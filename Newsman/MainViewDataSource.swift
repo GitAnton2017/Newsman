@@ -16,14 +16,15 @@ class MainViewDataSource: NSObject, UICollectionViewDataSource
 {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return titles.count
+        return items.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainViewCell", for: indexPath) as! MainViewCell
-        cell.cellLabel.text =  titles[indexPath.row]
-        cell.cellImage.image = icons[indexPath.row]
+        
+        cell.cellLabel.text =  items[indexPath.row].title
+        cell.cellImage.image = items[indexPath.row].mainIcon
         
         return cell
     }
@@ -48,30 +49,15 @@ class MainViewDataSource: NSObject, UICollectionViewDataSource
         
     }
     
-    let titles =
+    let items =
     [
-        "Photos" ,
-        "Texts"  ,
-        "Audio" ,
-        "Video" ,
-        "Sketches",
-        "Reports"
-        
-    ]
-    
-    let icons =
-    [
-        UIImage(named: "photos"),
-        UIImage(named: "texts"),
-        UIImage(named: "audios"),
-        UIImage(named: "videos"),
-        UIImage(named: "sketches"),
-        UIImage(named: "reports")
-     
+     MainMenuItems(title: "Photos",   mainIcon: UIImage(named: "photo.main")!, tabIcon: UIImage(named: "photo.tab.icon")!, type: .photo),
+     MainMenuItems(title: "Texts",    mainIcon: UIImage(named: "text.main")!,  tabIcon: UIImage(named: "text.tab.icon")!,  type: .text),
+     MainMenuItems(title: "Audio",    mainIcon: UIImage(named: "audio.main")!, tabIcon: UIImage(named: "audio.tab.icon")!, type: .audio),
+     MainMenuItems(title: "Video",    mainIcon: UIImage(named: "video.main")!, tabIcon: UIImage(named: "video.tab.icon")!, type: .video),
+     MainMenuItems(title: "Sketches", mainIcon: UIImage(named: "sketch.main")!, tabIcon: UIImage(named: "sketch.tab.icon")!, type: .sketch),
+     MainMenuItems(title: "Reports",  mainIcon: UIImage(named: "report.main")!, tabIcon: UIImage(named: "report.tab.icon")!, type: .report)
     ]
 
-    
-
-    
     
 }

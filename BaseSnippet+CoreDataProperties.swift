@@ -21,9 +21,9 @@ extension BaseSnippet {
     @NSManaged public var id: UUID?
     @NSManaged public var latitude: Double
     @NSManaged public var logitude: Double
-    @NSManaged public var priority: NSObject?
-    @NSManaged public var status: NSObject?
+    @NSManaged public var priority: String?
+    @NSManaged public var status: String?
     @NSManaged public var tag: String?
-    @NSManaged public var type: NSObject?
+    @NSManaged public var type: String?
 
 }

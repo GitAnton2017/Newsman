@@ -17,7 +17,7 @@ extension Report {
         return NSFetchRequest<Report>(entityName: "Report")
     }
 
-    @NSManaged public var categoty: String?
+    @NSManaged public var category: String?
     @NSManaged public var name: String?
     @NSManaged public var audios: NSSet?
     @NSManaged public var photos: NSSet?
