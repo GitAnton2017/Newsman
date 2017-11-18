@@ -36,3 +36,12 @@ public enum SnippetPriority: String
     case low     =  "Low"
     
 }
+
+public enum SnippetStatus: String
+{
+    case new         =   "New"
+    case old         =   "Old"
+    case archived    =   "Archived"
+   
+    
+}

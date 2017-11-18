@@ -16,13 +16,22 @@ class TextSnippetViewController: UIViewController
     func saveTextSnippetData()
     {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        textSnippet.date = Date() as NSDate
+        
+        if (textSnippet.status == nil || textSnippet.status == SnippetStatus.new.rawValue)
+        {
+         textSnippet.date = Date() as NSDate
+         textSnippet.id = UUID()
+         textSnippet.priority = SnippetPriority.normal.rawValue
+         textSnippet.type = SnippetType.text.rawValue
+         textSnippet.status = SnippetStatus.old.rawValue
+        }
+        
         textSnippet.text = textView.text
-        textSnippet.id = UUID()
-        textSnippet.type = SnippetType.text.rawValue
         textSnippet.tag = textSnippetTitle.text
-        textSnippet.priority = SnippetPriority.normal.rawValue
+        
+        print ("------------------------->\n" ,#function, textSnippet)
         appDelegate.saveContext()
+        print ("------------------------->\n" ,#function, textSnippet)
     }
     
     @IBAction func saveTextButtonPress(_ sender: UIBarButtonItem)
@@ -56,7 +65,6 @@ class TextSnippetViewController: UIViewController
     {
         super.viewDidLoad()
         
-        
         textView.inputAccessoryView = createKeyBoardToolBar()
         textSnippetTitle.inputAccessoryView = textView.inputAccessoryView
     }
@@ -71,7 +79,8 @@ class TextSnippetViewController: UIViewController
     {
         super.viewWillAppear(animated)
         textView.text = textSnippet.text
-        textSnippetTitle.text = textSnippet.text
+        textSnippetTitle.text = textSnippet.tag
+        print ("------------------------->\n" ,#function, textSnippet)
     }
 }
 

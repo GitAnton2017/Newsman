@@ -18,7 +18,10 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     }()
     
     lazy var items: [BaseSnippet] =
-    {
+        {
+            
+        print("------------------------->\n" ,#function)
+            
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
         let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
@@ -55,7 +58,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: items[indexPath.row].date! as Date)
         (cell as! SnippetsViewCell).snippetTextTag.text = items[indexPath.row].tag
         (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.tab.icon")
-        
+        print("(\(indexPath.row))\n", #function, items[indexPath.row])
        case .photo: break
        case .video: break
        case .audio: break

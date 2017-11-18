@@ -29,6 +29,7 @@ extension SnippetsViewController: UITableViewDelegate
         textSnippetVC.modalTransitionStyle = .partialCurl
         textSnippetVC.textSnippet = snippetsDataSource.items[indexPath.row] as! TextSnippet
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
+        print (#function, textSnippetVC.textSnippet)
     }
     
     func editPhotoSnippet(indexPath: IndexPath)

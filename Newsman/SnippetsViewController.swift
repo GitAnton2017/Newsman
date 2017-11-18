@@ -68,6 +68,7 @@ class SnippetsViewController: UIViewController
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
      let newTextSnippet = TextSnippet(context: moc)
+     newTextSnippet.status = SnippetStatus.new.rawValue
      textSnippetVC.textSnippet = newTextSnippet
      snippetsDataSource.items.insert(newTextSnippet, at: 0)
      self.navigationController?.pushViewController(textSnippetVC, animated: true)
