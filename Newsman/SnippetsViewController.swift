@@ -3,6 +3,16 @@ import Foundation
 import UIKit
 import CoreData
 
+
+enum GroupSnippets: String
+{
+  case byPriority     =  "By Snippet Priority"
+  case byDateCreated  =  "By Snippet Date Created"
+  case alphabetically =  "Alphabetically"
+  case bySnippetType  =  "By Snippet Type"
+  case none           =  "Plain List"
+}
+
 class SnippetsViewController: UIViewController
 {
     var snippetType: SnippetType!
@@ -15,10 +25,21 @@ class SnippetsViewController: UIViewController
      }
     }
     
+    var groupType: GroupSnippets = .none
+    {
+        didSet
+        {
+         if groupType != oldValue
+         {
+            snippetsTableView.reloadData()
+         }
+        }
+            
+    }
+    
     @IBOutlet var snippetsTableView: UITableView!
     
     let snippetsDataSource = SnippetsViewDataSource()
-    
     
     
     override func viewDidLoad()
@@ -30,6 +51,7 @@ class SnippetsViewController: UIViewController
      snippetsTableView.rowHeight = UITableViewAutomaticDimension
      createNewSnippet.image = createBarButtonIcon
      snippetsDataSource.itemsType = snippetType
+     snippetsDataSource.groupType = groupType
      snippetsTableView.dataSource = snippetsDataSource
         
     }
@@ -41,6 +63,7 @@ class SnippetsViewController: UIViewController
     }
     
     @IBOutlet var createNewSnippet: UIBarButtonItem!
+    @IBOutlet var groupSnippets: UIBarButtonItem!
     
     @IBAction func createNewSnippetPress(_ sender: UIBarButtonItem)
     {
@@ -54,6 +77,45 @@ class SnippetsViewController: UIViewController
         case .report:  createNewReport()
         default: break
       }
+    }
+    
+    @IBAction func groupSnippetsPress(_ sender: UIBarButtonItem)
+    {
+     let groupAC = UIAlertController(title: "Group Snippets", message: "Please select grouping type", preferredStyle: .alert)
+     let byPriority = UIAlertAction(title: GroupSnippets.byPriority.rawValue, style: .default)
+     { _ in
+        self.groupType = .byPriority
+     }
+     groupAC.addAction(byPriority)
+     
+     let byDateCreated = UIAlertAction(title: GroupSnippets.byDateCreated.rawValue, style: .default)
+     { _ in
+        self.groupType = .byDateCreated
+     }
+     groupAC.addAction(byDateCreated)
+        
+     let alphabetically = UIAlertAction(title: GroupSnippets.alphabetically.rawValue, style: .default)
+     { _ in
+        self.groupType = .alphabetically
+     }
+     groupAC.addAction(alphabetically)
+     
+     let bySnippetType = UIAlertAction(title: GroupSnippets.bySnippetType.rawValue, style: .default)
+     { _ in
+       self.groupType = .bySnippetType
+     }
+     groupAC.addAction(bySnippetType)
+    
+     let none = UIAlertAction(title: GroupSnippets.none.rawValue, style: .default)
+     { _ in
+        self.groupType = .none
+     }
+     groupAC.addAction(none)
+        
+     let cancel = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+     groupAC.addAction(cancel)
+      
+     self.present(groupAC, animated: true, completion: nil)
     }
     
     func createNewTextSnippet()

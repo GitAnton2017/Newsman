@@ -142,20 +142,26 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
                                 <rect key="frame" x="0.0" y="559" width="375" height="44"/>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="gER-RA-wNv"/>
+                                    <barButtonItem systemItem="refresh" id="V4k-Ye-d1M">
+                                        <connections>
+                                            <action selector="groupSnippetsPress:" destination="8F0-Wa-TO0" id="Z96-t2-EwS"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ULo-bY-QyT"/>
                                     <barButtonItem title="Button" id="wwM-RC-fnL">
                                         <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <action selector="createNewSnippetPress:" destination="8F0-Wa-TO0" id="bii-3b-oGu"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="oHX-Ar-Rx1"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Eoc-TW-de4"/>
+                                    <barButtonItem systemItem="organize" id="KUQ-Fn-oir"/>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
-                                <rect key="frame" x="0.0" y="0.0" width="367" height="559"/>
+                                <rect key="frame" x="4" y="0.0" width="367" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SnippetCell" rowHeight="70" id="i7N-u2-v6g" customClass="SnippetsViewCell" customModule="Newsman">
@@ -223,6 +229,7 @@
                     </view>
                     <connections>
                         <outlet property="createNewSnippet" destination="wwM-RC-fnL" id="8nF-1o-fb6"/>
+                        <outlet property="groupSnippets" destination="V4k-Ye-d1M" id="JIL-yl-91X"/>
                         <outlet property="snippetsTableView" destination="eyJ-fM-0bg" id="WNX-mL-PKI"/>
                     </connections>
                 </viewController>
@@ -276,7 +283,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="R3s-1E-Gqc" firstAttribute="trailing" secondItem="EVW-0P-Phy" secondAttribute="trailing" constant="4" id="0Ra-Ql-mbL"/>
                             <constraint firstItem="R3s-1E-Gqc" firstAttribute="bottom" secondItem="EVW-0P-Phy" secondAttribute="bottom" constant="44" id="6G7-Cm-eOF"/>

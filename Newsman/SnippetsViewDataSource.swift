@@ -7,6 +7,7 @@ import CoreData
 class SnippetsViewDataSource: NSObject, UITableViewDataSource
 {
     var itemsType: SnippetType!
+    var groupType: GroupSnippets!
     
     let dateFormatter =
     { () -> DateFormatter in
@@ -25,7 +26,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
         let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
-        let sort = NSSortDescriptor(key: "date", ascending: false)
+        let sort = NSSortDescriptor(key: #keyPath(BaseSnippet.date), ascending: false)
         let pred = NSPredicate(format: "%K = %@", #keyPath(BaseSnippet.type), itemsType.rawValue)
         request.predicate = pred
         request.sortDescriptors = [sort]
@@ -51,14 +52,15 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath)
+      (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: items[indexPath.row].date! as Date)
+      (cell as! SnippetsViewCell).snippetTextTag.text = items[indexPath.row].tag
+      
+      let priority = SnippetPriority(rawValue: items[indexPath.row].priority!)
+      (cell as! SnippetsViewCell).backgroundColor = priority?.color
         
       switch (itemsType)
       {
-       case .text:
-        (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: items[indexPath.row].date! as Date)
-        (cell as! SnippetsViewCell).snippetTextTag.text = items[indexPath.row].tag
-        (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.tab.icon")
-        print("(\(indexPath.row))\n", #function, items[indexPath.row])
+       case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.tab.icon")
        case .photo: break
        case .video: break
        case .audio: break

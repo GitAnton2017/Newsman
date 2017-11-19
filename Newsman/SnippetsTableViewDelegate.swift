@@ -4,7 +4,105 @@ import UIKit
 
 extension SnippetsViewController: UITableViewDelegate
 {
+    //*************************************************************************************************
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
+    //*************************************************************************************************
+    {
+      let setPriorityAction = UITableViewRowAction(style: .normal, title: "Priority")
+      {_,indexPath in
+        let prioritySelect = UIAlertController(title: "\(self.snippetType.rawValue)",
+            message: "Please select your snippet priority!",
+            preferredStyle: .alert)
+        
+        let hottest = UIAlertAction(title: SnippetPriority.hottest.rawValue, style: .default)
+        { _ in
+            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.hottest.rawValue
+            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.hottest.color
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            
+        }
+        prioritySelect.addAction(hottest)
+        
+        let hot = UIAlertAction(title: SnippetPriority.hot.rawValue, style: .default)
+        { _ in
+            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.hot.rawValue
+            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.hot.color
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        }
+        prioritySelect.addAction(hot)
+        
+        let high = UIAlertAction(title: SnippetPriority.high.rawValue, style: .default)
+        { _ in
+            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.high.rawValue
+            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.high.color
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        }
+        prioritySelect.addAction(high)
+        
+        let normal = UIAlertAction(title: SnippetPriority.normal.rawValue, style: .default)
+        { _ in
+            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.normal.rawValue
+            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.normal.color
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        }
+        prioritySelect.addAction(normal)
+        
+        let medium = UIAlertAction(title: SnippetPriority.medium.rawValue, style: .default)
+        { _ in
+            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.medium.rawValue
+            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.medium.color
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        }
+        prioritySelect.addAction(medium)
+        
+        let low = UIAlertAction(title: SnippetPriority.low.rawValue, style: .default)
+        { _ in
+            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.low.rawValue
+            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.low.color
+            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        }
+        prioritySelect.addAction(low)
+        
+        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+        
+        prioritySelect.addAction(cancelAction)
+        
+        self.present(prioritySelect, animated: true, completion: nil)
+      }
+      setPriorityAction.backgroundColor = UIColor.brown
+    
+      let deleteAction = UITableViewRowAction(style: .normal, title: "Delete")
+      {_,indexPath in
+        let snippet = self.snippetsDataSource.items[indexPath.row]
+        let deleteAC = UIAlertController(title: "\(self.snippetType.rawValue)",
+            message: "Are your sure you want to delete snippet with tag \n\"\(snippet.tag ?? "No tag")\"",
+            preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "DELETE", style: .destructive)
+        { _ in
+          let appDelegate = UIApplication.shared.delegate as! AppDelegate
+          let moc = appDelegate.persistentContainer.viewContext
+          moc.delete(snippet)
+          self.snippetsDataSource.items.remove(at: indexPath.row)
+          tableView.deleteRows(at: [indexPath], with: .fade)
+          appDelegate.saveContext()
+        }
+        deleteAC.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+        
+        deleteAC.addAction(cancelAction)
+        
+        self.present(deleteAC, animated: true, completion: nil)
+        
+      }
+      deleteAction.backgroundColor = UIColor.red
+        
+      return [setPriorityAction, deleteAction]
+    }
+    //*************************************************************************************************
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    //*************************************************************************************************
     {
         switch (snippetType)
         {
@@ -18,8 +116,9 @@ extension SnippetsViewController: UITableViewDelegate
         }
         
     }
-    
+    //*************************************************************************************************
     func editTextSnippet(indexPath: IndexPath)
+    //*************************************************************************************************
     {
         guard let textSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
         else
@@ -31,26 +130,31 @@ extension SnippetsViewController: UITableViewDelegate
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
         print (#function, textSnippetVC.textSnippet)
     }
-    
+    //*************************************************************************************************
     func editPhotoSnippet(indexPath: IndexPath)
+    //*************************************************************************************************
     {
     }
-    
+    //*************************************************************************************************
     func editVideoSnippet(indexPath: IndexPath)
+    //*************************************************************************************************
     {
     }
-    
+    //*************************************************************************************************
     func editAudioSnippet(indexPath: IndexPath)
+    //*************************************************************************************************
     {
     }
-    
+    //*************************************************************************************************
     func editSketchSnippet(indexPath: IndexPath)
+    //*************************************************************************************************
     {
     }
-    
+    //*************************************************************************************************
     func editReport(indexPath: IndexPath)
+    //*************************************************************************************************
     {
     }
-    
+    //*************************************************************************************************
 
 }
