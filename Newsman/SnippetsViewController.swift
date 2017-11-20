@@ -10,7 +10,7 @@ enum GroupSnippets: String
   case byDateCreated  =  "By Snippet Date Created"
   case alphabetically =  "Alphabetically"
   case bySnippetType  =  "By Snippet Type"
-  case none           =  "Plain List"
+  case plainList      =  "Plain List"
 }
 
 class SnippetsViewController: UIViewController
@@ -25,12 +25,14 @@ class SnippetsViewController: UIViewController
      }
     }
     
-    var groupType: GroupSnippets = .none
+    var groupType: GroupSnippets = .plainList
     {
         didSet
         {
          if groupType != oldValue
          {
+            snippetsDataSource.groupType = groupType
+            snippetsDataSource.rebuildData()
             snippetsTableView.reloadData()
          }
         }
@@ -40,7 +42,6 @@ class SnippetsViewController: UIViewController
     @IBOutlet var snippetsTableView: UITableView!
     
     let snippetsDataSource = SnippetsViewDataSource()
-    
     
     override func viewDidLoad()
     {
@@ -59,6 +60,7 @@ class SnippetsViewController: UIViewController
     override func viewWillAppear(_ animated: Bool)
     {
      super.viewWillAppear(animated)
+     snippetsDataSource.rebuildData()
      snippetsTableView.reloadData()
     }
     
@@ -106,9 +108,9 @@ class SnippetsViewController: UIViewController
      }
      groupAC.addAction(bySnippetType)
     
-     let none = UIAlertAction(title: GroupSnippets.none.rawValue, style: .default)
+     let none = UIAlertAction(title: GroupSnippets.plainList.rawValue, style: .default)
      { _ in
-        self.groupType = .none
+        self.groupType = .plainList
      }
      groupAC.addAction(none)
         

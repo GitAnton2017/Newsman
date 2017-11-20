@@ -4,6 +4,26 @@ import UIKit
 
 extension SnippetsViewController: UITableViewDelegate
 {
+    
+    //*************************************************************************************************
+    func changeSnippetPriority(_ tableView: UITableView, _ indexPath: IndexPath, _ newPriority: SnippetPriority)
+    //*************************************************************************************************
+    {
+      let snippet = snippetsDataSource.spippetsData[indexPath.section][indexPath.row]
+      let oldPriority = snippet.priority
+      if (newPriority.rawValue == oldPriority || snippetsDataSource.groupType != .byPriority)
+      {
+        return
+      }
+        
+      let cell = tableView.cellForRow(at: indexPath)
+      cell?.backgroundColor = newPriority.color
+      snippet.priority = newPriority.rawValue
+      snippetsDataSource.rebuildData()
+      tableView.reloadData()
+      (UIApplication.shared.delegate as! AppDelegate).saveContext()
+    }
+    
     //*************************************************************************************************
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
     //*************************************************************************************************
@@ -16,50 +36,38 @@ extension SnippetsViewController: UITableViewDelegate
         
         let hottest = UIAlertAction(title: SnippetPriority.hottest.rawValue, style: .default)
         { _ in
-            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.hottest.rawValue
-            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.hottest.color
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            self.changeSnippetPriority(tableView, indexPath, .hottest)
             
         }
         prioritySelect.addAction(hottest)
         
         let hot = UIAlertAction(title: SnippetPriority.hot.rawValue, style: .default)
         { _ in
-            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.hot.rawValue
-            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.hot.color
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            self.changeSnippetPriority(tableView, indexPath, .hot)
         }
         prioritySelect.addAction(hot)
         
         let high = UIAlertAction(title: SnippetPriority.high.rawValue, style: .default)
         { _ in
-            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.high.rawValue
-            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.high.color
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            self.changeSnippetPriority(tableView, indexPath, .high)
         }
         prioritySelect.addAction(high)
         
         let normal = UIAlertAction(title: SnippetPriority.normal.rawValue, style: .default)
         { _ in
-            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.normal.rawValue
-            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.normal.color
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            self.changeSnippetPriority(tableView, indexPath,.normal)
         }
         prioritySelect.addAction(normal)
         
         let medium = UIAlertAction(title: SnippetPriority.medium.rawValue, style: .default)
         { _ in
-            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.medium.rawValue
-            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.medium.color
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            self.changeSnippetPriority(tableView, indexPath, .medium)
         }
         prioritySelect.addAction(medium)
         
         let low = UIAlertAction(title: SnippetPriority.low.rawValue, style: .default)
         { _ in
-            self.snippetsDataSource.items[indexPath.row].priority = SnippetPriority.low.rawValue
-            tableView.cellForRow(at: indexPath)?.backgroundColor = SnippetPriority.low.color
-            (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            self.changeSnippetPriority(tableView, indexPath, .low)
         }
         prioritySelect.addAction(low)
         
@@ -73,7 +81,7 @@ extension SnippetsViewController: UITableViewDelegate
     
       let deleteAction = UITableViewRowAction(style: .normal, title: "Delete")
       {_,indexPath in
-        let snippet = self.snippetsDataSource.items[indexPath.row]
+        let snippet = self.snippetsDataSource.spippetsData[indexPath.section][indexPath.row]
         let deleteAC = UIAlertController(title: "\(self.snippetType.rawValue)",
             message: "Are your sure you want to delete snippet with tag \n\"\(snippet.tag ?? "No tag")\"",
             preferredStyle: .alert)
@@ -83,7 +91,9 @@ extension SnippetsViewController: UITableViewDelegate
           let appDelegate = UIApplication.shared.delegate as! AppDelegate
           let moc = appDelegate.persistentContainer.viewContext
           moc.delete(snippet)
-          self.snippetsDataSource.items.remove(at: indexPath.row)
+          let snippetIndex = self.snippetsDataSource.items.index(of: snippet)
+          self.snippetsDataSource.items.remove(at: snippetIndex!)
+          self.snippetsDataSource.spippetsData[indexPath.section].remove(at: indexPath.row)
           tableView.deleteRows(at: [indexPath], with: .fade)
           appDelegate.saveContext()
         }
@@ -126,8 +136,10 @@ extension SnippetsViewController: UITableViewDelegate
             return
         }
         textSnippetVC.modalTransitionStyle = .partialCurl
-        textSnippetVC.textSnippet = snippetsDataSource.items[indexPath.row] as! TextSnippet
+        textSnippetVC.textSnippet = snippetsDataSource.spippetsData[indexPath.section][indexPath.row] as! TextSnippet
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
+        
+        
         print (#function, textSnippetVC.textSnippet)
     }
     //*************************************************************************************************

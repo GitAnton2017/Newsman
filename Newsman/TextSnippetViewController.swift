@@ -28,10 +28,9 @@ class TextSnippetViewController: UIViewController
         
         textSnippet.text = textView.text
         textSnippet.tag = textSnippetTitle.text
-        
-        print ("------------------------->\n" ,#function, textSnippet)
+    
         appDelegate.saveContext()
-        print ("------------------------->\n" ,#function, textSnippet)
+
     }
     
     @IBAction func saveTextButtonPress(_ sender: UIBarButtonItem)

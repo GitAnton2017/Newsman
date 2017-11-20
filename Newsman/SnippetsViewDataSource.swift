@@ -3,11 +3,19 @@ import Foundation
 import UIKit
 import CoreData
 
-
 class SnippetsViewDataSource: NSObject, UITableViewDataSource
 {
+    
+    var groupTitles = [String]()
     var itemsType: SnippetType!
+    var spippetsData: [[BaseSnippet]] = []
     var groupType: GroupSnippets!
+    {
+        didSet
+        {
+         rebuildData()
+        }
+    }
     
     let dateFormatter =
     { () -> DateFormatter in
@@ -19,9 +27,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     }()
     
     lazy var items: [BaseSnippet] =
-        {
-            
-        print("------------------------->\n" ,#function)
+    {
             
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
@@ -44,18 +50,64 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         }
     }()
     
+    func rebuildData ()
+    {
+        spippetsData = []; groupTitles = []
+        
+        switch (groupType)
+        {
+         case .byPriority:
+            for filter in SnippetPriority.priorityFilters
+            {
+                let group = items.filter(filter.predicate)
+                if group.count > 0
+                {
+                 spippetsData.append(group)
+                 groupTitles.append(filter.title)
+                }
+            }
+            
+         case .byDateCreated:
+            for filter in SnippetDates.dateFilter
+            {
+               let group = items.filter(filter.predicate)
+               if group.count > 0
+               {
+                spippetsData.append(group)
+                groupTitles.append(filter.title)
+               }
+            }
+         case .alphabetically: break
+         case .bySnippetType: break
+         case .plainList:
+            spippetsData.append(items)
+         default: break
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
+    {
+        return groupType == .plainList ? nil : groupTitles[section]
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int
+    {
+        return groupType == .plainList ? 1 : spippetsData.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return items.count
+        return spippetsData[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath)
-      (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: items[indexPath.row].date! as Date)
-      (cell as! SnippetsViewCell).snippetTextTag.text = items[indexPath.row].tag
+      let item = spippetsData[indexPath.section][indexPath.row]
+      (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
+      (cell as! SnippetsViewCell).snippetTextTag.text = item.tag
       
-      let priority = SnippetPriority(rawValue: items[indexPath.row].priority!)
+      let priority = SnippetPriority(rawValue: item.priority!)
       (cell as! SnippetsViewCell).backgroundColor = priority?.color
         
       switch (itemsType)
