@@ -60,24 +60,49 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
             for filter in SnippetPriority.priorityFilters
             {
                 let group = items.filter(filter.predicate)
-                if group.count > 0
-                {
-                 spippetsData.append(group)
-                 groupTitles.append(filter.title)
-                }
+                spippetsData.append(group)
+                groupTitles.append(filter.title)
+
             }
             
          case .byDateCreated:
             for filter in SnippetDates.dateFilter
             {
                let group = items.filter(filter.predicate)
-               if group.count > 0
-               {
-                spippetsData.append(group)
-                groupTitles.append(filter.title)
-               }
+               spippetsData.append(group)
+               groupTitles.append(filter.title)
             }
-         case .alphabetically: break
+         case .alphabetically:
+            var letterSet = Set<Character>()
+            for item in items
+            {
+             if let firstLetter = item.tag?.first
+             {
+              letterSet.insert(firstLetter)
+             }
+            }
+            
+            spippetsData.append(items.filter{($0.tag?.isEmpty)!})
+            groupTitles.append("Untitled")
+            
+            for letter in letterSet.sorted()
+            {
+              let group = items.filter
+              {item in
+                if let firstLetter = item.tag?.first, firstLetter == letter
+                {
+                  return true
+                }
+                else
+                {
+                  return false
+                }
+              }
+              spippetsData.append(group.sorted{$0.tag! < $1.tag!})
+              groupTitles.append(String(letter))
+             }
+            
+            
          case .bySnippetType: break
          case .plainList:
             spippetsData.append(items)
@@ -87,12 +112,26 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        return groupType == .plainList ? nil : groupTitles[section]
+        if groupType == .plainList
+        {
+         return nil
+        }
+        else
+        {
+          if spippetsData[section].isEmpty
+          {
+           return nil
+          }
+          else
+          {
+           return groupTitles[section]
+          }
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
-        return groupType == .plainList ? 1 : spippetsData.count
+        return spippetsData.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -124,6 +163,9 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       return cell
     }
     
-    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
+    {
+        
+    }
     
 }

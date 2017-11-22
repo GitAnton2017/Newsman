@@ -11,12 +11,18 @@ enum GroupSnippets: String
   case alphabetically =  "Alphabetically"
   case bySnippetType  =  "By Snippet Type"
   case plainList      =  "Plain List"
+    
+  static let groupingTypes: [GroupSnippets] =
+  [
+   byPriority, byDateCreated, alphabetically, bySnippetType, plainList
+  ]
 }
 
 class SnippetsViewController: UIViewController
 {
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
+    
     var menuTitle: String!
     {
      didSet
@@ -39,6 +45,10 @@ class SnippetsViewController: UIViewController
             
     }
     
+    @IBOutlet var snippetsToolBar: UIToolbar!
+    
+    var currentToolBarItems: [UIBarButtonItem]!
+    
     @IBOutlet var snippetsTableView: UITableView!
     
     let snippetsDataSource = SnippetsViewDataSource()
@@ -54,6 +64,8 @@ class SnippetsViewController: UIViewController
      snippetsDataSource.itemsType = snippetType
      snippetsDataSource.groupType = groupType
      snippetsTableView.dataSource = snippetsDataSource
+     currentToolBarItems = snippetsToolBar.items
+     snippetsTableView.allowsMultipleSelectionDuringEditing = true
         
     }
     
@@ -65,7 +77,10 @@ class SnippetsViewController: UIViewController
     }
     
     @IBOutlet var createNewSnippet: UIBarButtonItem!
+    
     @IBOutlet var groupSnippets: UIBarButtonItem!
+    
+    @IBOutlet var editSnippets: UIBarButtonItem!
     
     @IBAction func createNewSnippetPress(_ sender: UIBarButtonItem)
     {
@@ -81,38 +96,77 @@ class SnippetsViewController: UIViewController
       }
     }
     
+    @objc func deleteSelectedSnippets()
+    {
+     guard let selectedSnippets = snippetsTableView.indexPathsForSelectedRows else
+     {
+       return
+     }
+     deleteSnippet(snippetsTableView, selectedSnippets)
+     toggleEditMode()
+    }
+    
+    @objc func changeSelectedSnippetsPriority()
+    {
+     guard let selectedSnippets = snippetsTableView.indexPathsForSelectedRows else
+     {
+      return
+     }
+     
+     let prioritySelect = UIAlertController(title: "\(self.snippetType.rawValue)", message: "Please select your snippet priority!",
+     preferredStyle: .alert)
+        
+     for priority in SnippetPriority.priorities
+     {
+      let action = UIAlertAction(title: priority.rawValue, style: .default)
+      { _ in
+        self.changeSnippetPriority(self.snippetsTableView, selectedSnippets, priority)
+        self.toggleEditMode()
+      }
+      prioritySelect.addAction(action)
+     }
+        
+     let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+     prioritySelect.addAction(cancelAction)
+        
+     self.present(prioritySelect, animated: true, completion: nil)
+    }
+    
+    func toggleEditMode()
+    {
+      if snippetsTableView.isEditing
+      {
+        snippetsTableView.setEditing(false, animated: true)
+        snippetsToolBar.setItems(currentToolBarItems, animated: true)
+      }
+      else
+      {
+        snippetsTableView.setEditing(true, animated: true)
+        let doneItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(editSnippetsPress))
+        let deleteItem  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteSelectedSnippets))
+        let priorityItem  = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(changeSelectedSnippetsPriority))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        snippetsToolBar.setItems([deleteItem, flexSpace, priorityItem,flexSpace, doneItem], animated: true)
+      }
+    }
+    
+    @IBAction func editSnippetsPress(_ sender: UIBarButtonItem)
+    {
+     toggleEditMode()
+    }
+    
     @IBAction func groupSnippetsPress(_ sender: UIBarButtonItem)
     {
      let groupAC = UIAlertController(title: "Group Snippets", message: "Please select grouping type", preferredStyle: .alert)
-     let byPriority = UIAlertAction(title: GroupSnippets.byPriority.rawValue, style: .default)
-     { _ in
-        self.groupType = .byPriority
-     }
-     groupAC.addAction(byPriority)
-     
-     let byDateCreated = UIAlertAction(title: GroupSnippets.byDateCreated.rawValue, style: .default)
-     { _ in
-        self.groupType = .byDateCreated
-     }
-     groupAC.addAction(byDateCreated)
         
-     let alphabetically = UIAlertAction(title: GroupSnippets.alphabetically.rawValue, style: .default)
-     { _ in
-        self.groupType = .alphabetically
+     for grouping in GroupSnippets.groupingTypes
+     {
+        let action = UIAlertAction(title: grouping.rawValue, style: .default)
+        { _ in
+            self.groupType = grouping
+        }
+        groupAC.addAction(action)
      }
-     groupAC.addAction(alphabetically)
-     
-     let bySnippetType = UIAlertAction(title: GroupSnippets.bySnippetType.rawValue, style: .default)
-     { _ in
-       self.groupType = .bySnippetType
-     }
-     groupAC.addAction(bySnippetType)
-    
-     let none = UIAlertAction(title: GroupSnippets.plainList.rawValue, style: .default)
-     { _ in
-        self.groupType = .plainList
-     }
-     groupAC.addAction(none)
         
      let cancel = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
      groupAC.addAction(cancel)

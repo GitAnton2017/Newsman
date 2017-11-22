@@ -6,24 +6,165 @@ extension SnippetsViewController: UITableViewDelegate
 {
     
     //*************************************************************************************************
-    func changeSnippetPriority(_ tableView: UITableView, _ indexPath: IndexPath, _ newPriority: SnippetPriority)
+    func changeSnippetPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
     //*************************************************************************************************
     {
-      let snippet = snippetsDataSource.spippetsData[indexPath.section][indexPath.row]
-      let oldPriority = snippet.priority
-      if (newPriority.rawValue == oldPriority || snippetsDataSource.groupType != .byPriority)
+      var snippets: [BaseSnippet] = []
+      var snippetTags = ""
+      var cnt = 1
+    
+      for path in indexPaths
       {
-        return
+        let snippet = self.snippetsDataSource.spippetsData[path.section][path.row]
+        let oldPriority = snippet.priority
+        if newPriority.rawValue != oldPriority
+        {
+         if let tag = snippet.tag, !tag.isEmpty
+         {
+          snippetTags.append("\"\(tag)\" from \"\(oldPriority!)\" to \"\(newPriority.rawValue)\"\(cnt == snippets.count ? "" : "\n")")
+         }
+         else
+         {
+          snippetTags.append("\"No tag\" from \"\(oldPriority!)\" to \"\(newPriority.rawValue)\"\(cnt == snippets.count ? "" : "\n")")
+         }
+         snippets.append(snippet)
+         cnt += 1
+        }
+        
       }
         
-      let cell = tableView.cellForRow(at: indexPath)
+      if snippets.count == 0 {return}
+      let s = (snippets.count == 1 ? "" : "s")
+      let s1 = (snippets.count == 1 ? snippets.first?.type: "Snippets")!
+      let priorityAC = UIAlertController(title: "Change \(s1) priority!",
+        message: "Are your sure\nyou want to change snippet\(s) priority:\n\n\(snippetTags)",
+        preferredStyle: .alert)
+        
+      let changeAction = UIAlertAction(title: "CHANGE", style: .default)
+      { _ in
+        if self.snippetsDataSource.groupType == .byPriority
+        {
+         for sectionIndex in 0..<self.snippetsDataSource.spippetsData.count
+         {
+          for x in snippets
+          {
+            if let rowIndex = self.snippetsDataSource.spippetsData[sectionIndex].index(of: x)
+            {
+             let moved = self.snippetsDataSource.spippetsData[sectionIndex].remove(at: rowIndex)
+             self.snippetsDataSource.spippetsData[newPriority.section].insert(moved, at: 0)
+             let sourcePath = IndexPath(row: rowIndex, section: sectionIndex)
+             let destinPath = IndexPath(row:        0, section: newPriority.section)
+             tableView.moveRow(at: sourcePath, to: destinPath)
+             let cell = tableView.cellForRow(at: destinPath)
+             cell?.backgroundColor = newPriority.color
+            }
+           }
+         }
+        }
+        else
+        {
+         for sectionIndex in 0..<self.snippetsDataSource.spippetsData.count
+         {
+          for x in snippets
+          {
+           if let rowIndex = self.snippetsDataSource.spippetsData[sectionIndex].index(of: x)
+           {
+            let cell = tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
+            cell?.backgroundColor = newPriority.color
+           }
+          }
+         }
+        }
+        
+        for x in snippets {x.priority = newPriority.rawValue}
+        
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+      }
+      
+      priorityAC.addAction(changeAction)
+        
+      let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+      priorityAC.addAction(cancelAction)
+        
+      self.present(priorityAC, animated: true, completion: nil)
+        
+      /*let cell = tableView.cellForRow(at: indexPath)
       cell?.backgroundColor = newPriority.color
       snippet.priority = newPriority.rawValue
       snippetsDataSource.rebuildData()
       tableView.reloadData()
-      (UIApplication.shared.delegate as! AppDelegate).saveContext()
+      (UIApplication.shared.delegate as! AppDelegate).saveContext()*/
     }
+    //*************************************************************************************************
+    func deleteSnippet(_ tableView: UITableView, _ indexPaths: [IndexPath])
+    //*************************************************************************************************
+    {
+        var snippets = [BaseSnippet]()
+        var snippetTags = ""
+        var cnt = 1
+        for indexPath in indexPaths
+        {
+         let snippet = self.snippetsDataSource.spippetsData[indexPath.section][indexPath.row]
+         snippets.append(snippet)
+         if let tag = snippet.tag, !tag.isEmpty
+         {
+          snippetTags.append("\"\(tag)\"\(cnt == indexPaths.count ? "" : "\n")")
+         }
+         else
+         {
+          snippetTags.append("\"No tag\"\(cnt == indexPaths.count ? "" : "\n")")
+         }
+         cnt += 1
     
+        }
+        
+        let s = (snippets.count == 1 ? "" : "s")
+        let s1 = (snippets.count == 1 ? snippets.first?.type: "Snippets")!
+        let deleteAC = UIAlertController(title: "Delete \(s1)!",
+            message: "Are your sure\nyou want to delete snippet\(s) with tag\(s)\n\n\(snippetTags)",
+            preferredStyle: .alert)
+        
+        let deleteAction = UIAlertAction(title: "DELETE", style: .destructive)
+        { _ in
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let moc = appDelegate.persistentContainer.viewContext
+            for snippet in snippets
+            {
+             moc.delete(snippet)
+             let snippetIndex = self.snippetsDataSource.items.index(of: snippet)
+             self.snippetsDataSource.items.remove(at: snippetIndex!)
+             
+            }
+            
+            for sectionIndex in 0..<self.snippetsDataSource.spippetsData.count
+            {
+              for x in snippets
+              {
+                if let rowIndex = self.snippetsDataSource.spippetsData[sectionIndex].index(of: x)
+                {
+                 self.snippetsDataSource.spippetsData[sectionIndex].remove(at: rowIndex)
+                 tableView.deleteRows(at: [IndexPath(row: rowIndex, section: sectionIndex)], with: .fade)
+                }
+              }
+            }
+            
+            /*for indexPath in indexPaths
+            {
+              self.snippetsDataSource.spippetsData[indexPath.section].remove(at: indexPath.row)
+            }*/
+
+            
+            
+            
+            appDelegate.saveContext()
+        }
+        deleteAC.addAction(deleteAction)
+        
+        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+        deleteAC.addAction(cancelAction)
+        
+        self.present(deleteAC, animated: true, completion: nil)
+    }
     //*************************************************************************************************
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
     //*************************************************************************************************
@@ -34,42 +175,14 @@ extension SnippetsViewController: UITableViewDelegate
             message: "Please select your snippet priority!",
             preferredStyle: .alert)
         
-        let hottest = UIAlertAction(title: SnippetPriority.hottest.rawValue, style: .default)
-        { _ in
-            self.changeSnippetPriority(tableView, indexPath, .hottest)
-            
+        for priority in SnippetPriority.priorities
+        {
+            let action = UIAlertAction(title: priority.rawValue, style: .default)
+            { _ in
+                self.changeSnippetPriority(tableView, [indexPath], priority)
+            }
+            prioritySelect.addAction(action)
         }
-        prioritySelect.addAction(hottest)
-        
-        let hot = UIAlertAction(title: SnippetPriority.hot.rawValue, style: .default)
-        { _ in
-            self.changeSnippetPriority(tableView, indexPath, .hot)
-        }
-        prioritySelect.addAction(hot)
-        
-        let high = UIAlertAction(title: SnippetPriority.high.rawValue, style: .default)
-        { _ in
-            self.changeSnippetPriority(tableView, indexPath, .high)
-        }
-        prioritySelect.addAction(high)
-        
-        let normal = UIAlertAction(title: SnippetPriority.normal.rawValue, style: .default)
-        { _ in
-            self.changeSnippetPriority(tableView, indexPath,.normal)
-        }
-        prioritySelect.addAction(normal)
-        
-        let medium = UIAlertAction(title: SnippetPriority.medium.rawValue, style: .default)
-        { _ in
-            self.changeSnippetPriority(tableView, indexPath, .medium)
-        }
-        prioritySelect.addAction(medium)
-        
-        let low = UIAlertAction(title: SnippetPriority.low.rawValue, style: .default)
-        { _ in
-            self.changeSnippetPriority(tableView, indexPath, .low)
-        }
-        prioritySelect.addAction(low)
         
         let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
         
@@ -77,43 +190,30 @@ extension SnippetsViewController: UITableViewDelegate
         
         self.present(prioritySelect, animated: true, completion: nil)
       }
+        
       setPriorityAction.backgroundColor = UIColor.brown
     
       let deleteAction = UITableViewRowAction(style: .normal, title: "Delete")
       {_,indexPath in
-        let snippet = self.snippetsDataSource.spippetsData[indexPath.section][indexPath.row]
-        let deleteAC = UIAlertController(title: "\(self.snippetType.rawValue)",
-            message: "Are your sure you want to delete snippet with tag \n\"\(snippet.tag ?? "No tag")\"",
-            preferredStyle: .alert)
-        
-        let deleteAction = UIAlertAction(title: "DELETE", style: .destructive)
-        { _ in
-          let appDelegate = UIApplication.shared.delegate as! AppDelegate
-          let moc = appDelegate.persistentContainer.viewContext
-          moc.delete(snippet)
-          let snippetIndex = self.snippetsDataSource.items.index(of: snippet)
-          self.snippetsDataSource.items.remove(at: snippetIndex!)
-          self.snippetsDataSource.spippetsData[indexPath.section].remove(at: indexPath.row)
-          tableView.deleteRows(at: [indexPath], with: .fade)
-          appDelegate.saveContext()
-        }
-        deleteAC.addAction(deleteAction)
-        
-        let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
-        
-        deleteAC.addAction(cancelAction)
-        
-        self.present(deleteAC, animated: true, completion: nil)
+         self.deleteSnippet(tableView, [indexPath])
         
       }
       deleteAction.backgroundColor = UIColor.red
         
-      return [setPriorityAction, deleteAction]
+      return [setPriorityAction,deleteAction]
+    }
+    //*************************************************************************************************
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle
+    //*************************************************************************************************
+    {
+     return .delete
+     
     }
     //*************************************************************************************************
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     //*************************************************************************************************
     {
+        if tableView.isEditing {return}
         switch (snippetType)
         {
          case .text:    editTextSnippet(indexPath: indexPath)

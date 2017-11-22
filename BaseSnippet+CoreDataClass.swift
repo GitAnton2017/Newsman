@@ -12,10 +12,8 @@ import CoreData
 import UIKit
 
 @objc(BaseSnippet)
-public class BaseSnippet: NSManagedObject
-{
 
-}
+public class BaseSnippet: NSManagedObject{}
 
 struct SnippetDates
 {
@@ -68,11 +66,11 @@ struct SnippetDates
  [
     ("Today",         {($0.date! as Date) >= boftd! && ($0.date! as Date) < bofnd!}),
     ("Yesterday",     {($0.date! as Date) >= bofld! && ($0.date! as Date) < boftd!}),
-    ("This Week",     {($0.date! as Date) >= boftw! && ($0.date! as Date) < bofld!}),
+    ("This Week",     {($0.date! as Date) >= boftw! && ($0.date! as Date) < bofnd!}),
     ("Last Week",     {($0.date! as Date) >= boflw! && ($0.date! as Date) < boftw!}),
-    ("This Month",    {($0.date! as Date) >= boftm! && ($0.date! as Date) < boflw!}),
+    ("This Month",    {($0.date! as Date) >= boftm! && ($0.date! as Date) < bofnd!}),
     ("Last Month",    {($0.date! as Date) >= boflm! && ($0.date! as Date) < boftm!}),
-    ("This Year",     {($0.date! as Date) >= bofty! && ($0.date! as Date) < boflm!})
+    ("This Year",     {($0.date! as Date) >= bofty! && ($0.date! as Date) < bofnd!})
  ]
 }
 
@@ -110,12 +108,11 @@ public enum SnippetPriority: String
     
     static let prioritySectionsMap: [SnippetPriority: Int] =
     [
-        .hottest : 0,
-        .hot     : 1,
-        .high    : 2,
-        .normal  : 3,
-        .medium  : 4,
-        .low     : 5
+        .hottest : 0, .hot : 1, .high : 2, .normal : 3, .medium : 4, .low : 5
+    ]
+    static let priorities: [SnippetPriority] =
+    [
+        .hottest , .hot, .high, .normal, .medium, .low
     ]
     
     var color: UIColor
