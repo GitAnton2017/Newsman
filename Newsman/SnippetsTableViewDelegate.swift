@@ -12,10 +12,11 @@ extension SnippetsViewController: UITableViewDelegate
       var snippets: [BaseSnippet] = []
       var snippetTags = ""
       var cnt = 1
-    
+      let dataSource = (tableView.dataSource as! SnippetsViewDataSource)
+        
       for path in indexPaths
       {
-        let snippet = self.snippetsDataSource.spippetsData[path.section][path.row]
+        let snippet = dataSource.spippetsData[path.section][path.row]
         let oldPriority = snippet.priority
         if newPriority.rawValue != oldPriority
         {
@@ -42,16 +43,16 @@ extension SnippetsViewController: UITableViewDelegate
         
       let changeAction = UIAlertAction(title: "CHANGE", style: .default)
       { _ in
-        if self.snippetsDataSource.groupType == .byPriority
+        if (dataSource.groupType == .byPriority)
         {
-         for sectionIndex in 0..<self.snippetsDataSource.spippetsData.count
+         for sectionIndex in 0..<dataSource.spippetsData.count
          {
           for x in snippets
           {
-            if let rowIndex = self.snippetsDataSource.spippetsData[sectionIndex].index(of: x)
+            if let rowIndex = dataSource.spippetsData[sectionIndex].index(of: x)
             {
-             let moved = self.snippetsDataSource.spippetsData[sectionIndex].remove(at: rowIndex)
-             self.snippetsDataSource.spippetsData[newPriority.section].insert(moved, at: 0)
+             let moved = dataSource.spippetsData[sectionIndex].remove(at: rowIndex)
+             dataSource.spippetsData[newPriority.section].insert(moved, at: 0)
              let sourcePath = IndexPath(row: rowIndex, section: sectionIndex)
              let destinPath = IndexPath(row:        0, section: newPriority.section)
              tableView.moveRow(at: sourcePath, to: destinPath)
@@ -63,11 +64,11 @@ extension SnippetsViewController: UITableViewDelegate
         }
         else
         {
-         for sectionIndex in 0..<self.snippetsDataSource.spippetsData.count
+         for sectionIndex in 0..<dataSource.spippetsData.count
          {
           for x in snippets
           {
-           if let rowIndex = self.snippetsDataSource.spippetsData[sectionIndex].index(of: x)
+           if let rowIndex = dataSource.spippetsData[sectionIndex].index(of: x)
            {
             let cell = tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
             cell?.backgroundColor = newPriority.color

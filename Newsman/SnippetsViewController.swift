@@ -11,6 +11,7 @@ enum GroupSnippets: String
   case alphabetically =  "Alphabetically"
   case bySnippetType  =  "By Snippet Type"
   case plainList      =  "Plain List"
+  case nope           //initial state 
     
   static let groupingTypes: [GroupSnippets] =
   [
@@ -31,18 +32,60 @@ class SnippetsViewController: UIViewController
      }
     }
     
-    var groupType: GroupSnippets = .plainList
+    private lazy var appSettings: [Settings] =
     {
-        didSet
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     let moc = appDelegate.persistentContainer.viewContext
+     let request: NSFetchRequest<Settings> = Settings.fetchRequest()
+     do
+     {
+      let settings = try moc.fetch(request)
+      return settings
+     }
+     catch
+     {
+      return [Settings]()
+     }
+    }()
+    
+    private var currentGrouping: GroupSnippets = .nope 
+    
+    var groupType: GroupSnippets
+    {
+        get
         {
-         if groupType != oldValue
+          if (!appSettings.isEmpty)
+          {
+            return GroupSnippets(rawValue: appSettings.first!.grouping!)!
+          }
+          else
+          {
+            return currentGrouping
+          }
+        }
+        set
+        {
+         if (currentGrouping != newValue)
          {
-            snippetsDataSource.groupType = groupType
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            currentGrouping = newValue
+            snippetsDataSource.groupType = newValue
             snippetsDataSource.rebuildData()
             snippetsTableView.reloadData()
+            if (!appSettings.isEmpty)
+            {
+             appSettings.first!.grouping = currentGrouping.rawValue
+            }
+            else
+            {
+             let moc = appDelegate.persistentContainer.viewContext
+             let newSettings = Settings(context: moc)
+             newSettings.grouping = currentGrouping.rawValue
+             appSettings.append(newSettings)
+            }
+            appDelegate.saveContext()
          }
         }
-            
     }
     
     @IBOutlet var snippetsToolBar: UIToolbar!

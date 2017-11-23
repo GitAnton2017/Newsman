@@ -12,6 +12,12 @@ class TextSnippetViewController: UIViewController
     @IBOutlet var textSnippetToolBar: UIToolbar!
     
     var textSnippet: TextSnippet!
+    {
+        didSet
+        {
+            navigationItem.title = textSnippet.tag
+        }
+    }
     
     func saveTextSnippetData()
     {
@@ -80,6 +86,19 @@ class TextSnippetViewController: UIViewController
         textView.text = textSnippet.text
         textSnippetTitle.text = textSnippet.tag
         print ("------------------------->\n" ,#function, textSnippet)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
+    {
+      if let segueID = segue.identifier, segueID == "DatePicker"
+      {
+        (segue.destination as! DatePickerViewController).editedSnippet = textSnippet
+      }
+      if let segueID = segue.identifier, segueID == "PriorityPicker"
+      {
+        (segue.destination as! PriorityPickerViewController).editedSnippet = textSnippet
+      }
+      
     }
 }
 

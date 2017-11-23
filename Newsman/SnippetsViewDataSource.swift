@@ -13,7 +13,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     {
         didSet
         {
-         rebuildData()
+         //rebuildData()
         }
     }
     
@@ -112,13 +112,13 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        if groupType == .plainList
+        if (groupType == .plainList)
         {
          return nil
         }
         else
         {
-          if spippetsData[section].isEmpty
+          if (spippetsData[section].isEmpty)
           {
            return nil
           }
@@ -166,6 +166,38 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
     {
         
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    {
+     
+     let from = sourceIndexPath;  let to = destinationIndexPath
+      
+     if (from.section == to.section)
+     {
+        let moved = spippetsData[from.section].remove(at: from.row)
+        spippetsData[to.section].insert(moved, at: to.row)
+     }
+     else
+     {
+       if (groupType == .byPriority)
+       {
+        let moved = spippetsData[from.section].remove(at: from.row)
+        spippetsData[to.section].insert(moved, at: to.row)
+        let cell = tableView.cellForRow(at: to)
+        let priority = SnippetPriority.priorities[to.section]
+        moved.priority = priority.rawValue
+        cell?.backgroundColor = SnippetPriority.priorityColorMap[priority]
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+       }
+       else
+       {
+        tableView.moveRow(at: to, to: from)
+       }
+       
+     }
+     tableView.reloadData()
+    
     }
     
 }

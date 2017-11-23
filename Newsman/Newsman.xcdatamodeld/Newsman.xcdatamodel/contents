@@ -27,6 +27,9 @@
         <relationship name="texts" toMany="YES" deletionRule="Nullify" destinationEntity="TextSnippet" inverseName="reports" inverseEntity="TextSnippet" syncable="YES"/>
         <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="VideoSnippet" inverseName="reports" inverseEntity="VideoSnippet" syncable="YES"/>
     </entity>
+    <entity name="Settings" representedClassName=".Settings" syncable="YES">
+        <attribute name="grouping" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="SketchSnippet" representedClassName="SketchSnippet" parentEntity="BaseSnippet" syncable="YES">
         <attribute name="sketch" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="sketches" inverseEntity="Report" syncable="YES"/>
@@ -47,5 +50,6 @@
         <element name="SketchSnippet" positionX="-666" positionY="-277" width="128" height="75"/>
         <element name="TextSnippet" positionX="-659" positionY="-99" width="128" height="75"/>
         <element name="VideoSnippet" positionX="-243" positionY="-124" width="128" height="75"/>
+        <element name="Settings" positionX="-468" positionY="-261" width="128" height="60"/>
     </elements>
 </model>

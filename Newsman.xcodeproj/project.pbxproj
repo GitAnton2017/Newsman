@@ -28,6 +28,10 @@
 		A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */; };
 		A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */; };
 		A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */; };
+		A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */; };
+		A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */; };
+		A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* DatePickerViewController.swift */; };
+		A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */; };
 		A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489881FBC4F2900359C0C /* AppDelegate.swift */; };
 		A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A754898A1FBC4F2900359C0C /* MainViewController.swift */; };
 		A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */; };
@@ -78,6 +82,10 @@
 		A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewCell.swift; sourceTree = "<group>"; };
 		A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSnippetViewController.swift; sourceTree = "<group>"; };
 		A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsTableViewDelegate.swift; sourceTree = "<group>"; };
+		A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A7400E741FC731A2006F05DC /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
+		A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerViewController.swift; sourceTree = "<group>"; };
 		A75489851FBC4F2900359C0C /* Newsman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Newsman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489881FBC4F2900359C0C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A754898A1FBC4F2900359C0C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -123,6 +131,8 @@
 		A71C85D21FBE228F000F2DD9 /* Core Data Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */,
+				A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */,
 				A71C85C41FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift */,
 				A71C85C51FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift */,
 				A71C85C61FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift */,
@@ -166,6 +176,8 @@
 			isa = PBXGroup;
 			children = (
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
+				A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */,
+				A7400E741FC731A2006F05DC /* DatePickerViewController.swift */,
 				A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
 				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
@@ -343,15 +355,19 @@
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
 				A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */,
 				A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */,
+				A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */,
 				A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */,
 				A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
 				A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */,
+				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
+				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
+				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,
 				A71C85CF1FBE19F3000F2DD9 /* PhotoSnippet+CoreDataClass.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,

@@ -267,6 +267,18 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="dwF-vX-AL3"/>
+                                    <barButtonItem systemItem="compose" id="AGD-bw-tqw">
+                                        <connections>
+                                            <segue destination="CV9-Jr-Pyu" kind="show" identifier="DatePicker" id="4xf-O6-s6P"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="AWb-IF-lgQ"/>
+                                    <barButtonItem systemItem="action" id="TEj-ZP-OgE">
+                                        <connections>
+                                            <segue destination="bef-PQ-TeZ" kind="show" identifier="PriorityPicker" id="U6G-5E-WPd"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="bnh-5l-U3c"/>
                                     <barButtonItem style="plain" systemItem="stop" id="ni3-eO-OXe">
                                         <connections>
                                             <action selector="clearTextButtonPress:" destination="mw8-gL-CtC" id="Chm-is-TFt"/>
@@ -319,7 +331,48 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Enm-yA-JkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1814" y="27"/>
+            <point key="canvasLocation" x="1813.5999999999999" y="26.53673163418291"/>
+        </scene>
+        <!--Priority Picker View Controller-->
+        <scene sceneID="s2v-Uq-UxB">
+            <objects>
+                <viewController storyboardIdentifier="PriorityPickerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="bef-PQ-TeZ" customClass="PriorityPickerViewController" customModule="Newsman" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9Qm-60-WNq">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xcX-yY-cW1">
+                                <rect key="frame" x="4" y="20" width="367" height="603"/>
+                                <subviews>
+                                    <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GF4-SW-51U">
+                                        <rect key="frame" x="0.0" y="0.0" width="367" height="603"/>
+                                    </pickerView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="GF4-SW-51U" firstAttribute="top" secondItem="xcX-yY-cW1" secondAttribute="top" id="hlf-Kn-yEV"/>
+                                    <constraint firstAttribute="trailing" secondItem="GF4-SW-51U" secondAttribute="trailing" id="hnA-Om-ri6"/>
+                                    <constraint firstAttribute="bottom" secondItem="GF4-SW-51U" secondAttribute="bottom" id="q6z-lx-z1P"/>
+                                    <constraint firstItem="GF4-SW-51U" firstAttribute="leading" secondItem="xcX-yY-cW1" secondAttribute="leading" id="wal-rW-Tlj"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="ZAE-ZQ-X7M" firstAttribute="trailing" secondItem="xcX-yY-cW1" secondAttribute="trailing" constant="4" id="2Of-vF-cZC"/>
+                            <constraint firstItem="xcX-yY-cW1" firstAttribute="leading" secondItem="ZAE-ZQ-X7M" secondAttribute="leading" constant="4" id="6qX-R9-gv0"/>
+                            <constraint firstItem="xcX-yY-cW1" firstAttribute="top" secondItem="ZAE-ZQ-X7M" secondAttribute="top" id="t23-tQ-DES"/>
+                            <constraint firstItem="ZAE-ZQ-X7M" firstAttribute="bottom" secondItem="xcX-yY-cW1" secondAttribute="bottom" constant="44" id="tvi-qS-fQ6"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ZAE-ZQ-X7M"/>
+                    </view>
+                    <connections>
+                        <outlet property="snippetPriorityPicker" destination="GF4-SW-51U" id="kWn-h5-tCY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BYq-pV-TZg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2649" y="362"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OAs-zD-MWr">
@@ -347,6 +400,50 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1cB-9U-sYj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-260" y="27"/>
+        </scene>
+        <!--Date Picker View Controller-->
+        <scene sceneID="9Aa-qw-KPT">
+            <objects>
+                <viewController storyboardIdentifier="DadePickerVC" id="CV9-Jr-Pyu" customClass="DatePickerViewController" customModule="Newsman" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UbW-oT-dP8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U7N-eL-HxC">
+                                <rect key="frame" x="4" y="20" width="367" height="603"/>
+                                <subviews>
+                                    <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="2m9-Zq-scI">
+                                        <rect key="frame" x="0.0" y="0.0" width="367" height="603"/>
+                                        <date key="date" timeIntervalSinceReferenceDate="533147533.74851799">
+                                            <!--2017-11-23 16:32:13 +0000-->
+                                        </date>
+                                    </datePicker>
+                                </subviews>
+                                <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="2m9-Zq-scI" firstAttribute="top" secondItem="U7N-eL-HxC" secondAttribute="top" id="2ex-0S-gRg"/>
+                                    <constraint firstAttribute="bottom" secondItem="2m9-Zq-scI" secondAttribute="bottom" id="XgQ-c2-rRv"/>
+                                    <constraint firstItem="2m9-Zq-scI" firstAttribute="leading" secondItem="U7N-eL-HxC" secondAttribute="leading" id="a0q-2z-R4z"/>
+                                    <constraint firstAttribute="trailing" secondItem="2m9-Zq-scI" secondAttribute="trailing" id="lnA-4E-zPP"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="U7N-eL-HxC" firstAttribute="leading" secondItem="Tx8-hx-svI" secondAttribute="leading" constant="4" id="9sj-GR-eCV"/>
+                            <constraint firstItem="Tx8-hx-svI" firstAttribute="bottom" secondItem="U7N-eL-HxC" secondAttribute="bottom" constant="44" id="eQT-fL-crz"/>
+                            <constraint firstItem="U7N-eL-HxC" firstAttribute="top" secondItem="Tx8-hx-svI" secondAttribute="top" id="vJ3-Rf-i95"/>
+                            <constraint firstItem="Tx8-hx-svI" firstAttribute="trailing" secondItem="U7N-eL-HxC" secondAttribute="trailing" constant="4" id="x0R-ju-hnJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Tx8-hx-svI"/>
+                    </view>
+                    <connections>
+                        <outlet property="snippetDatePicker" destination="2m9-Zq-scI" id="eyk-ab-AII"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yvK-HL-uI5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2650" y="-301"/>
         </scene>
     </scenes>
     <resources>

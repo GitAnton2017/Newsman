@@ -52,7 +52,8 @@ class MainViewDataSource: NSObject, UICollectionViewDataSource
     let items =
     [
      MainMenuItems(title: "Photos",   mainIcon: UIImage(named: "photo.main")!, tabIcon: UIImage(named: "photo.tab.icon")!, type: .photo),
-     MainMenuItems(title: "Texts",    mainIcon: UIImage(named: "text.main")!,  tabIcon: UIImage(named: "text.tab.icon")!,  type: .text),
+     MainMenuItems(title: "Texts",mainIcon: UIImage(named: "text.main")!, tabIcon: UIImage(named: "text.tab.icon")!,
+         type: .text),
      MainMenuItems(title: "Audio",    mainIcon: UIImage(named: "audio.main")!, tabIcon: UIImage(named: "audio.tab.icon")!, type: .audio),
      MainMenuItems(title: "Video",    mainIcon: UIImage(named: "video.main")!, tabIcon: UIImage(named: "video.tab.icon")!, type: .video),
      MainMenuItems(title: "Sketches", mainIcon: UIImage(named: "sketch.main")!, tabIcon: UIImage(named: "sketch.tab.icon")!, type: .sketch),
