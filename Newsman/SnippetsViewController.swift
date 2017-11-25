@@ -2,6 +2,7 @@
 import Foundation
 import UIKit
 import CoreData
+import CoreLocation
 
 
 enum GroupSnippets: String
@@ -11,11 +12,12 @@ enum GroupSnippets: String
   case alphabetically =  "Alphabetically"
   case bySnippetType  =  "By Snippet Type"
   case plainList      =  "Plain List"
+  case byLocation     =  "By Snippet Location"
   case nope           //initial state 
     
   static let groupingTypes: [GroupSnippets] =
   [
-   byPriority, byDateCreated, alphabetically, bySnippetType, plainList
+   byPriority, byDateCreated, alphabetically, bySnippetType, plainList, byLocation 
   ]
 }
 
@@ -24,6 +26,44 @@ class SnippetsViewController: UIViewController
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
     
+    var snippetLocation: CLLocation?
+    
+    func getLocationString(handler: @escaping (String?)->Void)
+    {
+        
+        if let location = snippetLocation
+        {
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(location)
+            { (placemarks, error)
+                in
+                if error == nil, let placemark = placemarks?.first
+                {
+                    var location = ""
+                    if let country    = placemark.country                 {location += country          }
+                    if let region     = placemark.administrativeArea      {location += ", " + region    }
+                    if let district   = placemark.subAdministrativeArea   {location += ", " + district  }
+                    if let city       = placemark.locality                {location += ", " + city      }
+                    if let subcity    = placemark.subLocality             {location += ", " + subcity   }
+                    if let street     = placemark.thoroughfare            {location += ", " + street    }
+                    if let substreet  = placemark.subThoroughfare         {location += ", " + substreet }
+                    
+                    OperationQueue.main.addOperation{handler(location)}
+                }
+                else
+                {
+                 OperationQueue.main.addOperation{handler(nil)}
+                }
+                
+            }
+            
+        }
+        else
+        {
+         OperationQueue.main.addOperation{handler(nil)}
+        }
+    }
+
     var menuTitle: String!
     {
      didSet
@@ -48,7 +88,7 @@ class SnippetsViewController: UIViewController
      }
     }()
     
-    private var currentGrouping: GroupSnippets = .nope 
+    private var currentGrouping: GroupSnippets = .plainList
     
     var groupType: GroupSnippets
     {
@@ -95,12 +135,18 @@ class SnippetsViewController: UIViewController
     @IBOutlet var snippetsTableView: UITableView!
     
     let snippetsDataSource = SnippetsViewDataSource()
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad()
     {
      super.viewDidLoad()   
       
      snippetsTableView.delegate = self
+     //Core Location Manager Settings ************************
+     locationManager.delegate = self
+     locationManager.desiredAccuracy = kCLLocationAccuracyBest
+     locationManager.distanceFilter = 20 //meters
+     //*******************************************************
      snippetsTableView.estimatedRowHeight = 70
      snippetsTableView.rowHeight = UITableViewAutomaticDimension
      createNewSnippet.image = createBarButtonIcon
@@ -109,7 +155,10 @@ class SnippetsViewController: UIViewController
      snippetsTableView.dataSource = snippetsDataSource
      currentToolBarItems = snippetsToolBar.items
      snippetsTableView.allowsMultipleSelectionDuringEditing = true
+     
         
+     setLocationPermissions()
+
     }
     
     override func viewWillAppear(_ animated: Bool)
@@ -230,6 +279,15 @@ class SnippetsViewController: UIViewController
      let moc = appDelegate.persistentContainer.viewContext
      let newTextSnippet = TextSnippet(context: moc)
      newTextSnippet.status = SnippetStatus.new.rawValue
+        
+     if let location = snippetLocation
+     {
+       newTextSnippet.logitude = location.coordinate.longitude
+       newTextSnippet.latitude = location.coordinate.latitude
+     }
+     
+     getLocationString {location in newTextSnippet.location = location}
+        
      textSnippetVC.textSnippet = newTextSnippet
      snippetsDataSource.items.insert(newTextSnippet, at: 0)
      self.navigationController?.pushViewController(textSnippetVC, animated: true)
@@ -256,3 +314,4 @@ class SnippetsViewController: UIViewController
     {
     }
 }
+

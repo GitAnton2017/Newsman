@@ -8,6 +8,7 @@
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="logitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
@@ -44,12 +45,12 @@
     </entity>
     <elements>
         <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
-        <element name="BaseSnippet" positionX="-443" positionY="-396" width="128" height="165"/>
+        <element name="BaseSnippet" positionX="-443" positionY="-396" width="128" height="180"/>
         <element name="PhotoSnippet" positionX="-632" positionY="-405" width="128" height="75"/>
         <element name="Report" positionX="-441" positionY="-199" width="128" height="148"/>
+        <element name="Settings" positionX="-468" positionY="-261" width="128" height="60"/>
         <element name="SketchSnippet" positionX="-666" positionY="-277" width="128" height="75"/>
         <element name="TextSnippet" positionX="-659" positionY="-99" width="128" height="75"/>
         <element name="VideoSnippet" positionX="-243" positionY="-124" width="128" height="75"/>
-        <element name="Settings" positionX="-468" positionY="-261" width="128" height="60"/>
     </elements>
 </model>

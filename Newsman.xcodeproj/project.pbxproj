@@ -32,6 +32,7 @@
 		A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */; };
 		A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* DatePickerViewController.swift */; };
 		A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */; };
+		A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */; };
 		A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489881FBC4F2900359C0C /* AppDelegate.swift */; };
 		A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A754898A1FBC4F2900359C0C /* MainViewController.swift */; };
 		A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */; };
@@ -86,6 +87,7 @@
 		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7400E741FC731A2006F05DC /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerViewController.swift; sourceTree = "<group>"; };
+		A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsCoreLocationDelegate.swift; sourceTree = "<group>"; };
 		A75489851FBC4F2900359C0C /* Newsman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Newsman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489881FBC4F2900359C0C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A754898A1FBC4F2900359C0C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
 				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
+				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
 				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
 				A754898A1FBC4F2900359C0C /* MainViewController.swift */,
@@ -364,6 +367,7 @@
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
+				A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
 				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,

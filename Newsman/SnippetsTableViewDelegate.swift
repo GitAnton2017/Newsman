@@ -16,7 +16,7 @@ extension SnippetsViewController: UITableViewDelegate
         
       for path in indexPaths
       {
-        let snippet = dataSource.spippetsData[path.section][path.row]
+        let snippet = dataSource.snippetsData[path.section][path.row]
         let oldPriority = snippet.priority
         if newPriority.rawValue != oldPriority
         {
@@ -45,14 +45,14 @@ extension SnippetsViewController: UITableViewDelegate
       { _ in
         if (dataSource.groupType == .byPriority)
         {
-         for sectionIndex in 0..<dataSource.spippetsData.count
+         for sectionIndex in 0..<dataSource.snippetsData.count
          {
           for x in snippets
           {
-            if let rowIndex = dataSource.spippetsData[sectionIndex].index(of: x)
+            if let rowIndex = dataSource.snippetsData[sectionIndex].index(of: x)
             {
-             let moved = dataSource.spippetsData[sectionIndex].remove(at: rowIndex)
-             dataSource.spippetsData[newPriority.section].insert(moved, at: 0)
+             let moved = dataSource.snippetsData[sectionIndex].remove(at: rowIndex)
+             dataSource.snippetsData[newPriority.section].insert(moved, at: 0)
              let sourcePath = IndexPath(row: rowIndex, section: sectionIndex)
              let destinPath = IndexPath(row:        0, section: newPriority.section)
              tableView.moveRow(at: sourcePath, to: destinPath)
@@ -64,11 +64,11 @@ extension SnippetsViewController: UITableViewDelegate
         }
         else
         {
-         for sectionIndex in 0..<dataSource.spippetsData.count
+         for sectionIndex in 0..<dataSource.snippetsData.count
          {
           for x in snippets
           {
-           if let rowIndex = dataSource.spippetsData[sectionIndex].index(of: x)
+           if let rowIndex = dataSource.snippetsData[sectionIndex].index(of: x)
            {
             let cell = tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
             cell?.backgroundColor = newPriority.color
@@ -105,7 +105,7 @@ extension SnippetsViewController: UITableViewDelegate
         var cnt = 1
         for indexPath in indexPaths
         {
-         let snippet = self.snippetsDataSource.spippetsData[indexPath.section][indexPath.row]
+         let snippet = self.snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
          snippets.append(snippet)
          if let tag = snippet.tag, !tag.isEmpty
          {
@@ -137,13 +137,13 @@ extension SnippetsViewController: UITableViewDelegate
              
             }
             
-            for sectionIndex in 0..<self.snippetsDataSource.spippetsData.count
+            for sectionIndex in 0..<self.snippetsDataSource.snippetsData.count
             {
               for x in snippets
               {
-                if let rowIndex = self.snippetsDataSource.spippetsData[sectionIndex].index(of: x)
+                if let rowIndex = self.snippetsDataSource.snippetsData[sectionIndex].index(of: x)
                 {
-                 self.snippetsDataSource.spippetsData[sectionIndex].remove(at: rowIndex)
+                 self.snippetsDataSource.snippetsData[sectionIndex].remove(at: rowIndex)
                  tableView.deleteRows(at: [IndexPath(row: rowIndex, section: sectionIndex)], with: .fade)
                 }
               }
@@ -237,7 +237,7 @@ extension SnippetsViewController: UITableViewDelegate
             return
         }
         textSnippetVC.modalTransitionStyle = .partialCurl
-        textSnippetVC.textSnippet = snippetsDataSource.spippetsData[indexPath.section][indexPath.row] as! TextSnippet
+        textSnippetVC.textSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row] as! TextSnippet
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
         
         

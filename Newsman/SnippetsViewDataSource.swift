@@ -8,7 +8,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     var groupTitles = [String]()
     var itemsType: SnippetType!
-    var spippetsData: [[BaseSnippet]] = []
+    var snippetsData: [[BaseSnippet]] = []
     var groupType: GroupSnippets!
     {
         didSet
@@ -52,7 +52,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func rebuildData ()
     {
-        spippetsData = []; groupTitles = []
+        snippetsData = []; groupTitles = []
         
         switch (groupType)
         {
@@ -60,7 +60,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
             for filter in SnippetPriority.priorityFilters
             {
                 let group = items.filter(filter.predicate)
-                spippetsData.append(group)
+                snippetsData.append(group)
                 groupTitles.append(filter.title)
 
             }
@@ -69,7 +69,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
             for filter in SnippetDates.dateFilter
             {
                let group = items.filter(filter.predicate)
-               spippetsData.append(group)
+               snippetsData.append(group)
                groupTitles.append(filter.title)
             }
          case .alphabetically:
@@ -82,7 +82,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
              }
             }
             
-            spippetsData.append(items.filter{($0.tag?.isEmpty)!})
+            snippetsData.append(items.filter{($0.tag?.isEmpty)!})
             groupTitles.append("Untitled")
             
             for letter in letterSet.sorted()
@@ -98,14 +98,32 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
                   return false
                 }
               }
-              spippetsData.append(group.sorted{$0.tag! < $1.tag!})
+              snippetsData.append(group.sorted{$0.tag! < $1.tag!})
               groupTitles.append(String(letter))
              }
             
+         case .byLocation:
+            var locationSet = Set<String>()
+            for item in items
+            {
+              if let location = item.location
+              {
+               locationSet.insert(location)
+              }
+            }
+            
+            snippetsData.append(items.filter{$0.location == nil})
+            groupTitles.append("Undefined Location")
+            
+            for location in locationSet
+            {
+              let group = items.filter{$0.location == location}
+              snippetsData.append(group)
+              groupTitles.append(location)
+            }
             
          case .bySnippetType: break
-         case .plainList:
-            spippetsData.append(items)
+         case .plainList: snippetsData.append(items)
          default: break
         }
     }
@@ -118,7 +136,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         }
         else
         {
-          if (spippetsData[section].isEmpty)
+          if (snippetsData[section].isEmpty)
           {
            return nil
           }
@@ -131,18 +149,18 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
-        return spippetsData.count
+        return snippetsData.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return spippetsData[section].count
+        return snippetsData[section].count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath)
-      let item = spippetsData[indexPath.section][indexPath.row]
+      let item = snippetsData[indexPath.section][indexPath.row]
       (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
       (cell as! SnippetsViewCell).snippetTextTag.text = item.tag
       
@@ -175,15 +193,15 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       
      if (from.section == to.section)
      {
-        let moved = spippetsData[from.section].remove(at: from.row)
-        spippetsData[to.section].insert(moved, at: to.row)
+        let moved = snippetsData[from.section].remove(at: from.row)
+        snippetsData[to.section].insert(moved, at: to.row)
      }
      else
      {
        if (groupType == .byPriority)
        {
-        let moved = spippetsData[from.section].remove(at: from.row)
-        spippetsData[to.section].insert(moved, at: to.row)
+        let moved = snippetsData[from.section].remove(at: from.row)
+        snippetsData[to.section].insert(moved, at: to.row)
         let cell = tableView.cellForRow(at: to)
         let priority = SnippetPriority.priorities[to.section]
         moved.priority = priority.rawValue

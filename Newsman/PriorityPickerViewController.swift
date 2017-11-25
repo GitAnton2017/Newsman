@@ -7,8 +7,10 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
         snippetPriorityPicker.dataSource = self
         snippetPriorityPicker.delegate = self
+        
     }
     
     override func viewWillAppear(_ animated: Bool)
@@ -34,11 +36,29 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
         return SnippetPriority.priorities.count
     }
     
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
+    /*func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
     {
       return SnippetPriority.priorities[row].rawValue
+    }*/
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat
+    {
+      return 50
     }
-    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString?
+    {
+      let priority = SnippetPriority.priorities[row]
+      let titleColor = SnippetPriority.priorityColorMap[priority]!
+      let fontSize: CGFloat = 50
+      let font = UIFont.italicSystemFont(ofSize: fontSize)
+      let titleAttr =
+        [
+            NSAttributedStringKey.font : font,
+            NSAttributedStringKey.foregroundColor: titleColor
+            
+           
+        ]
+      return NSAttributedString(string: priority.rawValue, attributes: titleAttr)
+    }
     var editedSnippet: BaseSnippet!
     {
         didSet

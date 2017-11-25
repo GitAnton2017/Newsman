@@ -25,5 +25,6 @@ extension BaseSnippet {
     @NSManaged public var status: String?
     @NSManaged public var tag: String?
     @NSManaged public var type: String?
+    @NSManaged public var location: String?
 
 }
