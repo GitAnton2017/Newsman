@@ -163,14 +163,34 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       let item = snippetsData[indexPath.section][indexPath.row]
       (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
       (cell as! SnippetsViewCell).snippetTextTag.text = item.tag
+      if let snippetPriority = item.priority, let priority = SnippetPriority(rawValue: snippetPriority)
+      {
+       (cell as! SnippetsViewCell).backgroundColor = priority.color
+      }
+      else
+      {
+       (cell as! SnippetsViewCell).backgroundColor = SnippetPriority.normal.color
+       item.priority = SnippetPriority.normal.rawValue
+      }
       
-      let priority = SnippetPriority(rawValue: item.priority!)
-      (cell as! SnippetsViewCell).backgroundColor = priority?.color
-        
       switch (itemsType)
       {
-       case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.tab.icon")
-       case .photo: break
+       case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
+       case .photo:
+        if let photos = (item as! PhotoSnippet).photos
+        {
+         let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: false)
+         let photosArr = photos.sortedArray(using: [sort])
+         if let mostRecentPhoto = photosArr.first, let path = (mostRecentPhoto as! Photo).url?.path
+         {
+          (cell as! SnippetsViewCell).snippetImage.image = UIImage(contentsOfFile: path)
+         }
+        }
+        else
+        {
+          (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "photo.main")
+        }
+
        case .video: break
        case .audio: break
        case .sketch: break

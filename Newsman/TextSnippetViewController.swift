@@ -22,19 +22,8 @@ class TextSnippetViewController: UIViewController
     func saveTextSnippetData()
     {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        
-        if (textSnippet.status == nil || textSnippet.status == SnippetStatus.new.rawValue)
-        {
-         textSnippet.date = Date() as NSDate
-         textSnippet.id = UUID()
-         textSnippet.priority = SnippetPriority.normal.rawValue
-         textSnippet.type = SnippetType.text.rawValue
-         textSnippet.status = SnippetStatus.old.rawValue
-        }
-        
         textSnippet.text = textView.text
         textSnippet.tag = textSnippetTitle.text
-    
         appDelegate.saveContext()
 
     }
@@ -42,7 +31,8 @@ class TextSnippetViewController: UIViewController
     @IBAction func saveTextButtonPress(_ sender: UIBarButtonItem)
     {
         saveTextSnippetData()
-        textView.resignFirstResponder()
+        if textView.isFirstResponder {textView.resignFirstResponder()}
+        if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
     }
     
     @IBAction func clearTextButtonPress(_ sender: UIBarButtonItem)
@@ -77,6 +67,8 @@ class TextSnippetViewController: UIViewController
     override func viewWillDisappear(_ animated: Bool)
     {
         super.viewWillDisappear(animated)
+        if textView.isFirstResponder {textView.resignFirstResponder()}
+        if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
         saveTextSnippetData()
     }
     
@@ -90,11 +82,11 @@ class TextSnippetViewController: UIViewController
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-      if let segueID = segue.identifier, segueID == "DatePicker"
+      if let segueID = segue.identifier, segueID == "TextSnippetDatePicker"
       {
         (segue.destination as! DatePickerViewController).editedSnippet = textSnippet
       }
-      if let segueID = segue.identifier, segueID == "PriorityPicker"
+      if let segueID = segue.identifier, segueID == "TextSnippetPriorityPicker"
       {
         (segue.destination as! PriorityPickerViewController).editedSnippet = textSnippet
       }

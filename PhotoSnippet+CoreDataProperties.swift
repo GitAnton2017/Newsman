@@ -2,7 +2,7 @@
 //  PhotoSnippet+CoreDataProperties.swift
 //  Newsman
 //
-//  Created by Anton2016 on 16.11.17.
+//  Created by Anton2016 on 27.11.17.
 //  Copyright © 2017 Anton2016. All rights reserved.
 //
 //
@@ -17,8 +17,9 @@ extension PhotoSnippet {
         return NSFetchRequest<PhotoSnippet>(entityName: "PhotoSnippet")
     }
 
-    @NSManaged public var photo: NSData?
+    @NSManaged public var photosURL: NSURL?
     @NSManaged public var reports: NSSet?
+    @NSManaged public var photos: NSSet?
 
 }
 
@@ -36,5 +37,22 @@ extension PhotoSnippet {
 
     @objc(removeReports:)
     @NSManaged public func removeFromReports(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for photos
+extension PhotoSnippet {
+
+    @objc(addPhotosObject:)
+    @NSManaged public func addToPhotos(_ value: Photo)
+
+    @objc(removePhotosObject:)
+    @NSManaged public func removeFromPhotos(_ value: Photo)
+
+    @objc(addPhotos:)
+    @NSManaged public func addToPhotos(_ values: NSSet)
+
+    @objc(removePhotos:)
+    @NSManaged public func removeFromPhotos(_ values: NSSet)
 
 }

@@ -238,15 +238,40 @@ extension SnippetsViewController: UITableViewDelegate
         }
         textSnippetVC.modalTransitionStyle = .partialCurl
         textSnippetVC.textSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row] as! TextSnippet
+        textSnippetVC.textSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
         
-        
-        print (#function, textSnippetVC.textSnippet)
     }
     //*************************************************************************************************
     func editPhotoSnippet(indexPath: IndexPath)
     //*************************************************************************************************
     {
+        guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
+            else
+        {
+            return
+        }
+        photoSnippetVC.modalTransitionStyle = .partialCurl
+        let photoSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row] as! PhotoSnippet
+        photoSnippetVC.photoSnippet = photoSnippet
+        photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
+        photoSnippetVC.newPhotos = [UIImage]()
+        var oldPhotos = [UIImage]()
+        
+        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
+        if let photos = photoSnippet.photos?.sortedArray(using: [sort])
+        {
+         for photo in photos
+         {
+          if let imagePath = (photo as! Photo).url?.path, let image = UIImage(contentsOfFile: imagePath)
+          {
+           oldPhotos.append(image)
+          }
+         }
+        }
+        photoSnippetVC.oldPhotos = oldPhotos
+        photoSnippetVC.snippetsVC = self
+        self.navigationController?.pushViewController(photoSnippetVC, animated: true)
     }
     //*************************************************************************************************
     func editVideoSnippet(indexPath: IndexPath)

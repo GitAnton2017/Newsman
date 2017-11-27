@@ -139,33 +139,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
-                                <rect key="frame" x="0.0" y="559" width="375" height="44"/>
-                                <items>
-                                    <barButtonItem systemItem="refresh" id="V4k-Ye-d1M">
-                                        <connections>
-                                            <action selector="groupSnippetsPress:" destination="8F0-Wa-TO0" id="Z96-t2-EwS"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ULo-bY-QyT"/>
-                                    <barButtonItem title="Button" id="wwM-RC-fnL">
-                                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <action selector="createNewSnippetPress:" destination="8F0-Wa-TO0" id="bii-3b-oGu"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Eoc-TW-de4"/>
-                                    <barButtonItem title="Edit" id="KUQ-Fn-oir">
-                                        <connections>
-                                            <action selector="editSnippetsPress:" destination="8F0-Wa-TO0" id="qeF-1D-zgj"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
-                                <rect key="frame" x="4" y="0.0" width="367" height="559"/>
+                                <rect key="frame" x="0.0" y="0.0" width="367" height="559"/>
                                 <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="sectionIndexColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -221,6 +196,31 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
+                                <rect key="frame" x="0.0" y="559" width="375" height="44"/>
+                                <items>
+                                    <barButtonItem systemItem="refresh" id="V4k-Ye-d1M">
+                                        <connections>
+                                            <action selector="groupSnippetsPress:" destination="8F0-Wa-TO0" id="Z96-t2-EwS"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ULo-bY-QyT"/>
+                                    <barButtonItem title="Button" id="wwM-RC-fnL">
+                                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="createNewSnippetPress:" destination="8F0-Wa-TO0" id="bii-3b-oGu"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Eoc-TW-de4"/>
+                                    <barButtonItem title="Edit" id="KUQ-Fn-oir">
+                                        <connections>
+                                            <action selector="editSnippetsPress:" destination="8F0-Wa-TO0" id="qeF-1D-zgj"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -255,39 +255,39 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xB3-bS-U6A">
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xB3-bS-U6A">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="psJ-lh-cMX"/>
-                                    <barButtonItem image="save (1)" style="done" id="QiB-bK-pB5">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="FhE-aN-B4R"/>
+                                    <barButtonItem image="save.tab.icon" id="QiB-bK-pB5">
                                         <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="1"/>
                                         <connections>
                                             <action selector="saveTextButtonPress:" destination="mw8-gL-CtC" id="X3Q-pg-EaR"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="dwF-vX-AL3"/>
-                                    <barButtonItem systemItem="compose" id="AGD-bw-tqw">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="rbS-Qp-fEZ"/>
+                                    <barButtonItem image="date.tab.icon" id="AGD-bw-tqw">
                                         <connections>
-                                            <segue destination="CV9-Jr-Pyu" kind="show" identifier="DatePicker" id="4xf-O6-s6P"/>
+                                            <segue destination="CV9-Jr-Pyu" kind="show" identifier="TextSnippetDatePicker" id="4xf-O6-s6P"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="AWb-IF-lgQ"/>
-                                    <barButtonItem systemItem="action" id="TEj-ZP-OgE">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="WZ3-aq-l4k"/>
+                                    <barButtonItem image="priority.tab.icon" id="TEj-ZP-OgE">
                                         <connections>
-                                            <segue destination="bef-PQ-TeZ" kind="show" identifier="PriorityPicker" id="U6G-5E-WPd"/>
+                                            <segue destination="bef-PQ-TeZ" kind="show" identifier="TextSnippetPriorityPicker" id="U6G-5E-WPd"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="bnh-5l-U3c"/>
-                                    <barButtonItem style="plain" systemItem="stop" id="ni3-eO-OXe">
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="2cx-8H-Qag"/>
+                                    <barButtonItem image="clear.tab.icon" style="plain" id="ni3-eO-OXe">
                                         <connections>
                                             <action selector="clearTextButtonPress:" destination="mw8-gL-CtC" id="Chm-is-TFt"/>
                                         </connections>
                                     </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Tak-iQ-nc7"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="dVj-2e-Iay"/>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" red="0.92549019607843142" green="0.23529411764705882" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter your snippet title here..." borderStyle="roundedRect" minimumFontSize="1" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Yve-pF-Sgx">
                                 <rect key="frame" x="8" y="36" width="359" height="30"/>
@@ -305,7 +305,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.92549019607843142" green="0.23529411764705882" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="R3s-1E-Gqc" firstAttribute="trailing" secondItem="EVW-0P-Phy" secondAttribute="trailing" constant="4" id="0Ra-Ql-mbL"/>
                             <constraint firstItem="R3s-1E-Gqc" firstAttribute="bottom" secondItem="EVW-0P-Phy" secondAttribute="bottom" constant="44" id="6G7-Cm-eOF"/>
@@ -331,7 +331,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Enm-yA-JkR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1813.5999999999999" y="26.53673163418291"/>
+            <point key="canvasLocation" x="1826" y="-161"/>
         </scene>
         <!--Priority Picker View Controller-->
         <scene sceneID="s2v-Uq-UxB">
@@ -372,7 +372,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYq-pV-TZg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2649" y="362"/>
+            <point key="canvasLocation" x="2761" y="416"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OAs-zD-MWr">
@@ -443,10 +443,141 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yvK-HL-uI5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2650" y="-301"/>
+            <point key="canvasLocation" x="2761" y="-315"/>
+        </scene>
+        <!--Photo Snippet View Controller-->
+        <scene sceneID="73f-d3-2I9">
+            <objects>
+                <viewController storyboardIdentifier="PhotoSnippetVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8Mi-lh-6Iq" customClass="PhotoSnippetViewController" customModule="Newsman" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dqS-dJ-g2s">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LTL-WS-0Wd">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="hl7-SH-cYg"/>
+                                    <barButtonItem image="save.tab.icon" id="7BD-Nx-M1h">
+                                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="1"/>
+                                        <connections>
+                                            <action selector="saveBarButtonPress:" destination="8Mi-lh-6Iq" id="8CV-Tr-UFp"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="2lM-tr-nRh"/>
+                                    <barButtonItem image="date.tab.icon" id="YoK-vI-8El">
+                                        <connections>
+                                            <segue destination="CV9-Jr-Pyu" kind="show" identifier="PhotoSnippetDatePicker" id="CdP-HO-XWj"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="SJr-zP-8Dc"/>
+                                    <barButtonItem image="photo.tab.icon" id="Blf-q6-FR7">
+                                        <connections>
+                                            <action selector="takePhotoBarButtonPress:" destination="8Mi-lh-6Iq" id="B3F-U7-Kc2"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="3vW-Xm-8un"/>
+                                    <barButtonItem image="priority.tab.icon" id="pLH-MV-lVe">
+                                        <connections>
+                                            <segue destination="bef-PQ-TeZ" kind="show" identifier="PhotoSnippetPriorityPicker" id="yLx-ea-9QV"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="AzR-KF-Luo"/>
+                                    <barButtonItem image="clear.tab.icon" style="plain" id="Aek-nG-i1a">
+                                        <connections>
+                                            <action selector="deletePhotosBarButtonPress:" destination="8Mi-lh-6Iq" id="ac4-Cu-pI2"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="CXH-oD-Xqt"/>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter your snippet title here..." borderStyle="roundedRect" minimumFontSize="1" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Pjr-4m-dEk">
+                                <rect key="frame" x="8" y="36" width="359" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="C7c-aZ-1Xk"/>
+                                </constraints>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
+                            </textField>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fRa-jJ-dD6">
+                                <rect key="frame" x="4" y="74" width="367" height="549"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="xIK-fT-b32">
+                                    <size key="itemSize" width="100" height="100"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoSnippetCell" id="pDB-24-B3G" customClass="PhotoSnippetCell" customModule="Newsman" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
+                                                    <rect key="frame" x="1" y="1" width="98" height="98"/>
+                                                </imageView>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="ENq-06-ukX" firstAttribute="leading" secondItem="pDB-24-B3G" secondAttribute="leading" constant="1" id="DiH-EU-eHs"/>
+                                            <constraint firstAttribute="bottom" secondItem="ENq-06-ukX" secondAttribute="bottom" constant="1" id="SqO-Km-52O"/>
+                                            <constraint firstAttribute="trailing" secondItem="ENq-06-ukX" secondAttribute="trailing" constant="1" id="Zas-sI-EcY"/>
+                                            <constraint firstItem="ENq-06-ukX" firstAttribute="top" secondItem="pDB-24-B3G" secondAttribute="top" constant="1" id="zPY-Di-34k"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="photoIconView" destination="ENq-06-ukX" id="i47-2F-JdN"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Pjr-4m-dEk" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="8" id="433-3r-MLi"/>
+                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" id="5Qw-vp-awR"/>
+                            <constraint firstItem="cYL-2S-pmF" firstAttribute="trailing" secondItem="fRa-jJ-dD6" secondAttribute="trailing" constant="4" id="6VA-dt-dtd"/>
+                            <constraint firstItem="fRa-jJ-dD6" firstAttribute="top" secondItem="Pjr-4m-dEk" secondAttribute="bottom" constant="8" id="7He-nE-RJE"/>
+                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="trailing" secondItem="cYL-2S-pmF" secondAttribute="trailing" id="7kX-aA-aDQ"/>
+                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="bottom" secondItem="cYL-2S-pmF" secondAttribute="bottom" id="Ced-uR-aNt"/>
+                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="top" secondItem="fRa-jJ-dD6" secondAttribute="bottom" id="Fhb-P6-2sQ"/>
+                            <constraint firstItem="Pjr-4m-dEk" firstAttribute="top" secondItem="cYL-2S-pmF" secondAttribute="top" constant="16" id="ebg-Wt-uDh"/>
+                            <constraint firstItem="cYL-2S-pmF" firstAttribute="trailing" secondItem="Pjr-4m-dEk" secondAttribute="trailing" constant="8" id="hmx-al-Ygc"/>
+                            <constraint firstItem="fRa-jJ-dD6" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="4" id="y76-zK-6cw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="cYL-2S-pmF"/>
+                    </view>
+                    <connections>
+                        <outlet property="datePickerBarButton" destination="YoK-vI-8El" id="BGo-AI-Drp"/>
+                        <outlet property="deletePhotosBarButton" destination="Aek-nG-i1a" id="OvA-X1-fU4"/>
+                        <outlet property="photoCollectionView" destination="fRa-jJ-dD6" id="yjP-0c-5Y0"/>
+                        <outlet property="photoSnippetTitle" destination="Pjr-4m-dEk" id="YO9-3l-CCz"/>
+                        <outlet property="photoSnippetToolBar" destination="LTL-WS-0Wd" id="gdS-XX-Mb1"/>
+                        <outlet property="priorityPickerBarButton" destination="pLH-MV-lVe" id="lJa-6z-N4k"/>
+                        <outlet property="saveBarButton" destination="7BD-Nx-M1h" id="Nwh-gx-pmz"/>
+                        <outlet property="takePhotoBarButton" destination="Blf-q6-FR7" id="iCX-ch-iU1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yTh-X9-2vj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1824.8" y="510.49475262368821"/>
         </scene>
     </scenes>
     <resources>
-        <image name="save (1)" width="32" height="32"/>
+        <image name="clear.tab.icon" width="30" height="30"/>
+        <image name="date.tab.icon" width="30" height="30"/>
+        <image name="photo.tab.icon" width="30" height="30"/>
+        <image name="priority.tab.icon" width="30" height="30"/>
+        <image name="save.tab.icon" width="30" height="30"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="CdP-HO-XWj"/>
+        <segue reference="yLx-ea-9QV"/>
+    </inferredMetricsTieBreakers>
 </document>

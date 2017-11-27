@@ -28,42 +28,6 @@ class SnippetsViewController: UIViewController
     
     var snippetLocation: CLLocation?
     
-    func getLocationString(handler: @escaping (String?)->Void)
-    {
-        
-        if let location = snippetLocation
-        {
-            let geocoder = CLGeocoder()
-            geocoder.reverseGeocodeLocation(location)
-            { (placemarks, error)
-                in
-                if error == nil, let placemark = placemarks?.first
-                {
-                    var location = ""
-                    if let country    = placemark.country                 {location += country          }
-                    if let region     = placemark.administrativeArea      {location += ", " + region    }
-                    if let district   = placemark.subAdministrativeArea   {location += ", " + district  }
-                    if let city       = placemark.locality                {location += ", " + city      }
-                    if let subcity    = placemark.subLocality             {location += ", " + subcity   }
-                    if let street     = placemark.thoroughfare            {location += ", " + street    }
-                    if let substreet  = placemark.subThoroughfare         {location += ", " + substreet }
-                    
-                    OperationQueue.main.addOperation{handler(location)}
-                }
-                else
-                {
-                 OperationQueue.main.addOperation{handler(nil)}
-                }
-                
-            }
-            
-        }
-        else
-        {
-         OperationQueue.main.addOperation{handler(nil)}
-        }
-    }
-
     var menuTitle: String!
     {
      didSet
@@ -236,7 +200,8 @@ class SnippetsViewController: UIViewController
         snippetsTableView.setEditing(true, animated: true)
         let doneItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(editSnippetsPress))
         let deleteItem  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteSelectedSnippets))
-        let priorityItem  = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(changeSelectedSnippetsPriority))
+        //let priorityItem  = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(changeSelectedSnippetsPriority))
+        let priorityItem = UIBarButtonItem(image: UIImage(named: "priority.tab.icon"), style: .plain, target: self, action: #selector(changeSelectedSnippetsPriority))
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         snippetsToolBar.setItems([deleteItem, flexSpace, priorityItem,flexSpace, doneItem], animated: true)
       }
@@ -278,6 +243,11 @@ class SnippetsViewController: UIViewController
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
      let newTextSnippet = TextSnippet(context: moc)
+
+     newTextSnippet.date = Date() as NSDate
+     newTextSnippet.id = UUID()
+     newTextSnippet.priority = SnippetPriority.normal.rawValue
+     newTextSnippet.type = SnippetType.text.rawValue
      newTextSnippet.status = SnippetStatus.new.rawValue
         
      if let location = snippetLocation
@@ -296,6 +266,53 @@ class SnippetsViewController: UIViewController
     
     func createNewPhotoSnippet()
     {
+     guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
+     else
+     {
+      return
+     }
+     photoSnippetVC.modalTransitionStyle = .partialCurl
+        
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     let moc = appDelegate.persistentContainer.viewContext
+     let newPhotoSnippet = PhotoSnippet(context: moc)
+
+     newPhotoSnippet.date = Date() as NSDate
+     let newPhotoSnippetID = UUID()
+     newPhotoSnippet.id = newPhotoSnippetID
+     newPhotoSnippet.priority = SnippetPriority.normal.rawValue
+     newPhotoSnippet.type = SnippetType.photo.rawValue
+     newPhotoSnippet.status = SnippetStatus.new.rawValue
+    
+     let fm = FileManager.default
+     let urls = fm.urls(for: .documentDirectory, in: .userDomainMask)
+     let newPhotoSnippetURL = urls.first!.appendingPathComponent(newPhotoSnippetID.uuidString)
+     do
+     {
+      try fm.createDirectory(at: newPhotoSnippetURL, withIntermediateDirectories: false, attributes: nil)
+      newPhotoSnippet.photosURL = newPhotoSnippetURL as NSURL
+      print ("PHOTO SNIPPET PHOTOS DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newPhotoSnippetURL.path)")
+     }
+     catch
+     {
+      print ("ERROR OCCURED WHEN CREATING PHOTO SNIPPET PHOTOS DIRECTORY: \(error.localizedDescription)")
+     }
+        
+     if let location = snippetLocation
+     {
+      newPhotoSnippet.logitude = location.coordinate.longitude
+      newPhotoSnippet.latitude = location.coordinate.latitude
+     }
+        
+     getLocationString {location in newPhotoSnippet.location = location}
+        
+     photoSnippetVC.photoSnippet = newPhotoSnippet
+     photoSnippetVC.newPhotos = [UIImage]()
+     photoSnippetVC.oldPhotos = [UIImage]()
+     photoSnippetVC.snippetsVC = self
+     snippetsDataSource.items.insert(newPhotoSnippet, at: 0)
+     self.navigationController?.pushViewController(photoSnippetVC, animated: true)
+     
     }
     
     func createNewVideoSnippet()
