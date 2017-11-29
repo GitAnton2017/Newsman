@@ -20,16 +20,16 @@
 	<string>1</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Adds location information to your snippets when it is created!</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Newsman needs access to your device camera to make photo snippets!</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Newsman needs access to your device photo library to make photo snippets!</string>
 	<key>CFBundleDisplayName</key>
 	<string></string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Newsman needs access to your device camera to make photo snippets!</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Adds location information to your snippets when it is created!</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Newsman needs access to your device photo library to make photo snippets!</string>
 	<key>UILaunchStoryboardName</key>
 	<string>Main</string>
 	<key>UIMainStoryboardFile</key>

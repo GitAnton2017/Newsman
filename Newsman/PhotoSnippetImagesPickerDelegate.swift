@@ -7,7 +7,7 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
   {
     let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-    newPhotos.append(pickedImage)
+    cache.addPhoto(photoSnippet: photoSnippet, image: pickedImage)
     dismiss(animated: true, completion: nil)
   }
     

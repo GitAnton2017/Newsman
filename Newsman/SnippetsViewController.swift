@@ -119,7 +119,7 @@ class SnippetsViewController: UIViewController
      snippetsTableView.dataSource = snippetsDataSource
      currentToolBarItems = snippetsToolBar.items
      snippetsTableView.allowsMultipleSelectionDuringEditing = true
-     
+     (UIApplication.shared.delegate as! AppDelegate).photoCache.snippetsVC = self
         
      setLocationPermissions()
 
@@ -284,13 +284,12 @@ class SnippetsViewController: UIViewController
      newPhotoSnippet.type = SnippetType.photo.rawValue
      newPhotoSnippet.status = SnippetStatus.new.rawValue
     
-     let fm = FileManager.default
-     let urls = fm.urls(for: .documentDirectory, in: .userDomainMask)
-     let newPhotoSnippetURL = urls.first!.appendingPathComponent(newPhotoSnippetID.uuidString)
+     let fileManager = FileManager.default
+     let docFolder = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+     let newPhotoSnippetURL = docFolder.appendingPathComponent(newPhotoSnippetID.uuidString)
      do
      {
-      try fm.createDirectory(at: newPhotoSnippetURL, withIntermediateDirectories: false, attributes: nil)
-      newPhotoSnippet.photosURL = newPhotoSnippetURL as NSURL
+      try fileManager.createDirectory(at: newPhotoSnippetURL, withIntermediateDirectories: false, attributes: nil)
       print ("PHOTO SNIPPET PHOTOS DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newPhotoSnippetURL.path)")
      }
      catch
@@ -307,9 +306,6 @@ class SnippetsViewController: UIViewController
      getLocationString {location in newPhotoSnippet.location = location}
         
      photoSnippetVC.photoSnippet = newPhotoSnippet
-     photoSnippetVC.newPhotos = [UIImage]()
-     photoSnippetVC.oldPhotos = [UIImage]()
-     photoSnippetVC.snippetsVC = self
      snippetsDataSource.items.insert(newPhotoSnippet, at: 0)
      self.navigationController?.pushViewController(photoSnippetVC, animated: true)
      

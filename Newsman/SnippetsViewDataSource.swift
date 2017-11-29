@@ -9,6 +9,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     var groupTitles = [String]()
     var itemsType: SnippetType!
     var snippetsData: [[BaseSnippet]] = []
+    let photoCache = (UIApplication.shared.delegate as! AppDelegate).photoCache
+    
     var groupType: GroupSnippets!
     {
         didSet
@@ -177,14 +179,10 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       {
        case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
        case .photo:
-        if let photos = (item as! PhotoSnippet).photos
+        let photoSnippet = item as! PhotoSnippet
+        if let icon = photoCache.getPhotos(photoSnippet: photoSnippet).first
         {
-         let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: false)
-         let photosArr = photos.sortedArray(using: [sort])
-         if let mostRecentPhoto = photosArr.first, let path = (mostRecentPhoto as! Photo).url?.path
-         {
-          (cell as! SnippetsViewCell).snippetImage.image = UIImage(contentsOfFile: path)
-         }
+          (cell as! SnippetsViewCell).snippetImage.image = icon
         }
         else
         {

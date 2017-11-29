@@ -17,7 +17,6 @@ extension PhotoSnippet {
         return NSFetchRequest<PhotoSnippet>(entityName: "PhotoSnippet")
     }
 
-    @NSManaged public var photosURL: NSURL?
     @NSManaged public var reports: NSSet?
     @NSManaged public var photos: NSSet?
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A7018EF31FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
 		A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85B51FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift */; };
 		A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85B61FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift */; };
@@ -69,6 +70,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A71C85B51FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A71C85B61FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				A7304ABE1FCC646300207A52 /* PhotoCash.swift */,
 				A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */,
 				A7304A9F1FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift */,
+				A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */,
 				A7304A9D1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift */,
 				A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */,
 				A7400E741FC731A2006F05DC /* DatePickerViewController.swift */,
@@ -396,6 +399,7 @@
 				A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
 				A7304AA01FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift in Sources */,
+				A7018EF31FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift in Sources */,
 				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
 				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,

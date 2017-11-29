@@ -5,18 +5,10 @@ import CoreData
 class PhotoSnippetViewController: UIViewController
 {
     
- var newPhotos: [UIImage]!
- var oldPhotos: [UIImage]!
- var photos:    [UIImage]
- {
-  get
-  {
-    return oldPhotos + newPhotos
-  }
- }
-
- var snippetsVC: SnippetsViewController!
+ var isEditingMode = true
     
+ let cache = (UIApplication.shared.delegate as! AppDelegate).photoCache
+
  var photoSnippet: PhotoSnippet!
  {
   didSet
@@ -42,37 +34,9 @@ class PhotoSnippetViewController: UIViewController
     
  func savePhotoSnippetData()
  {
-  let appDelegate = UIApplication.shared.delegate as! AppDelegate
-  let moc = appDelegate.persistentContainer.viewContext
   photoSnippet.tag = photoSnippetTitle.text
-  for photo in newPhotos
-  {
-    let newPhoto = Photo(context: moc)
-    let newPhotoID = UUID()
-    if let photosURL = photoSnippet.photosURL, let photoURL = photosURL.appendingPathComponent(newPhotoID.uuidString)
-    {
-     newPhoto.url = photoURL as NSURL
-    }
-    newPhoto.date = Date() as NSDate
-    newPhoto.photoSnippet = photoSnippet
-    newPhoto.id = newPhotoID
-    if let location = snippetsVC.snippetLocation
-    {
-     newPhoto.longitude = location.coordinate.longitude
-     newPhoto.latitude  = location.coordinate.latitude
-    }
     
-    snippetsVC.getLocationString {location in newPhoto.location = location}
-    
-    photoSnippet.addToPhotos(newPhoto)
-    
-    if let photoData = UIImagePNGRepresentation(photo), let photoURL = newPhoto.url
-    {
-      try? photoData.write(to: photoURL as URL, options: [.atomic])
-    }
-  }
-  
-  appDelegate.saveContext()
+  (UIApplication.shared.delegate as! AppDelegate).saveContext()
         
  }
  
@@ -82,14 +46,27 @@ class PhotoSnippetViewController: UIViewController
  {
   super.viewDidLoad()
   photoCollectionView.dataSource = self
+  photoCollectionView.delegate = self
+  photoCollectionView.allowsSelection = true
+  photoCollectionView.allowsMultipleSelection = true
   photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()
+ 
  }
     
  override func viewWillAppear(_ animated: Bool)
  {
   super.viewWillAppear(animated)
-  photoSnippetTitle.text = photoSnippet.tag
+  
+  if isEditingMode
+  {
+   photoSnippetTitle.text = photoSnippet.tag
+  }
+  else
+  {
+   isEditingMode = true
+  }
   photoCollectionView.reloadData()
+
     
  }
     
@@ -100,7 +77,10 @@ class PhotoSnippetViewController: UIViewController
   {
    photoSnippetTitle.resignFirstResponder()
   }
-  savePhotoSnippetData()
+  if isEditingMode
+  {
+   savePhotoSnippetData()
+  }
  }
     
     
@@ -124,6 +104,7 @@ class PhotoSnippetViewController: UIViewController
     
  @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
  {
+   isEditingMode = false
    let imagePicker = UIImagePickerController()
    if UIImagePickerController.isSourceTypeAvailable(.camera)
    {

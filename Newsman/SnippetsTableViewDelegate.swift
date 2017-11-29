@@ -255,22 +255,6 @@ extension SnippetsViewController: UITableViewDelegate
         let photoSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row] as! PhotoSnippet
         photoSnippetVC.photoSnippet = photoSnippet
         photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
-        photoSnippetVC.newPhotos = [UIImage]()
-        var oldPhotos = [UIImage]()
-        
-        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-        if let photos = photoSnippet.photos?.sortedArray(using: [sort])
-        {
-         for photo in photos
-         {
-          if let imagePath = (photo as! Photo).url?.path, let image = UIImage(contentsOfFile: imagePath)
-          {
-           oldPhotos.append(image)
-          }
-         }
-        }
-        photoSnippetVC.oldPhotos = oldPhotos
-        photoSnippetVC.snippetsVC = self
         self.navigationController?.pushViewController(photoSnippetVC, animated: true)
     }
     //*************************************************************************************************

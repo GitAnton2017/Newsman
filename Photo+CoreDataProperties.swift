@@ -18,7 +18,6 @@ extension Photo {
     }
 
     @NSManaged public var id: UUID?
-    @NSManaged public var url: NSURL?
     @NSManaged public var date: NSDate?
     @NSManaged public var location: String?
     @NSManaged public var latitude: Double

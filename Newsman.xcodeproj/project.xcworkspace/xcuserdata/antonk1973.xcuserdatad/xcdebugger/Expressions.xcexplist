@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "PhotoSnippetViewController.savePhotoSnippetData():PhotoSnippetViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(UIImage)((UIKit.UIImage)0x00006040000aa320)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
