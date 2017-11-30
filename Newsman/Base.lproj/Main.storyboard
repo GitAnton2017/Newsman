@@ -483,9 +483,9 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="AzR-KF-Luo"/>
-                                    <barButtonItem image="clear.tab.icon" style="plain" id="Aek-nG-i1a">
+                                    <barButtonItem style="plain" systemItem="edit" id="Aek-nG-i1a">
                                         <connections>
-                                            <action selector="deletePhotosBarButtonPress:" destination="8Mi-lh-6Iq" id="ac4-Cu-pI2"/>
+                                            <action selector="editPhotosPress:" destination="8Mi-lh-6Iq" id="kaY-KQ-NUA"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="CXH-oD-Xqt"/>
@@ -539,6 +539,7 @@
                             </collectionView>
                         </subviews>
                         <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Pjr-4m-dEk" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="8" id="433-3r-MLi"/>
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" id="5Qw-vp-awR"/>
@@ -552,10 +553,12 @@
                             <constraint firstItem="fRa-jJ-dD6" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="4" id="y76-zK-6cw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cYL-2S-pmF"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="mTb-Hh-2mK" appends="YES" id="UKa-JI-cQE"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="datePickerBarButton" destination="YoK-vI-8El" id="BGo-AI-Drp"/>
-                        <outlet property="deletePhotosBarButton" destination="Aek-nG-i1a" id="OvA-X1-fU4"/>
                         <outlet property="photoCollectionView" destination="fRa-jJ-dD6" id="yjP-0c-5Y0"/>
                         <outlet property="photoSnippetTitle" destination="Pjr-4m-dEk" id="YO9-3l-CCz"/>
                         <outlet property="photoSnippetToolBar" destination="LTL-WS-0Wd" id="gdS-XX-Mb1"/>
@@ -565,6 +568,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yTh-X9-2vj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pinchGestureRecognizer id="mTb-Hh-2mK">
+                    <connections>
+                        <action selector="pinchAction:" destination="8Mi-lh-6Iq" id="ng9-7H-DHu"/>
+                    </connections>
+                </pinchGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1824.8" y="510.49475262368821"/>
         </scene>

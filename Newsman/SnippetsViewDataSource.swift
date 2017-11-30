@@ -182,7 +182,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         let photoSnippet = item as! PhotoSnippet
         if let icon = photoCache.getPhotos(photoSnippet: photoSnippet).first
         {
-          (cell as! SnippetsViewCell).snippetImage.image = icon
+          (cell as! SnippetsViewCell).snippetImage.image = icon.image
         }
         else
         {
