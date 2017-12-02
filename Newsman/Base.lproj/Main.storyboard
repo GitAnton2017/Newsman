@@ -25,19 +25,19 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="10" id="dPM-MG-3cx">
                                     <size key="itemSize" width="150" height="150"/>
-                                    <size key="headerReferenceSize" width="0.0" height="45"/>
-                                    <size key="footerReferenceSize" width="0.0" height="45"/>
-                                    <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
+                                    <size key="headerReferenceSize" width="0.0" height="50"/>
+                                    <size key="footerReferenceSize" width="0.0" height="50"/>
+                                    <inset key="sectionInset" minX="20" minY="5" maxX="20" maxY="5"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="MainViewCell" id="rSG-Ze-xS5" customClass="MainViewCell" customModule="Newsman" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="65" width="150" height="150"/>
+                                        <rect key="frame" x="20" y="55" width="150" height="150"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NDH-YN-VEh">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NDH-YN-VEh">
                                                     <rect key="frame" x="25" y="123" width="100" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                     <color key="textColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -68,11 +68,11 @@
                                     </collectionViewCell>
                                 </cells>
                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="MainViewHeader" id="Uaw-7H-k8P" customClass="MainViewHeader" customModule="Newsman" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="367" height="45"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="367" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NEWSMAN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4u0-9p-ftU">
-                                            <rect key="frame" x="0.0" y="0.0" width="367" height="45"/>
+                                            <rect key="frame" x="0.0" y="5" width="367" height="45"/>
                                             <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="19"/>
                                             <color key="textColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -80,7 +80,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="4u0-9p-ftU" secondAttribute="trailing" id="8uk-Ij-Nhn"/>
-                                        <constraint firstItem="4u0-9p-ftU" firstAttribute="top" secondItem="Uaw-7H-k8P" secondAttribute="top" id="Cqh-EL-5ev"/>
+                                        <constraint firstItem="4u0-9p-ftU" firstAttribute="top" secondItem="Uaw-7H-k8P" secondAttribute="top" constant="5" id="Cqh-EL-5ev"/>
                                         <constraint firstAttribute="bottom" secondItem="4u0-9p-ftU" secondAttribute="bottom" id="g81-ao-nQF"/>
                                         <constraint firstItem="4u0-9p-ftU" firstAttribute="leading" secondItem="Uaw-7H-k8P" secondAttribute="leading" id="yJo-7J-RaS"/>
                                     </constraints>
@@ -89,11 +89,11 @@
                                     </connections>
                                 </collectionReusableView>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="MainViewFooter" id="iTY-eL-4Zb" customClass="MainViewFooter" customModule="Newsman" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="235" width="367" height="45"/>
+                                    <rect key="frame" x="0.0" y="210" width="367" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaI-cz-OX1">
-                                            <rect key="frame" x="0.0" y="0.0" width="367" height="45"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="367" height="50"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
@@ -141,6 +141,9 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
                                 <rect key="frame" x="0.0" y="559" width="375" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Pea-M7-Sff"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem systemItem="refresh" id="V4k-Ye-d1M">
                                         <connections>
@@ -164,7 +167,7 @@
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
                                 <rect key="frame" x="4" y="0.0" width="367" height="559"/>
                                 <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -182,7 +185,7 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lZK-7m-eLo">
                                                     <rect key="frame" x="15" y="11" width="48" height="48"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="48" id="NIT-UX-nEu"/>
+                                                        <constraint firstAttribute="height" constant="48" id="DNo-1m-suL"/>
                                                         <constraint firstAttribute="width" secondItem="lZK-7m-eLo" secondAttribute="height" multiplier="1:1" id="Tnj-uN-SMW"/>
                                                     </constraints>
                                                 </imageView>
@@ -200,13 +203,12 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="Qqb-23-EaJ" firstAttribute="bottom" secondItem="lZK-7m-eLo" secondAttribute="bottom" id="1bW-3o-sEJ"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Qqb-23-EaJ" secondAttribute="trailing" constant="20" symbolic="YES" id="4jz-6h-pcE"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8uF-fe-ELp" secondAttribute="trailing" constant="20" symbolic="YES" id="51V-hg-nMC"/>
                                                 <constraint firstItem="Qqb-23-EaJ" firstAttribute="leading" secondItem="lZK-7m-eLo" secondAttribute="trailing" constant="10" id="5Ja-TG-sq4"/>
                                                 <constraint firstItem="lZK-7m-eLo" firstAttribute="leading" secondItem="YtZ-ZP-IsY" secondAttribute="leadingMargin" id="AO1-f1-X4b"/>
-                                                <constraint firstItem="lZK-7m-eLo" firstAttribute="top" secondItem="YtZ-ZP-IsY" secondAttribute="topMargin" id="Sy8-wB-Qqu"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="lZK-7m-eLo" secondAttribute="bottom" id="e6z-Vo-A0f"/>
+                                                <constraint firstItem="Qqb-23-EaJ" firstAttribute="bottom" secondItem="lZK-7m-eLo" secondAttribute="bottom" id="PtH-pj-AAV"/>
+                                                <constraint firstItem="lZK-7m-eLo" firstAttribute="centerY" secondItem="YtZ-ZP-IsY" secondAttribute="centerY" id="PtR-cw-5bp"/>
                                                 <constraint firstItem="8uF-fe-ELp" firstAttribute="top" secondItem="lZK-7m-eLo" secondAttribute="top" id="it9-xg-maO"/>
                                                 <constraint firstItem="8uF-fe-ELp" firstAttribute="leading" secondItem="lZK-7m-eLo" secondAttribute="trailing" constant="10" id="oV1-hn-uU6"/>
                                             </constraints>
@@ -228,6 +230,7 @@
                             <constraint firstItem="anT-34-Kv0" firstAttribute="trailing" secondItem="eyJ-fM-0bg" secondAttribute="trailing" constant="4" id="Uwt-el-D2q"/>
                             <constraint firstItem="eyJ-fM-0bg" firstAttribute="top" secondItem="anT-34-Kv0" secondAttribute="top" id="V2W-ky-631"/>
                             <constraint firstItem="anT-34-Kv0" firstAttribute="bottom" secondItem="eyJ-fM-0bg" secondAttribute="bottom" constant="44" id="VP0-6x-ty7"/>
+                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="centerX" secondItem="ULZ-Fl-aNF" secondAttribute="centerX" id="bYN-cm-5DY"/>
                             <constraint firstItem="QNI-h6-xfy" firstAttribute="trailing" secondItem="anT-34-Kv0" secondAttribute="trailing" id="fwH-q5-8XS"/>
                             <constraint firstItem="QNI-h6-xfy" firstAttribute="leading" secondItem="anT-34-Kv0" secondAttribute="leading" id="wdY-d5-I16"/>
                             <constraint firstItem="eyJ-fM-0bg" firstAttribute="leading" secondItem="anT-34-Kv0" secondAttribute="leading" constant="4" id="xqD-XH-RiS"/>
@@ -258,6 +261,9 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xB3-bS-U6A">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="6Lp-9g-sXg"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="FhE-aN-B4R"/>
                                     <barButtonItem image="save.tab.icon" id="QiB-bK-pB5">
@@ -456,6 +462,9 @@
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LTL-WS-0Wd">
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="uzc-xI-TUr"/>
+                                </constraints>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="hl7-SH-cYg"/>
                                     <barButtonItem image="save.tab.icon" id="7BD-Nx-M1h">
@@ -537,6 +546,13 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="BrJ-Xz-Uta">
+                                <rect key="frame" x="140" y="577" width="94" height="29"/>
+                                <color key="tintColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="photoScaleStepperChanged:" destination="8Mi-lh-6Iq" eventType="valueChanged" id="6Jn-YC-8Ew"/>
+                                </connections>
+                            </stepper>
                         </subviews>
                         <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
@@ -548,8 +564,10 @@
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="trailing" secondItem="cYL-2S-pmF" secondAttribute="trailing" id="7kX-aA-aDQ"/>
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="bottom" secondItem="cYL-2S-pmF" secondAttribute="bottom" id="Ced-uR-aNt"/>
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="top" secondItem="fRa-jJ-dD6" secondAttribute="bottom" id="Fhb-P6-2sQ"/>
+                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="top" secondItem="BrJ-Xz-Uta" secondAttribute="bottom" constant="17" id="b6X-Ew-mz2"/>
                             <constraint firstItem="Pjr-4m-dEk" firstAttribute="top" secondItem="cYL-2S-pmF" secondAttribute="top" constant="16" id="ebg-Wt-uDh"/>
                             <constraint firstItem="cYL-2S-pmF" firstAttribute="trailing" secondItem="Pjr-4m-dEk" secondAttribute="trailing" constant="8" id="hmx-al-Ygc"/>
+                            <constraint firstItem="BrJ-Xz-Uta" firstAttribute="centerX" secondItem="dqS-dJ-g2s" secondAttribute="centerX" id="rbm-5r-LrZ"/>
                             <constraint firstItem="fRa-jJ-dD6" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="4" id="y76-zK-6cw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cYL-2S-pmF"/>
@@ -560,6 +578,7 @@
                     <connections>
                         <outlet property="datePickerBarButton" destination="YoK-vI-8El" id="BGo-AI-Drp"/>
                         <outlet property="photoCollectionView" destination="fRa-jJ-dD6" id="yjP-0c-5Y0"/>
+                        <outlet property="photoScaleStepper" destination="BrJ-Xz-Uta" id="zXO-ZG-kDj"/>
                         <outlet property="photoSnippetTitle" destination="Pjr-4m-dEk" id="YO9-3l-CCz"/>
                         <outlet property="photoSnippetToolBar" destination="LTL-WS-0Wd" id="gdS-XX-Mb1"/>
                         <outlet property="priorityPickerBarButton" destination="pLH-MV-lVe" id="lJa-6z-N4k"/>

@@ -82,6 +82,7 @@ public enum SnippetType: String
     case audio  = "AudioSnippet"
     case sketch = "SketchSnippet"
     case report = "Report"
+    
 }
 
 public enum SnippetPriority: String

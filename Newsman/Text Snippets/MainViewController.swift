@@ -21,6 +21,7 @@ class MainViewController: UIViewController
       (segue.destination as! SnippetsViewController).snippetType = mainViewDataSource.items[indexPath.row].type
       (segue.destination as! SnippetsViewController).menuTitle = mainViewDataSource.items[indexPath.row].title
       (segue.destination as! SnippetsViewController).createBarButtonIcon = mainViewDataSource.items[indexPath.row].tabIcon
+      (segue.destination as! SnippetsViewController).createBarButtonTitle = mainViewDataSource.items[indexPath.row].tabTitle
      }
         
     }

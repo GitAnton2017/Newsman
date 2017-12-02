@@ -11,7 +11,7 @@ extension PhotoSnippetViewController: UICollectionViewDelegate
       {
         (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 0.5
         allPhotosSelected = true
-        selectBarButton.title = "Unselect"
+        selectBarButton.title = "☆☆☆"
       }
       else
       {
@@ -24,6 +24,10 @@ extension PhotoSnippetViewController: UICollectionViewDelegate
       if isEditingPhotos
       {
         (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 1
+        if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
+        {
+         selectBarButton.title = "★★★"
+        }
       }
     }
 }

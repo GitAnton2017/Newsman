@@ -50,6 +50,7 @@
 		A75489AC1FBC4F2900359C0C /* NewsmanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489AB1FBC4F2900359C0C /* NewsmanUITests.swift */; };
 		A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BB1FBC620300359C0C /* MainViewCell.swift */; };
 		A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BD1FBC649000359C0C /* MainViewDataSource.swift */; };
+		A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7CB13731FD2D5EB00AA7294 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +120,11 @@
 		A75489AD1FBC4F2900359C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A75489BB1FBC620300359C0C /* MainViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewCell.swift; sourceTree = "<group>"; };
 		A75489BD1FBC649000359C0C /* MainViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDataSource.swift; sourceTree = "<group>"; };
+		A7CB13671FD27E8700AA7294 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		A7CB13681FD2A63B00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
+		A7CB13721FD2D5EB00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A7CB13741FD2D61200AA7294 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A7CB13751FD2D61400AA7294 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +155,7 @@
 		A71C85D21FBE228F000F2DD9 /* Core Data Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */,
 				A7304AA91FCC03B500207A52 /* PhotoSnippet+CoreDataProperties.swift */,
 				A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */,
 				A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */,
@@ -174,6 +181,7 @@
 		A754897C1FBC4F2900359C0C = {
 			isa = PBXGroup;
 			children = (
+				A7CB13731FD2D5EB00AA7294 /* Localizable.strings */,
 				A71C85D21FBE228F000F2DD9 /* Core Data Classes */,
 				A75489871FBC4F2900359C0C /* Newsman */,
 				A754899F1FBC4F2900359C0C /* NewsmanTests */,
@@ -196,29 +204,15 @@
 			isa = PBXGroup;
 			children = (
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
-				A7304ABE1FCC646300207A52 /* PhotoCash.swift */,
-				A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */,
-				A7304A9F1FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift */,
-				A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */,
-				A7304A9D1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift */,
-				A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */,
-				A7400E741FC731A2006F05DC /* DatePickerViewController.swift */,
-				A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */,
-				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
-				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
-				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
-				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
-				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
-				A754898A1FBC4F2900359C0C /* MainViewController.swift */,
-				A75489BD1FBC649000359C0C /* MainViewDataSource.swift */,
-				A7304A9B1FCAFDB700207A52 /* PhotoSnippetCell.swift */,
-				A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */,
-				A75489BB1FBC620300359C0C /* MainViewCell.swift */,
-				A75489921FBC4F2900359C0C /* Assets.xcassets */,
-				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
 				A75489971FBC4F2900359C0C /* Info.plist */,
-				A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */,
+				A75489921FBC4F2900359C0C /* Assets.xcassets */,
+				A7CB136E1FD2D35E00AA7294 /* Assesory Menus */,
+				A7CB136D1FD2D31D00AA7294 /* Main Menu */,
+				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
+				A7CB136B1FD2D2D900AA7294 /* Snippets Menu */,
+				A7CB136A1FD2D2AA00AA7294 /* Text Snippets */,
+				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
 			);
 			path = Newsman;
 			sourceTree = "<group>";
@@ -239,6 +233,60 @@
 				A75489AD1FBC4F2900359C0C /* Info.plist */,
 			);
 			path = NewsmanUITests;
+			sourceTree = "<group>";
+		};
+		A7CB13691FD2D27000AA7294 /* Photo Snippets */ = {
+			isa = PBXGroup;
+			children = (
+				A7304A9F1FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift */,
+				A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */,
+				A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */,
+				A7304A9D1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift */,
+				A7304A9B1FCAFDB700207A52 /* PhotoSnippetCell.swift */,
+				A7304ABE1FCC646300207A52 /* PhotoCash.swift */,
+			);
+			name = "Photo Snippets";
+			sourceTree = "<group>";
+		};
+		A7CB136A1FD2D2AA00AA7294 /* Text Snippets */ = {
+			isa = PBXGroup;
+			children = (
+				A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */,
+			);
+			path = "Text Snippets";
+			sourceTree = "<group>";
+		};
+		A7CB136B1FD2D2D900AA7294 /* Snippets Menu */ = {
+			isa = PBXGroup;
+			children = (
+				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
+				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
+				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
+				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
+				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
+			);
+			name = "Snippets Menu";
+			sourceTree = "<group>";
+		};
+		A7CB136D1FD2D31D00AA7294 /* Main Menu */ = {
+			isa = PBXGroup;
+			children = (
+				A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */,
+				A75489BD1FBC649000359C0C /* MainViewDataSource.swift */,
+				A75489BB1FBC620300359C0C /* MainViewCell.swift */,
+				A754898A1FBC4F2900359C0C /* MainViewController.swift */,
+			);
+			name = "Main Menu";
+			path = "Text Snippets";
+			sourceTree = "<group>";
+		};
+		A7CB136E1FD2D35E00AA7294 /* Assesory Menus */ = {
+			isa = PBXGroup;
+			children = (
+				A7400E741FC731A2006F05DC /* DatePickerViewController.swift */,
+				A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */,
+			);
+			name = "Assesory Menus";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +397,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */,
+				A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */,
 				A75489961FBC4F2900359C0C /* LaunchScreen.storyboard in Resources */,
 				A75489931FBC4F2900359C0C /* Assets.xcassets in Resources */,
 			);
@@ -452,6 +501,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				A71C85971FBD9587000F2DD9 /* Base */,
+				A7CB13671FD27E8700AA7294 /* en */,
+				A7CB13681FD2A63B00AA7294 /* ru */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -464,6 +515,17 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		A7CB13731FD2D5EB00AA7294 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7CB13721FD2D5EB00AA7294 /* ru */,
+				A7CB13741FD2D61200AA7294 /* Base */,
+				A7CB13751FD2D61400AA7294 /* en */,
+			);
+			name = Localizable.strings;
+			path = "Newsman/Text Snippets";
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -471,6 +533,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -528,6 +591,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

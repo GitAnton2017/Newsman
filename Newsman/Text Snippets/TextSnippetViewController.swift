@@ -11,7 +11,7 @@ class TextSnippetViewController: UIViewController
     @IBOutlet var textSnippetTitle: UITextField!
     @IBOutlet var textSnippetToolBar: UIToolbar!
     
-    var textSnippet: TextSnippet!
+    var textSnippet: TextSnippet! 
     {
         didSet
         {

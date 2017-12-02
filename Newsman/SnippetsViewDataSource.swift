@@ -63,7 +63,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
             {
                 let group = items.filter(filter.predicate)
                 snippetsData.append(group)
-                groupTitles.append(filter.title)
+                groupTitles.append(NSLocalizedString(filter.title, comment: filter.title))
 
             }
             
@@ -72,7 +72,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
             {
                let group = items.filter(filter.predicate)
                snippetsData.append(group)
-               groupTitles.append(filter.title)
+               groupTitles.append(NSLocalizedString(filter.title, comment: filter.title))
             }
          case .alphabetically:
             var letterSet = Set<Character>()

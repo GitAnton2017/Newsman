@@ -65,27 +65,33 @@ class PhotoSnippetViewController: UIViewController
    if allPhotosSelected
    {
     allPhotosSelected = false
-    selectBarButton.title = "Select"
+    selectBarButton.title = "★★★"
     if let selectedItemsPaths = photoCollectionView.indexPathsForSelectedItems
     {
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-     (photoCollectionView.cellForItem(at: itemIndexPath) as! PhotoSnippetCell).photoIconView.alpha = 1
+      if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
+      {
+        cell.photoIconView.alpha = 1
+      }
      }
     }
    }
    else
    {
     allPhotosSelected = true
-    selectBarButton.title = "Unselect"
+    selectBarButton.title = "☆☆☆"
     for i in 0..<photoCollectionView.numberOfSections
     {
       for j in 0..<photoCollectionView.numberOfItems(inSection: i)
       {
         let itemIndexPath = IndexPath(item: j, section: i)
-        photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: UICollectionViewScrollPosition.top)
-        (photoCollectionView.cellForItem(at: itemIndexPath) as! PhotoSnippetCell).photoIconView.alpha = 0.5
+        photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: UICollectionViewScrollPosition.bottom)
+        if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
+        {
+          cell.photoIconView.alpha = 0.5
+        }
       }
     }
     
@@ -100,7 +106,10 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      (photoCollectionView.cellForItem(at: itemIndexPath) as! PhotoSnippetCell).photoIconView.alpha = 1
+      if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
+      {
+       cell.photoIconView.alpha = 1
+      }
      }
     }
     allPhotosSelected = false
@@ -113,13 +122,23 @@ class PhotoSnippetViewController: UIViewController
    {
     isEditingPhotos = true
     photoCollectionView.allowsMultipleSelection = true
-    let doneItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(editPhotosPress))
+    let doneItem = UIBarButtonItem(title: "⏎", style: .done, target: self, action: #selector(editPhotosPress))
+    doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
+    doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .normal)
+    
     let deleteItem  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deletePhotosBarButtonPress))
-    let selectItem = UIBarButtonItem(title: "Select", style: .done, target: self, action: #selector(toggleAllPhotosSelection))
+    
+    let selectItem = UIBarButtonItem(title: "★★★", style: .plain, target: self, action: #selector(toggleAllPhotosSelection))
+    selectItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .selected)
+    selectItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 35)], for: .normal)
+    
     selectBarButton = selectItem
+    
     //let priorityItem  = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(changeSelectedSnippetsPriority))
     //let priorityItem = UIBarButtonItem(image: UIImage(named: "priority.tab.icon"), style: .plain, target: self, action: #selector(changeSelectedSnippetsPriority))
+    
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+    
     photoSnippetToolBar.setItems([deleteItem, flexSpace, selectItem, flexSpace, doneItem], animated: true)
     
    }
@@ -133,6 +152,11 @@ class PhotoSnippetViewController: UIViewController
   photoCollectionView.delegate = self
   photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()
   currentToolBarItems = photoSnippetToolBar.items
+  photoScaleStepper.value = Double(nphoto)
+  photoScaleStepper.minimumValue = Double(minPhotosInRow)
+  photoScaleStepper.maximumValue = Double(maxPhotosInRow)
+  photoScaleStepper.stepValue = 1.0
+  photoScaleStepper.wraps = true
  
  }
     
@@ -178,6 +202,12 @@ class PhotoSnippetViewController: UIViewController
     
  var maxPhotosInRow = 10
  var minPhotosInRow = 1
+    
+ @IBOutlet var photoScaleStepper: UIStepper!
+ @IBAction func photoScaleStepperChanged(_ sender: UIStepper)
+ {
+  nphoto = Int(sender.value)
+ }
     
  @IBAction func pinchAction(_ sender: UIPinchGestureRecognizer)
  {
