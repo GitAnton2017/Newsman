@@ -23,6 +23,7 @@ enum GroupSnippets: String
 
 class SnippetsViewController: UIViewController
 {
+    
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
     var createBarButtonTitle: String!
@@ -130,7 +131,6 @@ class SnippetsViewController: UIViewController
      snippetsTableView.dataSource = snippetsDataSource
      currentToolBarItems = snippetsToolBar.items
      snippetsTableView.allowsMultipleSelectionDuringEditing = true
-     (UIApplication.shared.delegate as! AppDelegate).photoCache.snippetsVC = self
      //snippetsTableView.translatesAutoresizingMaskIntoConstraints = false
         
      setLocationPermissions()
@@ -142,6 +142,7 @@ class SnippetsViewController: UIViewController
      super.viewWillAppear(animated)
      snippetsDataSource.rebuildData()
      snippetsTableView.reloadData()
+        print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
     }
     
     @IBOutlet var createNewSnippet: UIBarButtonItem!

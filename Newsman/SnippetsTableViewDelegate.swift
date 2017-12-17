@@ -97,6 +97,36 @@ extension SnippetsViewController: UITableViewDelegate
       (UIApplication.shared.delegate as! AppDelegate).saveContext()*/
     }
     //*************************************************************************************************
+    func deletePhotoSnippet(photoSnippet: PhotoSnippet)
+    //*************************************************************************************************
+    {
+        if let photos = photoSnippet.photos
+        {
+            for photo in photos
+            {
+                let photoID = (photo as! Photo).id!.uuidString
+                for item in PhotoItem.imageCacheDict
+                {
+                  item.value.removeObject(forKey: photoID as NSString)
+                }
+            }
+        }
+        let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
+        do
+        {
+            try FileManager.default.removeItem(at: snippetURL)
+            print("IMAGE FOLDER DELETED SUCCESSFULLY AT PATH:\n\(snippetURL.path)")
+        }
+        catch
+        {
+            print("ERROR DELETING IMAGE FOLDER AT PATH:\n\(snippetURL.path)\n\(error.localizedDescription)")
+        }
+        
+    }
+    
+    
+    //*************************************************************************************************
     func deleteSnippet(_ tableView: UITableView, _ indexPaths: [IndexPath])
     //*************************************************************************************************
     {
@@ -129,12 +159,27 @@ extension SnippetsViewController: UITableViewDelegate
         { _ in
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let moc = appDelegate.persistentContainer.viewContext
+            
             for snippet in snippets
             {
-             moc.delete(snippet)
              let snippetIndex = self.snippetsDataSource.items.index(of: snippet)
              self.snippetsDataSource.items.remove(at: snippetIndex!)
              
+             let deletedSnippetType = SnippetType(rawValue: snippet.type!)!
+             switch (deletedSnippetType)
+             {
+              case .text:   break
+              case .photo:
+                self.deletePhotoSnippet(photoSnippet: snippet as! PhotoSnippet)
+                
+              case .video:  break
+              case .audio:  break
+              case .sketch: break
+              case .report: break
+             }
+                
+             moc.delete(snippet)
+                
             }
             
             for sectionIndex in 0..<self.snippetsDataSource.snippetsData.count
@@ -256,6 +301,8 @@ extension SnippetsViewController: UITableViewDelegate
         photoSnippetVC.photoSnippet = photoSnippet
         photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(photoSnippetVC, animated: true)
+        print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
+
     }
     //*************************************************************************************************
     func editVideoSnippet(indexPath: IndexPath)

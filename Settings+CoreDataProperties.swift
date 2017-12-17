@@ -18,5 +18,4 @@ extension Settings {
     }
 
     @NSManaged public var grouping: String?
-
 }

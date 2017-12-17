@@ -2,23 +2,35 @@ import Foundation
 import UIKit
 import CoreData
 
+
 class PhotoSnippetViewController: UIViewController
 {
     
  var isEditingMode = true
  var isEditingPhotos = false
-    
  var currentToolBarItems: [UIBarButtonItem]!
-    
- let cache = (UIApplication.shared.delegate as! AppDelegate).photoCache
-    
- var photos: [PhotoPair]
+   
+ override func didReceiveMemoryWarning()
  {
-  get
-  {
-    return cache.getPhotos(photoSnippet: photoSnippet)
-  }
+    super.didReceiveMemoryWarning()
+    print ("out of memory")
  }
+    
+    
+ lazy var photoItems: [PhotoItem] =
+ {
+    var photoItems = [PhotoItem]()
+    let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
+    if let allPhotos = photoSnippet.photos?.sortedArray(using: [sort]) as? [Photo]
+    {
+     for photo in allPhotos
+     {
+      let newPhotoItem = PhotoItem(photo: photo)
+      photoItems.append(newPhotoItem)
+     }
+    }
+    return photoItems
+ }()
 
  var photoSnippet: PhotoSnippet!
  {
@@ -71,6 +83,7 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
+      photoItems[itemIndexPath.row].photo.isSelected = false
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
         cell.photoIconView.alpha = 1
@@ -86,8 +99,9 @@ class PhotoSnippetViewController: UIViewController
     {
       for j in 0..<photoCollectionView.numberOfItems(inSection: i)
       {
+        photoItems[j].photo.isSelected = true
         let itemIndexPath = IndexPath(item: j, section: i)
-        photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: UICollectionViewScrollPosition.bottom)
+        photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: .top)
         if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
         {
           cell.photoIconView.alpha = 0.5
@@ -106,6 +120,7 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
+      photoItems[itemIndexPath.row].photo.isSelected = false
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
        cell.photoIconView.alpha = 1
@@ -114,14 +129,13 @@ class PhotoSnippetViewController: UIViewController
     }
     allPhotosSelected = false
     isEditingPhotos = false
-    photoCollectionView.allowsMultipleSelection = false
     
     photoSnippetToolBar.setItems(currentToolBarItems, animated: true)
    }
    else
    {
     isEditingPhotos = true
-    photoCollectionView.allowsMultipleSelection = true
+    
     let doneItem = UIBarButtonItem(title: "⏎", style: .done, target: self, action: #selector(editPhotosPress))
     doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
     doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .normal)
@@ -143,13 +157,16 @@ class PhotoSnippetViewController: UIViewController
     
    }
  }
- @IBOutlet var photoCollectionView: UICollectionView!
+ @IBOutlet weak var photoCollectionView: UICollectionView!
     
  override func viewDidLoad()
  {
   super.viewDidLoad()
+  nphoto = Int(photoSnippet.nphoto)
   photoCollectionView.dataSource = self
   photoCollectionView.delegate = self
+  photoCollectionView.allowsMultipleSelection = true
+  imagePicker.delegate = self
   photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()
   currentToolBarItems = photoSnippetToolBar.items
   photoScaleStepper.value = Double(nphoto)
@@ -172,6 +189,7 @@ class PhotoSnippetViewController: UIViewController
   {
    isEditingMode = true
   }
+    
   photoCollectionView.reloadData()
 
  }
@@ -187,19 +205,9 @@ class PhotoSnippetViewController: UIViewController
   {
    savePhotoSnippetData()
   }
+
  }
  
- func updateLayout()
- {
-  let width = photoCollectionView.collectionViewLayout.collectionViewContentSize.width
-  let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-  let size = (width - fl.sectionInset.left - fl.sectionInset.right - fl.minimumInteritemSpacing * CGFloat(nphoto - 1)) / CGFloat(nphoto)
-        
-  fl.itemSize.width = size
-  fl.itemSize.height = size
-        
- }
-    
  var maxPhotosInRow = 10
  var minPhotosInRow = 1
     
@@ -221,19 +229,32 @@ class PhotoSnippetViewController: UIViewController
     nphoto -= 1
   }
  }
+ 
+ var imageSize: CGFloat
+ {
+    get
+    {
+      let width = photoCollectionView.frame.width
+      let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+      let size = (width - fl.sectionInset.left - fl.sectionInset.right - fl.minimumInteritemSpacing * CGFloat(nphoto - 1)) / CGFloat(nphoto)
+        
+      return size
+    }
+ }
     
  var nphoto: Int = 3
  {
   didSet
   {
-    updateLayout()
+    if nphoto != oldValue
+    {
+     photoSnippet.nphoto = Int32(nphoto)
+     photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
+    }
+    
   }
  }
- override func viewDidLayoutSubviews()
- {
-  super.viewDidLayoutSubviews()
-  updateLayout()
- }
+ 
     
  @IBOutlet var photoSnippetTitle: UITextField!
     
@@ -252,14 +273,123 @@ class PhotoSnippetViewController: UIViewController
  @IBOutlet var datePickerBarButton: UIBarButtonItem!
     
  @IBOutlet var takePhotoBarButton: UIBarButtonItem!
+
+ let imagePicker = UIImagePickerController()
+ var imagePickerTakeButton: UIButton!
+ var imagePickerCnxxButton: UIButton!
+    
+ @objc func pickImageButtonPress()
+ {
+  imagePickerTakeButton.isEnabled = false
+  imagePickerCnxxButton.isEnabled = false
+  imagePicker.takePicture()
+ }
+  
+ @objc func cancelImageButtonPress()
+ {
+  dismiss(animated: true, completion: nil)
+ }
+  
+ func createImagePickerCustomView(imagePickerView: UIView)
+ {
+    let pickerViewHeight: CGFloat = 100.0
+    let pickerView = UIView()
+    pickerView.backgroundColor = UIColor.lightGray
+    pickerView.translatesAutoresizingMaskIntoConstraints = false
+    imagePickerView.addSubview(pickerView)
+    
+    let pickerViewTopCon = pickerView.bottomAnchor.constraint(equalTo: imagePickerView.bottomAnchor)
+    let pickerViewLeadingCon = pickerView.leadingAnchor.constraint(equalTo: imagePickerView.leadingAnchor)
+    let pickerViewTrailingCon = pickerView.trailingAnchor.constraint(equalTo: imagePickerView.trailingAnchor)
+    let pickerViewHeightCon = pickerView.heightAnchor.constraint(equalToConstant: pickerViewHeight)
+    pickerViewTopCon.isActive = true
+    pickerViewLeadingCon.isActive = true
+    pickerViewTrailingCon.isActive = true
+    pickerViewHeightCon.isActive = true
+    
+    let takePictureButton = UIButton()
+    takePictureButton.addTarget(self, action: #selector(pickImageButtonPress), for: .touchDown)
+    takePictureButton.backgroundColor = UIColor(red: 0.0, green: 0.563, blue: 0.319, alpha: 1.00)
+    takePictureButton.contentMode = .center
+    let titleAttrNormal =
+    [
+      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 25),
+      NSAttributedStringKey.foregroundColor: UIColor.black
+    ]
+    let takeLocal = NSLocalizedString("TAKE", comment: "Take Photo Button Title")
+    let titleNormal = NSAttributedString(string: takeLocal, attributes: titleAttrNormal)
+    takePictureButton.setAttributedTitle(titleNormal, for: .normal)
+    let titleAttrPressed =
+    [
+      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 28),
+      NSAttributedStringKey.foregroundColor: UIColor.white
+    ]
+    let titlePressed = NSAttributedString(string: takeLocal, attributes: titleAttrPressed)
+    takePictureButton.setAttributedTitle(titlePressed, for: .highlighted)
+
+    takePictureButton.showsTouchWhenHighlighted = true
+    takePictureButton.translatesAutoresizingMaskIntoConstraints = false
+    pickerView.addSubview(takePictureButton)
+    
+    let takePictureButtonTopCon = takePictureButton.topAnchor.constraint(equalTo: pickerView.topAnchor, constant: 5)
+    let takePictureButtonLeadingCon = takePictureButton.leadingAnchor.constraint(equalTo: pickerView.leadingAnchor, constant: 5)
+    let takePictureButtonBottomCon = takePictureButton.bottomAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: -5)
+    let takePictureButtonWidthCon = takePictureButton.widthAnchor.constraint(equalTo: pickerView.widthAnchor, multiplier: 0.5, constant: -7.5)
+    
+    takePictureButtonTopCon.isActive = true
+    takePictureButtonLeadingCon.isActive = true
+    takePictureButtonBottomCon.isActive = true
+    takePictureButtonWidthCon.isActive = true
+    
+    let cnxButton = UIButton()
+    cnxButton.addTarget(self, action: #selector(cancelImageButtonPress), for: .touchDown)
+    cnxButton.backgroundColor = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 0.80)
+    cnxButton.contentMode = .center
+    let cnxTitleAttrNormal =
+    [
+      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 25),
+      NSAttributedStringKey.foregroundColor: UIColor.black
+    ]
+    let cnxLocal = NSLocalizedString("CANCEL", comment: "Cancel Photo Button Title")
+    let cnxTitleNormal = NSAttributedString(string: cnxLocal, attributes: cnxTitleAttrNormal)
+    cnxButton.setAttributedTitle(cnxTitleNormal, for: .normal)
+    
+    let cnxTitleAttrPressed =
+    [
+      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 28),
+      NSAttributedStringKey.foregroundColor: UIColor.white
+    ]
+    let cnxTitlePressed = NSAttributedString(string: cnxLocal, attributes: cnxTitleAttrPressed)
+    cnxButton.setAttributedTitle(cnxTitlePressed, for: .highlighted)
+    
+    cnxButton.showsTouchWhenHighlighted = true
+    cnxButton.translatesAutoresizingMaskIntoConstraints = false
+    pickerView.addSubview(cnxButton)
+    
+    let cnxButtonTopCon = cnxButton.topAnchor.constraint(equalTo: pickerView.topAnchor, constant: 5)
+    let cnxButtonLeadingCon = cnxButton.trailingAnchor.constraint(equalTo: pickerView.trailingAnchor, constant: -5)
+    let cnxButtonBottomCon = cnxButton.bottomAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: -5)
+    let cnxButtonWidthCon = cnxButton.widthAnchor.constraint(equalTo: pickerView.widthAnchor, multiplier: 0.5, constant: -7.5)
+    
+    cnxButtonTopCon.isActive = true
+    cnxButtonLeadingCon.isActive = true
+    cnxButtonBottomCon.isActive = true
+    cnxButtonWidthCon.isActive = true
+
+    imagePickerTakeButton = takePictureButton
+    imagePickerCnxxButton = cnxButton
+ }
     
  @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
  {
    isEditingMode = false
-   let imagePicker = UIImagePickerController()
+   //let imagePicker = UIImagePickerController()
    if UIImagePickerController.isSourceTypeAvailable(.camera)
    {
     imagePicker.sourceType = .camera
+    imagePicker.showsCameraControls = false
+    createImagePickerCustomView(imagePickerView: imagePicker.view)
+
    }
    else if UIImagePickerController.isSourceTypeAvailable(.photoLibrary)
    {
@@ -273,7 +403,6 @@ class PhotoSnippetViewController: UIViewController
    {
     return
    }
-   imagePicker.delegate = self
 
    present(imagePicker, animated: true, completion: nil)
 
@@ -284,17 +413,29 @@ class PhotoSnippetViewController: UIViewController
     
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
  {
-    if let selectedItemsPaths = photoCollectionView.indexPathsForSelectedItems
+
+    for item in photoItems.filter({$0.photo.isSelected})
+    {
+        let index = photoItems.index(of: item)
+        let deletedItem = photoItems.remove(at: index!)
+        deletedItem.deleteImage()
+        let itemIndexPath = IndexPath(row: index!, section: 0)
+        photoCollectionView.deleteItems(at: [itemIndexPath])
+    }
+    
+    togglePhotoEditingMode()
+    
+    /*if let selectedItemsPaths = photoCollectionView.indexPathsForSelectedItems
     {
         for itemIndexPath in selectedItemsPaths.sorted(by: {$0.row > $1.row})
         {
-          let photoToDelete = photos[itemIndexPath.row]
-          cache.deletePhoto(photoSnippet: photoSnippet, photo: photoToDelete)
+          let deletedItem = photoItems.remove(at: itemIndexPath.row)
+          deletedItem.deleteImage()
           photoCollectionView.deleteItems(at: [itemIndexPath])
         }
         
         togglePhotoEditingMode()
-    }
+    }*/
  }
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)

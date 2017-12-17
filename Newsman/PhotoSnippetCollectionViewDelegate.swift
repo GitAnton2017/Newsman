@@ -2,20 +2,38 @@
 import Foundation
 import UIKit
 
-extension PhotoSnippetViewController: UICollectionViewDelegate
+extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
+    func collectionView(_ collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                          sizeForItemAt indexPath: IndexPath) -> CGSize
+    {
+      return CGSize(width: imageSize, height: imageSize)
+    }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
       if isEditingPhotos
       {
-        (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 0.5
-        allPhotosSelected = true
-        selectBarButton.title = "☆☆☆"
-      }
-      else
-      {
-        
+        if (!photoItems[indexPath.row].photo.isSelected)
+        {
+         print ("SELECT NOT SELECTED")
+         (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 0.5
+         photoItems[indexPath.row].photo.isSelected = true
+         allPhotosSelected = true
+         selectBarButton.title = "☆☆☆"
+        }
+        else
+        {
+         print ("SELECT SELECTED")
+         (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 1
+          photoItems[indexPath.row].photo.isSelected = false
+          
+          if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
+          {
+           selectBarButton.title = "★★★"
+          }
+        }
       }
     }
     
@@ -23,10 +41,23 @@ extension PhotoSnippetViewController: UICollectionViewDelegate
     {
       if isEditingPhotos
       {
-        (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 1
-        if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
+        if (photoItems[indexPath.row].photo.isSelected)
         {
-         selectBarButton.title = "★★★"
+         print ("DESELECT SELECTED")
+         (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 1
+         photoItems[indexPath.row].photo.isSelected = false
+         if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
+         {
+          selectBarButton.title = "★★★"
+         }
+        }
+        else
+        {
+          print ("DESELECT DESELECTED")
+          (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 0.5
+          photoItems[indexPath.row].photo.isSelected = true
+          allPhotosSelected = true
+          selectBarButton.title = "☆☆☆"
         }
       }
     }

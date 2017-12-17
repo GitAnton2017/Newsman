@@ -9,18 +9,29 @@
 import UIKit
 import CoreData
 
+extension AppDelegate: NSCacheDelegate
+{
+    func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any)
+    {
+       print ("IMAGE OF SIZE \((obj as! UIImage).size) EVICTED FROM CACHE NAMED \(cache.name)")
+    }
+}
+
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate
+{
 
     var window: UIWindow?
-
-    let photoCache = PhotoCash()
+    
+    let layerDelegate = LayerDelegate()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     
     {
         // Override point for customization after application launch.
-    
+        
+        //PhotoCash.queue.maxConcurrentOperationCount = 3
+        //PhotoItem.imageCache.delegate = self
         return true
     }
 

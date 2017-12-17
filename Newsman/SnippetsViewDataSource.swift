@@ -9,7 +9,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     var groupTitles = [String]()
     var itemsType: SnippetType!
     var snippetsData: [[BaseSnippet]] = []
-    let photoCache = (UIApplication.shared.delegate as! AppDelegate).photoCache
+    
     
     var groupType: GroupSnippets!
     {
@@ -84,7 +84,11 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
              }
             }
             
-            snippetsData.append(items.filter{($0.tag?.isEmpty)!})
+            snippetsData.append(items.filter
+                {
+                    ($0.tag?.isEmpty) ?? true
+                    
+            })
             groupTitles.append("Untitled")
             
             for letter in letterSet.sorted()
@@ -180,9 +184,15 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
        case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
        case .photo:
         let photoSnippet = item as! PhotoSnippet
-        if let icon = photoCache.getPhotos(photoSnippet: photoSnippet).first
+        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
+        if let lastPhoto = photoSnippet.photos?.sortedArray(using: [sort]).last as? Photo
         {
-          (cell as! SnippetsViewCell).snippetImage.image = icon.image
+          let photoItem = PhotoItem(photo: lastPhoto)
+          let iconWidth = (cell as! SnippetsViewCell).snippetImage.frame.width
+          photoItem.getImage(requiredImageWidth: iconWidth)
+          {(image) in
+            (cell as! SnippetsViewCell).snippetImage.image = image
+          }
         }
         else
         {

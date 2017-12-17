@@ -3,6 +3,20 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "closure #1 in PhotoSnippetViewController.collectionView(_:cellForItemAt:):PhotoSnippetCollectionViewDataSource.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "scaledImage.scale">
+            </PersistentString>
+            <PersistentString
+               value = "originalImage.size">
+            </PersistentString>
+            <PersistentString
+               value = "scaledImage.size">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotoSnippetViewController.savePhotoSnippetData():PhotoSnippetViewController.swift">
          <PersistentStrings>
             <PersistentString

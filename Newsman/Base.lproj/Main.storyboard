@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -378,7 +377,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYq-pV-TZg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2761" y="416"/>
+            <point key="canvasLocation" x="2760.8000000000002" y="415.14242878560725"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OAs-zD-MWr">
@@ -514,34 +513,42 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fRa-jJ-dD6">
                                 <rect key="frame" x="4" y="74" width="367" height="549"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="xIK-fT-b32">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" id="xIK-fT-b32">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="2" minY="2" maxX="2" maxY="2"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoSnippetCell" id="pDB-24-B3G" customClass="PhotoSnippetCell" customModule="Newsman" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoSnippetCell" id="pDB-24-B3G" customClass="PhotoSnippetCell" customModule="Newsman" customModuleProvider="target">
+                                        <rect key="frame" x="2" y="2" width="100" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
                                                     <rect key="frame" x="1" y="1" width="98" height="98"/>
+                                                    <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </imageView>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rcR-EZ-aT9">
+                                                    <rect key="frame" x="32" y="32" width="37" height="37"/>
+                                                    <color key="tintColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="color" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="ENq-06-ukX" firstAttribute="leading" secondItem="pDB-24-B3G" secondAttribute="leading" constant="1" id="DiH-EU-eHs"/>
+                                            <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerX" secondItem="pDB-24-B3G" secondAttribute="centerX" id="KZr-sE-z7K"/>
                                             <constraint firstAttribute="bottom" secondItem="ENq-06-ukX" secondAttribute="bottom" constant="1" id="SqO-Km-52O"/>
                                             <constraint firstAttribute="trailing" secondItem="ENq-06-ukX" secondAttribute="trailing" constant="1" id="Zas-sI-EcY"/>
+                                            <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerY" secondItem="pDB-24-B3G" secondAttribute="centerY" id="j9C-Mr-smu"/>
                                             <constraint firstItem="ENq-06-ukX" firstAttribute="top" secondItem="pDB-24-B3G" secondAttribute="top" constant="1" id="zPY-Di-34k"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="photoIconView" destination="ENq-06-ukX" id="i47-2F-JdN"/>
+                                            <outlet property="spinner" destination="rcR-EZ-aT9" id="Izy-HS-c0Y"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -587,7 +594,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yTh-X9-2vj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <pinchGestureRecognizer id="mTb-Hh-2mK">
+                <pinchGestureRecognizer enabled="NO" id="mTb-Hh-2mK">
                     <connections>
                         <action selector="pinchAction:" destination="8Mi-lh-6Iq" id="ng9-7H-DHu"/>
                     </connections>

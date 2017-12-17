@@ -2,7 +2,7 @@
 //  PhotoSnippet+CoreDataProperties.swift
 //  Newsman
 //
-//  Created by Anton2016 on 27.11.17.
+//  Created by Anton2016 on 17.12.2017.
 //  Copyright © 2017 Anton2016. All rights reserved.
 //
 //
@@ -17,25 +17,9 @@ extension PhotoSnippet {
         return NSFetchRequest<PhotoSnippet>(entityName: "PhotoSnippet")
     }
 
-    @NSManaged public var reports: NSSet?
+    @NSManaged public var nphoto: Int32
     @NSManaged public var photos: NSSet?
-
-}
-
-// MARK: Generated accessors for reports
-extension PhotoSnippet {
-
-    @objc(addReportsObject:)
-    @NSManaged public func addToReports(_ value: Report)
-
-    @objc(removeReportsObject:)
-    @NSManaged public func removeFromReports(_ value: Report)
-
-    @objc(addReports:)
-    @NSManaged public func addToReports(_ values: NSSet)
-
-    @objc(removeReports:)
-    @NSManaged public func removeFromReports(_ values: NSSet)
+    @NSManaged public var reports: NSSet?
 
 }
 
@@ -53,5 +37,22 @@ extension PhotoSnippet {
 
     @objc(removePhotos:)
     @NSManaged public func removeFromPhotos(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for reports
+extension PhotoSnippet {
+
+    @objc(addReportsObject:)
+    @NSManaged public func addToReports(_ value: Report)
+
+    @objc(removeReportsObject:)
+    @NSManaged public func removeFromReports(_ value: Report)
+
+    @objc(addReports:)
+    @NSManaged public func addToReports(_ values: NSSet)
+
+    @objc(removeReports:)
+    @NSManaged public func removeFromReports(_ values: NSSet)
 
 }

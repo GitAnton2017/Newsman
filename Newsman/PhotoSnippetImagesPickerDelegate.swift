@@ -7,8 +7,24 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
   {
     let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-    cache.addPhoto(photoSnippet: photoSnippet, image: pickedImage)
-    dismiss(animated: true, completion: nil)
+
+    let ratio: CGFloat = 1.0/3.0
+
+    if let image = pickedImage.resized(withPercentage: ratio)
+    {
+     let newPhotoItem  = PhotoItem(photoSnippet: photoSnippet, image: image, cachedImageWidth: imageSize)
+     photoItems.append(newPhotoItem)
+    }
+    
+    if UIImagePickerController.isSourceTypeAvailable(.camera)
+    {
+     imagePickerTakeButton.isEnabled = true
+     imagePickerCnxxButton.isEnabled = true
+    }
+    else
+    {
+     dismiss(animated: true, completion: nil)
+    }
   }
     
 }
