@@ -527,7 +527,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
+                                                <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
                                                     <rect key="frame" x="1" y="1" width="98" height="98"/>
                                                     <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </imageView>

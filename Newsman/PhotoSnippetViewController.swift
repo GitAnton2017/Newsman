@@ -124,6 +124,10 @@ class PhotoSnippetViewController: UIViewController
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
        cell.photoIconView.alpha = 1
+       if let flag = photoItems[itemIndexPath.row].photo.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
+       {
+         cell.drawFlag(flagColor: color)
+       }
       }
      }
     }
@@ -148,12 +152,14 @@ class PhotoSnippetViewController: UIViewController
     
     selectBarButton = selectItem
     
-    //let priorityItem  = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(changeSelectedSnippetsPriority))
-    //let priorityItem = UIBarButtonItem(image: UIImage(named: "priority.tab.icon"), style: .plain, target: self, action: #selector(changeSelectedSnippetsPriority))
+    let flagItem = UIBarButtonItem(title: "⚑", style: .plain, target: self, action: #selector(flagPhoto))
+    flagItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .selected)
+    flagItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 35)], for: .normal)
+    
     
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
-    photoSnippetToolBar.setItems([deleteItem, flexSpace, selectItem, flexSpace, doneItem], animated: true)
+    photoSnippetToolBar.setItems([deleteItem, flexSpace, selectItem, flexSpace, flagItem, flexSpace, doneItem], animated: true)
     
    }
  }
@@ -174,7 +180,7 @@ class PhotoSnippetViewController: UIViewController
   photoScaleStepper.maximumValue = Double(maxPhotosInRow)
   photoScaleStepper.stepValue = 1.0
   photoScaleStepper.wraps = true
- 
+    
  }
     
  override func viewWillAppear(_ animated: Bool)
@@ -208,10 +214,10 @@ class PhotoSnippetViewController: UIViewController
 
  }
  
- var maxPhotosInRow = 10
- var minPhotosInRow = 1
+ var maxPhotosInRow = 10; var minPhotosInRow = 1
     
  @IBOutlet var photoScaleStepper: UIStepper!
+    
  @IBAction func photoScaleStepperChanged(_ sender: UIStepper)
  {
   nphoto = Int(sender.value)
@@ -229,7 +235,13 @@ class PhotoSnippetViewController: UIViewController
     nphoto -= 1
   }
  }
- 
+
+ override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
+ {
+    super.viewWillTransition(to: size, with: coordinator)
+    photoCollectionView.reloadData()
+ }
+    
  var imageSize: CGFloat
  {
     get
@@ -251,7 +263,6 @@ class PhotoSnippetViewController: UIViewController
      photoSnippet.nphoto = Int32(nphoto)
      photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
     }
-    
   }
  }
  
@@ -425,17 +436,41 @@ class PhotoSnippetViewController: UIViewController
     
     togglePhotoEditingMode()
     
-    /*if let selectedItemsPaths = photoCollectionView.indexPathsForSelectedItems
+ }
+   
+ func setPhotoPriorityFlags(NFlags: Int)
+ {
+  let flagStr = PhotoPriorityFlags.priorities[NFlags].rawValue
+  photoItems.filter({$0.photo.isSelected}).forEach
+  {
+    $0.photo.priorityFlag = flagStr
+  }
+ }
+    
+    
+ @objc func flagPhoto (_ sender: UIBarButtonItem)
+ {
+    let loc_title = NSLocalizedString("Photo Priority Flag", comment: "Setting Photo Priority Flags")
+    let loc_message = NSLocalizedString("Please set photo priority flag!", comment: "Priority Flag Selection Alerts")
+    let prioritySelect = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
+    let maxFlags = PhotoPriorityFlags.priorities.count
+    
+    for i in 0..<maxFlags
     {
-        for itemIndexPath in selectedItemsPaths.sorted(by: {$0.row > $1.row})
-        {
-          let deletedItem = photoItems.remove(at: itemIndexPath.row)
-          deletedItem.deleteImage()
-          photoCollectionView.deleteItems(at: [itemIndexPath])
+     let action = UIAlertAction(title: String(repeating: "🚩", count: maxFlags - i), style: .default)
+        { _ in
+            self.setPhotoPriorityFlags(NFlags: i)
+            self.togglePhotoEditingMode()
         }
-        
-        togglePhotoEditingMode()
-    }*/
+        prioritySelect.addAction(action)
+    }
+    
+    let loc_cnx_title = NSLocalizedString("CANCEL", comment: "Cancel Alert Action")
+    let cancelAction = UIAlertAction(title: loc_cnx_title , style: .cancel, handler: nil)
+    
+    prioritySelect.addAction(cancelAction)
+    
+    self.present(prioritySelect, animated: true, completion: nil)
  }
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
