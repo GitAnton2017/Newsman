@@ -5,6 +5,7 @@ import UIKit
 extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     
+
     func collectionView(_ collectionView: UICollectionView,
                           layout collectionViewLayout: UICollectionViewLayout,
                           sizeForItemAt indexPath: IndexPath) -> CGSize

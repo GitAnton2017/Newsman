@@ -13,15 +13,23 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSnippetCell", for: indexPath) as! PhotoSnippetCell
-      
+        
+      let photoCV = collectionView as! PhotoSnippetCollectionView
+        
+      photoCV.layer.addSublayer(cell.layer)
+        
+      if let path = photoCV.menuIndexPath, path == indexPath
+      {
+       let cellPoint = CGPoint(x: round(cell.frame.width * photoCV.menuShift.x),
+                               y: round(cell.frame.height * photoCV.menuShift.y))
     
+       let menuPoint = cell.photoIconView.layer.convert(cellPoint, to: photoCV.layer)
+        
+       photoCV.drawCellMenu(menuColor: UIColor.red, touchPoint: menuPoint)
+        
+      }
+        
       cell.photoIconView.alpha = photoItems[indexPath.row].photo.isSelected ? 0.5 : 1
-    
-      cell.photoIconView.layer.cornerRadius = 10.0
-      cell.photoIconView.layer.borderWidth = 1
-      cell.photoIconView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
-      cell.photoIconView.layer.masksToBounds = true
-      
        
       if let flag = photoItems[indexPath.row].photo.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
       {

@@ -70,7 +70,7 @@ class PhotoItem: NSObject
             if let cache = PhotoItem.imageCacheDict[width]
             {
                 cache.setObject(res_img, forKey: imageID as NSString)
-                print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)")
+                //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)")
             }
             else
             {
@@ -79,7 +79,7 @@ class PhotoItem: NSObject
                 newImageWidthCache.delegate = PhotoItem.appDelegate
                 newImageWidthCache.setObject(res_img, forKey: imageID as NSString)
                 PhotoItem.imageCacheDict[width] = newImageWidthCache
-                print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
+                //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
             }
             
             return res_img
@@ -111,7 +111,7 @@ class PhotoItem: NSObject
           if let data = UIImagePNGRepresentation(image)
           {
            try data.write(to: self.photoURL, options: [.atomic])
-           print ("JPEG IMAGE OF SIZE \(data.count) bytes SAVED SUCCESSFULLY AT PATH:\n\(self.photoURL.path)")
+           //print ("JPEG IMAGE OF SIZE \(data.count) bytes SAVED SUCCESSFULLY AT PATH:\n\(self.photoURL.path)")
           }
          }
          catch
@@ -136,7 +136,7 @@ class PhotoItem: NSObject
         {
           completion(cachedImage)
         }
-        print("IMAGE LOADED FROM EXISTING CACHE: \(imageCache.name), SIZE: \(cachedImage.size)")
+        //print("IMAGE LOADED FROM EXISTING CACHE: \(imageCache.name), SIZE: \(cachedImage.size)")
         return
        }
        else
@@ -160,7 +160,7 @@ class PhotoItem: NSObject
               completion(cachedImage)
             }
             
-            print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
+            //print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
             
             return
         }
@@ -172,7 +172,7 @@ class PhotoItem: NSObject
          let data = try Data(contentsOf: self.photoURL)
          if let savedImage = UIImage(data: data, scale: 1)
          {
-          print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
+          //print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
           OperationQueue.main.addOperation
           {
            let cachedImage = self.cacheThumbnailImage(imageID: self.photoID, image: savedImage, width: Int(requiredImageWidth))

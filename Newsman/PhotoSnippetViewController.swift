@@ -16,7 +16,6 @@ class PhotoSnippetViewController: UIViewController
     print ("out of memory")
  }
     
-    
  lazy var photoItems: [PhotoItem] =
  {
     var photoItems = [PhotoItem]()
@@ -133,12 +132,17 @@ class PhotoSnippetViewController: UIViewController
     }
     allPhotosSelected = false
     isEditingPhotos = false
+    photoCollectionView.isPhotoEditing = false
+    
+    photoCollectionView.menuTapGR.isEnabled = true
     
     photoSnippetToolBar.setItems(currentToolBarItems, animated: true)
    }
    else
    {
     isEditingPhotos = true
+    photoCollectionView.isPhotoEditing = true
+    photoCollectionView.menuTapGR.isEnabled = false
     
     let doneItem = UIBarButtonItem(title: "⏎", style: .done, target: self, action: #selector(editPhotosPress))
     doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
@@ -163,7 +167,10 @@ class PhotoSnippetViewController: UIViewController
     
    }
  }
- @IBOutlet weak var photoCollectionView: UICollectionView!
+    
+ @IBOutlet weak var photoCollectionView: PhotoSnippetCollectionView!
+  
+ var menuTapGR: UITapGestureRecognizer!
     
  override func viewDidLoad()
  {
@@ -183,6 +190,7 @@ class PhotoSnippetViewController: UIViewController
     
  }
     
+
  override func viewWillAppear(_ animated: Bool)
  {
   super.viewWillAppear(animated)
@@ -253,6 +261,9 @@ class PhotoSnippetViewController: UIViewController
       return size
     }
  }
+
+ static var menuIndexPath: IndexPath? = nil
+ static var menuShift = CGPoint.zero
     
  var nphoto: Int = 3
  {
@@ -260,8 +271,10 @@ class PhotoSnippetViewController: UIViewController
   {
     if nphoto != oldValue
     {
+     photoCollectionView.locateCellMenu()
      photoSnippet.nphoto = Int32(nphoto)
      photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
+     
     }
   }
  }
