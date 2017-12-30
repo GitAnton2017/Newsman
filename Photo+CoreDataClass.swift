@@ -17,12 +17,12 @@ public enum PhotoPriorityFlags: String
 {
     static let priorityColorMap : [PhotoPriorityFlags: UIColor] =
     [
-            .hottest : UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.00),
-            .hot     : UIColor(red: 0.8, green: 0.3, blue: 0.2, alpha: 1.00),
-            .high    : UIColor(red: 0.6, green: 0.5, blue: 0.3, alpha: 1.00),
-            .normal  : UIColor(red: 0.0, green: 1.0, blue: 0.2, alpha: 1.00),
-            .medium  : UIColor(red: 0.0, green: 0.9, blue: 0.6, alpha: 1.00),
-            .low     : UIColor(red: 0.0, green: 0.5, blue: 0.8, alpha: 1.00)
+            .hottest : UIColor.red,
+            .hot     : UIColor.orange,
+            .high    : UIColor.yellow,
+            .normal  : UIColor.brown,
+            .medium  : UIColor.blue,
+            .low     : UIColor.green
     ]
     
     static let priorityFilters : [(title: String, predicate: (Photo) -> Bool)] =
@@ -59,6 +59,8 @@ public enum PhotoPriorityFlags: String
             return PhotoPriorityFlags.prioritySectionsMap[self]!
         }
     }
+    
+    
     
     static let strings: [String] =
     [

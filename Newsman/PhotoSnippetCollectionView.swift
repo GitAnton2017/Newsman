@@ -2,17 +2,53 @@
 import Foundation
 import UIKit
 
-struct CellMenuItem
+
+protocol MenuItemProtocol
 {
-  let itemLayerName: String
-  let buttonImage: UIImage?
+   var itemLayerName: String {get set}
 }
 
-let mainMenuItems =
+protocol MenuItemImageProtocol: MenuItemProtocol
+{
+   var itemImage: UIImage? {get set}
+}
+
+protocol MenuItemDrawProtocol: MenuItemProtocol
+{
+   var fillColor: UIColor {get set}
+}
+
+
+struct CellMenuImageItem: MenuItemImageProtocol
+{
+    var itemLayerName: String
+    var itemImage: UIImage?
+}
+
+struct CellMenuDrawItem: MenuItemDrawProtocol
+{
+    var itemLayerName: String
+    var fillColor: UIColor
+}
+
+let mainMenuItems : [MenuItemProtocol] =
 [
- CellMenuItem(itemLayerName: "flagSetLayer", buttonImage: UIImage(named: "flag.menu.icon" )),
- CellMenuItem(itemLayerName: "trashLayer",   buttonImage: UIImage(named: "trash.menu.icon")),
- CellMenuItem(itemLayerName: "cnxLayer",     buttonImage: UIImage(named: "cnx.menu.icon"  )),
+  CellMenuImageItem(itemLayerName: "flagSetLayer", itemImage: UIImage(named: "flag.menu.icon" )),
+  CellMenuImageItem(itemLayerName: "trashLayer",   itemImage: UIImage(named: "trash.menu.icon")),
+  CellMenuImageItem(itemLayerName: "cnxLayer",     itemImage: UIImage(named: "cnx.menu.icon"  ))
+]
+
+let flagMenuItems : [MenuItemProtocol] =
+[
+  CellMenuDrawItem(itemLayerName: "flagLayer", fillColor: UIColor.red),
+  CellMenuDrawItem(itemLayerName: "flagLayer", fillColor: UIColor.orange),
+  CellMenuDrawItem(itemLayerName: "flagLayer", fillColor: UIColor.yellow),
+  CellMenuDrawItem(itemLayerName: "flagLayer", fillColor: UIColor.brown),
+  CellMenuDrawItem(itemLayerName: "flagLayer", fillColor: UIColor.blue),
+  CellMenuDrawItem(itemLayerName: "flagLayer", fillColor: UIColor.green),
+  CellMenuImageItem(itemLayerName: "upLayer", itemImage: UIImage(named: "up.menu.icon"      )),
+  CellMenuImageItem(itemLayerName: "unflagLayer", itemImage: UIImage(named: "unflag.menu.icon"  )),
+  CellMenuImageItem(itemLayerName: "cnxLayer", itemImage: UIImage(named: "cnx.menu.icon"     ))
 ]
 
 class PhotoMenuLayer: CALayer
@@ -42,10 +78,40 @@ class PhotoMenuLayer: CALayer
     }
 }
 
-class FlagPhotoLayer: CALayer
+class FlagItemLayer: CALayer
 {
+    var flagColor: UIColor!
+    
+    override init()
+    {
+      super.init()
+    }
+    
+    convenience init(flagColor: UIColor)
+    {
+      self.init()
+      self.flagColor = flagColor
+    }
+    
+    required init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+    }
+    
     override func draw(in ctx: CGContext)
     {
+        let p1 = CGPoint(x: 0, y: 0)
+        let p2 = CGPoint(x: 0, y: bounds.height)
+        let p3 = CGPoint(x: bounds.width/2, y: bounds.height * 0.6)
+        let p4 = CGPoint(x: bounds.width, y: bounds.height)
+        let p5 = CGPoint(x: bounds.width, y: 0)
+        
+        ctx.beginPath()
+        ctx.addLines(between: [p1,p2,p3,p4,p5])
+        ctx.closePath()
+        ctx.setFillColor(flagColor.cgColor)
+        ctx.drawPath(using: .fill)
+        
         
     }
 }
@@ -55,8 +121,10 @@ class PhotoSnippetCollectionView: UICollectionView
     var menuTapGR: UITapGestureRecognizer!
     var cellLongPressGR : UILongPressGestureRecognizer!
     
+    let itemsInRow: Int = 3
+    
     let menuArrowSize = CGSize(width: 20.0, height: 50.0)
-    let menuBarSize =   CGSize(width: 150.0, height: 50.0)
+    let menuItemSize =  CGSize(width: 50.0, height: 50.0)
     
     var isPhotoEditing = false
     
@@ -84,9 +152,9 @@ class PhotoSnippetCollectionView: UICollectionView
         
         let touchPoint = gr.location(in: self)
         
-        if (gr.state == .ended)
+        if let _ = indexPathForItem(at: touchPoint), gr.state == .ended
         {
-         drawCellMenu(menuColor: UIColor.red, touchPoint: touchPoint)
+          drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
         }
         
     }
@@ -94,23 +162,54 @@ class PhotoSnippetCollectionView: UICollectionView
     @objc func tapCellMenuItem (gr: UITapGestureRecognizer)
     {
         let touchPoint = gr.location(in: self)
-        if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer
+        if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
+           let buttonLayer = menuLayer.hitTest(touchPoint)
         {
-          switch (menuLayer.hitTest(touchPoint)?.name)
+          switch (buttonLayer.name)
           {
             case "flagSetLayer"? :
-                if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
-                {
-                    print (indexPath)
-                }
+             if let _ = indexPathForItem(at: menuLayer.menuTouchPoint)
+             {
+              menuLayer.removeFromSuperlayer()
+              drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuLayer.menuTouchPoint, menuItems: flagMenuItems)
+             }
                 
             case "trashLayer"?   :
-                if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
-                {
-                 (dataSource as! PhotoSnippetViewController).photoItems.remove(at: indexPath.row)
-                 deleteItems(at: [indexPath])
-                }
-                
+             if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
+             {
+              let ds = dataSource as! PhotoSnippetViewController
+              let deleted = ds.photoItems.remove(at: indexPath.row)
+              deleted.deleteImage()
+              deleteItems(at: [indexPath])
+             }
+            
+            case "flagLayer"?:
+             if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
+             {
+              let ds = dataSource as! PhotoSnippetViewController
+              let flagColor = (buttonLayer as! FlagItemLayer).flagColor
+              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
+              ds.photoItems[indexPath.row].photo.priorityFlag = flagStr
+              let cell = cellForItem(at: indexPath) as! PhotoSnippetCell
+              cell.drawFlag(flagColor: flagColor!)
+             }
+            
+            case "unflagLayer"?:
+             if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
+             {
+              let ds = dataSource as! PhotoSnippetViewController
+              ds.photoItems[indexPath.row].photo.priorityFlag = nil
+              let cell = cellForItem(at: indexPath) as! PhotoSnippetCell
+              cell.clearFlag()
+             }
+            
+            case "upLayer"?:
+             if let _ = indexPathForItem(at: menuLayer.menuTouchPoint)
+             {
+               menuLayer.removeFromSuperlayer()
+               drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuLayer.menuTouchPoint, menuItems: mainMenuItems)
+             }
+            
             case "cnxLayer"? : break
             default: break
           }
@@ -148,12 +247,46 @@ class PhotoSnippetCollectionView: UICollectionView
         }
     }
     
-    func addMenuItems(menuItems: [CellMenuItem])
+    func setItemsLayers(menuItems: [MenuItemProtocol])->[CALayer]
     {
+     var layers: [CALayer] = []
+     for i in 0..<menuItems.count
+     {
+      switch (menuItems[i])
+      {
+       case is CellMenuImageItem:
+        let layer = CALayer()
+        layer.contents = (menuItems[i] as! CellMenuImageItem).itemImage?.cgImage
+        layer.name = menuItems[i].itemLayerName
+        layer.frame = CGRect(x: menuItemSize.width * CGFloat(i % itemsInRow),
+                             y: menuItemSize.height * CGFloat(i / itemsInRow),
+                             width: menuItemSize.width,
+                             height: menuItemSize.height)
         
+        layer.contentsScale = UIScreen.main.scale
+        layer.transform = CATransform3DMakeScale(0.8, 0.8, 1)
+        layers.append(layer)
+        
+       case is CellMenuDrawItem:
+        let layer = FlagItemLayer(flagColor: (menuItems[i] as! CellMenuDrawItem).fillColor)
+        layer.setNeedsDisplay()
+        layer.name = menuItems[i].itemLayerName
+        layer.frame = CGRect(x: menuItemSize.width * CGFloat(i % itemsInRow),
+                             y: menuItemSize.height * CGFloat(i / itemsInRow),
+                             width: menuItemSize.width,
+                             height: menuItemSize.height)
+        
+        layer.contentsScale = UIScreen.main.scale
+        layer.transform = CATransform3DMakeScale(0.7, 0.7, 1)
+        layers.append(layer)
+        
+       default: break
+      }
+     }
+     return layers
     }
     
-    func drawCellMenu (menuColor: UIColor, touchPoint: CGPoint)
+    func drawCellMenu (menuColor: UIColor, touchPoint: CGPoint, menuItems: [MenuItemProtocol])
     {
         if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"})
         {
@@ -164,19 +297,29 @@ class PhotoSnippetCollectionView: UICollectionView
         }
         
         let menuLayer = PhotoMenuLayer()
+        let barLayer = CALayer()
         
         menuLayer.arrowSize = menuArrowSize
         menuLayer.fillColor = menuColor
         menuLayer.name = "MenuLayer"
         menuLayer.menuTouchPoint = touchPoint
+    
         
-        let menuFrame = CGRect(x: touchPoint.x, y: touchPoint.y, width: menuBarSize.width, height: menuBarSize.height + menuArrowSize.height)
+        let barFrame =
+            CGRect(x: 0, y: menuArrowSize.height,
+                   width: menuItemSize.width * CGFloat(itemsInRow),
+                   height: menuItemSize.height * CGFloat(menuItems.count/itemsInRow + (menuItems.count % itemsInRow == 0 ? 0 : 1)))
         
-        let barLayer = CALayer()
-        barLayer.frame = CGRect(x: 0, y: menuArrowSize.height, width: menuBarSize.width, height: menuBarSize.height)
+        let menuFrame =
+            CGRect(x: touchPoint.x, y: touchPoint.y,
+                   width: barFrame.width,
+                   height: barFrame.height + menuArrowSize.height)
+        
+        
+        barLayer.frame = barFrame
         barLayer.contentsScale = UIScreen.main.scale
         barLayer.zPosition = menuLayer.zPosition + 1
-        
+    
         
         if touchPoint.x + menuFrame.width  >= layer.bounds.width &&
            touchPoint.y + menuFrame.height <= layer.bounds.height
@@ -208,33 +351,8 @@ class PhotoSnippetCollectionView: UICollectionView
         menuLayer.frame = menuFrame
         menuLayer.contentsScale = UIScreen.main.scale
         
-        let flagSetLayer = CALayer()
-        flagSetLayer.name = "flagSetLayer"
-        flagSetLayer.frame = CGRect(x: 0, y: 0, width: menuBarSize.width/3.0, height: menuBarSize.height)
-        flagSetLayer.contentsScale = UIScreen.main.scale
-        flagSetLayer.contents = UIImage(named: "flag.menu.icon")?.cgImage
-        flagSetLayer.transform = CATransform3DMakeScale(0.8, 0.8, 1)
-        flagSetLayer.zPosition = barLayer.zPosition + 1
-        barLayer.addSublayer(flagSetLayer)
-        
-        let trashLayer = CALayer()
-        trashLayer.name = "trashLayer"
-        trashLayer.frame = CGRect(x: menuBarSize.width/3.0, y: 0, width: menuBarSize.width/3.0, height: menuBarSize.height)
-        trashLayer.contentsScale = UIScreen.main.scale
-        trashLayer.contents = UIImage(named: "trash.menu.icon")?.cgImage
-        trashLayer.transform = CATransform3DMakeScale(0.8, 0.8, 1)
-        trashLayer.zPosition = barLayer.zPosition + 1
-        barLayer.addSublayer(trashLayer)
-        
-        let cnxLayer = CALayer()
-        cnxLayer.name = "cnxLayer"
-        cnxLayer.frame = CGRect(x: menuBarSize.width/3.0 * 2.0, y: 0, width: menuBarSize.width/3.0, height: menuBarSize.height)
-        cnxLayer.contentsScale = UIScreen.main.scale
-        cnxLayer.contents = UIImage(named: "cnx.menu.icon")?.cgImage
-        cnxLayer.transform = CATransform3DMakeScale(0.8, 0.8, 1)
-        cnxLayer.zPosition = barLayer.zPosition + 1
-        barLayer.addSublayer(cnxLayer)
-        
+        barLayer.sublayers = setItemsLayers(menuItems: menuItems)
+    
         menuLayer.addSublayer(barLayer)
         
         layer.addSublayer(menuLayer)

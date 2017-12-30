@@ -25,8 +25,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
        let menuPoint = cell.photoIconView.layer.convert(cellPoint, to: photoCV.layer)
         
-       photoCV.drawCellMenu(menuColor: UIColor.red, touchPoint: menuPoint)
-        
+        photoCV.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuPoint, menuItems: mainMenuItems)
+                            
       }
         
       cell.photoIconView.alpha = photoItems[indexPath.row].photo.isSelected ? 0.5 : 1
