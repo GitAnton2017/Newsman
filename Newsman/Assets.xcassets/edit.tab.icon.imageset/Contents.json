@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "priority1x.png",
+      "filename" : "editmode(1x).png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "priority2x.png",
+      "filename" : "editmode(2x).png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "priority3x.png",
+      "filename" : "editmode(3x).png",
       "scale" : "3x"
     }
   ],

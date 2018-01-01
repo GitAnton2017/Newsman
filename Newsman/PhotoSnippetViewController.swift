@@ -123,18 +123,15 @@ class PhotoSnippetViewController: UIViewController
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
        cell.photoIconView.alpha = 1
-       if let flag = photoItems[itemIndexPath.row].photo.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
-       {
-         cell.drawFlag(flagColor: color)
-       }
       }
      }
     }
     allPhotosSelected = false
     isEditingPhotos = false
     photoCollectionView.isPhotoEditing = false
-    
     photoCollectionView.menuTapGR.isEnabled = true
+    photoCollectionView.menuArrowSize = CGSize(width: 20.0, height: 50.0)
+    photoCollectionView.menuItemSize = CGSize(width: 50.0, height: 50.0)
     
     photoSnippetToolBar.setItems(currentToolBarItems, animated: true)
    }
@@ -143,6 +140,8 @@ class PhotoSnippetViewController: UIViewController
     isEditingPhotos = true
     photoCollectionView.isPhotoEditing = true
     photoCollectionView.menuTapGR.isEnabled = false
+    photoCollectionView.menuArrowSize = CGSize.zero
+    photoCollectionView.menuItemSize = CGSize(width: 64.0, height: 64.0)
     
     let doneItem = UIBarButtonItem(title: "⏎", style: .done, target: self, action: #selector(editPhotosPress))
     doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
@@ -247,7 +246,22 @@ class PhotoSnippetViewController: UIViewController
  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
  {
     super.viewWillTransition(to: size, with: coordinator)
+    if !isEditingPhotos
+    {
+     photoCollectionView.locateCellMenu()
+    }
+    
     photoCollectionView.reloadData()
+ }
+
+ override func viewDidLayoutSubviews()
+ {
+    super.viewDidLayoutSubviews()
+    if photoCollectionView.isCellMenuVisible() && isEditingPhotos
+    {
+       showFlagPhotoMenu()
+    }
+    
  }
     
  var imageSize: CGFloat
@@ -271,7 +285,7 @@ class PhotoSnippetViewController: UIViewController
   {
     if nphoto != oldValue
     {
-     photoCollectionView.locateCellMenu()
+     if !isEditingPhotos {photoCollectionView.locateCellMenu()}
      photoSnippet.nphoto = Int32(nphoto)
      photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
      
@@ -434,10 +448,9 @@ class PhotoSnippetViewController: UIViewController
  
  @IBOutlet var priorityPickerBarButton: UIBarButtonItem!
     
-    
- @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
+ 
+ func deleteSelectedPhotos()
  {
-
     for item in photoItems.filter({$0.photo.isSelected})
     {
         let index = photoItems.index(of: item)
@@ -448,9 +461,13 @@ class PhotoSnippetViewController: UIViewController
     }
     
     togglePhotoEditingMode()
-    
  }
-   
+    
+ @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
+ {
+  deleteSelectedPhotos()
+ }
+
  func setPhotoPriorityFlags(NFlags: Int)
  {
   let flagStr = PhotoPriorityFlags.priorities[NFlags].rawValue
@@ -459,11 +476,22 @@ class PhotoSnippetViewController: UIViewController
     $0.photo.priorityFlag = flagStr
   }
  }
+  
+ func showFlagPhotoMenu()
+ {
+    photoCollectionView.dismissCellMenu()
+    let x = (photoCollectionView.frame.width - CGFloat(photoCollectionView.itemsInRow) * photoCollectionView.menuItemSize.width)/2
+    let y = (photoCollectionView.frame.height - ceil(CGFloat(editMenuItems.count) / CGFloat(photoCollectionView.itemsInRow)) * photoCollectionView.menuItemSize.height) / 2
+    photoCollectionView.menuTapGR.isEnabled = true
+    photoCollectionView.drawCellMenu(menuColor: #colorLiteral(red: 0.8855290292, green: 0.8220692608, blue: 0.755911735, alpha: 1), touchPoint: CGPoint(x: x, y: y), menuItems: editMenuItems)
     
+ }
     
  @objc func flagPhoto (_ sender: UIBarButtonItem)
  {
-    let loc_title = NSLocalizedString("Photo Priority Flag", comment: "Setting Photo Priority Flags")
+    showFlagPhotoMenu()
+    
+    /*let loc_title = NSLocalizedString("Photo Priority Flag", comment: "Setting Photo Priority Flags")
     let loc_message = NSLocalizedString("Please set photo priority flag!", comment: "Priority Flag Selection Alerts")
     let prioritySelect = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
     let maxFlags = PhotoPriorityFlags.priorities.count
@@ -483,7 +511,7 @@ class PhotoSnippetViewController: UIViewController
     
     prioritySelect.addAction(cancelAction)
     
-    self.present(prioritySelect, animated: true, completion: nil)
+    self.present(prioritySelect, animated: true, completion: nil)*/
  }
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
