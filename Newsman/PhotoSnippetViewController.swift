@@ -174,6 +174,7 @@ class PhotoSnippetViewController: UIViewController
  override func viewDidLoad()
  {
   super.viewDidLoad()
+  navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
   nphoto = Int(photoSnippet.nphoto)
   photoCollectionView.dataSource = self
   photoCollectionView.delegate = self
@@ -186,6 +187,7 @@ class PhotoSnippetViewController: UIViewController
   photoScaleStepper.maximumValue = Double(maxPhotosInRow)
   photoScaleStepper.stepValue = 1.0
   photoScaleStepper.wraps = true
+  menuFrameSize = view.frame.size
     
  }
     
@@ -232,37 +234,31 @@ class PhotoSnippetViewController: UIViewController
     
  @IBAction func pinchAction(_ sender: UIPinchGestureRecognizer)
  {
-  if (sender.scale > 1 && nphoto < maxPhotosInRow)
-  {
-    nphoto += 1
-  }
-    
-  if (sender.scale < 1 && nphoto > minPhotosInRow)
-  {
-    nphoto -= 1
-  }
+  if (sender.scale > 1 && nphoto < maxPhotosInRow) {nphoto += 1}
+  if (sender.scale < 1 && nphoto > minPhotosInRow) {nphoto -= 1}
  }
 
+    
  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
  {
+
     super.viewWillTransition(to: size, with: coordinator)
     if !isEditingPhotos
     {
      photoCollectionView.locateCellMenu()
     }
+    else
+    {
+      menuFrameSize = size
+      menuView?.removeFromSuperview()
+      menuView = nil
+      showFlagPhotoMenu()
+    }
     
     photoCollectionView.reloadData()
  }
 
- override func viewDidLayoutSubviews()
- {
-    super.viewDidLayoutSubviews()
-    if photoCollectionView.isCellMenuVisible() && isEditingPhotos
-    {
-       showFlagPhotoMenu()
-    }
-    
- }
+ 
     
  var imageSize: CGFloat
  {
@@ -477,41 +473,120 @@ class PhotoSnippetViewController: UIViewController
   }
  }
   
+ var menuView: UIView? = nil
+ var menuFrameSize: CGSize!
+ var menuViewOrigin: CGPoint
+ {
+  get
+  {
+    let x = (menuFrameSize.width - CGFloat(photoCollectionView.itemsInRow) * photoCollectionView.menuItemSize.width)/2
+    let y = (menuFrameSize.height - ceil(CGFloat(editMenuItems.count) / CGFloat(photoCollectionView.itemsInRow)) * photoCollectionView.menuItemSize.height) / 2
+    return CGPoint(x: x, y: y)
+  }
+ }
+    
  func showFlagPhotoMenu()
  {
-    photoCollectionView.dismissCellMenu()
-    let x = (photoCollectionView.frame.width - CGFloat(photoCollectionView.itemsInRow) * photoCollectionView.menuItemSize.width)/2
-    let y = (photoCollectionView.frame.height - ceil(CGFloat(editMenuItems.count) / CGFloat(photoCollectionView.itemsInRow)) * photoCollectionView.menuItemSize.height) / 2
-    photoCollectionView.menuTapGR.isEnabled = true
-    photoCollectionView.drawCellMenu(menuColor: #colorLiteral(red: 0.8855290292, green: 0.8220692608, blue: 0.755911735, alpha: 1), touchPoint: CGPoint(x: x, y: y), menuItems: editMenuItems)
+   if menuView != nil
+   {
+    menuView?.removeFromSuperview()
+    menuView = nil
+    return
+   }
     
+   photoCollectionView.dismissCellMenu()
+   photoCollectionView.drawCellMenu(menuColor: #colorLiteral(red: 0.8855290292, green: 0.8220692608, blue: 0.755911735, alpha: 1), touchPoint: CGPoint.zero, menuItems: editMenuItems)
+    
+   if let menuLayer = photoCollectionView.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer
+   {
+    let menuFrame = CGRect(origin: menuViewOrigin, size: menuLayer.frame.size)
+    menuView = UIView(frame: menuFrame)
+    let flagMenuGR = UITapGestureRecognizer(target: self, action: #selector(tapPhotoEditMenu))
+    let panMenuGR =  UIPanGestureRecognizer(target: self, action: #selector(panPhotoEditMenu))
+    menuView!.addGestureRecognizer(flagMenuGR)
+    menuView!.addGestureRecognizer(panMenuGR)
+    view.addSubview(menuView!)
+    menuView!.layer.addSublayer(menuLayer)
+   }
+ }
+ 
+ var menuTouchPoint: CGPoint = CGPoint.zero
+    
+ @objc func panPhotoEditMenu (gr: UIPanGestureRecognizer)
+ {
+  guard let menu = menuView else {return}
+    
+  switch (gr.state)
+  {
+   case .began: menuTouchPoint = gr.location(in: menu)
+   case .changed:
+    let touchPoint = gr.location(in: menu)
+    let translation = gr.translation(in: menu)
+    if (touchPoint.x > menuTouchPoint.x - 20  && touchPoint.y > menuTouchPoint.y - 20  &&
+        touchPoint.x < menuTouchPoint.x + 20  && touchPoint.y < menuTouchPoint.y + 20)
+    {
+     menu.center.x += translation.x
+     menu.center.y += translation.y
+    }
+    
+    gr.setTranslation(CGPoint.zero, in: menu)
+   
+    default: break
+   }
+
+  }
+ 
+ @objc func tapPhotoEditMenu (gr: UITapGestureRecognizer)
+ {
+  let touchPoint = gr.location(in: menuView)
+  if let menuLayer = menuView!.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
+     let buttonLayer = menuLayer.hitTest(touchPoint)
+  {
+    switch (buttonLayer.name)
+    {
+     case "flagLayer"?:
+      let flagColor = (buttonLayer as! FlagItemLayer).flagColor
+      let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
+      photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
+      {
+        $0.element.photo.priorityFlag = flagStr
+        if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
+        {
+         cell.drawFlag(flagColor: flagColor!)
+        }
+      }
+      
+      togglePhotoEditingMode()
+      menuView!.removeFromSuperview()
+      menuView = nil
+        
+     case "unflagLayer"?:
+      photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
+      {
+        $0.element.photo.priorityFlag = nil
+         if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
+         {
+          cell.clearFlag()
+         }
+      }
+      
+      togglePhotoEditingMode()
+      menuView!.removeFromSuperview()
+      menuView = nil
+        
+     case "cnxLayer"?:
+      menuView!.removeFromSuperview()
+      menuView = nil
+        
+     default: break
+        
+    }
+   }
  }
     
  @objc func flagPhoto (_ sender: UIBarButtonItem)
  {
     showFlagPhotoMenu()
-    
-    /*let loc_title = NSLocalizedString("Photo Priority Flag", comment: "Setting Photo Priority Flags")
-    let loc_message = NSLocalizedString("Please set photo priority flag!", comment: "Priority Flag Selection Alerts")
-    let prioritySelect = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
-    let maxFlags = PhotoPriorityFlags.priorities.count
-    
-    for i in 0..<maxFlags
-    {
-     let action = UIAlertAction(title: String(repeating: "🚩", count: maxFlags - i), style: .default)
-        { _ in
-            self.setPhotoPriorityFlags(NFlags: i)
-            self.togglePhotoEditingMode()
-        }
-        prioritySelect.addAction(action)
-    }
-    
-    let loc_cnx_title = NSLocalizedString("CANCEL", comment: "Cancel Alert Action")
-    let cancelAction = UIAlertAction(title: loc_cnx_title , style: .cancel, handler: nil)
-    
-    prioritySelect.addAction(cancelAction)
-    
-    self.present(prioritySelect, animated: true, completion: nil)*/
  }
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)

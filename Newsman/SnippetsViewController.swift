@@ -106,7 +106,7 @@ class SnippetsViewController: UIViewController
     override func viewDidLoad()
     {
      super.viewDidLoad()   
-      
+     navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
      snippetsTableView.delegate = self
      //Core Location Manager Settings ************************
      locationManager.delegate = self

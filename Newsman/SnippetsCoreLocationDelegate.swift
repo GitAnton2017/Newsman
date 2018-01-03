@@ -9,8 +9,7 @@ extension SnippetsViewController: CLLocationManagerDelegate
     {
       switch(CLLocationManager.authorizationStatus())
       {
-        case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
+        case .notDetermined: locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse: fallthrough
         case .authorizedAlways: break
         case .denied: fallthrough
@@ -23,10 +22,8 @@ extension SnippetsViewController: CLLocationManagerDelegate
     {
       switch(CLLocationManager.authorizationStatus())
      {
-        case .notDetermined:
-          break
-        case .authorizedWhenInUse:
-            locationManager.startUpdatingLocation()
+        case .notDetermined: break
+        case .authorizedWhenInUse: locationManager.startUpdatingLocation()
         case .authorizedAlways: break
         case .denied: break
         case .restricted: break
@@ -77,14 +74,5 @@ extension SnippetsViewController: CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])
     {
       snippetLocation = locations.last
-        
-      if let currentLocation = locations.last
-      {
-        let snippetCoordinate = currentLocation.coordinate
-        print ("SNIPPET LOCATION*****************************")
-        print ("LATITUDE: \(snippetCoordinate.latitude)")
-        print ("LONGITUDE: \(snippetCoordinate.longitude)")
-    
-      }
     }
 }

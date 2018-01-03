@@ -155,10 +155,32 @@ class PhotoSnippetCollectionView: UICollectionView
         addGestureRecognizer(menuTapGR)
     }
     
-    @objc func cellLongPress(_ gr: UIGestureRecognizer)
+    func reorderPhoto (with gr: UILongPressGestureRecognizer)
+    {
+      let touchPoint = gr.location(in: self)
+      if let indexPath = indexPathForItem(at: touchPoint),
+         let cell = cellForItem(at: indexPath)
+      {
+        switch (gr.state)
+        {
+         case .began: beginInteractiveMovementForItem(at: indexPath)
+          UIView.animate(withDuration: 0.2,
+                         delay: 0,
+                         options: [.curveEaseInOut],
+                         animations: {cell.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)},
+                         completion: nil)
+         case .changed: updateInteractiveMovementTargetPosition(touchPoint)
+         case .ended: endInteractiveMovement()
+         default: cancelInteractiveMovement()
+        }
+      }
+    }
+    
+    @objc func cellLongPress(_ gr: UILongPressGestureRecognizer)
     {
         if isPhotoEditing
         {
+          reorderPhoto(with: gr)
           return
         }
         
@@ -177,8 +199,6 @@ class PhotoSnippetCollectionView: UICollectionView
         }
         
     }
-    
-
     
     @objc func tapCellMenuItem (gr: UITapGestureRecognizer)
     {
@@ -203,49 +223,26 @@ class PhotoSnippetCollectionView: UICollectionView
               deleted.deleteImage()
               self.deleteItems(at: [indexPath])
              }
-            
+             menuLayer.removeFromSuperlayer()
             case "flagLayer"?:
              let flagColor = (buttonLayer as! FlagItemLayer).flagColor
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
-             if isPhotoEditing
-             {
-              ds.photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
-              {
-                $0.element.photo.priorityFlag = flagStr
-                if let cell = cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
-                {
-                 cell.drawFlag(flagColor: flagColor!)
-                }
-              }
-              ds.togglePhotoEditingMode()
-             }
-             else if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
+             if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
              {
               ds.photoItems[indexPath.row].photo.priorityFlag = flagStr
               let cell = self.cellForItem(at: indexPath) as! PhotoSnippetCell
               cell.drawFlag(flagColor: flagColor!)
              }
+             menuLayer.removeFromSuperlayer()
             
             case "unflagLayer"?:
-             if isPhotoEditing
-             {
-               ds.photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
-               {
-                $0.element.photo.priorityFlag = nil
-                if let cell = cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
-                {
-                 cell.clearFlag()
-                }
-               }
-                
-               ds.togglePhotoEditingMode()
-             }
-             else if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
+             if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
              {
               ds.photoItems[indexPath.row].photo.priorityFlag = nil
               let cell = self.cellForItem(at: indexPath) as! PhotoSnippetCell
               cell.clearFlag()
              }
+             menuLayer.removeFromSuperlayer()
             
             case "upLayer"?:
              if let _ = self.indexPathForItem(at: menuLayer.menuTouchPoint)
@@ -253,20 +250,16 @@ class PhotoSnippetCollectionView: UICollectionView
                menuLayer.removeFromSuperlayer()
                self.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuLayer.menuTouchPoint, menuItems: mainMenuItems)
              }
+           case "cnxLayer"?:
+             menuLayer.removeFromSuperlayer()
             
-            case "cnxLayer"? :
-             if isPhotoEditing
-             {
-              menuTapGR.isEnabled = false
-             }
+           default: break
             
-            default: break
-            
-           }//switch
+          }//switch
           
           self.menuIndexPath = nil
           self.menuShift = CGPoint.zero
-          menuLayer.removeFromSuperlayer()
+          
         
         }
     }

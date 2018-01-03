@@ -5,7 +5,18 @@ import UIKit
 extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     
-
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
+    {
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    {
+        let movedItem = photoItems.remove(at: sourceIndexPath.row)
+        photoItems.insert(movedItem, at: destinationIndexPath.row)
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView,
                           layout collectionViewLayout: UICollectionViewLayout,
                           sizeForItemAt indexPath: IndexPath) -> CGSize

@@ -59,7 +59,7 @@ class TextSnippetViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
+        navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
         textView.inputAccessoryView = createKeyBoardToolBar()
         textSnippetTitle.inputAccessoryView = textView.inputAccessoryView
     }
