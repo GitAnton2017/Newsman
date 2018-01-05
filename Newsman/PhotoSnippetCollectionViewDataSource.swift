@@ -5,6 +5,26 @@ import CoreData
 
 extension PhotoSnippetViewController: UICollectionViewDataSource
 {
+    
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
+    {
+        print ("canMoveItemAt indexPath: \(indexPath)")
+        return true
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    {
+        let movedItem = photoItems.remove(at: sourceIndexPath.row)
+        photoItems.insert(movedItem, at: destinationIndexPath.row)
+        
+        for i in 0..<photoItems.count
+        {
+          photoItems[i].photo.position = Int16(i)
+        }
+        
+        photoSnippet.grouping = GroupPhotos.manually.rawValue
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
       return photoItems.count

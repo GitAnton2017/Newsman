@@ -22,6 +22,7 @@
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="priorityFlag" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="photoSnippet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="photos" inverseEntity="PhotoSnippet" syncable="YES"/>
         <fetchedProperty name="fetchedProperty" optional="YES" syncable="YES">
@@ -29,6 +30,7 @@
         </fetchedProperty>
     </entity>
     <entity name="PhotoSnippet" representedClassName="PhotoSnippet" parentEntity="BaseSnippet" syncable="YES">
+        <attribute name="grouping" optional="YES" attributeType="String" defaultValueString="By Time Created" syncable="YES"/>
         <attribute name="nphoto" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="10" defaultValueString="3" usesScalarValueType="YES" syncable="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoSnippet" inverseEntity="Photo" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="photos" inverseEntity="Report" syncable="YES"/>
@@ -60,8 +62,8 @@
     <elements>
         <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
         <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="180"/>
-        <element name="Photo" positionX="-605" positionY="-612" width="128" height="194"/>
-        <element name="PhotoSnippet" positionX="-632" positionY="-405" width="128" height="90"/>
+        <element name="Photo" positionX="-558" positionY="-684" width="128" height="209"/>
+        <element name="PhotoSnippet" positionX="-632" positionY="-405" width="128" height="103"/>
         <element name="Report" positionX="-441" positionY="-199" width="128" height="148"/>
         <element name="Settings" positionX="-272" positionY="-576" width="128" height="60"/>
         <element name="SketchSnippet" positionX="-666" positionY="-277" width="128" height="75"/>

@@ -11,6 +11,4 @@ import Foundation
 import CoreData
 
 @objc(SketchSnippet)
-public class SketchSnippet: BaseSnippet {
-
-}
+public class SketchSnippet: BaseSnippet {}

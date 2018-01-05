@@ -19,8 +19,8 @@ class PhotoSnippetViewController: UIViewController
  lazy var photoItems: [PhotoItem] =
  {
     var photoItems = [PhotoItem]()
-    let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-    if let allPhotos = photoSnippet.photos?.sortedArray(using: [sort]) as? [Photo]
+    let sort = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortDescriptor
+    if let allPhotos = photoSnippet.photos?.sortedArray(using: [sort!]) as? [Photo]
     {
      for photo in allPhotos
      {
@@ -281,7 +281,14 @@ class PhotoSnippetViewController: UIViewController
   {
     if nphoto != oldValue
     {
-     if !isEditingPhotos {photoCollectionView.locateCellMenu()}
+     if isEditingPhotos
+     {
+        photoCollectionView.cancellUnfinishedMove()
+     }
+     else
+     {
+        photoCollectionView.locateCellMenu()
+     }
      photoSnippet.nphoto = Int32(nphoto)
      photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
      
@@ -447,6 +454,7 @@ class PhotoSnippetViewController: UIViewController
  
  func deleteSelectedPhotos()
  {
+    //var deletedIndexPaths = [IndexPath]()
     for item in photoItems.filter({$0.photo.isSelected})
     {
         let index = photoItems.index(of: item)
@@ -454,9 +462,29 @@ class PhotoSnippetViewController: UIViewController
         deletedItem.deleteImage()
         let itemIndexPath = IndexPath(row: index!, section: 0)
         photoCollectionView.deleteItems(at: [itemIndexPath])
+        //deletedIndexPaths.append(itemIndexPath)
+       
     }
-    
+    //photoCollectionView.deleteItems(at: deletedIndexPaths)
     togglePhotoEditingMode()
+    
+    /*UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
+                   animations:
+        {[unowned self] () -> Void in
+          for ip in deletedIndexPaths
+          {
+           if let cell = self.photoCollectionView.cellForItem(at: ip)
+           {
+            cell.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+           }
+         }
+        },
+        completion:
+        {[unowned self] _ in
+            self.photoCollectionView.deleteItems(at: deletedIndexPaths)
+            self.togglePhotoEditingMode()
+    })*/
+    
  }
     
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
@@ -519,11 +547,19 @@ class PhotoSnippetViewController: UIViewController
   switch (gr.state)
   {
    case .began: menuTouchPoint = gr.location(in: menu)
+   
+    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: {menu.alpha = 0.85}, completion: nil)
+    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn, .`repeat`, .autoreverse],
+                   animations:
+                   {
+                     menu.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                   },
+                   completion: nil)
    case .changed:
     let touchPoint = gr.location(in: menu)
     let translation = gr.translation(in: menu)
-    if (touchPoint.x > menuTouchPoint.x - 20  && touchPoint.y > menuTouchPoint.y - 20  &&
-        touchPoint.x < menuTouchPoint.x + 20  && touchPoint.y < menuTouchPoint.y + 20)
+    if (touchPoint.x > menuTouchPoint.x - 30  && touchPoint.y > menuTouchPoint.y - 30  &&
+        touchPoint.x < menuTouchPoint.x + 30  && touchPoint.y < menuTouchPoint.y + 30)
     {
      menu.center.x += translation.x
      menu.center.y += translation.y
@@ -531,13 +567,35 @@ class PhotoSnippetViewController: UIViewController
     
     gr.setTranslation(CGPoint.zero, in: menu)
    
-    default: break
+   default:
+    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut],
+                   animations:
+                   {
+                     menu.transform = CGAffineTransform.identity
+                     menu.alpha = 1.0
+                   },
+                   completion: nil)
    }
 
   }
  
  @objc func tapPhotoEditMenu (gr: UITapGestureRecognizer)
  {
+  let closeMenuAni =
+  {[unowned self]() -> Void in
+    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
+                   animations:
+                   {
+                    self.menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                    self.menuView!.alpha = 0
+                   },
+                   completion:
+                   {_ in
+                    self.menuView!.removeFromSuperview()
+                    self.menuView = nil
+                   }
+    )
+  }
   let touchPoint = gr.location(in: menuView)
   if let menuLayer = menuView!.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
      let buttonLayer = menuLayer.hitTest(touchPoint)
@@ -557,8 +615,8 @@ class PhotoSnippetViewController: UIViewController
       }
       
       togglePhotoEditingMode()
-      menuView!.removeFromSuperview()
-      menuView = nil
+      closeMenuAni()
+
         
      case "unflagLayer"?:
       photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
@@ -571,12 +629,10 @@ class PhotoSnippetViewController: UIViewController
       }
       
       togglePhotoEditingMode()
-      menuView!.removeFromSuperview()
-      menuView = nil
+      closeMenuAni()
+    
         
-     case "cnxLayer"?:
-      menuView!.removeFromSuperview()
-      menuView = nil
+     case "cnxLayer"?: closeMenuAni()
         
      default: break
         

@@ -155,38 +155,62 @@ class PhotoSnippetCollectionView: UICollectionView
         addGestureRecognizer(menuTapGR)
     }
     
-    func reorderPhoto (with gr: UILongPressGestureRecognizer)
+    var hasUnfinishedMove = false
+    var unfinishedMoveCell: PhotoSnippetCell? = nil
+    
+    func cancellUnfinishedMove()
     {
-      let touchPoint = gr.location(in: self)
-      if let indexPath = indexPathForItem(at: touchPoint),
-         let cell = cellForItem(at: indexPath)
-      {
+        if hasUnfinishedMove
+        {
+            cancelInteractiveMovement()
+            unfinishedMoveCell?.photoIconView.alpha = 1
+            unfinishedMoveCell?.photoIconView.layer.borderWidth = 1
+            unfinishedMoveCell = nil
+            hasUnfinishedMove = false
+        }
+    }
+    func reorderPhoto (tappedCell cell: PhotoSnippetCell, tappedIndexPath indexPath: IndexPath, with gr: UILongPressGestureRecognizer)
+    {
+        let tp = gr.location(in: self)
         switch (gr.state)
         {
-         case .began: beginInteractiveMovementForItem(at: indexPath)
-          UIView.animate(withDuration: 0.2,
-                         delay: 0,
-                         options: [.curveEaseInOut],
-                         animations: {cell.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)},
+         case .began:
+          cancellUnfinishedMove()
+          beginInteractiveMovementForItem(at: indexPath)
+          hasUnfinishedMove = true
+          unfinishedMoveCell = cell
+          cell.photoIconView.alpha = 0.75
+          cell.photoIconView.layer.borderWidth = 5.0
+          UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut,.`repeat`,.autoreverse],
+                         animations: {cell.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)},
                          completion: nil)
-         case .changed: updateInteractiveMovementTargetPosition(touchPoint)
-         case .ended: endInteractiveMovement()
-         default: cancelInteractiveMovement()
+          
+
+         case .changed: updateInteractiveMovementTargetPosition(tp)
+         case .ended:
+    
+          endInteractiveMovement()
+          hasUnfinishedMove = false
+          unfinishedMoveCell = nil
+          cell.photoIconView.layer.borderWidth = 1.0
+          cell.photoIconView.alpha = 1
+       
+         default: cancellUnfinishedMove()
         }
-      }
+    
     }
     
     @objc func cellLongPress(_ gr: UILongPressGestureRecognizer)
     {
-        if isPhotoEditing
-        {
-          reorderPhoto(with: gr)
-          return
-        }
-        
         let touchPoint = gr.location(in: self)
         
-        if let _ = indexPathForItem(at: touchPoint)
+        if isPhotoEditing,
+            let ip = indexPathForItem(at: touchPoint),
+            let cell = cellForItem(at: ip) as? PhotoSnippetCell
+        {
+          reorderPhoto(tappedCell: cell, tappedIndexPath: ip, with: gr)
+        }
+        else if let _ = indexPathForItem(at: touchPoint)
         {
          if gr.state == .ended
          {

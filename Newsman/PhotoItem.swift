@@ -98,6 +98,7 @@ class PhotoItem: NSObject
       newPhoto.date = Date() as NSDate
       newPhoto.photoSnippet = photoSnippet
       newPhoto.id = newPhotoID
+      newPhoto.position = Int16(photoSnippet.photos?.count ?? 0)
       photoSnippet.addToPhotos(newPhoto)
         
       self.init(photo: newPhoto)

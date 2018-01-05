@@ -25,6 +25,7 @@ extension Photo
     @NSManaged public var location: String?
     @NSManaged public var longitude: Double
     @NSManaged public var isSelected: Bool
+    @NSManaged public var position: Int16
     @NSManaged public var priorityFlag: String?
     @NSManaged public var photoSnippet: PhotoSnippet?
 
