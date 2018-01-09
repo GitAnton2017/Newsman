@@ -44,22 +44,9 @@ public enum PhotoPriorityFlags: String
             .hottest , .hot, .high, .normal, .medium, .low
     ]
     
-    var color: UIColor
-    {
-        get
-        {
-            return PhotoPriorityFlags.priorityColorMap[self]!
-        }
-    }
-    
-    var section: Int
-    {
-        get
-        {
-            return PhotoPriorityFlags.prioritySectionsMap[self]!
-        }
-    }
-    
+    var color: UIColor  {return PhotoPriorityFlags.priorityColorMap[self]!}
+    var section: Int    {return PhotoPriorityFlags.prioritySectionsMap[self]!}
+    var rateIndex: Int  {return PhotoPriorityFlags.prioritySectionsMap.count - 1 - section}
     
     
     static let strings: [String] =

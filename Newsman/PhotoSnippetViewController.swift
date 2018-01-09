@@ -19,17 +19,83 @@ class PhotoSnippetViewController: UIViewController
  lazy var photoItems: [PhotoItem] =
  {
     var photoItems = [PhotoItem]()
-    let sort = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortDescriptor
-    if let allPhotos = photoSnippet.photos?.sortedArray(using: [sort!]) as? [Photo]
+    if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
     {
-     for photo in allPhotos
+     photoItems = allPhotos.map{PhotoItem(photo: $0)}
+     if let sortPred = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortPredicate
      {
-      let newPhotoItem = PhotoItem(photo: photo)
-      photoItems.append(newPhotoItem)
+        photoItems.sort(by: sortPred)
      }
     }
     return photoItems
  }()
+ 
+ func sectionedPhotoItems() -> [[PhotoItem]]
+ {
+   var photoItems = [[PhotoItem]]()
+   if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
+   {
+    sectionTitles.forEach
+    { title in
+      photoItems.append(allPhotos.filter{($0.priorityFlag ?? "") == title}.map({PhotoItem(photo: $0)}))
+    }
+   }
+   return photoItems
+ }
+
+ func desectionedPhotoItems() -> [[PhotoItem]]
+ {
+  var photoItems = [[PhotoItem]]()
+  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
+  {
+   photoItems.append(allPhotos.map({PhotoItem(photo: $0)}))
+  }
+  return photoItems
+ }
+
+ var sectionTitles: [String]
+ {
+  var sections = [String]()
+  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
+  {
+    sections = Set(allPhotos.map{$0.priorityFlag ?? ""}).sorted
+    {
+      (PhotoPriorityFlags(rawValue: $0)?.rateIndex ?? -1) <= (PhotoPriorityFlags(rawValue: $1)?.rateIndex ?? -1)
+    }
+  }
+    
+  return sections
+ }
+    
+ lazy var photoItems2D: [[PhotoItem]] =
+ {
+  var photoItems = [[PhotoItem]]()
+  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
+  {
+    if let sortPred = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortPredicate
+    {
+     photoItems.append(allPhotos.map({PhotoItem(photo: $0)}).sorted(by: sortPred))
+    }
+    else
+    {
+     photoItems = sectionedPhotoItems()
+    }
+  }
+  return photoItems
+ }()
+    
+
+ func itemsForSections(section: Int) -> [PhotoItem]
+ {
+  if photoCollectionView.photoGroupType == .makeGroups
+  {
+   return photoItems.filter{($0.photo.priorityFlag ?? "") == sectionTitles[section]}
+  }
+  else 
+  {
+   return photoItems
+  }
+ }
 
  var photoSnippet: PhotoSnippet!
  {
@@ -142,6 +208,7 @@ class PhotoSnippetViewController: UIViewController
     photoCollectionView.menuTapGR.isEnabled = false
     photoCollectionView.menuArrowSize = CGSize.zero
     photoCollectionView.menuItemSize = CGSize(width: 64.0, height: 64.0)
+    photoCollectionView.dismissCellMenu()
     
     let doneItem = UIBarButtonItem(title: "⏎", style: .done, target: self, action: #selector(editPhotosPress))
     doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
@@ -159,12 +226,44 @@ class PhotoSnippetViewController: UIViewController
     flagItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .selected)
     flagItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 35)], for: .normal)
     
+    let groupItem = UIBarButtonItem(title: "❐", style: .plain, target: self, action: #selector(groupPhoto))
+    groupItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .selected)
+    groupItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 35)], for: .normal)
     
     let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
     
-    photoSnippetToolBar.setItems([deleteItem, flexSpace, selectItem, flexSpace, flagItem, flexSpace, doneItem], animated: true)
+    photoSnippetToolBar.setItems([deleteItem, flexSpace,
+                                  selectItem, flexSpace,
+                                  flagItem, flexSpace,
+                                  groupItem, flexSpace,
+                                  doneItem], animated: true)
     
    }
+ }
+  
+ @objc func groupPhoto()
+ {
+    let loc_title = NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
+    let loc_message = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")
+    let groupAC = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
+    
+    for grouping in GroupPhotos.groupingTypes
+    {
+        let loc_gr_title = NSLocalizedString(grouping.rawValue, comment: grouping.rawValue)
+        let action = UIAlertAction(title: loc_gr_title, style: .default)
+        { _ in
+            self.photoCollectionView.photoGroupType = grouping
+    
+        }
+        groupAC.addAction(action)
+    }
+    
+    let loc_cnx_title = NSLocalizedString("CANCEL",comment: "Cancel Alert Action")
+    let cancel = UIAlertAction(title: loc_cnx_title, style: .cancel, handler: nil)
+    
+    groupAC.addAction(cancel)
+    
+    self.present(groupAC, animated: true, completion: nil)
  }
     
  @IBOutlet weak var photoCollectionView: PhotoSnippetCollectionView!
@@ -247,10 +346,10 @@ class PhotoSnippetViewController: UIViewController
     {
      photoCollectionView.locateCellMenu()
     }
-    else
+    else if let menu = menuView
     {
       menuFrameSize = size
-      menuView?.removeFromSuperview()
+      menu.removeFromSuperview()
       menuView = nil
       showFlagPhotoMenu()
     }
@@ -318,6 +417,8 @@ class PhotoSnippetViewController: UIViewController
  let imagePicker = UIImagePickerController()
  var imagePickerTakeButton: UIButton!
  var imagePickerCnxxButton: UIButton!
+    
+    
     
  @objc func pickImageButtonPress()
  {
@@ -454,37 +555,31 @@ class PhotoSnippetViewController: UIViewController
  
  func deleteSelectedPhotos()
  {
-    //var deletedIndexPaths = [IndexPath]()
-    for item in photoItems.filter({$0.photo.isSelected})
+   for i in 0..<photoItems2D.count
+   {
+    for item in photoItems2D[i].filter({$0.photo.isSelected})
     {
-        let index = photoItems.index(of: item)
-        let deletedItem = photoItems.remove(at: index!)
+        let index = photoItems2D[i].index(of: item)
+        let deletedItem = photoItems2D[i].remove(at: index!)
         deletedItem.deleteImage()
-        let itemIndexPath = IndexPath(row: index!, section: 0)
+        
+        
+        let itemIndexPath = IndexPath(row: index!, section: i)
+        
         photoCollectionView.deleteItems(at: [itemIndexPath])
-        //deletedIndexPaths.append(itemIndexPath)
-       
+        
     }
-    //photoCollectionView.deleteItems(at: deletedIndexPaths)
-    togglePhotoEditingMode()
     
-    /*UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
-                   animations:
-        {[unowned self] () -> Void in
-          for ip in deletedIndexPaths
-          {
-           if let cell = self.photoCollectionView.cellForItem(at: ip)
-           {
-            cell.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-           }
-         }
-        },
-        completion:
-        {[unowned self] _ in
-            self.photoCollectionView.deleteItems(at: deletedIndexPaths)
-            self.togglePhotoEditingMode()
-    })*/
     
+   }
+   for section in photoItems2D.enumerated().filter({$0.element.count == 0})
+   {
+        photoItems2D.remove(at: section.offset)
+        photoCollectionView.deleteSections([section.offset])
+   }
+
+  togglePhotoEditingMode()
+
  }
     
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
@@ -517,8 +612,7 @@ class PhotoSnippetViewController: UIViewController
  {
    if menuView != nil
    {
-    menuView?.removeFromSuperview()
-    menuView = nil
+    closeMenuAni()
     return
    }
     
@@ -535,6 +629,7 @@ class PhotoSnippetViewController: UIViewController
     menuView!.addGestureRecognizer(panMenuGR)
     view.addSubview(menuView!)
     menuView!.layer.addSublayer(menuLayer)
+    openMenuAni()
    }
  }
  
@@ -579,23 +674,38 @@ class PhotoSnippetViewController: UIViewController
 
   }
  
+  func openMenuAni()
+  {
+        menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        menuView!.alpha = 0
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
+                       animations:
+                       {
+                        self.menuView!.transform = CGAffineTransform.identity
+                        self.menuView!.alpha = 1
+                       },
+                       completion: nil)
+        
+  }
+ 
+ func closeMenuAni()
+ {
+        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
+                       animations:
+                       {
+                        self.menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                        self.menuView!.alpha = 0
+                       },
+                       completion:
+                       {_ in
+                        self.menuView!.removeFromSuperview()
+                        self.menuView = nil
+                       })
+
+ }
+    
  @objc func tapPhotoEditMenu (gr: UITapGestureRecognizer)
  {
-  let closeMenuAni =
-  {[unowned self]() -> Void in
-    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
-                   animations:
-                   {
-                    self.menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-                    self.menuView!.alpha = 0
-                   },
-                   completion:
-                   {_ in
-                    self.menuView!.removeFromSuperview()
-                    self.menuView = nil
-                   }
-    )
-  }
   let touchPoint = gr.location(in: menuView)
   if let menuLayer = menuView!.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
      let buttonLayer = menuLayer.hitTest(touchPoint)

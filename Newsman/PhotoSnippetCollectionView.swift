@@ -123,13 +123,42 @@ class FlagItemLayer: CALayer
         ctx.closePath()
         ctx.setFillColor(flagColor.cgColor)
         ctx.drawPath(using: .fill)
-        
-        
     }
 }
 
 class PhotoSnippetCollectionView: UICollectionView
 {
+    var photoGroupType: GroupPhotos
+    {
+      get
+      {
+        let grouping = (dataSource as! PhotoSnippetViewController).photoSnippet.grouping
+        return GroupPhotos(rawValue: grouping!)!
+      }
+        
+      set
+      {
+       let ds = dataSource as! PhotoSnippetViewController
+       if (newValue == .makeGroups && photoGroupType != .makeGroups)
+       {
+         ds.photoItems2D = ds.sectionedPhotoItems()
+       }
+       else if (newValue != .makeGroups && photoGroupType == .makeGroups)
+       {
+         ds.photoItems2D = ds.desectionedPhotoItems()
+         ds.photoItems2D[0].sort(by: newValue.sortPredicate!)
+       }
+       else
+       {
+         ds.photoItems2D[0].sort(by: newValue.sortPredicate!)
+         GroupPhotos.ascending = !GroupPhotos.ascending
+       }
+    
+       ds.photoSnippet.grouping = newValue.rawValue
+       reloadData()
+      }
+    }
+    
     var menuTapGR: UITapGestureRecognizer!
     var cellLongPressGR : UILongPressGestureRecognizer!
     

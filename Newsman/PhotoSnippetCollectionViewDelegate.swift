@@ -5,7 +5,34 @@ import UIKit
 extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
     
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize
+    {
+        if photoCollectionView.photoGroupType == .makeGroups //&& photoItems2D[section].count > 0
+        {
+            return CGSize(width: 0, height: 50)
+        }
+        else
+        {
+            
+            return CGSize.zero
+        }
+    }
     
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize
+    {
+        if photoCollectionView.photoGroupType == .makeGroups //&& photoItems2D[section].count > 0
+        {
+            return CGSize(width: 0, height: 50)
+        }
+        else
+        {
+            return CGSize.zero
+        }
+    }
     func collectionView(_ collectionView: UICollectionView,
                           layout collectionViewLayout: UICollectionViewLayout,
                           sizeForItemAt indexPath: IndexPath) -> CGSize
@@ -38,15 +65,17 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
       let iconView = (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView
+      let photoItem = photoItems2D[indexPath.section][indexPath.row]
+        
       cellTouchAnimation(view: iconView!)
         
       if isEditingPhotos
       {
-        if (!photoItems[indexPath.row].photo.isSelected)
+        if (!photoItem.photo.isSelected)
         {
          print ("SELECT NOT SELECTED")
          iconView!.alpha = 0.5
-         photoItems[indexPath.row].photo.isSelected = true
+         photoItem.photo.isSelected = true
          allPhotosSelected = true
          selectBarButton.title = "☆☆☆"
         }
@@ -54,7 +83,7 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
         {
          print ("SELECT SELECTED")
          iconView!.alpha = 1
-          photoItems[indexPath.row].photo.isSelected = false
+         photoItem.photo.isSelected = false
           
           if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
           {
@@ -67,15 +96,17 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
     {
       let iconView = (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView
+      let photoItem = photoItems2D[indexPath.section][indexPath.row]
+        
       cellTouchAnimation(view: iconView!)
         
       if isEditingPhotos
       {
-        if (photoItems[indexPath.row].photo.isSelected)
+        if (photoItem.photo.isSelected)
         {
          print ("DESELECT SELECTED")
          iconView!.alpha = 1
-         photoItems[indexPath.row].photo.isSelected = false
+         photoItem.photo.isSelected = false
          if let selected = collectionView.indexPathsForSelectedItems, selected.count == 0
          {
           selectBarButton.title = "★★★"
@@ -85,7 +116,7 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
         {
           print ("DESELECT DESELECTED")
           iconView!.alpha = 0.5
-          photoItems[indexPath.row].photo.isSelected = true
+          photoItem.photo.isSelected = true
           allPhotosSelected = true
           selectBarButton.title = "☆☆☆"
         }

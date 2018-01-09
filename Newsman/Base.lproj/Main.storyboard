@@ -509,7 +509,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                             </textField>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fRa-jJ-dD6" customClass="PhotoSnippetCollectionView" customModule="Newsman" customModuleProvider="target">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fRa-jJ-dD6" customClass="PhotoSnippetCollectionView" customModule="Newsman">
                                 <rect key="frame" x="4" y="74" width="367" height="543"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" id="xIK-fT-b32">
@@ -551,6 +551,48 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="photoSectionHeader" id="OXL-QE-zfg" customClass="PhotoSectionHeader" customModule="Newsman" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="367" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8G-V2-vUY">
+                                            <rect key="frame" x="8" y="8" width="351" height="28"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="leading" secondItem="OXL-QE-zfg" secondAttribute="leadingMargin" id="bFG-oR-XwO"/>
+                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="bottom" secondItem="OXL-QE-zfg" secondAttribute="bottomMargin" id="eF3-2Z-QuD"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="N8G-V2-vUY" secondAttribute="trailing" id="eh1-Ug-Ggy"/>
+                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="top" secondItem="OXL-QE-zfg" secondAttribute="topMargin" id="jNJ-Jz-mDa"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="headerLabel" destination="N8G-V2-vUY" id="NWm-yp-USp"/>
+                                    </connections>
+                                </collectionReusableView>
+                                <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="photoSectionFooter" id="JAm-Kh-He4" customClass="PhotoSectionFooter" customModule="Newsman" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="104" width="367" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3aI-lF-zLh">
+                                            <rect key="frame" x="16" y="0.0" width="335" height="44"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="3aI-lF-zLh" secondAttribute="trailing" id="5SR-25-bdG"/>
+                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="leading" secondItem="JAm-Kh-He4" secondAttribute="leadingMargin" id="5hg-Hs-rSt"/>
+                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="bottom" secondItem="JAm-Kh-He4" secondAttribute="bottomMargin" id="AH5-Ho-8Pv"/>
+                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="top" secondItem="JAm-Kh-He4" secondAttribute="topMargin" id="Zfj-gY-ykB"/>
+                                    </constraints>
+                                    <connections>
+                                        <outlet property="footerLabel" destination="3aI-lF-zLh" id="DhI-IK-x9d"/>
+                                    </connections>
+                                </collectionReusableView>
                             </collectionView>
                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="BrJ-Xz-Uta">
                                 <rect key="frame" x="140" y="571" width="94" height="29"/>
@@ -613,6 +655,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="CdP-HO-XWj"/>
-        <segue reference="U6G-5E-WPd"/>
+        <segue reference="yLx-ea-9QV"/>
     </inferredMetricsTieBreakers>
 </document>

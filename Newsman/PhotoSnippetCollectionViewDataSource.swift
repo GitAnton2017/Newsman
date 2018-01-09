@@ -3,12 +3,27 @@ import Foundation
 import UIKit
 import CoreData
 
+
+class PhotoSectionHeader: UICollectionReusableView
+{
+    @IBOutlet weak var headerLabel: UILabel!
+    
+    required init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+    }
+}
+
+class PhotoSectionFooter: UICollectionReusableView
+{
+    @IBOutlet weak var footerLabel: UILabel!
+}
+
 extension PhotoSnippetViewController: UICollectionViewDataSource
 {
     
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
     {
-        print ("canMoveItemAt indexPath: \(indexPath)")
         return true
     }
     
@@ -25,9 +40,71 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
         photoSnippet.grouping = GroupPhotos.manually.rawValue
     }
     
+    func collectionView(_ collectionView: UICollectionView,
+                          viewForSupplementaryElementOfKind kind: String,
+                          at indexPath: IndexPath) -> UICollectionReusableView
+    {
+        switch (kind)
+        {
+         case UICollectionElementKindSectionHeader:
+            
+          let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                     withReuseIdentifier: "photoSectionHeader",
+                                                                     for: indexPath) as! PhotoSectionHeader
+          
+          if photoCollectionView.photoGroupType == .makeGroups
+          {
+           let title = sectionTitles[indexPath.section].isEmpty ? "Not Flagged Yet" : sectionTitles[indexPath.section]
+           view.headerLabel.text = NSLocalizedString(title, comment: title)
+           if let color = PhotoPriorityFlags(rawValue: sectionTitles[indexPath.section])?.color
+           {
+             view.backgroundColor = color
+           }
+           else
+           {
+            view.backgroundColor = UIColor.lightGray
+           }
+          }
+          return view
+          
+            
+         case UICollectionElementKindSectionFooter:
+            
+          let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                     withReuseIdentifier: "photoSectionFooter",
+                                                                     for: indexPath) as! PhotoSectionFooter
+          if photoCollectionView.photoGroupType == .makeGroups
+          {
+           view.backgroundColor = collectionView.backgroundColor
+          
+           view.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") +
+                                                    ": \(itemsForSections(section: indexPath.section).count)"
+          }
+          return view
+            
+         default:  return UICollectionReusableView()
+        }
+        
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int
+    {
+       /* if (collectionView as! PhotoSnippetCollectionView).photoGroupType == .makeGroups
+        {
+          return sectionTitles.count
+        }
+        else
+        {
+          return 1
+        }*/
+ 
+        return photoItems2D.count
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-      return photoItems.count
+      //return itemsForSections(section: section).count
+        
+        return photoItems2D[section].count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
@@ -35,6 +112,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSnippetCell", for: indexPath) as! PhotoSnippetCell
         
       let photoCV = collectionView as! PhotoSnippetCollectionView
+        
+      //let photoItem = itemsForSections(section: indexPath.section)[indexPath.row]
+      let photoItem = photoItems2D[indexPath.section][indexPath.row]
         
       photoCV.layer.addSublayer(cell.layer)
         
@@ -49,9 +129,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
                             
       }
         
-      cell.photoIconView.alpha = photoItems[indexPath.row].photo.isSelected ? 0.5 : 1
+      cell.photoIconView.alpha = photoItem.photo.isSelected ? 0.5 : 1
        
-      if let flag = photoItems[indexPath.row].photo.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
+      if let flag = photoItem.photo.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
       {
        cell.drawFlag(flagColor: color)
       }
@@ -60,7 +140,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
        cell.clearFlag()
       }
         
-      photoItems[indexPath.row].getImage(requiredImageWidth:  imageSize)
+      photoItem.getImage(requiredImageWidth:  imageSize)
       {(image) in
         
        cell.photoIconView.image = image

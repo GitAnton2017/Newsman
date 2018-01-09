@@ -13,7 +13,14 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
     if let image = pickedImage.resized(withPercentage: ratio)
     {
      let newPhotoItem  = PhotoItem(photoSnippet: photoSnippet, image: image, cachedImageWidth: imageSize)
-     photoItems.append(newPhotoItem)
+     if photoCollectionView.photoGroupType == .makeGroups
+     {
+      photoItems2D = sectionedPhotoItems()
+     }
+     else
+     {
+      photoItems2D[0].append(newPhotoItem)
+     }
     }
     
     if UIImagePickerController.isSourceTypeAvailable(.camera)
