@@ -243,10 +243,10 @@
 			children = (
 				A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */,
 				A7304A9F1FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift */,
+				A75117F41FF656590009F03C /* PhotoSnippetCollectionView.swift */,
 				A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */,
 				A704264E1FDA87CA000B3400 /* PhotoItem.swift */,
 				A7304A9B1FCAFDB700207A52 /* PhotoSnippetCell.swift */,
-				A75117F41FF656590009F03C /* PhotoSnippetCollectionView.swift */,
 				A7304A9D1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift */,
 			);
 			name = "Photo Snippets";

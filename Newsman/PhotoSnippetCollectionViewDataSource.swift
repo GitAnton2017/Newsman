@@ -27,7 +27,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
         return true
     }
     
-    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    /*func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     {
         let movedItem = photoItems.remove(at: sourceIndexPath.row)
         photoItems.insert(movedItem, at: destinationIndexPath.row)
@@ -38,12 +38,13 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
         }
         
         photoSnippet.grouping = GroupPhotos.manually.rawValue
-    }
+    }*/
     
     func collectionView(_ collectionView: UICollectionView,
                           viewForSupplementaryElementOfKind kind: String,
                           at indexPath: IndexPath) -> UICollectionReusableView
     {
+        
         switch (kind)
         {
          case UICollectionElementKindSectionHeader:
@@ -52,11 +53,12 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
                                                                      withReuseIdentifier: "photoSectionHeader",
                                                                      for: indexPath) as! PhotoSectionHeader
           
-          if photoCollectionView.photoGroupType == .makeGroups
+
+          if photoCollectionView.photoGroupType == .makeGroups, let titles = sectionTitles
           {
-           let title = sectionTitles[indexPath.section].isEmpty ? "Not Flagged Yet" : sectionTitles[indexPath.section]
+           let title = (titles[indexPath.section].isEmpty) ? "Not Flagged Yet" : titles[indexPath.section]
            view.headerLabel.text = NSLocalizedString(title, comment: title)
-           if let color = PhotoPriorityFlags(rawValue: sectionTitles[indexPath.section])?.color
+           if let color = PhotoPriorityFlags(rawValue: titles[indexPath.section])?.color
            {
              view.backgroundColor = color
            }
@@ -76,9 +78,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
           if photoCollectionView.photoGroupType == .makeGroups
           {
            view.backgroundColor = collectionView.backgroundColor
-          
-           view.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") +
-                                                    ": \(itemsForSections(section: indexPath.section).count)"
+           let itemsCount = photoItems2D[indexPath.section].count
+           view.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") + ": \(itemsCount)"
           }
           return view
             

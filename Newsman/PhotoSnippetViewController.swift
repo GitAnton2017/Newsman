@@ -15,31 +15,26 @@ class PhotoSnippetViewController: UIViewController
     super.didReceiveMemoryWarning()
     print ("out of memory")
  }
-    
- lazy var photoItems: [PhotoItem] =
- {
-    var photoItems = [PhotoItem]()
-    if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
-    {
-     photoItems = allPhotos.map{PhotoItem(photo: $0)}
-     if let sortPred = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortPredicate
-     {
-        photoItems.sort(by: sortPred)
-     }
-    }
-    return photoItems
- }()
  
  func sectionedPhotoItems() -> [[PhotoItem]]
  {
    var photoItems = [[PhotoItem]]()
    if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
    {
-    sectionTitles.forEach
+    let sections = Set(allPhotos.map{$0.priorityFlag ?? ""}).sorted
+    {
+     (PhotoPriorityFlags(rawValue: $0)?.rateIndex ?? -1) <= (PhotoPriorityFlags(rawValue: $1)?.rateIndex ?? -1)
+    }
+    
+    sections.forEach
     { title in
       photoItems.append(allPhotos.filter{($0.priorityFlag ?? "") == title}.map({PhotoItem(photo: $0)}))
     }
+    
+    sectionTitles = sections
+    
    }
+    
    return photoItems
  }
 
@@ -50,22 +45,11 @@ class PhotoSnippetViewController: UIViewController
   {
    photoItems.append(allPhotos.map({PhotoItem(photo: $0)}))
   }
+  sectionTitles = nil
   return photoItems
  }
 
- var sectionTitles: [String]
- {
-  var sections = [String]()
-  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
-  {
-    sections = Set(allPhotos.map{$0.priorityFlag ?? ""}).sorted
-    {
-      (PhotoPriorityFlags(rawValue: $0)?.rateIndex ?? -1) <= (PhotoPriorityFlags(rawValue: $1)?.rateIndex ?? -1)
-    }
-  }
-    
-  return sections
- }
+ var sectionTitles: [String]? = nil
     
  lazy var photoItems2D: [[PhotoItem]] =
  {
@@ -84,19 +68,6 @@ class PhotoSnippetViewController: UIViewController
   return photoItems
  }()
     
-
- func itemsForSections(section: Int) -> [PhotoItem]
- {
-  if photoCollectionView.photoGroupType == .makeGroups
-  {
-   return photoItems.filter{($0.photo.priorityFlag ?? "") == sectionTitles[section]}
-  }
-  else 
-  {
-   return photoItems
-  }
- }
-
  var photoSnippet: PhotoSnippet!
  {
   didSet
@@ -107,7 +78,10 @@ class PhotoSnippetViewController: UIViewController
     
  @objc func doneButtonPressed ()
  {
-  if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
+  if photoSnippetTitle.isFirstResponder
+  {
+    photoSnippetTitle.resignFirstResponder()
+}
  }
     
  func createKeyBoardToolBar() -> UIToolbar
@@ -148,7 +122,7 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      photoItems[itemIndexPath.row].photo.isSelected = false
+      photoItems2D[itemIndexPath.section][itemIndexPath.row].photo.isSelected = false
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
         cell.photoIconView.alpha = 1
@@ -164,7 +138,7 @@ class PhotoSnippetViewController: UIViewController
     {
       for j in 0..<photoCollectionView.numberOfItems(inSection: i)
       {
-        photoItems[j].photo.isSelected = true
+        photoItems2D[i][j].photo.isSelected = true
         let itemIndexPath = IndexPath(item: j, section: i)
         photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: .top)
         if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
@@ -185,7 +159,7 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      photoItems[itemIndexPath.row].photo.isSelected = false
+      photoItems2D[itemIndexPath.section][itemIndexPath.row].photo.isSelected = false
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
        cell.photoIconView.alpha = 1
@@ -289,7 +263,6 @@ class PhotoSnippetViewController: UIViewController
   menuFrameSize = view.frame.size
     
  }
-    
 
  override func viewWillAppear(_ animated: Bool)
  {
@@ -552,48 +525,53 @@ class PhotoSnippetViewController: UIViewController
  
  @IBOutlet var priorityPickerBarButton: UIBarButtonItem!
     
- 
  func deleteSelectedPhotos()
  {
-   for i in 0..<photoItems2D.count
+  for (sectionIndex, section) in photoItems2D.enumerated().filter({$0.element.first(where: {$0.photo.isSelected}) != nil}).sorted(by: {$0.offset > $1.offset})
+  {
+   for (itemIndex, _) in section.enumerated().filter({$0.element.photo.isSelected}).sorted(by: {$0.offset > $1.offset})
    {
-    for item in photoItems2D[i].filter({$0.photo.isSelected})
-    {
-        let index = photoItems2D[i].index(of: item)
-        let deletedItem = photoItems2D[i].remove(at: index!)
-        deletedItem.deleteImage()
-        
-        
-        let itemIndexPath = IndexPath(row: index!, section: i)
-        
-        photoCollectionView.deleteItems(at: [itemIndexPath])
-        
-    }
-    
-    
+    let deletedItem = photoItems2D[sectionIndex].remove(at: itemIndex)
+    deletedItem.deleteImage()
+    let itemIndexPath = IndexPath(row: itemIndex, section: sectionIndex)
+    photoCollectionView.deleteItems(at: [itemIndexPath])
    }
-   for section in photoItems2D.enumerated().filter({$0.element.count == 0})
+   if photoCollectionView.photoGroupType == .makeGroups
    {
-        photoItems2D.remove(at: section.offset)
-        photoCollectionView.deleteSections([section.offset])
+    photoCollectionView.reloadSections([sectionIndex])
    }
-
+  }
+    
+  for section in photoItems2D.enumerated().filter({$0.element.count == 0}).sorted(by: {$0.offset > $1.offset})
+  {
+    photoItems2D.remove(at: section.offset)
+    sectionTitles?.remove(at: section.offset)
+    photoCollectionView.deleteSections([section.offset])
+  }
+    
   togglePhotoEditingMode()
 
+ }
+  
+ func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
+ {
+  let path = photoItems2D.enumerated().lazy.map({($0.offset, $0.element.index(of: photoItem))}).first(where: {$0.1 != nil})
+  return IndexPath(row: path!.1!, section: path!.0)
+ }
+    
+ func flagGroupedSelectedPhotos(with flagStr: String?)
+ {
+  for item in photoItems2D.reduce([], {$0 + $1.filter({$0.photo.isSelected})})
+  {
+    item.photo.isSelected = false
+    let itemIndexPath = photoItemIndexPath(photoItem: item)
+    photoCollectionView.movePhoto(at: itemIndexPath, with: flagStr)
+  }
  }
     
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
  {
   deleteSelectedPhotos()
- }
-
- func setPhotoPriorityFlags(NFlags: Int)
- {
-  let flagStr = PhotoPriorityFlags.priorities[NFlags].rawValue
-  photoItems.filter({$0.photo.isSelected}).forEach
-  {
-    $0.photo.priorityFlag = flagStr
-  }
  }
   
  var menuView: UIView? = nil
@@ -703,6 +681,7 @@ class PhotoSnippetViewController: UIViewController
                        })
 
  }
+
     
  @objc func tapPhotoEditMenu (gr: UITapGestureRecognizer)
  {
@@ -715,13 +694,20 @@ class PhotoSnippetViewController: UIViewController
      case "flagLayer"?:
       let flagColor = (buttonLayer as! FlagItemLayer).flagColor
       let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
-      photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
+      if photoCollectionView.photoGroupType != .makeGroups
       {
-        $0.element.photo.priorityFlag = flagStr
-        if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
+        photoItems2D[0].enumerated().filter({$0.element.photo.isSelected}).forEach
         {
-         cell.drawFlag(flagColor: flagColor!)
+         $0.element.photo.priorityFlag = flagStr
+         if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
+         {
+          cell.drawFlag(flagColor: flagColor!)
+         }
         }
+      }
+      else
+      {
+       flagGroupedSelectedPhotos(with: flagStr)
       }
       
       togglePhotoEditingMode()
@@ -729,13 +715,16 @@ class PhotoSnippetViewController: UIViewController
 
         
      case "unflagLayer"?:
-      photoItems.enumerated().filter({$0.element.photo.isSelected}).forEach
+      for section in photoItems2D
       {
+       section.enumerated().filter({$0.element.photo.isSelected}).forEach
+       {
         $0.element.photo.priorityFlag = nil
          if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
          {
           cell.clearFlag()
          }
+       }
       }
       
       togglePhotoEditingMode()

@@ -253,47 +253,183 @@ class PhotoSnippetCollectionView: UICollectionView
         
     }
     
+    func movePhoto (at indexPath: IndexPath, with flagStr: String?)
+    {
+     let ds = dataSource as! PhotoSnippetViewController
+     if let section = ds.photoItems2D.enumerated().first(where: {$0.element.first?.photo.priorityFlag == flagStr})
+     {
+      moveBetweenExistingSections(at: indexPath, to: section, with: flagStr)
+     }
+     else
+     {
+      let pred =
+      {(item: (offset : Int, element: [PhotoItem])) -> Bool in
+       let firstItem = item.element.first?.photo.priorityFlag
+       let currRate = (firstItem == nil ? -1 : PhotoPriorityFlags(rawValue: (firstItem)!)!.rateIndex)
+       let rate =     (flagStr ==   nil ? -1 : PhotoPriorityFlags(rawValue:     flagStr!)!.rateIndex)
+       return  rate < currRate
+      }
+                
+      if let next = ds.photoItems2D.enumerated().first(where: pred)
+      {
+        moveToNewInsertedSection(at: indexPath, to: next, with: flagStr)
+      }
+      else
+      {
+        moveToNewAppendedSection(at: indexPath, with: flagStr)
+      }
+     }
+    }
+    
+    func refreshSections (sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
+    {
+     let ds = dataSource as! PhotoSnippetViewController
+        
+     reloadSections([destinationIndexPath.section])
+     if ds.photoItems2D[sourceIndexPath.section].count != 0
+     {
+        reloadSections([sourceIndexPath.section])
+     }
+     else
+     {
+        ds.photoItems2D.remove(at: sourceIndexPath.section)
+        ds.sectionTitles?.remove(at: sourceIndexPath.section)
+        deleteSections([sourceIndexPath.section])
+     }
+    }
+    
+    func moveToNewAppendedSection(at indexPath: IndexPath, with flagStr: String?)
+    {
+     let ds = dataSource as! PhotoSnippetViewController
+     ds.photoItems2D.append([])
+     ds.sectionTitles?.append(flagStr ?? "")
+     insertSections([ds.photoItems2D.count - 1])
+     let moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+     moved.photo.priorityFlag = flagStr
+     ds.photoItems2D[ds.photoItems2D.count - 1].append(moved)
+     let destIndexPath = IndexPath(row: 0, section: ds.photoItems2D.count - 1)
+     moveItem(at: indexPath, to: destIndexPath)
+     refreshSections(sourceIndexPath: indexPath, destinationIndexPath: destIndexPath)
+    }
+    
+    func moveToNewInsertedSection(at indexPath: IndexPath, to section: (offset : Int, element: [PhotoItem]), with flagStr: String?)
+    {
+     let ds = dataSource as! PhotoSnippetViewController
+     ds.photoItems2D.insert([], at: section.offset)
+     ds.sectionTitles?.insert(flagStr ?? "", at: section.offset)
+     insertSections([section.offset])
+     if section.offset > indexPath.section
+     {
+      let moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+      moved.photo.priorityFlag = flagStr
+      ds.photoItems2D[section.offset].append(moved)
+      let destIndexPath = IndexPath(row: 0, section: section.offset)
+      moveItem(at: indexPath, to: destIndexPath)
+      refreshSections(sourceIndexPath: indexPath, destinationIndexPath: destIndexPath)
+     }
+     else
+     {
+      let moved = ds.photoItems2D[indexPath.section + 1].remove(at: indexPath.row)
+      moved.photo.priorityFlag = flagStr
+      ds.photoItems2D[section.offset].append(moved)
+      let destIndexPath = IndexPath(row: 0, section: section.offset)
+      let sourIndexPath = IndexPath(row: indexPath.row, section: indexPath.section + 1)
+      moveItem(at: sourIndexPath, to: destIndexPath)
+      refreshSections(sourceIndexPath: sourIndexPath, destinationIndexPath: destIndexPath)
+     }
+    }
+    
+    func moveBetweenExistingSections(at indexPath: IndexPath, to section: (offset : Int, element: [PhotoItem]), with flagStr: String?)
+    {
+      guard section.offset != indexPath.section else
+      {
+       return
+      }
+    
+      let ds = dataSource as! PhotoSnippetViewController
+      let moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+      moved.photo.priorityFlag = flagStr
+      ds.photoItems2D[section.offset].append(moved)
+      let destIndexPath = IndexPath(row: section.element.count, section: section.offset)
+      moveItem(at: indexPath, to: destIndexPath)
+      refreshSections(sourceIndexPath: indexPath, destinationIndexPath: destIndexPath)
+    }
+    
+    func deletePhoto (at indexPath: IndexPath)
+    {
+     let ds = dataSource as! PhotoSnippetViewController
+     let deleted = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+     deleted.deleteImage()
+     deleteItems(at: [indexPath])
+     if ds.photoItems2D[indexPath.section].count == 0
+     {
+      ds.photoItems2D.remove(at: indexPath.section)
+      ds.sectionTitles?.remove(at: indexPath.section)
+      deleteSections([indexPath.section])
+     }
+     else if photoGroupType == .makeGroups
+     {
+      reloadSections([indexPath.section])
+     }
+    }
+    
     @objc func tapCellMenuItem (gr: UITapGestureRecognizer)
     {
         let touchPoint = gr.location(in: self)
         if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
            let buttonLayer = menuLayer.hitTest(touchPoint)
         {
-           let ds = self.dataSource as! PhotoSnippetViewController
+           let ds = dataSource as! PhotoSnippetViewController
            switch (buttonLayer.name)
            {
             case "flagSetLayer"? :
              if let _ = self.indexPathForItem(at: menuLayer.menuTouchPoint)
              {
               menuLayer.removeFromSuperlayer()
-              self.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuLayer.menuTouchPoint, menuItems: flagMenuItems)
+              drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuLayer.menuTouchPoint, menuItems: flagMenuItems)
              }
                 
-            case "trashLayer"?   :
-             if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
+            case "trashLayer"? :
+             if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              let deleted = ds.photoItems.remove(at: indexPath.row)
-              deleted.deleteImage()
-              self.deleteItems(at: [indexPath])
+              deletePhoto(at: indexPath)
              }
              menuLayer.removeFromSuperlayer()
+            
             case "flagLayer"?:
              let flagColor = (buttonLayer as! FlagItemLayer).flagColor
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
-             if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
+             if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              ds.photoItems[indexPath.row].photo.priorityFlag = flagStr
-              let cell = self.cellForItem(at: indexPath) as! PhotoSnippetCell
+              let cell = cellForItem(at: indexPath) as! PhotoSnippetCell
               cell.drawFlag(flagColor: flagColor!)
+              
+              if photoGroupType != .makeGroups
+              {
+               ds.photoItems2D[indexPath.section][indexPath.row].photo.priorityFlag = flagStr
+              }
+              else
+              {
+                movePhoto(at: indexPath, with: flagStr)
+              }
+              
              }
+             
              menuLayer.removeFromSuperlayer()
             
             case "unflagLayer"?:
              if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              ds.photoItems[indexPath.row].photo.priorityFlag = nil
-              let cell = self.cellForItem(at: indexPath) as! PhotoSnippetCell
+              let cell = cellForItem(at: indexPath) as! PhotoSnippetCell
               cell.clearFlag()
+              if photoGroupType != .makeGroups
+              {
+                ds.photoItems2D[indexPath.section][indexPath.row].photo.priorityFlag = nil
+              }
+              else
+              {
+               movePhoto(at: indexPath, with: nil)
+              }
              }
              menuLayer.removeFromSuperlayer()
             
@@ -456,10 +592,12 @@ class PhotoSnippetCollectionView: UICollectionView
         menuLayer.frame = menuFrame
         menuLayer.contentsScale = UIScreen.main.scale
         
+        
         barLayer.sublayers = setItemsLayers(menuItems: menuItems)
     
         menuLayer.addSublayer(barLayer)
-        
+       
+        menuLayer.zPosition = layer.zPosition + 1
         menuLayer.shadowOpacity = 1.0
         menuLayer.shadowRadius = 10.0
         menuLayer.shadowOffset = CGSize(width: -5.0, height: -5.0)
