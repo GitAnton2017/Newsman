@@ -128,6 +128,19 @@ class FlagItemLayer: CALayer
 
 class PhotoSnippetCollectionView: UICollectionView
 {
+    var ascendingSort: Bool
+    {
+      get
+      {
+        return (dataSource as! PhotoSnippetViewController).photoSnippet.ascending
+      }
+        
+      set
+      {
+       (dataSource as! PhotoSnippetViewController).photoSnippet.ascending = newValue
+        GroupPhotos.ascending = newValue
+      }
+    }
     var photoGroupType: GroupPhotos
     {
       get
@@ -138,6 +151,7 @@ class PhotoSnippetCollectionView: UICollectionView
         
       set
       {
+       
        let ds = dataSource as! PhotoSnippetViewController
        if (newValue == .makeGroups && photoGroupType != .makeGroups)
        {
@@ -148,10 +162,15 @@ class PhotoSnippetCollectionView: UICollectionView
          ds.photoItems2D = ds.desectionedPhotoItems()
          ds.photoItems2D[0].sort(by: newValue.sortPredicate!)
        }
-       else
+       else if (newValue != .makeGroups && photoGroupType != .makeGroups)
        {
          ds.photoItems2D[0].sort(by: newValue.sortPredicate!)
-         GroupPhotos.ascending = !GroupPhotos.ascending
+         ascendingSort = !ascendingSort
+       }
+       else
+       {
+        ascendingSort = !ascendingSort
+        ds.photoItems2D = ds.sectionedPhotoItems()
        }
     
        ds.photoSnippet.grouping = newValue.rawValue
@@ -343,6 +362,7 @@ class PhotoSnippetCollectionView: UICollectionView
     {
       guard section.offset != indexPath.section else
       {
+       (cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 1.0
        return
       }
     
@@ -375,6 +395,7 @@ class PhotoSnippetCollectionView: UICollectionView
     
     @objc func tapCellMenuItem (gr: UITapGestureRecognizer)
     {
+        cancellUnfinishedMove()
         let touchPoint = gr.location(in: self)
         if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
            let buttonLayer = menuLayer.hitTest(touchPoint)

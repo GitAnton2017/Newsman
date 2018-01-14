@@ -18,6 +18,7 @@ extension PhotoSnippet {
     }
 
     @NSManaged public var nphoto: Int32
+    @NSManaged public var ascending: Bool
     @NSManaged public var grouping: String?
     @NSManaged public var photos: NSSet?
     @NSManaged public var reports: NSSet?

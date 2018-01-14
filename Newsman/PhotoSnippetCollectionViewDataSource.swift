@@ -21,24 +21,42 @@ class PhotoSectionFooter: UICollectionReusableView
 
 extension PhotoSnippetViewController: UICollectionViewDataSource
 {
-    
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool
     {
         return true
     }
     
-    /*func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     {
-        let movedItem = photoItems.remove(at: sourceIndexPath.row)
-        photoItems.insert(movedItem, at: destinationIndexPath.row)
+      if photoCollectionView.photoGroupType != .makeGroups
+      {
+        let movedItem = photoItems2D[0].remove(at: sourceIndexPath.row)
+        photoItems2D[0].insert(movedItem, at: destinationIndexPath.row)
         
-        for i in 0..<photoItems.count
+        for i in 0..<photoItems2D[0].count
         {
-          photoItems[i].photo.position = Int16(i)
+          photoItems2D[0][i].photo.position = Int16(i)
         }
         
         photoSnippet.grouping = GroupPhotos.manually.rawValue
-    }*/
+      }
+      else
+      {
+        let movedItem = photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+        photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
+        let flagStr = sectionTitles![destinationIndexPath.section]
+        movedItem.photo.priorityFlag = flagStr.isEmpty ? nil : flagStr
+        collectionView.reloadSections([sourceIndexPath.section, destinationIndexPath.section])
+        
+        if photoItems2D[sourceIndexPath.section].isEmpty
+        {
+         sectionTitles!.remove(at: sourceIndexPath.section)
+         photoItems2D.remove(at: sourceIndexPath.section)
+         collectionView.deleteSections([sourceIndexPath.section])
+        }
+        
+      }
+    }
     
     func collectionView(_ collectionView: UICollectionView,
                           viewForSupplementaryElementOfKind kind: String,

@@ -23,16 +23,20 @@ class PhotoSnippetViewController: UIViewController
    {
     let sections = Set(allPhotos.map{$0.priorityFlag ?? ""}).sorted
     {
-     (PhotoPriorityFlags(rawValue: $0)?.rateIndex ?? -1) <= (PhotoPriorityFlags(rawValue: $1)?.rateIndex ?? -1)
+     let x0 = PhotoPriorityFlags(rawValue: $0)?.rateIndex ?? -1
+     let x1 = PhotoPriorityFlags(rawValue: $1)?.rateIndex ?? -1
+     return photoSnippet.ascending ? x0 < x1 : x0 > x1
     }
     
     sections.forEach
     { title in
-      photoItems.append(allPhotos.filter{($0.priorityFlag ?? "") == title}.map({PhotoItem(photo: $0)}))
+      let newSection = allPhotos.filter{($0.priorityFlag ?? "") == title}.sorted
+      {($0.date! as Date) <= ($1.date! as Date)
+      }.map{PhotoItem(photo: $0)}
+        
+      photoItems.append(newSection)
     }
-    
     sectionTitles = sections
-    
    }
     
    return photoItems
@@ -715,18 +719,22 @@ class PhotoSnippetViewController: UIViewController
 
         
      case "unflagLayer"?:
-      for section in photoItems2D
+      if photoCollectionView.photoGroupType != .makeGroups
       {
-       section.enumerated().filter({$0.element.photo.isSelected}).forEach
+       photoItems2D[0].enumerated().filter({$0.element.photo.isSelected}).forEach
        {
-        $0.element.photo.priorityFlag = nil
+         $0.element.photo.priorityFlag = nil
          if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
          {
           cell.clearFlag()
          }
        }
       }
-      
+      else
+      {
+        flagGroupedSelectedPhotos(with: nil)
+      }
+
       togglePhotoEditingMode()
       closeMenuAni()
     

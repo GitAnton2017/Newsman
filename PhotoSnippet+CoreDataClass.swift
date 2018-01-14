@@ -30,7 +30,8 @@ enum GroupPhotos: String
      .manually      : NSSortDescriptor(key: #keyPath(Photo.position),     ascending: true)
     ]
     
-    static var ascending = true
+    static var ascending: Bool = true
+    
     typealias SortPredicate = (PhotoItem, PhotoItem) -> Bool
     static let sortPredMap: [GroupPhotos : SortPredicate] =
     [
