@@ -99,6 +99,10 @@ class FlagItemLayer: CALayer
       super.init()
     }
     
+    override init(layer: Any)
+    {
+        super.init(layer: layer)
+    }
     convenience init(flagColor: UIColor)
     {
       self.init()
@@ -205,6 +209,7 @@ class PhotoSnippetCollectionView: UICollectionView
     
     var hasUnfinishedMove = false
     var unfinishedMoveCell: PhotoSnippetCell? = nil
+
     
     func cancellUnfinishedMove()
     {
@@ -415,8 +420,8 @@ class PhotoSnippetCollectionView: UICollectionView
              {
               deletePhoto(at: indexPath)
              }
-             menuLayer.removeFromSuperlayer()
-            
+             closeLayerAnimated(layer: menuLayer)
+        
             case "flagLayer"?:
              let flagColor = (buttonLayer as! FlagItemLayer).flagColor
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
@@ -435,8 +440,7 @@ class PhotoSnippetCollectionView: UICollectionView
               }
               
              }
-             
-             menuLayer.removeFromSuperlayer()
+             closeLayerAnimated(layer: menuLayer)
             
             case "unflagLayer"?:
              if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
@@ -452,7 +456,8 @@ class PhotoSnippetCollectionView: UICollectionView
                movePhoto(at: indexPath, with: nil)
               }
              }
-             menuLayer.removeFromSuperlayer()
+             closeLayerAnimated(layer: menuLayer)
+           
             
             case "upLayer"?:
              if let _ = self.indexPathForItem(at: menuLayer.menuTouchPoint)
@@ -461,7 +466,8 @@ class PhotoSnippetCollectionView: UICollectionView
                self.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuLayer.menuTouchPoint, menuItems: mainMenuItems)
              }
            case "cnxLayer"?:
-             menuLayer.removeFromSuperlayer()
+             closeLayerAnimated(layer: menuLayer)
+        
             
            default: break
             
@@ -498,6 +504,43 @@ class PhotoSnippetCollectionView: UICollectionView
         {
             menuLayer.removeFromSuperlayer()
         }
+    }
+    
+    func closeLayerAnimated(layer: CALayer)
+    {
+      CATransaction.begin()
+      CATransaction.setAnimationDuration(0.1)
+      CATransaction.setCompletionBlock
+      {
+       CATransaction.setAnimationDuration(0.6)
+       CATransaction.setCompletionBlock
+       {
+        layer.removeFromSuperlayer()
+       }
+        
+       layer.position.y += self.frame.width
+       layer.transform = CATransform3DMakeScale(0, 0, 1)
+       layer.opacity = 0
+       
+      }
+        
+      var zeroLayer:(CALayer) -> Void  = {_ in}
+      zeroLayer = {layer in
+            layer.sublayers?.forEach
+            {
+              $0.transform = CATransform3DMakeScale(0, 0, 1)
+              zeroLayer($0)
+            }
+        }
+        
+      if let subLayer = layer.sublayers?.first
+      {
+        zeroLayer(subLayer)
+      }
+      
+      CATransaction.commit()
+    
+      
     }
     
     func isCellMenuVisible()->Bool
@@ -548,6 +591,16 @@ class PhotoSnippetCollectionView: UICollectionView
      return layers
     }
     
+    enum CellMenuType: Int
+    {
+        case normal = 0
+        case right =  1
+        case bottom = 2
+        case corner = 3
+    }
+    
+    var cellMenuType: CellMenuType!
+    
     func drawCellMenu (menuColor: UIColor, touchPoint: CGPoint, menuItems: [MenuItemProtocol])
     {
         if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"})
@@ -557,6 +610,8 @@ class PhotoSnippetCollectionView: UICollectionView
             menuShift = CGPoint.zero
             return
         }
+        
+        cellMenuType = .normal
         
         let menuLayer = PhotoMenuLayer()
         let barLayer = CALayer()
@@ -589,6 +644,7 @@ class PhotoSnippetCollectionView: UICollectionView
             menuLayer.anchorPoint = CGPoint(x: 0.0, y: 0.5)
             menuLayer.transform = CATransform3DMakeRotation(CGFloat.pi, 0, 1, 0)
             barLayer.transform = CATransform3DMakeRotation(CGFloat.pi, 0, 1, 0)
+            cellMenuType = .right
         }
         
         if touchPoint.y + menuFrame.height >= layer.bounds.height &&
@@ -597,6 +653,7 @@ class PhotoSnippetCollectionView: UICollectionView
             menuLayer.anchorPoint = CGPoint(x: 0.5, y: 0.0)
             menuLayer.transform = CATransform3DMakeRotation(CGFloat.pi, 1, 0, 0)
             barLayer.transform = CATransform3DMakeRotation(CGFloat.pi, 1, 0, 0)
+            cellMenuType = .bottom
         }
         
         if touchPoint.y + menuFrame.height >= layer.bounds.height &&
@@ -608,6 +665,7 @@ class PhotoSnippetCollectionView: UICollectionView
             transform = CATransform3DRotate(transform, CGFloat.pi, 1, 0, 0)
             menuLayer.transform = transform
             barLayer.transform = transform
+            cellMenuType = .corner
         }
         
         menuLayer.frame = menuFrame

@@ -47,14 +47,16 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
         let flagStr = sectionTitles![destinationIndexPath.section]
         movedItem.photo.priorityFlag = flagStr.isEmpty ? nil : flagStr
         collectionView.reloadSections([sourceIndexPath.section, destinationIndexPath.section])
-        
-        if photoItems2D[sourceIndexPath.section].isEmpty
+        defer
         {
-         sectionTitles!.remove(at: sourceIndexPath.section)
-         photoItems2D.remove(at: sourceIndexPath.section)
-         collectionView.deleteSections([sourceIndexPath.section])
+         if photoItems2D[sourceIndexPath.section].isEmpty
+         {
+          sectionTitles!.remove(at: sourceIndexPath.section)
+          photoItems2D.remove(at: sourceIndexPath.section)
+          collectionView.deleteSections([sourceIndexPath.section])
+         }
         }
-        
+        //return
       }
     }
     
@@ -108,21 +110,10 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int
     {
-       /* if (collectionView as! PhotoSnippetCollectionView).photoGroupType == .makeGroups
-        {
-          return sectionTitles.count
-        }
-        else
-        {
-          return 1
-        }*/
- 
         return photoItems2D.count
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-      //return itemsForSections(section: section).count
-        
         return photoItems2D[section].count
     }
 
@@ -132,7 +123,6 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
         
       let photoCV = collectionView as! PhotoSnippetCollectionView
         
-      //let photoItem = itemsForSections(section: indexPath.section)[indexPath.row]
       let photoItem = photoItems2D[indexPath.section][indexPath.row]
         
       photoCV.layer.addSublayer(cell.layer)
