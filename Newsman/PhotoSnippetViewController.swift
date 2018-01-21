@@ -174,6 +174,7 @@ class PhotoSnippetViewController: UIViewController
     isEditingPhotos = false
     photoCollectionView.isPhotoEditing = false
     photoCollectionView.menuTapGR.isEnabled = true
+    photoCollectionView.cellPanGR.isEnabled = false
     photoCollectionView.menuArrowSize = CGSize(width: 20.0, height: 50.0)
     photoCollectionView.menuItemSize = CGSize(width: 50.0, height: 50.0)
     
@@ -184,6 +185,7 @@ class PhotoSnippetViewController: UIViewController
     isEditingPhotos = true
     photoCollectionView.isPhotoEditing = true
     photoCollectionView.menuTapGR.isEnabled = false
+    photoCollectionView.cellPanGR.isEnabled = true
     photoCollectionView.menuArrowSize = CGSize.zero
     photoCollectionView.menuItemSize = CGSize(width: 64.0, height: 64.0)
     photoCollectionView.dismissCellMenu()

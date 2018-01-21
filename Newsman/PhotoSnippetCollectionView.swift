@@ -184,6 +184,7 @@ class PhotoSnippetCollectionView: UICollectionView
     
     var menuTapGR: UITapGestureRecognizer!
     var cellLongPressGR : UILongPressGestureRecognizer!
+    var cellPanGR: UIPanGestureRecognizer!
     
     let itemsInRow: Int = 3
     
@@ -200,16 +201,160 @@ class PhotoSnippetCollectionView: UICollectionView
         super.init(coder: aDecoder)
         
         cellLongPressGR = UILongPressGestureRecognizer(target: self, action: #selector(cellLongPress))
-        cellLongPressGR.minimumPressDuration = 0.25
+        cellLongPressGR.minimumPressDuration = 0.4
         addGestureRecognizer(cellLongPressGR)
         
         menuTapGR = UITapGestureRecognizer(target: self, action: #selector(tapCellMenuItem))
         addGestureRecognizer(menuTapGR)
+        
+        cellPanGR = UIPanGestureRecognizer(target: self, action: #selector(cellPan))
+        cellPanGR.isEnabled = false
+        addGestureRecognizer(cellPanGR)
     }
     
     var hasUnfinishedMove = false
     var unfinishedMoveCell: PhotoSnippetCell? = nil
 
+    var movedCell: UICollectionViewCell? = nil
+    var correctionY: CGFloat? = nil
+    var movedCellBeginPosition = CGPoint.zero
+    
+    @objc func cellPan (_ gr: UIPanGestureRecognizer)
+    {
+      guard isPhotoEditing else
+      {
+       return
+      }
+        
+      switch (gr.state)
+      {
+        case .began:
+         let cellTouchPoint = gr.location(in: self)
+         if let indexPath = indexPathForItem(at: cellTouchPoint), let cell = cellForItem(at: indexPath) as? PhotoSnippetCell
+         {
+          movedCell = cell
+          cell.layer.zPosition = layer.zPosition + 100
+          movedCellBeginPosition = cell.center
+          cell.photoIconView.layer.borderWidth = 5
+            
+          UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: {cell.alpha = 0.85}, completion: nil)
+          UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn, .`repeat`, .autoreverse, .allowUserInteraction],
+                         animations:
+                         {
+                          cell.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                         }, completion: nil)
+            
+         }
+        
+        case .changed:
+         if let cell = movedCell
+         {
+          let translation = gr.translation(in: self)
+          cell.center.x += translation.x
+          cell.center.y += translation.y
+        
+          print ("CHANGED with \(translation)")
+          //print ("center before \(cell.center) , TP before \(gr.location(in: self))")
+          if let bottomMostIndexPath = indexPathsForVisibleItems.max(by: {$0 <= $1}),
+             let bottomCell = cellForItem(at: bottomMostIndexPath),
+             cell.center.y >= bottomCell.center.y
+            
+          {
+           if bottomMostIndexPath.row < numberOfItems(inSection: bottomMostIndexPath.section) - 1
+           {
+            let scrollIndexPath = IndexPath(row: bottomMostIndexPath.row + 1, section: bottomMostIndexPath.section)
+            scrollToItem(at: scrollIndexPath, at: .bottom, animated: true)
+           }
+           else if bottomMostIndexPath.section < numberOfSections - 1
+           {
+            let scrollIndexPath = IndexPath(row: 0, section: bottomMostIndexPath.section + 1)
+            scrollToItem(at: scrollIndexPath, at: .bottom, animated: true)
+            
+            
+           }
+          // print ("center after \(cell.center) , TP after \(gr.location(in: self))")
+         
+            
+          }
+           
+          let tp = gr.location(in: self)
+          if abs(cell.center.y - tp.y) > 0
+          {
+            cell.center.y = tp.y
+            print ("CORRECTED to \(tp)")
+          }
+          gr.setTranslation(CGPoint.zero, in: self)
+        
+         }
+        
+        default:
+          
+          print ("FINISHED WITH STATE - \(gr.state.rawValue)")
+          if let cell = movedCell as? PhotoSnippetCell
+          {
+           if let destIndexPath = indexPathForItem(at: cell.center), let sourIndexPath = indexPath(for: cell)
+           {
+             movePhoto(sourceIndexPath: sourIndexPath, destinationIndexPath: destIndexPath)
+           }
+           else
+           {
+            cell.center = movedCellBeginPosition
+           }
+           
+           UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut], animations:
+                {
+                  cell.transform = CGAffineTransform.identity
+                  cell.alpha = 1.0
+                },  completion: nil)
+           
+            
+           cell.photoIconView.layer.borderWidth = 1
+          
+           movedCell = nil
+           movedCellBeginPosition = CGPoint.zero
+           cell.layer.zPosition = layer.zPosition - 100
+           
+          }
+        }
+    }
+    
+    func movePhoto (sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
+    {
+        let ds = dataSource as! PhotoSnippetViewController
+        if photoGroupType != .makeGroups
+        {
+            let movedItem = ds.photoItems2D[0].remove(at: sourceIndexPath.row)
+            ds.photoItems2D[0].insert(movedItem, at: destinationIndexPath.row)
+            moveItem(at: sourceIndexPath, to: destinationIndexPath)
+            
+            for i in 0..<ds.photoItems2D[0].count
+            {
+                ds.photoItems2D[0][i].photo.position = Int16(i)
+            }
+            
+            ds.photoSnippet.grouping = GroupPhotos.manually.rawValue
+        }
+        else
+        {
+            let movedItem = ds.photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+            ds.photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
+            let flagStr = ds.sectionTitles![destinationIndexPath.section]
+            movedItem.photo.priorityFlag = flagStr.isEmpty ? nil : flagStr
+            moveItem(at: sourceIndexPath, to: destinationIndexPath)
+            reloadSections([sourceIndexPath.section, destinationIndexPath.section])
+            
+            if ds.photoItems2D[sourceIndexPath.section].isEmpty
+            {
+                ds.sectionTitles!.remove(at: sourceIndexPath.section)
+                ds.photoItems2D.remove(at: sourceIndexPath.section)
+                deleteSections([sourceIndexPath.section])
+            }
+
+        }
+        
+        
+        
+    }
     
     func cancellUnfinishedMove()
     {
@@ -255,25 +400,19 @@ class PhotoSnippetCollectionView: UICollectionView
     
     @objc func cellLongPress(_ gr: UILongPressGestureRecognizer)
     {
-        let touchPoint = gr.location(in: self)
-        
-        if isPhotoEditing,
-            let ip = indexPathForItem(at: touchPoint),
-            let cell = cellForItem(at: ip) as? PhotoSnippetCell
+      let touchPoint = gr.location(in: self)
+      if let _ = indexPathForItem(at: touchPoint)
+      {
+        if !isPhotoEditing && gr.state == .ended
         {
-          reorderPhoto(tappedCell: cell, tappedIndexPath: ip, with: gr)
-        }
-        else if let _ = indexPathForItem(at: touchPoint)
-        {
-         if gr.state == .ended
-         {
-          drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
-         }
+         drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
         }
         else
         {
           dismissCellMenu()
         }
+      }
+        
         
     }
     
@@ -601,6 +740,7 @@ class PhotoSnippetCollectionView: UICollectionView
     
     var cellMenuType: CellMenuType!
     
+    
     func drawCellMenu (menuColor: UIColor, touchPoint: CGPoint, menuItems: [MenuItemProtocol])
     {
         if let menuLayer = layer.sublayers?.first(where: {$0.name == "MenuLayer"})
@@ -637,7 +777,6 @@ class PhotoSnippetCollectionView: UICollectionView
         barLayer.contentsScale = UIScreen.main.scale
         barLayer.zPosition = menuLayer.zPosition + 1
     
-        
         if touchPoint.x + menuFrame.width  >= layer.bounds.width &&
            touchPoint.y + menuFrame.height <= layer.bounds.height
         {
@@ -646,6 +785,7 @@ class PhotoSnippetCollectionView: UICollectionView
             barLayer.transform = CATransform3DMakeRotation(CGFloat.pi, 0, 1, 0)
             cellMenuType = .right
         }
+        
         
         if touchPoint.y + menuFrame.height >= layer.bounds.height &&
            touchPoint.x + menuFrame.width  <= layer.bounds.width
@@ -671,9 +811,8 @@ class PhotoSnippetCollectionView: UICollectionView
         menuLayer.frame = menuFrame
         menuLayer.contentsScale = UIScreen.main.scale
         
-        
         barLayer.sublayers = setItemsLayers(menuItems: menuItems)
-    
+        
         menuLayer.addSublayer(barLayer)
        
         menuLayer.zPosition = layer.zPosition + 1
@@ -685,6 +824,7 @@ class PhotoSnippetCollectionView: UICollectionView
         
         menuLayer.display()
         
+    
     }
 
 }

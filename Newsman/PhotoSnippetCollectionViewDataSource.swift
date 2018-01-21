@@ -56,7 +56,6 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
           collectionView.deleteSections([sourceIndexPath.section])
          }
         }
-        //return
       }
     }
     
