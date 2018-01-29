@@ -200,7 +200,6 @@ class PhotoItem: NSObject
     func deleteImage()
     {
         PhotoItem.moc.delete(photo)
-        
         for item in PhotoItem.imageCacheDict
         {
           item.value.removeObject(forKey: photoID as NSString)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17C88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17C205" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AudioSnippet" representedClassName="AudioSnippet" parentEntity="BaseSnippet" syncable="YES">
         <attribute name="record" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="audios" inverseEntity="Report" syncable="YES"/>
@@ -14,6 +14,9 @@
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tag" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" customClassName=".SnippetType" syncable="YES"/>
+        <fetchedProperty name="fetchedProperty" optional="YES" syncable="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="BaseSnippet"/>
+        </fetchedProperty>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
@@ -60,9 +63,10 @@
         <attribute name="video" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="videos" inverseEntity="Report" syncable="YES"/>
     </entity>
+    <fetchRequest name="FetchRequest" entity="TextSnippet" predicateString="text CONTAINS &quot;&quot;"/>
     <elements>
         <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
-        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="180"/>
+        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="209"/>
         <element name="Photo" positionX="-558" positionY="-684" width="128" height="209"/>
         <element name="PhotoSnippet" positionX="-632" positionY="-405" width="128" height="120"/>
         <element name="Report" positionX="-441" positionY="-199" width="128" height="148"/>

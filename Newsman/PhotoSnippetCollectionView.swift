@@ -209,7 +209,7 @@ class PhotoSnippetCollectionView: UICollectionView
         
         cellPanGR = UIPanGestureRecognizer(target: self, action: #selector(cellPan))
         cellPanGR.isEnabled = false
-        addGestureRecognizer(cellPanGR)
+        //addGestureRecognizer(cellPanGR)
     }
     
     var hasUnfinishedMove = false
@@ -219,16 +219,31 @@ class PhotoSnippetCollectionView: UICollectionView
     var correctionY: CGFloat? = nil
     var movedCellBeginPosition = CGPoint.zero
     
+    var selectedPhotoCells: [PhotoSnippetCell]
+    {
+      var selected = [PhotoSnippetCell]()
+      let ds = dataSource as! PhotoSnippetViewController
+      ds.photoItems2D.reduce([], {$0 + $1.filter({$0.photo.isSelected})}).forEach
+      {
+        let indexPath = ds.photoItemIndexPath(photoItem: $0)
+        if let cell = cellForItem(at: indexPath) as? PhotoSnippetCell
+        {
+         selected.append(cell)
+        }
+      }
+        
+      return selected
+    }
+    
     @objc func cellPan (_ gr: UIPanGestureRecognizer)
     {
-      guard isPhotoEditing else
-      {
-       return
-      }
+      guard isPhotoEditing else {return}
         
       switch (gr.state)
       {
         case .began:
+            
+         print ("PAN BEGAN")
          let cellTouchPoint = gr.location(in: self)
          if let indexPath = indexPathForItem(at: cellTouchPoint), let cell = cellForItem(at: indexPath) as? PhotoSnippetCell
          {
@@ -253,36 +268,20 @@ class PhotoSnippetCollectionView: UICollectionView
           cell.center.x += translation.x
           cell.center.y += translation.y
         
-          print ("CHANGED with \(translation)")
-          //print ("center before \(cell.center) , TP before \(gr.location(in: self))")
-          if let bottomMostIndexPath = indexPathsForVisibleItems.max(by: {$0 <= $1}),
-             let bottomCell = cellForItem(at: bottomMostIndexPath),
-             cell.center.y >= bottomCell.center.y
-            
-          {
-           if bottomMostIndexPath.row < numberOfItems(inSection: bottomMostIndexPath.section) - 1
-           {
-            let scrollIndexPath = IndexPath(row: bottomMostIndexPath.row + 1, section: bottomMostIndexPath.section)
-            scrollToItem(at: scrollIndexPath, at: .bottom, animated: true)
-           }
-           else if bottomMostIndexPath.section < numberOfSections - 1
-           {
-            let scrollIndexPath = IndexPath(row: 0, section: bottomMostIndexPath.section + 1)
-            scrollToItem(at: scrollIndexPath, at: .bottom, animated: true)
-            
-            
-           }
-          // print ("center after \(cell.center) , TP after \(gr.location(in: self))")
-         
-            
-          }
-           
           let tp = gr.location(in: self)
-          if abs(cell.center.y - tp.y) > 0
+    
+          let scrollRect = CGRect(x: 0, y: cell.center.y, width: frame.width, height: 10)
+          scrollRectToVisible(scrollRect, animated: true)
+         
+          if abs(cell.center.y - tp.y) > 0 || abs(cell.center.x - tp.x) > 0
           {
-            cell.center.y = tp.y
-            print ("CORRECTED to \(tp)")
+            print ("cell.center = \(cell.center)")
+            print ("TP = \(tp)")
+            
+            UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut], animations: {cell.center = tp})
           }
+            
+            
           gr.setTranslation(CGPoint.zero, in: self)
         
          }
@@ -292,14 +291,15 @@ class PhotoSnippetCollectionView: UICollectionView
           print ("FINISHED WITH STATE - \(gr.state.rawValue)")
           if let cell = movedCell as? PhotoSnippetCell
           {
-           if let destIndexPath = indexPathForItem(at: cell.center), let sourIndexPath = indexPath(for: cell)
-           {
-             movePhoto(sourceIndexPath: sourIndexPath, destinationIndexPath: destIndexPath)
-           }
-           else
-           {
-            cell.center = movedCellBeginPosition
-           }
+            if let destIndexPath = indexPathForItem(at: cell.center), let sourIndexPath = indexPath(for: cell)
+                
+            {
+                movePhoto(sourceIndexPath: sourIndexPath, destinationIndexPath: destIndexPath)
+            }
+            else
+            {
+                cell.center = movedCellBeginPosition
+            }
            
            UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut], animations:
                 {
@@ -351,8 +351,11 @@ class PhotoSnippetCollectionView: UICollectionView
             }
 
         }
-        
-        
+
+    }
+    
+    func moveSelectedPhotos (to destinationIndexPath: IndexPath)
+    {
         
     }
     
@@ -400,18 +403,18 @@ class PhotoSnippetCollectionView: UICollectionView
     
     @objc func cellLongPress(_ gr: UILongPressGestureRecognizer)
     {
-      let touchPoint = gr.location(in: self)
-      if let _ = indexPathForItem(at: touchPoint)
-      {
-        if !isPhotoEditing && gr.state == .ended
-        {
-         drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
-        }
-        else
-        {
-          dismissCellMenu()
-        }
-      }
+          guard !isPhotoEditing else {return}
+        
+          let touchPoint = gr.location(in: self)
+          if let _ = indexPathForItem(at: touchPoint), gr.state == .ended
+          {
+           drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
+          }
+          else
+          {
+           dismissCellMenu()
+          }
+      
         
         
     }

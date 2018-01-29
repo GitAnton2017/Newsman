@@ -257,6 +257,11 @@ class PhotoSnippetViewController: UIViewController
   nphoto = Int(photoSnippet.nphoto)
   photoCollectionView.dataSource = self
   photoCollectionView.delegate = self
+    
+  photoCollectionView.dragDelegate = self
+  photoCollectionView.dropDelegate = self
+  photoCollectionView.dragInteractionEnabled = true
+    
   photoCollectionView.allowsMultipleSelection = true
   imagePicker.delegate = self
   photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()

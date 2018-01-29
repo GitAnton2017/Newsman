@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A7018EF31FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */; };
 		A704264F1FDA87CA000B3400 /* PhotoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A704264E1FDA87CA000B3400 /* PhotoItem.swift */; };
+		A71715C8201F86BA00112FFF /* PhotoSnippetDragDropDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715C7201F86BA00112FFF /* PhotoSnippetDragDropDelegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
 		A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85B51FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift */; };
 		A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85B61FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift */; };
@@ -27,6 +28,7 @@
 		A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */; };
 		A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */; };
 		A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */; };
+		A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7298E142015E9A000A7301D /* CoreData.framework */; };
 		A7304A9A1FCAF9E400207A52 /* PhotoSnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */; };
 		A7304A9C1FCAFDB700207A52 /* PhotoSnippetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9B1FCAFDB700207A52 /* PhotoSnippetCell.swift */; };
 		A7304A9E1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9D1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift */; };
@@ -74,6 +76,7 @@
 /* Begin PBXFileReference section */
 		A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		A704264E1FDA87CA000B3400 /* PhotoItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoItem.swift; sourceTree = "<group>"; };
+		A71715C7201F86BA00112FFF /* PhotoSnippetDragDropDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetDragDropDelegate.swift; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A71C85B51FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A71C85B61FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BaseSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -92,10 +95,12 @@
 		A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItems.swift; sourceTree = "<group>"; };
 		A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewCell.swift; sourceTree = "<group>"; };
 		A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSnippetViewController.swift; sourceTree = "<group>"; };
+		A7298E142015E9A000A7301D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetViewController.swift; sourceTree = "<group>"; };
 		A7304A9B1FCAFDB700207A52 /* PhotoSnippetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetCell.swift; sourceTree = "<group>"; };
 		A7304A9D1FCB0DFD00207A52 /* PhotoSnippetImagesPickerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetImagesPickerDelegate.swift; sourceTree = "<group>"; };
 		A7304A9F1FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		A7317B072015EA4100C8836A /* Newsman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Newsman.entitlements; sourceTree = "<group>"; };
 		A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsTableViewDelegate.swift; sourceTree = "<group>"; };
 		A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -134,6 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,6 +186,14 @@
 			name = "Core Data Classes";
 			sourceTree = "<group>";
 		};
+		A7298E132015E99F00A7301D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A7298E142015E9A000A7301D /* CoreData.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A754897C1FBC4F2900359C0C = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +203,7 @@
 				A754899F1FBC4F2900359C0C /* NewsmanTests */,
 				A75489AA1FBC4F2900359C0C /* NewsmanUITests */,
 				A75489861FBC4F2900359C0C /* Products */,
+				A7298E132015E99F00A7301D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 0;
@@ -206,6 +221,7 @@
 		A75489871FBC4F2900359C0C /* Newsman */ = {
 			isa = PBXGroup;
 			children = (
+				A7317B072015EA4100C8836A /* Newsman.entitlements */,
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
 				A75489971FBC4F2900359C0C /* Info.plist */,
@@ -244,6 +260,7 @@
 				A7018EF21FCF32C500E9ADAF /* PhotoSnippetCollectionViewDelegate.swift */,
 				A7304A9F1FCB160C00207A52 /* PhotoSnippetCollectionViewDataSource.swift */,
 				A75117F41FF656590009F03C /* PhotoSnippetCollectionView.swift */,
+				A71715C7201F86BA00112FFF /* PhotoSnippetDragDropDelegate.swift */,
 				A7304A991FCAF9E400207A52 /* PhotoSnippetViewController.swift */,
 				A704264E1FDA87CA000B3400 /* PhotoItem.swift */,
 				A7304A9B1FCAFDB700207A52 /* PhotoSnippetCell.swift */,
@@ -362,6 +379,11 @@
 					A75489841FBC4F2900359C0C = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					A754899B1FBC4F2900359C0C = {
 						CreatedOnToolsVersion = 9.1;
@@ -460,6 +482,7 @@
 				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,
+				A71715C8201F86BA00112FFF /* PhotoSnippetDragDropDelegate.swift in Sources */,
 				A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */,
 				A71C85E91FBED660000F2DD9 /* SnippetsViewDataSource.swift in Sources */,
 				A71C85BF1FBE1972000F2DD9 /* Report+CoreDataClass.swift in Sources */,
@@ -647,6 +670,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Newsman/Newsman.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
 				INFOPLIST_FILE = Newsman/Info.plist;
@@ -662,6 +686,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Newsman/Newsman.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
 				INFOPLIST_FILE = Newsman/Info.plist;
