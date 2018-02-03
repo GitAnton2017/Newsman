@@ -27,6 +27,7 @@ class SnippetsViewController: UIViewController
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
     var createBarButtonTitle: String!
+    var editedSnippet: BaseSnippet!
     
     var snippetLocation: CLLocation?
     
@@ -108,6 +109,7 @@ class SnippetsViewController: UIViewController
      super.viewDidLoad()   
      navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
      snippetsTableView.delegate = self
+     snippetsTableView.dropDelegate = self
      //Core Location Manager Settings ************************
      locationManager.delegate = self
      locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -354,6 +356,13 @@ class SnippetsViewController: UIViewController
     
     func createNewReport()
     {
+    }
+    
+    func snippetIndexPath(snippet: BaseSnippet) -> IndexPath
+    {
+      let path = snippetsDataSource.snippetsData.enumerated().lazy.map({($0.offset, $0.element.index(of: snippet))}).first(where: {$0.1 != nil})
+        
+        return IndexPath(row: path!.1!, section: path!.0)
     }
 }
 

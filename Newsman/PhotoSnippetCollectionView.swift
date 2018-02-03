@@ -326,7 +326,7 @@ class PhotoSnippetCollectionView: UICollectionView
             let movedItem = ds.photoItems2D[0].remove(at: sourceIndexPath.row)
             ds.photoItems2D[0].insert(movedItem, at: destinationIndexPath.row)
             moveItem(at: sourceIndexPath, to: destinationIndexPath)
-            
+            reloadItems(at: [destinationIndexPath])
             for i in 0..<ds.photoItems2D[0].count
             {
                 ds.photoItems2D[0][i].photo.position = Int16(i)

@@ -772,4 +772,8 @@ class PhotoSnippetViewController: UIViewController
         
  }
     
+ var isInvisiblePhotosDraged = false
+
+ 
+    
 }

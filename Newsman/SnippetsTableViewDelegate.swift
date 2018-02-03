@@ -272,6 +272,7 @@ extension SnippetsViewController: UITableViewDelegate
         }
         
     }
+   
     //*************************************************************************************************
     func editTextSnippet(indexPath: IndexPath)
     //*************************************************************************************************
@@ -282,7 +283,8 @@ extension SnippetsViewController: UITableViewDelegate
             return
         }
         textSnippetVC.modalTransitionStyle = .partialCurl
-        textSnippetVC.textSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row] as! TextSnippet
+        editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
+        textSnippetVC.textSnippet = editedSnippet as! TextSnippet
         textSnippetVC.textSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
         
@@ -297,11 +299,13 @@ extension SnippetsViewController: UITableViewDelegate
             return
         }
         photoSnippetVC.modalTransitionStyle = .partialCurl
-        let photoSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row] as! PhotoSnippet
+        editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
+        let photoSnippet = editedSnippet as! PhotoSnippet
         photoSnippetVC.photoSnippet = photoSnippet
         photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(photoSnippetVC, animated: true)
-        print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
+        
+        //print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
 
     }
     //*************************************************************************************************

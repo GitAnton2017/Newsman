@@ -46,7 +46,7 @@ class PhotoItem: NSObject
         return photo.id!.uuidString
       }
     }
-    
+
     var photoURL: URL
     {
       get
@@ -56,6 +56,7 @@ class PhotoItem: NSObject
         return snippetURL.appendingPathComponent(photoID)
       }
     }
+    
     
     init(photo : Photo)
     {
@@ -216,6 +217,37 @@ class PhotoItem: NSObject
         }
         
         PhotoItem.appDelegate.saveContext()
+    }
+    
+    class func movePhotos (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet)
+    {
+     if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
+     {
+      sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
+      destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
+        
+      let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+      let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
+      let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+    
+      sourceSelectedPhotos.forEach
+      {
+        $0.isSelected = false
+        let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
+        let destPhotoURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
+        
+        do
+        {
+          try FileManager.default.moveItem(at: sourcePhotoURL, to: destPhotoURL)
+          print("IMAGE FILE MOVED SUCCESSFULLY TO PATH:\n\(destSnippetURL.path)")
+        }
+        catch
+        {
+          print("ERROR MOVING IMAGE FILE FROM:\n\(sourcePhotoURL.path) TO \(destSnippetURL.path) \n\(error.localizedDescription)")
+        }
+      }
+      PhotoItem.appDelegate.saveContext()
+     }
     }
     
 }
