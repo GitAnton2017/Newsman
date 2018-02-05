@@ -9,7 +9,11 @@ class PhotoSnippetViewController: UIViewController
  var isEditingMode = true
  var isEditingPhotos = false
  var currentToolBarItems: [UIBarButtonItem]!
-   
+ 
+ deinit
+ {
+  print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.tag ?? "no tag")")
+ }
  override func didReceiveMemoryWarning()
  {
     super.didReceiveMemoryWarning()
@@ -566,8 +570,18 @@ class PhotoSnippetViewController: UIViewController
   
  func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
  {
-  let path = photoItems2D.enumerated().lazy.map({($0.offset, $0.element.index(of: photoItem))}).first(where: {$0.1 != nil})
+  let path = photoItems2D.enumerated().lazy.map{($0.offset, $0.element.index(of: photoItem))}.first {$0.1 != nil}
   return IndexPath(row: path!.1!, section: path!.0)
+ }
+ 
+ func photoIdentityItemIndexPath(photoItem: PhotoItem) -> IndexPath
+ {
+    let path = photoItems2D.enumerated().lazy.map
+    {
+      (section: $0.offset, item: $0.element.enumerated().lazy.first{$0.element.photo === photoItem.photo})
+    }.first{$0.item != nil}
+    
+    return IndexPath(row: path!.item!.offset, section: path!.section)
  }
     
  func flagGroupedSelectedPhotos(with flagStr: String?)

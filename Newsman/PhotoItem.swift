@@ -219,7 +219,7 @@ class PhotoItem: NSObject
         PhotoItem.appDelegate.saveContext()
     }
     
-    class func movePhotos (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet)
+    @discardableResult class func movePhotos (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet)->[PhotoItem]?
     {
      if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
      {
@@ -247,6 +247,21 @@ class PhotoItem: NSObject
         }
       }
       PhotoItem.appDelegate.saveContext()
+      
+      return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
+        
+     }
+     else
+     {
+       return nil
+     }
+    }
+    
+    class func deselectPhotos (at sourcePhotoSnippet: PhotoSnippet)
+    {
+     if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
+     {
+      sourceSelectedPhotos.forEach {$0.isSelected = false}
      }
     }
     

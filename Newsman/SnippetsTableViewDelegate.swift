@@ -260,6 +260,7 @@ extension SnippetsViewController: UITableViewDelegate
     //*************************************************************************************************
     {
         if tableView.isEditing {return}
+    
         switch (snippetType)
         {
          case .text:    editTextSnippet(indexPath: indexPath)
@@ -305,7 +306,7 @@ extension SnippetsViewController: UITableViewDelegate
         photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(photoSnippetVC, animated: true)
         
-        //print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
+        print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
 
     }
     //*************************************************************************************************

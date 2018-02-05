@@ -27,7 +27,15 @@ class SnippetsViewController: UIViewController
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
     var createBarButtonTitle: String!
+    
     var editedSnippet: BaseSnippet!
+    {
+        didSet
+        {
+          sourceSnippet = oldValue
+        }
+    }
+    var sourceSnippet: BaseSnippet!
     
     var snippetLocation: CLLocation?
     

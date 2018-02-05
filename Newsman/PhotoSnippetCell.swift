@@ -32,6 +32,8 @@ class PhotoSnippetCell: UICollectionViewCell
     {
         spinner.startAnimating()
         super.awakeFromNib()
+        photoIconView.image = nil
+        clearFlag()
         imageRoundClip()
     }
     
@@ -39,6 +41,8 @@ class PhotoSnippetCell: UICollectionViewCell
     {
         spinner.startAnimating()
         super.prepareForReuse()
+        photoIconView.image = nil
+        clearFlag()
         imageRoundClip()
     }
     
@@ -52,10 +56,12 @@ class PhotoSnippetCell: UICollectionViewCell
     
     func imageRoundClip()
     {
+       photoIconView.clearsContextBeforeDrawing = true
        photoIconView.layer.cornerRadius = 10.0
        photoIconView.layer.borderWidth = 1.0
        photoIconView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
        photoIconView.layer.masksToBounds = true
+      
     }
     
     func drawFlag (flagColor: UIColor)
