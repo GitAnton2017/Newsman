@@ -198,8 +198,9 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)
     {
-     if let destinationIndexPath = coordinator.destinationIndexPath
-     {
+     
+      let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+    
       switch (coordinator.proposal.operation)
       {
        case .move:
@@ -217,12 +218,12 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
        case .copy: copyPhotosFromSideApp (collectionView, performDropWith: coordinator, to: destinationIndexPath)
        default: return
       }
-     }
+     
     }
     
     func collectionView(_ collectionView: UICollectionView, dropSessionDidExit session: UIDropSession)
     {
-      self.navigationController?.popViewController(animated: true)
+      //self.navigationController?.popViewController(animated: true)
     }
     
     
