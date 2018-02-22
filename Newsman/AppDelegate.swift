@@ -9,13 +9,13 @@
 import UIKit
 import CoreData
 
-extension AppDelegate: NSCacheDelegate
+/*extension AppDelegate: NSCacheDelegate
 {
     func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any)
     {
        print ("IMAGE OF SIZE \((obj as! UIImage).size) EVICTED FROM CACHE NAMED \(cache.name)")
     }
-}
+}*/
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate

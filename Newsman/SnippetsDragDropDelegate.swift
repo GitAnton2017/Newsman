@@ -23,7 +23,7 @@ extension SnippetsViewController: UITableViewDropDelegate
      }
      else
      {
-       PhotoItem.deselectPhotos(at: sourcePhotoSnippet)
+       PhotoItem.deselectSelectedItems(at: sourcePhotoSnippet)
        if let vc = coordinator.session.localDragSession?.localContext as? PhotoSnippetViewController
        {
         navigationController?.pushViewController(vc, animated: true)

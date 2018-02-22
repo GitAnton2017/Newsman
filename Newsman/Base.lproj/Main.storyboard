@@ -550,13 +550,72 @@
                                             <outlet property="spinner" destination="rcR-EZ-aT9" id="Izy-HS-c0Y"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCell" id="fnI-wr-opi" customClass="PhotoFolderCell" customModule="Newsman" customModuleProvider="target">
+                                        <rect key="frame" x="133.5" y="2" width="100" height="100"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uV4-sc-8X5">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="L7E-el-Wl0">
+                                                        <size key="itemSize" width="30" height="30"/>
+                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                        <inset key="sectionInset" minX="1" minY="1" maxX="1" maxY="1"/>
+                                                    </collectionViewFlowLayout>
+                                                    <cells>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
+                                                            <rect key="frame" x="1" y="1" width="30" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <subviews>
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RMg-9Z-gHf">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                    </imageView>
+                                                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
+                                                                        <rect key="frame" x="4.5" y="5" width="20" height="20"/>
+                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    </activityIndicatorView>
+                                                                </subviews>
+                                                            </view>
+                                                            <constraints>
+                                                                <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" id="0ZL-fM-jfs"/>
+                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="MVH-fv-Hfl"/>
+                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="bcB-j6-hlH"/>
+                                                                <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" id="shd-L1-jco"/>
+                                                            </constraints>
+                                                            <connections>
+                                                                <outlet property="photoIconView" destination="RMg-9Z-gHf" id="CsE-cw-0Fb"/>
+                                                                <outlet property="spinner" destination="Mmv-vJ-BGZ" id="iaF-dt-Gtl"/>
+                                                            </connections>
+                                                        </collectionViewCell>
+                                                    </cells>
+                                                </collectionView>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="0.7801412646" green="1" blue="0.98771443459999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="uV4-sc-8X5" secondAttribute="trailing" id="beU-JE-YBp"/>
+                                            <constraint firstItem="uV4-sc-8X5" firstAttribute="leading" secondItem="fnI-wr-opi" secondAttribute="leading" id="dgo-lB-F6G"/>
+                                            <constraint firstAttribute="bottom" secondItem="uV4-sc-8X5" secondAttribute="bottom" id="ijg-Bp-P8k"/>
+                                            <constraint firstItem="uV4-sc-8X5" firstAttribute="top" secondItem="fnI-wr-opi" secondAttribute="top" id="zPY-Vr-vMy"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="photoCollectionView" destination="uV4-sc-8X5" id="BTH-NN-Tzu"/>
+                                        </connections>
+                                    </collectionViewCell>
                                 </cells>
                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="photoSectionHeader" id="OXL-QE-zfg" customClass="PhotoSectionHeader" customModule="Newsman" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="367" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8G-V2-vUY">
-                                            <rect key="frame" x="8" y="8" width="351" height="28"/>
+                                            <rect key="frame" x="16" y="0.0" width="335" height="44"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>

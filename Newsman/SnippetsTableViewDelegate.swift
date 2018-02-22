@@ -115,12 +115,12 @@ extension SnippetsViewController: UITableViewDelegate
         let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
         do
         {
-            try FileManager.default.removeItem(at: snippetURL)
-            print("IMAGE FOLDER DELETED SUCCESSFULLY AT PATH:\n\(snippetURL.path)")
+          try FileManager.default.removeItem(at: snippetURL)
+          print("PHOTO SNIPPET IMAGES DIRECTORY DELETED SUCCESSFULLY AT PATH:\n\(snippetURL.path)")
         }
         catch
         {
-            print("ERROR DELETING IMAGE FOLDER AT PATH:\n\(snippetURL.path)\n\(error.localizedDescription)")
+          print("ERROR DELETING PHOTO SNIPPET IMAGES DIRECTORY AT PATH:\n\(snippetURL.path)\n\(error.localizedDescription)")
         }
         
     }

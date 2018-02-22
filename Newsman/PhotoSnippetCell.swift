@@ -86,5 +86,6 @@ class PhotoSnippetCell: UICollectionViewCell
         flagLayer.display()
     }
     
-
 }
+
+

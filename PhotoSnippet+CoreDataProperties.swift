@@ -2,8 +2,8 @@
 //  PhotoSnippet+CoreDataProperties.swift
 //  Newsman
 //
-//  Created by Anton2016 on 17.12.2017.
-//  Copyright © 2017 Anton2016. All rights reserved.
+//  Created by Anton2016 on 09.02.2018.
+//  Copyright © 2018 Anton2016. All rights reserved.
 //
 //
 
@@ -17,11 +17,12 @@ extension PhotoSnippet {
         return NSFetchRequest<PhotoSnippet>(entityName: "PhotoSnippet")
     }
 
-    @NSManaged public var nphoto: Int32
     @NSManaged public var ascending: Bool
     @NSManaged public var grouping: String?
+    @NSManaged public var nphoto: Int32
     @NSManaged public var photos: NSSet?
     @NSManaged public var reports: NSSet?
+    @NSManaged public var folders: NSSet?
 
 }
 
@@ -56,5 +57,22 @@ extension PhotoSnippet {
 
     @objc(removeReports:)
     @NSManaged public func removeFromReports(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for folders
+extension PhotoSnippet {
+
+    @objc(addFoldersObject:)
+    @NSManaged public func addToFolders(_ value: PhotoFolder)
+
+    @objc(removeFoldersObject:)
+    @NSManaged public func removeFromFolders(_ value: PhotoFolder)
+
+    @objc(addFolders:)
+    @NSManaged public func addToFolders(_ values: NSSet)
+
+    @objc(removeFolders:)
+    @NSManaged public func removeFromFolders(_ values: NSSet)
 
 }

@@ -20,8 +20,6 @@ enum GroupPhotos: String
     case byTimeCreated     =  "By Time Created"
     case manually          =  "Manually"
     case makeGroups        =  "Make Groups by Priority Flag"
-    //case byLocation        =  "By Photo Location"
-    //case byCustomCategory  =  "By Custom Category"
     
     static let sortDecritorsMap: [GroupPhotos : NSSortDescriptor] =
     [
@@ -32,21 +30,12 @@ enum GroupPhotos: String
     
     static var ascending: Bool = true
     
-    typealias SortPredicate = (PhotoItem, PhotoItem) -> Bool
+    typealias SortPredicate = (PhotoItemProtocol, PhotoItemProtocol) -> Bool
     static let sortPredMap: [GroupPhotos : SortPredicate] =
     [
-     .byPriorityFlag:
-        {let f1 = $0.photo.priorityFlag ?? ""; let i1 = PhotoPriorityFlags(rawValue: f1)?.rateIndex ?? -1
-         let f2 = $1.photo.priorityFlag ?? ""; let i2 = PhotoPriorityFlags(rawValue: f2)?.rateIndex ?? -1
-         return GroupPhotos.ascending ? i1 <= i2 : i1 >= i2
-        },
-     
-     .byTimeCreated:  {GroupPhotos.ascending ? (($0.photo.date! as Date) <= ($1.photo.date! as Date)) :
-                                               (($0.photo.date! as Date) >= ($1.photo.date! as Date))},
-     
-     .manually:       {GroupPhotos.ascending ? ($0.photo.position <= $1.photo.position) :
-                                               ($0.photo.position >= $1.photo.position)}
-    
+     .byPriorityFlag: {GroupPhotos.ascending ? $0.priority <= $1.priority : $0.priority >= $1.priority },
+     .byTimeCreated:  {GroupPhotos.ascending ? $0.date     <= $1.date     : $0.date     >= $1.date     },
+     .manually:       {GroupPhotos.ascending ? $0.position <= $1.position : $0.position >= $1.position }
     ]
     
     static let groupingTypes : [GroupPhotos] = [.byPriorityFlag, .byTimeCreated, .manually, .makeGroups]

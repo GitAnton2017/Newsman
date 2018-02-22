@@ -1,98 +1,273 @@
+
 import Foundation
 import UIKit
 import CoreData
 
-
 class PhotoSnippetViewController: UIViewController
 {
+    
+//MARK: ===================== CALCULATED PROPERTIES =========================
+    
+//---------------------------------------------------------------------------
+ var photoSnippet: PhotoSnippet!
+//---------------------------------------------------------------------------
+ {
+  didSet {navigationItem.title = photoSnippet.tag}
+ }
+//---------------------------------------------------------------------------
+ var imageSize: CGFloat
+//---------------------------------------------------------------------------
+ {
+  let width = photoCollectionView.frame.width
+  let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+  let lelfInset =  fl.sectionInset.left
+  let rightInset = fl.sectionInset.right
+  let itemSpace =  fl.minimumInteritemSpacing
+  return (width - lelfInset - rightInset - itemSpace * CGFloat(nphoto - 1)) / CGFloat(nphoto)
+ }
+//---------------------------------------------------------------------------
+ var nphoto: Int = 3
+//---------------------------------------------------------------------------
+ {
+  didSet
+  {
+    if nphoto != oldValue
+    {
+     if isEditingPhotos
+     {
+      photoCollectionView.cancellUnfinishedMove()
+     }
+     else
+     {
+      photoCollectionView.locateCellMenu()
+     }
+     
+     photoSnippet.nphoto = Int32(nphoto)
+     photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
+                
+    }
+   }
+ }
+    
+//---------------------------------------------------------------------------------
+    
+//MARK: ========================== STORED PROPERTIES ==============================
     
  var isEditingMode = true
  var isEditingPhotos = false
  var currentToolBarItems: [UIBarButtonItem]!
+ var allPhotosSelected = false
+ var selectBarButton: UIBarButtonItem!
+ var menuTapGR: UITapGestureRecognizer!
+ var maxPhotosInRow = 10
+ var minPhotosInRow = 1
+ var sectionTitles: [String]? = nil //section titles for sectioned photo collection view if any...
+    
+ var menuView: UIView? = nil
+ var menuFrameSize: CGSize!
+ var menuTouchPoint: CGPoint = CGPoint.zero
+    
+ static var menuIndexPath: IndexPath? = nil // CV index path where small photo item menu appeares...
+ static var menuShift = CGPoint.zero
+
+
+ let imagePicker = UIImagePickerController()
+ var imagePickerTakeButton: UIButton!
+ var imagePickerCnxxButton: UIButton!
+    
+ lazy var photoItems2D: [[PhotoItemProtocol]] = createPhotoItems2D()
+    
+//---------------------------------------------------------------------------------
+//MARK:-
+    
+//MARK: ============================ OUTLETS ======================================
+    
+ @IBOutlet weak var photoCollectionView: PhotoSnippetCollectionView!
+ @IBOutlet weak var photoScaleStepper: UIStepper!
+ @IBOutlet weak var photoSnippetTitle: UITextField!
+ @IBOutlet weak var photoSnippetToolBar: UIToolbar!
+    
+ //--------------------- VC Tool Bar Menu Buttons ---------------------------------
+ @IBOutlet weak var saveBarButton: UIBarButtonItem!
+ @IBOutlet weak var datePickerBarButton: UIBarButtonItem!
+ @IBOutlet weak var takePhotoBarButton: UIBarButtonItem!
+ @IBOutlet weak var priorityPickerBarButton: UIBarButtonItem!
  
+//---------------------------------------------------------------------------------
+//MARK: -
+    
+    
+//MARK: =============== LOAD PHOTO SNIPPET VIEW CONTROLLER VIEW ===================
+//=================================================================================
+ override func viewDidLoad()
+//=================================================================================
+ {
+   super.viewDidLoad()
+   navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
+   nphoto = Int(photoSnippet.nphoto)
+   photoCollectionView.dataSource = self
+   photoCollectionView.delegate = self
+   
+   photoCollectionView.dragDelegate = self
+   photoCollectionView.dropDelegate = self
+   photoCollectionView.dragInteractionEnabled = true
+   
+   photoCollectionView.allowsMultipleSelection = true
+   imagePicker.delegate = self
+   photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()
+   currentToolBarItems = photoSnippetToolBar.items
+   photoScaleStepper.value = Double(nphoto)
+   photoScaleStepper.minimumValue = Double(minPhotosInRow)
+   photoScaleStepper.maximumValue = Double(maxPhotosInRow)
+   photoScaleStepper.stepValue = 1.0
+   photoScaleStepper.wraps = true
+   menuFrameSize = view.frame.size
+        
+ }
+//==========================================================================================
+//MARK:-
+    
+    
+//MARK: ------------------------- VIEW WILL APPEAR --------------------------
+//---------------------------------------------------------------------------
+ override func viewWillAppear(_ animated: Bool)
+//---------------------------------------------------------------------------
+ {
+   super.viewWillAppear(animated)
+   
+   if isEditingMode
+   {
+     photoSnippetTitle.text = photoSnippet.tag
+   }
+   else
+   {
+     isEditingMode = true
+   }
+   
+   photoCollectionView.reloadData()
+        
+ }
+//---------------------------------------------------------------------------
+//MARK:-
+    
+    
+//MARK: ------------------------- VIEW WILL DISAPPEAR -----------------------
+//---------------------------------------------------------------------------
+ override func viewWillDisappear(_ animated: Bool)
+//---------------------------------------------------------------------------
+ {
+   super.viewWillDisappear(animated)
+    
+   if photoSnippetTitle.isFirstResponder
+   {
+     photoSnippetTitle.resignFirstResponder()
+   }
+    
+   if isEditingMode
+   {
+     savePhotoSnippetData()
+   }
+        
+ }
+//---------------------------------------------------------------------------
+//MARK:-
+    
+//MARK:======================== ACTIONS OUTLETS =============================
+//---------------------------------------------------------------------------
+ @IBAction func photoScaleStepperChanged(_ sender: UIStepper)
+//---------------------------------------------------------------------------
+ {
+  nphoto = Int(sender.value)
+ }
+//---------------------------------------------------------------------------
+ @IBAction func editPhotosPress(_ sender: UIBarButtonItem)
+//---------------------------------------------------------------------------
+{
+ togglePhotoEditingMode()
+}
+//---------------------------------------------------------------------------
+ @IBAction func pinchAction(_ sender: UIPinchGestureRecognizer)
+//---------------------------------------------------------------------------
+{
+ if (sender.scale > 1 && nphoto < maxPhotosInRow) {nphoto += 1}
+ if (sender.scale < 1 && nphoto > minPhotosInRow) {nphoto -= 1}
+}
+//---------------------------------------------------------------------------
+ @IBAction func saveBarButtonPress(_ sender: UIBarButtonItem)
+//---------------------------------------------------------------------------
+ {
+    if photoSnippetTitle.isFirstResponder
+    {
+        photoSnippetTitle.resignFirstResponder()
+    }
+    
+    savePhotoSnippetData()
+ }
+//---------------------------------------------------------------------------
+ @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
+//---------------------------------------------------------------------------
+ {
+    isEditingMode = false
+    
+    if UIImagePickerController.isSourceTypeAvailable(.camera)
+    {
+        imagePicker.sourceType = .camera
+        imagePicker.showsCameraControls = false
+        createImagePickerCustomView(imagePickerView: imagePicker.view)
+    }
+    else if UIImagePickerController.isSourceTypeAvailable(.photoLibrary)
+    {
+        imagePicker.sourceType = .photoLibrary
+    }
+    else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
+    {
+        imagePicker.sourceType = .savedPhotosAlbum
+    }
+    else
+    {
+        return
+    }
+    
+    present(imagePicker, animated: true, completion: nil)
+    
+ }
+//---------------------------------------------------------------------------
+//MARK: -
+    
  deinit
  {
   print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.tag ?? "no tag")")
  }
+    
+//MARK: ----------------- MEMORY WARNING PROCESSING -------------------------
+//---------------------------------------------------------------------------
  override func didReceiveMemoryWarning()
+//---------------------------------------------------------------------------
  {
     super.didReceiveMemoryWarning()
     print ("out of memory")
  }
- 
- func sectionedPhotoItems() -> [[PhotoItem]]
- {
-   var photoItems = [[PhotoItem]]()
-   if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
-   {
-    let sections = Set(allPhotos.map{$0.priorityFlag ?? ""}).sorted
-    {
-     let x0 = PhotoPriorityFlags(rawValue: $0)?.rateIndex ?? -1
-     let x1 = PhotoPriorityFlags(rawValue: $1)?.rateIndex ?? -1
-     return photoSnippet.ascending ? x0 < x1 : x0 > x1
-    }
+//---------------------------------------------------------------------------
+//MARK:-
     
-    sections.forEach
-    { title in
-      let newSection = allPhotos.filter{($0.priorityFlag ?? "") == title}.sorted
-      {($0.date! as Date) <= ($1.date! as Date)
-      }.map{PhotoItem(photo: $0)}
-        
-      photoItems.append(newSection)
-    }
-    sectionTitles = sections
-   }
-    
-   return photoItems
- }
-
- func desectionedPhotoItems() -> [[PhotoItem]]
- {
-  var photoItems = [[PhotoItem]]()
-  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
-  {
-   photoItems.append(allPhotos.map({PhotoItem(photo: $0)}))
-  }
-  sectionTitles = nil
-  return photoItems
- }
-
- var sectionTitles: [String]? = nil
-    
- lazy var photoItems2D: [[PhotoItem]] =
- {
-  var photoItems = [[PhotoItem]]()
-  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
-  {
-    if let sortPred = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortPredicate
-    {
-     photoItems.append(allPhotos.map({PhotoItem(photo: $0)}).sorted(by: sortPred))
-    }
-    else
-    {
-     photoItems = sectionedPhotoItems()
-    }
-  }
-  return photoItems
- }()
-    
- var photoSnippet: PhotoSnippet!
- {
-  didSet
-  {
-    navigationItem.title = photoSnippet.tag
-  }
- }
-    
+//MARK: ------------- Dismiss Title Edit Key Board --------------------------
+//---------------------------------------------------------------------------
  @objc func doneButtonPressed ()
+//---------------------------------------------------------------------------
  {
   if photoSnippetTitle.isFirstResponder
   {
     photoSnippetTitle.resignFirstResponder()
-}
+  }
  }
+//---------------------------------------------------------------------------
+//MARK: -
+
     
+//MARK: ------------- PREPARING PHOTO SNIPPET TOOLBAR -----------------------
+//---------------------------------------------------------------------------
  func createKeyBoardToolBar() -> UIToolbar
+//---------------------------------------------------------------------------
  {
   let keyboardToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: photoSnippetToolBar.bounds.width, height: 44))
   keyboardToolbar.backgroundColor = photoSnippetToolBar.backgroundColor
@@ -101,25 +276,26 @@ class PhotoSnippetViewController: UIViewController
   keyboardToolbar.setItems([flexSpace,doneButton,flexSpace], animated: false)
   return keyboardToolbar
  }
+//---------------------------------------------------------------------------
+//MARK: -
+
     
+//MARK: -------------- Saving Current Managed Context -----------------------
+//---------------------------------------------------------------------------
  func savePhotoSnippetData()
+//---------------------------------------------------------------------------
  {
   photoSnippet.tag = photoSnippetTitle.text
-    
   (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        
  }
+//---------------------------------------------------------------------------
+//MARK: -
+
     
- @IBAction func editPhotosPress(_ sender: UIBarButtonItem)
- {
-  togglePhotoEditingMode()
- }
- 
- var allPhotosSelected = false
-    
- var selectBarButton: UIBarButtonItem!
-    
+//MARK: -------------- Toggle All Photos Selection Mode ----------------------
+//---------------------------------------------------------------------------
  @objc func toggleAllPhotosSelection()
+//---------------------------------------------------------------------------
  {
    if allPhotosSelected
    {
@@ -130,7 +306,7 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      photoItems2D[itemIndexPath.section][itemIndexPath.row].photo.isSelected = false
+      photoItems2D[itemIndexPath.section][itemIndexPath.row].isSelected = false
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
         cell.photoIconView.alpha = 1
@@ -146,7 +322,7 @@ class PhotoSnippetViewController: UIViewController
     {
       for j in 0..<photoCollectionView.numberOfItems(inSection: i)
       {
-        photoItems2D[i][j].photo.isSelected = true
+        photoItems2D[i][j].isSelected = true
         let itemIndexPath = IndexPath(item: j, section: i)
         photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: .top)
         if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
@@ -158,7 +334,14 @@ class PhotoSnippetViewController: UIViewController
     
    }
  }
+//---------------------------------------------------------------------------
+//MARK: -
+    
+    
+//MARK: -------------- Toggle Photo Items Editing Mode ----------------------
+//---------------------------------------------------------------------------
  func togglePhotoEditingMode()
+//---------------------------------------------------------------------------
  {
    if isEditingPhotos
    {
@@ -167,7 +350,7 @@ class PhotoSnippetViewController: UIViewController
      for itemIndexPath in selectedItemsPaths
      {
       photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      photoItems2D[itemIndexPath.section][itemIndexPath.row].photo.isSelected = false
+      photoItems2D[itemIndexPath.section][itemIndexPath.row].isSelected = false
       if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
       {
        cell.photoIconView.alpha = 1
@@ -224,8 +407,15 @@ class PhotoSnippetViewController: UIViewController
     
    }
  }
-  
+    
+//---------------------------------------------------------------------------
+//MARK: -
+ 
+    
+//MARK: --------------------------- GROUP PHOTO  ----------------------------
+//---------------------------------------------------------------------------
  @objc func groupPhoto()
+//---------------------------------------------------------------------------
  {
     let loc_title = NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
     let loc_message = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")
@@ -249,84 +439,14 @@ class PhotoSnippetViewController: UIViewController
     
     self.present(groupAC, animated: true, completion: nil)
  }
-    
- @IBOutlet weak var photoCollectionView: PhotoSnippetCollectionView!
-  
- var menuTapGR: UITapGestureRecognizer!
-    
- override func viewDidLoad()
- {
-  super.viewDidLoad()
-  navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
-  nphoto = Int(photoSnippet.nphoto)
-  photoCollectionView.dataSource = self
-  photoCollectionView.delegate = self
-    
-  photoCollectionView.dragDelegate = self
-  photoCollectionView.dropDelegate = self
-  photoCollectionView.dragInteractionEnabled = true
-    
-  photoCollectionView.allowsMultipleSelection = true
-  imagePicker.delegate = self
-  photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()
-  currentToolBarItems = photoSnippetToolBar.items
-  photoScaleStepper.value = Double(nphoto)
-  photoScaleStepper.minimumValue = Double(minPhotosInRow)
-  photoScaleStepper.maximumValue = Double(maxPhotosInRow)
-  photoScaleStepper.stepValue = 1.0
-  photoScaleStepper.wraps = true
-  menuFrameSize = view.frame.size
-    
- }
+//---------------------------------------------------------------------------
+//MARK: -
 
- override func viewWillAppear(_ animated: Bool)
- {
-  super.viewWillAppear(animated)
-  
-  if isEditingMode
-  {
-   photoSnippetTitle.text = photoSnippet.tag
-  }
-  else
-  {
-   isEditingMode = true
-  }
-    
-  photoCollectionView.reloadData()
-
- }
-    
- override func viewWillDisappear(_ animated: Bool)
- {
-  super.viewWillDisappear(animated)
-  if photoSnippetTitle.isFirstResponder
-  {
-   photoSnippetTitle.resignFirstResponder()
-  }
-  if isEditingMode
-  {
-   savePhotoSnippetData()
-  }
-
- }
- 
- var maxPhotosInRow = 10; var minPhotosInRow = 1
-    
- @IBOutlet var photoScaleStepper: UIStepper!
-    
- @IBAction func photoScaleStepperChanged(_ sender: UIStepper)
- {
-  nphoto = Int(sender.value)
- }
-    
- @IBAction func pinchAction(_ sender: UIPinchGestureRecognizer)
- {
-  if (sender.scale > 1 && nphoto < maxPhotosInRow) {nphoto += 1}
-  if (sender.scale < 1 && nphoto > minPhotosInRow) {nphoto -= 1}
- }
-
-    
- override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
+//MARK: --------------------------- VC TRANSITIONS  -------------------------
+//---------------------------------------------------------------------------
+ override func viewWillTransition(to size: CGSize,
+                                  with coordinator: UIViewControllerTransitionCoordinator)
+//---------------------------------------------------------------------------
  {
 
     super.viewWillTransition(to: size, with: coordinator)
@@ -344,433 +464,44 @@ class PhotoSnippetViewController: UIViewController
     
     photoCollectionView.reloadData()
  }
-
+//---------------------------------------------------------------------------
+//MARK: -
  
     
- var imageSize: CGFloat
- {
-    get
-    {
-      let width = photoCollectionView.frame.width
-      let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-      let size = (width - fl.sectionInset.left - fl.sectionInset.right - fl.minimumInteritemSpacing * CGFloat(nphoto - 1)) / CGFloat(nphoto)
-        
-      return size
-    }
- }
-
- static var menuIndexPath: IndexPath? = nil
- static var menuShift = CGPoint.zero
-    
- var nphoto: Int = 3
- {
-  didSet
-  {
-    if nphoto != oldValue
-    {
-     if isEditingPhotos
-     {
-        photoCollectionView.cancellUnfinishedMove()
-     }
-     else
-     {
-        photoCollectionView.locateCellMenu()
-     }
-     photoSnippet.nphoto = Int32(nphoto)
-     photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
-     
-    }
-  }
- }
- 
-    
- @IBOutlet var photoSnippetTitle: UITextField!
-    
- @IBOutlet var photoSnippetToolBar: UIToolbar!
-    
- @IBOutlet var saveBarButton: UIBarButtonItem!
- @IBAction func saveBarButtonPress(_ sender: UIBarButtonItem)
- {
-   if photoSnippetTitle.isFirstResponder
-   {
-    photoSnippetTitle.resignFirstResponder()
-   }
-   savePhotoSnippetData()
- }
-    
- @IBOutlet var datePickerBarButton: UIBarButtonItem!
-    
- @IBOutlet var takePhotoBarButton: UIBarButtonItem!
-
- let imagePicker = UIImagePickerController()
- var imagePickerTakeButton: UIButton!
- var imagePickerCnxxButton: UIButton!
-    
-    
-    
+//MARK: ---------------- IMAGE PICKER CONTROLLER PREPARE --------------------
+//---------------------------------------------------------------------------
  @objc func pickImageButtonPress()
+//---------------------------------------------------------------------------
  {
   imagePickerTakeButton.isEnabled = false
   imagePickerCnxxButton.isEnabled = false
   imagePicker.takePicture()
  }
-  
+//---------------------------------------------------------------------------
  @objc func cancelImageButtonPress()
+//---------------------------------------------------------------------------
  {
   dismiss(animated: true, completion: nil)
  }
-  
- func createImagePickerCustomView(imagePickerView: UIView)
- {
-    let pickerViewHeight: CGFloat = 100.0
-    let pickerView = UIView()
-    pickerView.backgroundColor = UIColor.lightGray
-    pickerView.translatesAutoresizingMaskIntoConstraints = false
-    imagePickerView.addSubview(pickerView)
-    
-    let pickerViewTopCon = pickerView.bottomAnchor.constraint(equalTo: imagePickerView.bottomAnchor)
-    let pickerViewLeadingCon = pickerView.leadingAnchor.constraint(equalTo: imagePickerView.leadingAnchor)
-    let pickerViewTrailingCon = pickerView.trailingAnchor.constraint(equalTo: imagePickerView.trailingAnchor)
-    let pickerViewHeightCon = pickerView.heightAnchor.constraint(equalToConstant: pickerViewHeight)
-    pickerViewTopCon.isActive = true
-    pickerViewLeadingCon.isActive = true
-    pickerViewTrailingCon.isActive = true
-    pickerViewHeightCon.isActive = true
-    
-    let takePictureButton = UIButton()
-    takePictureButton.addTarget(self, action: #selector(pickImageButtonPress), for: .touchDown)
-    takePictureButton.backgroundColor = UIColor(red: 0.0, green: 0.563, blue: 0.319, alpha: 1.00)
-    takePictureButton.contentMode = .center
-    let titleAttrNormal =
-    [
-      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 25),
-      NSAttributedStringKey.foregroundColor: UIColor.black
-    ]
-    let takeLocal = NSLocalizedString("TAKE", comment: "Take Photo Button Title")
-    let titleNormal = NSAttributedString(string: takeLocal, attributes: titleAttrNormal)
-    takePictureButton.setAttributedTitle(titleNormal, for: .normal)
-    let titleAttrPressed =
-    [
-      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 28),
-      NSAttributedStringKey.foregroundColor: UIColor.white
-    ]
-    let titlePressed = NSAttributedString(string: takeLocal, attributes: titleAttrPressed)
-    takePictureButton.setAttributedTitle(titlePressed, for: .highlighted)
+//---------------------------------------------------------------------------
 
-    takePictureButton.showsTouchWhenHighlighted = true
-    takePictureButton.translatesAutoresizingMaskIntoConstraints = false
-    pickerView.addSubview(takePictureButton)
     
-    let takePictureButtonTopCon = takePictureButton.topAnchor.constraint(equalTo: pickerView.topAnchor, constant: 5)
-    let takePictureButtonLeadingCon = takePictureButton.leadingAnchor.constraint(equalTo: pickerView.leadingAnchor, constant: 5)
-    let takePictureButtonBottomCon = takePictureButton.bottomAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: -5)
-    let takePictureButtonWidthCon = takePictureButton.widthAnchor.constraint(equalTo: pickerView.widthAnchor, multiplier: 0.5, constant: -7.5)
-    
-    takePictureButtonTopCon.isActive = true
-    takePictureButtonLeadingCon.isActive = true
-    takePictureButtonBottomCon.isActive = true
-    takePictureButtonWidthCon.isActive = true
-    
-    let cnxButton = UIButton()
-    cnxButton.addTarget(self, action: #selector(cancelImageButtonPress), for: .touchDown)
-    cnxButton.backgroundColor = UIColor(red: 0.9, green: 0.0, blue: 0.0, alpha: 0.80)
-    cnxButton.contentMode = .center
-    let cnxTitleAttrNormal =
-    [
-      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 25),
-      NSAttributedStringKey.foregroundColor: UIColor.black
-    ]
-    let cnxLocal = NSLocalizedString("CANCEL", comment: "Cancel Photo Button Title")
-    let cnxTitleNormal = NSAttributedString(string: cnxLocal, attributes: cnxTitleAttrNormal)
-    cnxButton.setAttributedTitle(cnxTitleNormal, for: .normal)
-    
-    let cnxTitleAttrPressed =
-    [
-      NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 28),
-      NSAttributedStringKey.foregroundColor: UIColor.white
-    ]
-    let cnxTitlePressed = NSAttributedString(string: cnxLocal, attributes: cnxTitleAttrPressed)
-    cnxButton.setAttributedTitle(cnxTitlePressed, for: .highlighted)
-    
-    cnxButton.showsTouchWhenHighlighted = true
-    cnxButton.translatesAutoresizingMaskIntoConstraints = false
-    pickerView.addSubview(cnxButton)
-    
-    let cnxButtonTopCon = cnxButton.topAnchor.constraint(equalTo: pickerView.topAnchor, constant: 5)
-    let cnxButtonLeadingCon = cnxButton.trailingAnchor.constraint(equalTo: pickerView.trailingAnchor, constant: -5)
-    let cnxButtonBottomCon = cnxButton.bottomAnchor.constraint(equalTo: pickerView.bottomAnchor, constant: -5)
-    let cnxButtonWidthCon = cnxButton.widthAnchor.constraint(equalTo: pickerView.widthAnchor, multiplier: 0.5, constant: -7.5)
-    
-    cnxButtonTopCon.isActive = true
-    cnxButtonLeadingCon.isActive = true
-    cnxButtonBottomCon.isActive = true
-    cnxButtonWidthCon.isActive = true
-
-    imagePickerTakeButton = takePictureButton
-    imagePickerCnxxButton = cnxButton
- }
-    
- @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
- {
-   isEditingMode = false
-   //let imagePicker = UIImagePickerController()
-   if UIImagePickerController.isSourceTypeAvailable(.camera)
-   {
-    imagePicker.sourceType = .camera
-    imagePicker.showsCameraControls = false
-    createImagePickerCustomView(imagePickerView: imagePicker.view)
-
-   }
-   else if UIImagePickerController.isSourceTypeAvailable(.photoLibrary)
-   {
-    imagePicker.sourceType = .photoLibrary
-   }
-   else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
-   {
-    imagePicker.sourceType = .savedPhotosAlbum
-   }
-   else
-   {
-    return
-   }
-
-   present(imagePicker, animated: true, completion: nil)
-
- }
- 
- @IBOutlet var priorityPickerBarButton: UIBarButtonItem!
-    
- func deleteSelectedPhotos()
- {
-  for (sectionIndex, section) in photoItems2D.enumerated().filter({$0.element.first(where: {$0.photo.isSelected}) != nil}).sorted(by: {$0.offset > $1.offset})
-  {
-   for (itemIndex, _) in section.enumerated().filter({$0.element.photo.isSelected}).sorted(by: {$0.offset > $1.offset})
-   {
-    let deletedItem = photoItems2D[sectionIndex].remove(at: itemIndex)
-    deletedItem.deleteImage()
-    let itemIndexPath = IndexPath(row: itemIndex, section: sectionIndex)
-    photoCollectionView.deleteItems(at: [itemIndexPath])
-   }
-   if photoCollectionView.photoGroupType == .makeGroups
-   {
-    photoCollectionView.reloadSections([sectionIndex])
-   }
-  }
-    
-  for section in photoItems2D.enumerated().filter({$0.element.count == 0}).sorted(by: {$0.offset > $1.offset})
-  {
-    photoItems2D.remove(at: section.offset)
-    sectionTitles?.remove(at: section.offset)
-    photoCollectionView.deleteSections([section.offset])
-  }
-    
-  togglePhotoEditingMode()
-
- }
-  
- func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
+ /*func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
  {
   let path = photoItems2D.enumerated().lazy.map{($0.offset, $0.element.index(of: photoItem))}.first {$0.1 != nil}
   return IndexPath(row: path!.1!, section: path!.0)
- }
- 
- func photoIdentityItemIndexPath(photoItem: PhotoItem) -> IndexPath
- {
-    let path = photoItems2D.enumerated().lazy.map
-    {
-      (section: $0.offset, item: $0.element.enumerated().lazy.first{$0.element.photo === photoItem.photo})
-    }.first{$0.item != nil}
-    
-    return IndexPath(row: path!.item!.offset, section: path!.section)
- }
-    
- func flagGroupedSelectedPhotos(with flagStr: String?)
- {
-  for item in photoItems2D.reduce([], {$0 + $1.filter({$0.photo.isSelected})})
-  {
-    item.photo.isSelected = false
-    let itemIndexPath = photoItemIndexPath(photoItem: item)
-    photoCollectionView.movePhoto(at: itemIndexPath, with: flagStr)
-  }
- }
+ }*/
+
     
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
  {
   deleteSelectedPhotos()
- }
-  
- var menuView: UIView? = nil
- var menuFrameSize: CGSize!
- var menuViewOrigin: CGPoint
- {
-  get
-  {
-    let x = (menuFrameSize.width - CGFloat(photoCollectionView.itemsInRow) * photoCollectionView.menuItemSize.width)/2
-    let y = (menuFrameSize.height - ceil(CGFloat(editMenuItems.count) / CGFloat(photoCollectionView.itemsInRow)) * photoCollectionView.menuItemSize.height) / 2
-    return CGPoint(x: x, y: y)
-  }
- }
-    
- func showFlagPhotoMenu()
- {
-   if menuView != nil
-   {
-    closeMenuAni()
-    return
-   }
-    
-   photoCollectionView.dismissCellMenu()
-   photoCollectionView.drawCellMenu(menuColor: #colorLiteral(red: 0.8855290292, green: 0.8220692608, blue: 0.755911735, alpha: 1), touchPoint: CGPoint.zero, menuItems: editMenuItems)
-    
-   if let menuLayer = photoCollectionView.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer
-   {
-    let menuFrame = CGRect(origin: menuViewOrigin, size: menuLayer.frame.size)
-    menuView = UIView(frame: menuFrame)
-    let flagMenuGR = UITapGestureRecognizer(target: self, action: #selector(tapPhotoEditMenu))
-    let panMenuGR =  UIPanGestureRecognizer(target: self, action: #selector(panPhotoEditMenu))
-    menuView!.addGestureRecognizer(flagMenuGR)
-    menuView!.addGestureRecognizer(panMenuGR)
-    view.addSubview(menuView!)
-    menuView!.layer.addSublayer(menuLayer)
-    openMenuAni()
-   }
- }
- 
- var menuTouchPoint: CGPoint = CGPoint.zero
-    
- @objc func panPhotoEditMenu (gr: UIPanGestureRecognizer)
- {
-  guard let menu = menuView else {return}
-    
-  switch (gr.state)
-  {
-   case .began: menuTouchPoint = gr.location(in: menu)
-   
-    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn], animations: {menu.alpha = 0.85}, completion: nil)
-    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn, .`repeat`, .autoreverse],
-                   animations:
-                   {
-                     menu.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-                   },
-                   completion: nil)
-   case .changed:
-    let touchPoint = gr.location(in: menu)
-    let translation = gr.translation(in: menu)
-    if (touchPoint.x > menuTouchPoint.x - 30  && touchPoint.y > menuTouchPoint.y - 30  &&
-        touchPoint.x < menuTouchPoint.x + 30  && touchPoint.y < menuTouchPoint.y + 30)
-    {
-     menu.center.x += translation.x
-     menu.center.y += translation.y
-    }
-    
-    gr.setTranslation(CGPoint.zero, in: menu)
-   
-   default:
-    UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseInOut],
-                   animations:
-                   {
-                     menu.transform = CGAffineTransform.identity
-                     menu.alpha = 1.0
-                   },
-                   completion: nil)
-   }
-
-  }
- 
-  func openMenuAni()
-  {
-        menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-        menuView!.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
-                       animations:
-                       {
-                        self.menuView!.transform = CGAffineTransform.identity
-                        self.menuView!.alpha = 1
-                       },
-                       completion: nil)
-        
-  }
- 
- func closeMenuAni()
- {
-        UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
-                       animations:
-                       {
-                        self.menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-                        self.menuView!.alpha = 0
-                       },
-                       completion:
-                       {_ in
-                        self.menuView!.removeFromSuperview()
-                        self.menuView = nil
-                       })
-
- }
-
-    
- @objc func tapPhotoEditMenu (gr: UITapGestureRecognizer)
- {
-  let touchPoint = gr.location(in: menuView)
-  if let menuLayer = menuView!.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
-     let buttonLayer = menuLayer.hitTest(touchPoint)
-  {
-    switch (buttonLayer.name)
-    {
-     case "flagLayer"?:
-      let flagColor = (buttonLayer as! FlagItemLayer).flagColor
-      let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
-      if photoCollectionView.photoGroupType != .makeGroups
-      {
-        photoItems2D[0].enumerated().filter({$0.element.photo.isSelected}).forEach
-        {
-         $0.element.photo.priorityFlag = flagStr
-         if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
-         {
-          cell.drawFlag(flagColor: flagColor!)
-         }
-        }
-      }
-      else
-      {
-       flagGroupedSelectedPhotos(with: flagStr)
-      }
-      
-      togglePhotoEditingMode()
-      closeMenuAni()
-
-        
-     case "unflagLayer"?:
-      if photoCollectionView.photoGroupType != .makeGroups
-      {
-       photoItems2D[0].enumerated().filter({$0.element.photo.isSelected}).forEach
-       {
-         $0.element.photo.priorityFlag = nil
-         if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
-         {
-          cell.clearFlag()
-         }
-       }
-      }
-      else
-      {
-        flagGroupedSelectedPhotos(with: nil)
-      }
-
-      togglePhotoEditingMode()
-      closeMenuAni()
-    
-        
-     case "cnxLayer"?: closeMenuAni()
-        
-     default: break
-        
-    }
-   }
+  togglePhotoEditingMode()
  }
     
  @objc func flagPhoto (_ sender: UIBarButtonItem)
  {
-    showFlagPhotoMenu()
+  showFlagPhotoMenu()
  }
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)

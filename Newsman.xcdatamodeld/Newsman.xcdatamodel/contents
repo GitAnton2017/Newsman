@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17C205" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="13772" systemVersion="17D47" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AudioSnippet" representedClassName="AudioSnippet" parentEntity="BaseSnippet" syncable="YES">
         <attribute name="record" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="audios" inverseEntity="Report" syncable="YES"/>
@@ -14,28 +14,30 @@
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tag" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" customClassName=".SnippetType" syncable="YES"/>
-        <fetchedProperty name="fetchedProperty" optional="YES" syncable="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="BaseSnippet"/>
-        </fetchedProperty>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="priorityFlag" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="photoSnippet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="photos" inverseEntity="PhotoSnippet" syncable="YES"/>
-        <fetchedProperty name="fetchedProperty" optional="YES" syncable="YES">
-            <fetchRequest name="fetchedPropertyFetchRequest" entity="Photo"/>
-        </fetchedProperty>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoFolder" inverseName="photos" inverseEntity="PhotoFolder" syncable="YES"/>
+        <relationship name="photoSnippet" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="photos" inverseEntity="PhotoSnippet" syncable="YES"/>
+    </entity>
+    <entity name="PhotoFolder" representedClassName="PhotoFolder" syncable="YES">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="priorityFlag" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="photos" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="folder" inverseEntity="Photo" syncable="YES"/>
+        <relationship name="photoSnippet" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="folders" inverseEntity="PhotoSnippet" syncable="YES"/>
     </entity>
     <entity name="PhotoSnippet" representedClassName="PhotoSnippet" parentEntity="BaseSnippet" syncable="YES">
         <attribute name="ascending" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="grouping" optional="YES" attributeType="String" defaultValueString="By Time Created" syncable="YES"/>
         <attribute name="nphoto" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="10" defaultValueString="3" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoFolder" inverseName="photoSnippet" inverseEntity="PhotoFolder" syncable="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoSnippet" inverseEntity="Photo" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="photos" inverseEntity="Report" syncable="YES"/>
     </entity>
@@ -63,16 +65,16 @@
         <attribute name="video" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="videos" inverseEntity="Report" syncable="YES"/>
     </entity>
-    <fetchRequest name="FetchRequest" entity="TextSnippet" predicateString="text CONTAINS &quot;&quot;"/>
     <elements>
         <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
-        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="209"/>
-        <element name="Photo" positionX="-558" positionY="-684" width="128" height="209"/>
-        <element name="PhotoSnippet" positionX="-632" positionY="-405" width="128" height="120"/>
+        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="178"/>
+        <element name="Photo" positionX="-855" positionY="-558" width="128" height="148"/>
+        <element name="PhotoSnippet" positionX="-650" positionY="-448" width="128" height="133"/>
         <element name="Report" positionX="-441" positionY="-199" width="128" height="148"/>
-        <element name="Settings" positionX="-272" positionY="-576" width="128" height="60"/>
-        <element name="SketchSnippet" positionX="-666" positionY="-277" width="128" height="75"/>
-        <element name="TextSnippet" positionX="-659" positionY="-99" width="128" height="75"/>
-        <element name="VideoSnippet" positionX="-243" positionY="-124" width="128" height="75"/>
+        <element name="Settings" positionX="-254" positionY="-540" width="128" height="60"/>
+        <element name="SketchSnippet" positionX="-659" positionY="-282" width="128" height="75"/>
+        <element name="TextSnippet" positionX="-657" positionY="-144" width="128" height="75"/>
+        <element name="VideoSnippet" positionX="-243" positionY="-162" width="128" height="75"/>
+        <element name="PhotoFolder" positionX="-848" positionY="-355" width="137" height="148"/>
     </elements>
 </model>
