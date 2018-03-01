@@ -2,11 +2,33 @@
 import UIKit
 import Foundation
 
-class PhotoFolderCell: UICollectionViewCell
+class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    func deselect()
+    {
+        photoCollectionView.reloadData()
+    }
+    
+    func select()
+    {
+        photoCollectionView.reloadData()
+    }
+    
+    var photoItemView: UIView {return photoCollectionView}
+    var cellFrame: CGRect     {return frame}
+    
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
-    let ds = PhotoFolderCollectionViewDataSource()
+    var photoItems: [PhotoItem]!
+    var nphoto: Int = 3
+    
+    var frameSize: CGFloat = 0
+    {
+        didSet
+        {
+          photoCollectionView.reloadData()
+        }
+    }
     
     required init?(coder aDecoder: NSCoder)
     {
@@ -16,15 +38,41 @@ class PhotoFolderCell: UICollectionViewCell
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        photoCollectionView.dataSource = ds
-        ds.photoCollectionView = photoCollectionView
+        imageRoundClip()
+        photoCollectionView.dataSource = self
+        photoCollectionView.delegate = self
         photoCollectionView.reloadData()
+
+    
     }
     
     override func prepareForReuse()
     {
        super.prepareForReuse()
+       imageRoundClip()
+    
     }
+    
+    
+    
+}
+
+extension PhotoFolderCell: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+{
+ //MARK:------------------------------------- SETTING CV CELLS SIZES -------------------------------------------
+ //-------------------------------------------------------------------------------------------------------------
+ func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                     sizeForItemAt indexPath: IndexPath) -> CGSize
+     //-------------------------------------------------------------------------------------------------------------
+ {
+    
+     return CGSize(width: imageSize, height: imageSize)
+    
+ }//func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout:...
+ //-------------------------------------------------------------------------------------------------------------
+ //MARK: -
+    
+    
 }
 
 class PhotoFolderCollectionView: UICollectionView
@@ -64,24 +112,25 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell
     
 }
 
-class PhotoFolderCollectionViewDataSource: NSObject, UICollectionViewDataSource
+extension PhotoFolderCell:  UICollectionViewDataSource
 {
-    var photoItems: [PhotoItem]!
-    weak var photoCollectionView: UICollectionView!
-    var nphoto: Int = 3
+    
     var imageSize: CGFloat
     {
      get
      {
-      let width = photoCollectionView.frame.width
+      
+      let width = frameSize
+      //print ("width =\(width)" )
       let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-      let size = (width - fl.sectionInset.left - fl.sectionInset.right - fl.minimumInteritemSpacing * CGFloat(nphoto - 1)) / CGFloat(nphoto)
-            
-      return size
+      let leftInset = fl.sectionInset.left
+      let rightInset = fl.sectionInset.right
+      let space = fl.minimumInteritemSpacing
+      let size = (width - leftInset - rightInset - space * CGFloat(nphoto - 1)) / CGFloat(nphoto)
+      return trunc(size)
      }
     }
 
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         return photoItems.count
@@ -89,6 +138,9 @@ class PhotoFolderCollectionViewDataSource: NSObject, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
+        // print ("LOADING FOLDER CELL WITH IP - \(indexPath)")
+        // print ("VISIBLE CELLS: \(collectionView.visibleCells.count)")
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCollectionViewCell", for: indexPath) as! PhotoFolderCollectionViewCell
         let photoItem = photoItems[indexPath.row]
         cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
@@ -100,15 +152,22 @@ class PhotoFolderCollectionViewDataSource: NSObject, UICollectionViewDataSource
             
             if let img = image
             {
+               // print ("IMAGE LOADED FOR CELL WITH IP - \(indexPath)")
                 if img.size.height > img.size.width
                 {
+                    
                     let r = img.size.width/img.size.height
                     cell.photoIconView.layer.contentsRect = CGRect(x: 0, y: (1 - r)/2, width: 1, height: r)
+                    
+                    
                 }
                 else
                 {
+                    
                     let r = img.size.height/img.size.width
                     cell.photoIconView.layer.contentsRect = CGRect(x: (1 - r)/2, y: 0, width: r, height: 1)
+                    
+                   
                 }
             }
             

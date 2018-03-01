@@ -18,7 +18,9 @@ extension SnippetsViewController: UITableViewDropDelegate
         sourceIndexPath != destIndexPath
      {
        PhotoItem.movePhotos(from: sourcePhotoSnippet, to: destPhotoSnippet)
+       PhotoItem.moveFolders(from: sourcePhotoSnippet, to: destPhotoSnippet)
        coordinator.session.localDragSession?.localContext = nil
+       PhotoItem.deselectSelectedItems(at: destPhotoSnippet)
        editPhotoSnippet(indexPath: destIndexPath)
      }
      else

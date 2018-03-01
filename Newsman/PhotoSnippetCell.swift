@@ -23,8 +23,70 @@ class FlagLayer: CALayer
     }
 }
 
-class PhotoSnippetCell: UICollectionViewCell
+protocol PhotoSnippetCellProtocol
 {
+    var photoItemView: UIView {get}
+    var cellFrame: CGRect     {get}
+    func deselect ()
+    func select ()
+    
+    
+}
+
+extension PhotoSnippetCellProtocol
+{
+    func clearFlag ()
+    {
+        if let prevFlagLayer = photoItemView.layer.sublayers?.first(where: {$0.name == "FlagLayer"})
+        {
+            prevFlagLayer.removeFromSuperlayer()
+        }
+        deselect()
+    }
+    
+    func imageRoundClip()
+    {
+        photoItemView.clearsContextBeforeDrawing = true
+        photoItemView.layer.cornerRadius = 10.0
+        photoItemView.layer.borderWidth = 1.0
+        photoItemView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
+        photoItemView.layer.masksToBounds = true
+        
+    }
+    
+    func drawFlag (flagColor: UIColor)
+    {
+        let flagLayer = FlagLayer()
+        flagLayer.fillColor = flagColor
+        flagLayer.name = "FlagLayer"
+        deselect()
+        
+        let imageSize = cellFrame.width
+        flagLayer.frame = CGRect(x:imageSize * 0.8, y: 0, width: imageSize * 0.2, height: imageSize * 0.25)
+        flagLayer.contentsScale = UIScreen.main.scale
+        
+        if let prevFlagLayer = photoItemView.layer.sublayers?.first(where: {$0.name == "FlagLayer"})
+        {
+            photoItemView.layer.replaceSublayer(prevFlagLayer, with: flagLayer)
+        }
+        else
+        {
+            photoItemView.layer.addSublayer(flagLayer)
+        }
+        
+        flagLayer.display()
+    }
+}
+
+
+class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
+{
+    func deselect() {photoIconView.alpha = 1}
+    func select()   {photoIconView.alpha = 0.5}
+
+    var photoItemView: UIView {return photoIconView}
+    var cellFrame: CGRect     {return frame}
+    
     @IBOutlet weak var photoIconView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
@@ -46,45 +108,6 @@ class PhotoSnippetCell: UICollectionViewCell
         imageRoundClip()
     }
     
-    func clearFlag ()
-    {
-        if let prevFlagLayer = photoIconView.layer.sublayers?.first(where: {$0.name == "FlagLayer"})
-        {
-          prevFlagLayer.removeFromSuperlayer()
-        }
-    }
-    
-    func imageRoundClip()
-    {
-       photoIconView.clearsContextBeforeDrawing = true
-       photoIconView.layer.cornerRadius = 10.0
-       photoIconView.layer.borderWidth = 1.0
-       photoIconView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
-       photoIconView.layer.masksToBounds = true
-      
-    }
-    
-    func drawFlag (flagColor: UIColor)
-    {
-        let flagLayer = FlagLayer()
-        flagLayer.fillColor = flagColor
-        flagLayer.name = "FlagLayer"
-        
-        let imageSize = frame.width
-        flagLayer.frame = CGRect(x:imageSize * 0.8, y: 0, width: imageSize * 0.2, height: imageSize * 0.25)
-        flagLayer.contentsScale = UIScreen.main.scale
-        
-        if let prevFlagLayer = photoIconView.layer.sublayers?.first(where: {$0.name == "FlagLayer"})
-        {
-          photoIconView.layer.replaceSublayer(prevFlagLayer, with: flagLayer)
-        }
-        else
-        {
-          photoIconView.layer.addSublayer(flagLayer)
-        }
-        
-        flagLayer.display()
-    }
     
 }
 

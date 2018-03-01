@@ -23,7 +23,8 @@ class PhotoSnippetViewController: UIViewController
   let lelfInset =  fl.sectionInset.left
   let rightInset = fl.sectionInset.right
   let itemSpace =  fl.minimumInteritemSpacing
-  return (width - lelfInset - rightInset - itemSpace * CGFloat(nphoto - 1)) / CGFloat(nphoto)
+  let size = (width - lelfInset - rightInset - itemSpace * CGFloat(nphoto - 1)) / CGFloat(nphoto)
+  return trunc (size) 
  }
 //---------------------------------------------------------------------------
  var nphoto: Int = 3
@@ -31,8 +32,7 @@ class PhotoSnippetViewController: UIViewController
  {
   didSet
   {
-    if nphoto != oldValue
-    {
+
      if isEditingPhotos
      {
       photoCollectionView.cancellUnfinishedMove()
@@ -43,9 +43,15 @@ class PhotoSnippetViewController: UIViewController
      }
      
      photoSnippet.nphoto = Int32(nphoto)
-     photoCollectionView.reloadItems(at: photoCollectionView.indexPathsForVisibleItems)
-                
-    }
+     let visibleCells = photoCollectionView.indexPathsForVisibleItems
+     photoCollectionView.reloadItems(at: visibleCells)
+    
+    /*photoCollectionView.visibleCells.filter{$0 is PhotoFolderCell}.forEach
+    {
+        ($0 as! PhotoFolderCell).photoCollectionView.reloadData()
+    }*/
+     
+    
    }
  }
     
@@ -61,6 +67,7 @@ class PhotoSnippetViewController: UIViewController
  var menuTapGR: UITapGestureRecognizer!
  var maxPhotosInRow = 10
  var minPhotosInRow = 1
+ let nPhotoFolderMap = [10: 2, 9: 2, 8: 2, 7: 2, 6: 2, 5: 2, 4: 3, 3: 3, 2: 3, 1: 5]
  var sectionTitles: [String]? = nil //section titles for sectioned photo collection view if any...
     
  var menuView: UIView? = nil
@@ -166,6 +173,11 @@ class PhotoSnippetViewController: UIViewController
    if isEditingMode
    {
      savePhotoSnippetData()
+   }
+
+   if !photoCollectionView.hasActiveDrag
+   {
+    deselectSelectedItems(in: photoCollectionView)
    }
         
  }
@@ -301,37 +313,13 @@ class PhotoSnippetViewController: UIViewController
    {
     allPhotosSelected = false
     selectBarButton.title = "★★★"
-    if let selectedItemsPaths = photoCollectionView.indexPathsForSelectedItems
-    {
-     for itemIndexPath in selectedItemsPaths
-     {
-      photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      photoItems2D[itemIndexPath.section][itemIndexPath.row].isSelected = false
-      if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
-      {
-        cell.photoIconView.alpha = 1
-      }
-     }
-    }
+    deselectSelectedItems(in: photoCollectionView)
    }
    else
    {
     allPhotosSelected = true
     selectBarButton.title = "☆☆☆"
-    for i in 0..<photoCollectionView.numberOfSections
-    {
-      for j in 0..<photoCollectionView.numberOfItems(inSection: i)
-      {
-        photoItems2D[i][j].isSelected = true
-        let itemIndexPath = IndexPath(item: j, section: i)
-        photoCollectionView.selectItem(at: itemIndexPath, animated: true, scrollPosition: .top)
-        if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
-        {
-          cell.photoIconView.alpha = 0.5
-        }
-      }
-    }
-    
+    selectAllPhotoItems(in: photoCollectionView)
    }
  }
 //---------------------------------------------------------------------------
@@ -345,18 +333,7 @@ class PhotoSnippetViewController: UIViewController
  {
    if isEditingPhotos
    {
-    if let selectedItemsPaths = photoCollectionView.indexPathsForSelectedItems
-    {
-     for itemIndexPath in selectedItemsPaths
-     {
-      photoCollectionView.deselectItem(at: itemIndexPath, animated: true)
-      photoItems2D[itemIndexPath.section][itemIndexPath.row].isSelected = false
-      if let cell = photoCollectionView.cellForItem(at: itemIndexPath) as? PhotoSnippetCell
-      {
-       cell.photoIconView.alpha = 1
-      }
-     }
-    }
+    deselectSelectedItems(in: photoCollectionView)
     allPhotosSelected = false
     isEditingPhotos = false
     photoCollectionView.isPhotoEditing = false
@@ -364,6 +341,11 @@ class PhotoSnippetViewController: UIViewController
     photoCollectionView.cellPanGR.isEnabled = false
     photoCollectionView.menuArrowSize = CGSize(width: 20.0, height: 50.0)
     photoCollectionView.menuItemSize = CGSize(width: 50.0, height: 50.0)
+    
+    photoCollectionView.visibleCells.filter{$0 is PhotoFolderCell}.forEach
+    {
+     ($0 as! PhotoFolderCell).photoCollectionView.isUserInteractionEnabled = true
+    }
     
     photoSnippetToolBar.setItems(currentToolBarItems, animated: true)
    }
@@ -376,6 +358,11 @@ class PhotoSnippetViewController: UIViewController
     photoCollectionView.menuArrowSize = CGSize.zero
     photoCollectionView.menuItemSize = CGSize(width: 64.0, height: 64.0)
     photoCollectionView.dismissCellMenu()
+    
+    photoCollectionView.visibleCells.filter{$0 is PhotoFolderCell}.forEach
+    {
+      ($0 as! PhotoFolderCell).photoCollectionView.isUserInteractionEnabled = false
+    }
     
     let doneItem = UIBarButtonItem(title: "⏎", style: .done, target: self, action: #selector(editPhotosPress))
     doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)

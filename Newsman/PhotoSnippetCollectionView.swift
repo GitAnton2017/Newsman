@@ -429,9 +429,9 @@ class PhotoSnippetCollectionView: UICollectionView
      {
       let pred =
       {(item: (offset : Int, element: [PhotoItemProtocol])) -> Bool in
-       let firstItem = item.element.first?.priorityFlag
-       let currRate = (firstItem == nil ? -1 : PhotoPriorityFlags(rawValue: (firstItem)!)!.rateIndex)
-       let rate =     (flagStr ==   nil ? -1 : PhotoPriorityFlags(rawValue:     flagStr!)!.rateIndex)
+       let firstItem = item.element.first?.priorityFlag ?? ""
+       let currRate = (firstItem.isEmpty ? -1 : PhotoPriorityFlags(rawValue: firstItem)!.rateIndex)
+       let rate =     (flagStr ==  nil ? -1 : PhotoPriorityFlags(rawValue:    flagStr!)!.rateIndex)
        return  rate < currRate
       }
                 
@@ -508,7 +508,6 @@ class PhotoSnippetCollectionView: UICollectionView
     {
       guard section.offset != indexPath.section else
       {
-       (cellForItem(at: indexPath) as! PhotoSnippetCell).photoIconView.alpha = 1.0
        return
       }
     
@@ -569,7 +568,8 @@ class PhotoSnippetCollectionView: UICollectionView
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
              if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              let cell = cellForItem(at: indexPath) as! PhotoSnippetCell
+              let cell = cellForItem(at: indexPath) as! PhotoSnippetCellProtocol
+              ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
               cell.drawFlag(flagColor: flagColor!)
               
               if photoGroupType != .makeGroups
@@ -587,7 +587,8 @@ class PhotoSnippetCollectionView: UICollectionView
             case "unflagLayer"?:
              if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              let cell = cellForItem(at: indexPath) as! PhotoSnippetCell
+              let cell = cellForItem(at: indexPath) as!  PhotoSnippetCellProtocol
+              ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
               cell.clearFlag()
               if photoGroupType != .makeGroups
               {

@@ -20,17 +20,17 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     switch (photoItems2D[indexPath.section][indexPath.row])
     {
      case let item as PhotoItem:
-      if let image = item.getImage(requiredImageWidth: imageSize)
-      {
-        let itemProvider = NSItemProvider(object: image)
+      //if let image = item.getImage(requiredImageWidth: imageSize)
+      //{
+        let itemProvider = NSItemProvider(object: item)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = indexPath
         return [dragItem]
-      }
-      else
+    //  }
+      /*else
       {
        return []
-      }
+      }*/
      case let item as PhotoFolderItem:
       if let photos = item.folder.photos?.allObjects as? [Photo]
       {
@@ -38,11 +38,11 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
         let photoItems = photos.map{PhotoItem(photo: $0)}
         photoItems.forEach
         {
-          if let image = $0.getImage(requiredImageWidth: imageSize)
-          {
-           let itemProvider = NSItemProvider(object: image)
+          //if let image = $0.getImage(requiredImageWidth: imageSize)
+         // {
+           let itemProvider = NSItemProvider(object: $0)
            dragItems.append(UIDragItem(itemProvider: itemProvider))
-          }
+         // }
         }
         
         dragItems.first?.localObject = indexPath
@@ -73,6 +73,10 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
         if !cell.isSelected
         {
            photoItems2D[indexPath.section][indexPath.row].isSelected = true
+           if let folderCell = cell as? PhotoFolderCell
+           {
+            folderCell.photoCollectionView.reloadData()
+           }
         }
         return getDragItems(forCellAt: indexPath)
         
@@ -95,6 +99,10 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
          if !cell.isSelected
          {
            photoItems2D[indexPath.section][indexPath.row].isSelected = true
+           if let folderCell = cell as? PhotoFolderCell
+           {
+             folderCell.photoCollectionView.reloadData()
+           }
          }
          return dragItems
        }
@@ -108,7 +116,15 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
 //-------------------------------------------------------------------------------------------------------
 //MARK: -
     
-    
+ func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
+ {
+   deselectSelectedItems(in: collectionView)
+ }
+ 
+ func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
+ {
+  deselectSelectedItems(in: collectionView)
+ }
     
 //MARK:----------------- ADDING DRAG ITEMS TO CURRENT DRAG SESSION DELEGATE METHOD ----------------------
 //-------------------------------------------------------------------------------------------------------
@@ -133,7 +149,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  }//unc collectionView(_ collectionView: UICollectionView,itemsForAddingTo...
 //-------------------------------------------------------------------------------------------------------
 //MARK: -
-    
+
     
 //MARK:----------------------------- DROPPING PROPOSAL DELEGATE METHOD ----------------------------------
 //-------------------------------------------------------------------------------------------------------
@@ -154,7 +170,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     
     
 //---------------------------------------------------------------------------------------------------------
- typealias DropPhotoItem = (photoItem: PhotoItemProtocol, dropItem: UICollectionViewDropItem)
+ typealias DropPhotoItem = (photoItem: PhotoItemProtocol, dropItems: [UICollectionViewDropItem])
 //---------------------------------------------------------------------------------------------------------
   
     
@@ -174,12 +190,25 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     
     dropPhotoItems.forEach
     {
+        
        let sourceIndexPath = photoItemIndexPath(photoItem: $0.photoItem)
        photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
        collectionView.deleteItems(at: [sourceIndexPath])
-       coordinator.drop($0.dropItem.dragItem, toItemAt: destinationIndexPath)
-    }
-   
+    
+
+       /*if $0.dropItems.count == 1
+       {
+        coordinator.drop($0.dropItems[0].dragItem, toItemAt: destinationIndexPath)
+       }
+       else if let dropCellRect = collectionView.cellForItem(at: destinationIndexPath)?.bounds
+       {
+        $0.dropItems.forEach
+        {
+         coordinator.drop($0.dragItem, intoItemAt: destinationIndexPath, rect: dropCellRect)
+        }
+       }*/
+    }//photoItems.forEach...
+    
     PhotoFolderItem.removeEmptyFolders(from: photoSnippet)
   }
  }//func performMergeIntoFolder (_ collectionView: UICollectionView...
@@ -197,19 +226,30 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
 //---------------------------------------------------------------------------------------------------------
  {
    dropPhotoItems.forEach
-   {
-    var item = $0
-    item.photoItem.isSelected = false
+   {item in
     let sourceIndexPath = photoItemIndexPath(photoItem: item.photoItem)
     let photoCV = collectionView as! PhotoSnippetCollectionView
     photoCV.movePhoto(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
-    coordinator.drop(item.dropItem.dragItem, toItemAt: destinationIndexPath)
-   }
+    
+    
+    /*if item.dropItems.count == 1
+    {
+      coordinator.drop($0.dropItems[0].dragItem, toItemAt: destinationIndexPath)
+    }
+    else if let dropCellRect = collectionView.cellForItem(at: destinationIndexPath)?.bounds
+    {
+     item.dropItems.forEach
+     {
+      coordinator.drop($0.dragItem, intoItemAt: destinationIndexPath, rect: dropCellRect)
+     }
+    }*/
+   }//photoItems.forEach...
+   
  }//func performItemsMove (_ collectionView: UICollectionView...
 //---------------------------------------------------------------------------------------------------------
 //MARK: -
   
-    
+
     
 //MARK:------------------ MOVING DRAGED PHOTO ITEMS INSIDE CV CREATED AT DESTINATION IP -------------------
 //---------------------------------------------------------------------------------------------------------
@@ -225,12 +265,28 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
    //counting only drag items having assigned source index path to localObject field...
    let itemsCount = coordinator.items.filter{$0.dragItem.localObject != nil}.count
     
-   for dropItem in coordinator.items
+   for dropItem in coordinator.items.enumerated()
    {
-    if let indexPath = dropItem.dragItem.localObject as? IndexPath
+    if let indexPath = dropItem.element.dragItem.localObject as? IndexPath
     {
      let photoItem = photoItems2D[indexPath.section][indexPath.row]
-     dropPhotoItems.append((photoItem, dropItem))
+     var dropItems: [UICollectionViewDropItem] = []
+        
+     if let folderItem  = photoItem as? PhotoFolderItem, let photos = folderItem.folder.photos?.allObjects as? [Photo]
+     {
+       let N = photos.count
+       let index = dropItem.offset
+       for i in index..<index + N
+       {
+        dropItems.append(coordinator.items[i])
+       }
+     }
+     else
+     {
+      dropItems.append(dropItem.element)
+     }
+        
+     dropPhotoItems.append((photoItem: photoItem, dropItems: dropItems))
      //if one of the index pathes of the draged items equals to destination index path and number of items more than one...
      //we try to merge items into single folder...
         
@@ -305,8 +361,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
 //---------------------------------------------------------------------------------------------------------
 //MARK: -
     
-    
-    
+   
     
 //MARK:----------------------- MOVING DRAGED PHOTO ITEMS BETWEEN CVs --------------------------------------
 //---------------------------------------------------------------------------------------------------------
@@ -319,10 +374,8 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
    if dragSessionVC.photoSnippet === photoSnippet
    {
     dragSessionVC.photoItems2D.reduce([], {$0 + $1.filter({$0.isSelected})}).forEach
-    {
-     var item = $0
-     let sourceIndexPath = photoItemIndexPath(photoItem: item)
-     item.isSelected = false
+    {movedItem in
+     let sourceIndexPath = photoItemIndexPath(photoItem: movedItem)
      let photoCV = collectionView as! PhotoSnippetCollectionView
      photoCV.movePhoto(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
  
@@ -335,17 +388,17 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     
     (movedPhotoItems + movedFolderItems).forEach
     {
-      photoItems2D[destinationIndexPath.section].insert($0, at: destinationIndexPath.row)
+      var movedItem = $0
+      photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
       if photoCollectionView.photoGroupType == .makeGroups
       {
-       var item = $0
-       item.priorityFlag = sectionTitles?[destinationIndexPath.section]
+       movedItem.priorityFlag = sectionTitles?[destinationIndexPath.section]
       }
       (collectionView as! PhotoSnippetCollectionView).insertItems(at: [destinationIndexPath])
     }
    }
  
-   coordinator.session.items.forEach{coordinator.drop($0, toItemAt: destinationIndexPath)}
+   //coordinator.session.items.forEach{coordinator.drop($0, toItemAt: destinationIndexPath)}
  
  }//func movePhotosBetweenCollectionViews (_ collectionView: UICollectionView...
 //---------------------------------------------------------------------------------------------------------
@@ -369,11 +422,13 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
      {
       movePhotosBetweenCollectionViews (collectionView, from: dragSessionVC, performDropWith: coordinator, to: destinationIndexPath)
       coordinator.session.localDragSession?.localContext = nil
+      
      }
      else
      {
       movePhotosInsideCollectionView (collectionView, performDropWith: coordinator, to: destinationIndexPath)
      }
+    
     case .copy:
       copyPhotosFromSideApp (collectionView, performDropWith: coordinator, to: destinationIndexPath)
     

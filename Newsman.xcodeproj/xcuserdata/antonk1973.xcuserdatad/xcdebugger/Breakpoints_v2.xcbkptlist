@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "539542763.4513839"
+            timestampString = "541587230.486042"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "539542763.451436"
+            timestampString = "541587230.486117"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "204"
@@ -58,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "539542763.451483"
+            timestampString = "541587230.486171"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "202"
@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "539542763.451529"
+            timestampString = "541587230.486221"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "17"
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.877345"
+            timestampString = "541617485.8253911"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "PhotoSnippetViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -378,7 +378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetImagesPickerDelegate.swift"
-            timestampString = "541013279.4471"
+            timestampString = "541613996.3595279"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "9"
@@ -394,11 +394,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.877573"
+            timestampString = "541617485.825596"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.877634"
+            timestampString = "541617485.8256561"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "162"
-            endingLineNumber = "162"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "viewWillDisappear(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -426,43 +426,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDelegate.swift"
-            timestampString = "541013279.447477"
+            timestampString = "541603494.591351"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/PhotoSnippetCollectionViewDelegate.swift"
-            timestampString = "541013279.447525"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/PhotoSnippetCollectionViewDelegate.swift"
-            timestampString = "541013279.447566"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
             landmarkName = "collectionView(_:didDeselectItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -473,28 +441,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.877835"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "354"
-            endingLineNumber = "354"
-            landmarkName = "togglePhotoEditingMode()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.717607"
+            timestampString = "541617485.825729"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "627"
-            endingLineNumber = "627"
+            startingLineNumber = "628"
+            endingLineNumber = "628"
             landmarkName = "locateCellMenu()"
             landmarkType = "7">
             <Locations>
@@ -538,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.7176501"
+            timestampString = "541617485.826128"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "718"
-            endingLineNumber = "718"
+            startingLineNumber = "719"
+            endingLineNumber = "719"
             landmarkName = "setItemsLayers(menuItems:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,7 +506,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.717689"
+            timestampString = "541617485.82643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "118"
@@ -570,11 +522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.877937"
+            timestampString = "541617485.826721"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "525"
-            endingLineNumber = "525">
+            startingLineNumber = "512"
+            endingLineNumber = "512">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -616,11 +568,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.717741"
+            timestampString = "541617485.826772"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "546"
-            endingLineNumber = "546"
+            startingLineNumber = "545"
+            endingLineNumber = "545"
             landmarkName = "tapCellMenuItem(gr:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -632,11 +584,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.878006"
+            timestampString = "541617485.8270299"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "525"
-            endingLineNumber = "525">
+            startingLineNumber = "512"
+            endingLineNumber = "512">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -646,11 +598,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.878058"
+            timestampString = "541617485.82708"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
+            startingLineNumber = "248"
+            endingLineNumber = "248"
             landmarkName = "PhotoSnippetViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -662,7 +614,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.717804"
+            timestampString = "541617485.827126"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "201"
@@ -678,7 +630,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.447733"
+            timestampString = "541617485.8273751"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "7"
@@ -756,7 +708,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.7179151"
+            timestampString = "541617485.827433"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "575"
@@ -772,7 +724,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.717953"
+            timestampString = "541617485.827691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "582"
@@ -820,7 +772,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.447885"
+            timestampString = "541617485.827947"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "75"
@@ -836,7 +788,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionView.swift"
-            timestampString = "540999928.718053"
+            timestampString = "541617485.8279999"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "483"
@@ -852,11 +804,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetViewController.swift"
-            timestampString = "540923638.878348"
+            timestampString = "541617485.828254"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "163"
-            endingLineNumber = "163"
+            startingLineNumber = "170"
+            endingLineNumber = "170"
             landmarkName = "viewWillDisappear(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -868,7 +820,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.448033"
+            timestampString = "541617485.828306"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "44"
@@ -884,7 +836,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.44811"
+            timestampString = "541617485.82838"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
@@ -900,7 +852,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.44818"
+            timestampString = "541617485.828428"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "67"
@@ -916,7 +868,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.448264"
+            timestampString = "541617485.828474"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "55"
@@ -932,7 +884,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.448355"
+            timestampString = "541617485.828521"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "68"
@@ -948,13 +900,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.448455"
+            timestampString = "541603494.592036"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "62"
             endingLineNumber = "62"
-            landmarkName = "collectionView(_:itemsForBeginning:at:)"
-            landmarkType = "7">
+            landmarkName = "PhotoSnippetViewController"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -964,7 +916,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.448552"
+            timestampString = "541603494.592085"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
@@ -980,11 +932,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.448645"
+            timestampString = "541603494.592128"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "collectionView(_:itemsForBeginning:at:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -996,11 +948,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.44873"
+            timestampString = "541603494.592173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "collectionView(_:itemsForBeginning:at:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1012,11 +964,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.448815"
+            timestampString = "541603494.5922149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "256"
+            endingLineNumber = "256"
             landmarkName = "movePhotosInsideCollectionView(_:performDropWith:to:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1028,11 +980,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoItem.swift"
-            timestampString = "541013279.4489011"
+            timestampString = "541603494.592261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
+            startingLineNumber = "156"
+            endingLineNumber = "156"
             landmarkName = "init(photoSnippet:)"
             landmarkType = "7">
             <Locations>
@@ -1044,7 +996,7 @@
                   moduleName = "Newsman"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoItem.swift"
-                  timestampString = "541008703.9828089"
+                  timestampString = "541190494.778819"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "150"
@@ -1059,7 +1011,7 @@
                   moduleName = "Newsman"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoItem.swift"
-                  timestampString = "541008703.9848469"
+                  timestampString = "541190494.780708"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "150"
@@ -1076,11 +1028,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoItem.swift"
-            timestampString = "541013279.448975"
+            timestampString = "541603494.592582"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "init(photoSnippet:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1092,11 +1044,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449048"
+            timestampString = "541617485.8286541"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "414"
-            endingLineNumber = "414"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1108,11 +1060,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449113"
+            timestampString = "541617485.828703"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "387"
-            endingLineNumber = "387"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "getFolderCell(_:at:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1124,11 +1076,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoFolderCell.swift"
-            timestampString = "541013279.449181"
+            timestampString = "541617485.828753"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1140,11 +1092,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoFolderCell.swift"
-            timestampString = "541013279.449239"
+            timestampString = "541617485.828799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
             landmarkName = "collectionView(_:numberOfItemsInSection:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1156,11 +1108,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.4492919"
+            timestampString = "541617485.828843"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "390"
-            endingLineNumber = "390"
+            startingLineNumber = "470"
+            endingLineNumber = "470"
             landmarkName = "getFolderCell(_:at:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1172,11 +1124,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoFolderCell.swift"
-            timestampString = "541013279.449351"
+            timestampString = "541617485.8288881"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "73"
-            endingLineNumber = "73"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "imageSize"
             landmarkType = "24">
          </BreakpointContent>
@@ -1188,13 +1140,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449398"
+            timestampString = "541617485.828931"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "419"
-            endingLineNumber = "419"
-            landmarkName = "collectionView(_:cellForItemAt:)"
-            landmarkType = "7">
+            startingLineNumber = "501"
+            endingLineNumber = "501">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1204,7 +1154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449455"
+            timestampString = "541617485.828979"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "15"
@@ -1220,11 +1170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.44951"
+            timestampString = "541603494.593062"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
             landmarkName = "movePhotosInsideCollectionView(_:performDropWith:to:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1236,11 +1186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoItem.swift"
-            timestampString = "541013279.449577"
+            timestampString = "541603494.593105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "180"
-            endingLineNumber = "180"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "init(photoSnippet:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1252,7 +1202,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449639"
+            timestampString = "541617485.829054"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "22"
@@ -1268,11 +1218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449692"
+            timestampString = "541617485.829102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "391"
-            endingLineNumber = "391"
+            startingLineNumber = "471"
+            endingLineNumber = "471"
             landmarkName = "getFolderCell(_:at:with:)"
             landmarkType = "7">
             <Locations>
@@ -1316,12 +1266,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.4497451"
+            timestampString = "541617485.829149"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "404"
-            endingLineNumber = "404"
-            landmarkName = "getFolderCell(_:at:with:)"
+            startingLineNumber = "486"
+            endingLineNumber = "486"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1332,13 +1282,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.449798"
+            timestampString = "541617485.829195"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "401"
-            endingLineNumber = "401"
-            landmarkName = "getFolderCell(_:at:with:)"
-            landmarkType = "7">
+            startingLineNumber = "481"
+            endingLineNumber = "481"
+            landmarkName = "PhotoSnippetViewController"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1348,11 +1298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.449851"
+            timestampString = "541603494.5934891"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
             landmarkName = "performMergeIntoFolder(_:performDropWith:to:using:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1364,11 +1314,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.449911"
+            timestampString = "541603494.593532"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
+            startingLineNumber = "378"
+            endingLineNumber = "378"
             landmarkName = "movePhotosBetweenCollectionViews(_:from:performDropWith:to:)"
             landmarkType = "7">
             <Locations>
@@ -1412,7 +1362,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.4499609"
+            timestampString = "541603494.593575"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "32"
@@ -1428,7 +1378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.450009"
+            timestampString = "541603494.593619"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "31"
@@ -1444,7 +1394,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.450057"
+            timestampString = "541603494.593661"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
@@ -1460,7 +1410,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.450103"
+            timestampString = "541603494.5937051"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "40"
@@ -1476,7 +1426,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.45015"
+            timestampString = "541603494.593747"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "38"
@@ -1492,11 +1442,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoItem.swift"
-            timestampString = "541013279.4501981"
+            timestampString = "541603494.5937901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
+            startingLineNumber = "643"
+            endingLineNumber = "643"
             landmarkName = "moveFolders(from:to:)"
             landmarkType = "7">
             <Locations>
@@ -1508,11 +1458,11 @@
                   moduleName = "Newsman"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoItem.swift"
-                  timestampString = "541001478.520426"
+                  timestampString = "541341549.3156689"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "511"
-                  endingLineNumber = "511"
+                  startingLineNumber = "569"
+                  endingLineNumber = "569"
                   offsetFromSymbolStart = "44">
                </Location>
                <Location
@@ -1523,11 +1473,11 @@
                   moduleName = "Newsman"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoItem.swift"
-                  timestampString = "541001478.522813"
+                  timestampString = "541341549.317513"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "511"
-                  endingLineNumber = "511"
+                  startingLineNumber = "569"
+                  endingLineNumber = "569"
                   offsetFromSymbolStart = "16">
                </Location>
             </Locations>
@@ -1540,11 +1490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoItem.swift"
-            timestampString = "541013279.450247"
+            timestampString = "541603494.5940011"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "getImage(requiredImageWidth:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1556,13 +1506,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
-            timestampString = "541013279.450303"
+            timestampString = "541603494.5942039"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "PhotoSnippetViewController"
-            landmarkType = "21">
+            startingLineNumber = "112"
+            endingLineNumber = "112"
+            landmarkName = "collectionView(_:itemsForBeginning:at:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1572,11 +1522,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoItem.swift"
-            timestampString = "541013279.4503551"
+            timestampString = "541603494.594252"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "deleteImages()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1588,12 +1538,588 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
-            timestampString = "541013279.450406"
+            timestampString = "541617485.829366"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "110"
             endingLineNumber = "110"
             landmarkName = "photoItemIndexPath(photoItem:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoFolderCell.swift"
+            timestampString = "541617485.829415"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoFolderCell.swift"
+            timestampString = "541617485.829459"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
+            timestampString = "541617485.829506"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "472"
+            endingLineNumber = "472"
+            landmarkName = "getFolderCell(_:at:with:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Newsman.PhotoSnippetViewController.getFolderCell(__ObjC.UICollectionView, at: Foundation.IndexPath, with: Newsman.PhotoFolderItem) -&gt; Newsman.PhotoFolderCell"
+                  moduleName = "Newsman"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoSnippetCollectionViewDataSource.swift"
+                  timestampString = "541092615.96305"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "392"
+                  endingLineNumber = "392"
+                  offsetFromSymbolStart = "712">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Newsman.Photo) -&gt; Newsman.PhotoItem in Newsman.PhotoSnippetViewController.getFolderCell(__ObjC.UICollectionView, at: Foundation.IndexPath, with: Newsman.PhotoFolderItem) -&gt; Newsman.PhotoFolderCell"
+                  moduleName = "Newsman"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoSnippetCollectionViewDataSource.swift"
+                  timestampString = "541092615.964819"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "392"
+                  endingLineNumber = "392"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.594587"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "performMergeIntoFolder(_:performDropWith:to:using:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.594631"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "386"
+            endingLineNumber = "386"
+            landmarkName = "movePhotosBetweenCollectionViews(_:from:performDropWith:to:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Newsman.PhotoSnippetViewController.movePhotosBetweenCollectionViews(__ObjC.UICollectionView, from: Newsman.PhotoSnippetViewController, performDropWith: __ObjC.UICollectionViewDropCoordinator, to: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "Newsman"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoSnippetDragDropDelegate.swift"
+                  timestampString = "541250848.238891"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "333"
+                  endingLineNumber = "333"
+                  offsetFromSymbolStart = "788">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "implicit closure #1 : @autoclosure () throws -&gt; Swift.Array&lt;Newsman.PhotoItem&gt; in Newsman.PhotoSnippetViewController.movePhotosBetweenCollectionViews(__ObjC.UICollectionView, from: Newsman.PhotoSnippetViewController, performDropWith: __ObjC.UICollectionViewDropCoordinator, to: Foundation.IndexPath) -&gt; ()"
+                  moduleName = "Newsman"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoSnippetDragDropDelegate.swift"
+                  timestampString = "541250848.241218"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "333"
+                  endingLineNumber = "333"
+                  offsetFromSymbolStart = "68">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.594674"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "228"
+            endingLineNumber = "228"
+            landmarkName = "performItemsMove(_:performDropWith:to:using:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoFolderCell.swift"
+            timestampString = "541617485.82959"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoFolderCell.swift"
+            timestampString = "541617485.82965"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.594752"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "getDragItems(forCellAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.594839"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "494"
+            endingLineNumber = "494"
+            landmarkName = "getImage(requiredImageWidth:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoFolderCell.swift"
+            timestampString = "541617485.829715"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.595103"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
+            landmarkName = "getImage(requiredImageWidth:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.59531"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "531"
+            endingLineNumber = "531"
+            landmarkName = "getImage(requiredImageWidth:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.595513"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
+            landmarkName = "url"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
+            timestampString = "541617485.829789"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "437"
+            endingLineNumber = "437"
+            landmarkName = "getFolderCell(_:at:with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.595759"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "collectionView(_:itemsForBeginning:at:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.595804"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
+            landmarkName = "movePhotosInsideCollectionView(_:performDropWith:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.595848"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "isSelected"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.596041"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "596"
+            endingLineNumber = "596"
+            landmarkName = "movePhotos(from:to:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Newsman.PhotoItem.movePhotos(from: Newsman.PhotoSnippet, to: Newsman.PhotoSnippet) -&gt; Swift.Optional&lt;Swift.Array&lt;Newsman.PhotoItem&gt;&gt;"
+                  moduleName = "Newsman"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoItem.swift"
+                  timestampString = "541428605.4812599"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "528"
+                  endingLineNumber = "528"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Newsman.Photo) -&gt; Swift.Bool in static Newsman.PhotoItem.movePhotos(from: Newsman.PhotoSnippet, to: Newsman.PhotoSnippet) -&gt; Swift.Optional&lt;Swift.Array&lt;Newsman.PhotoItem&gt;&gt;"
+                  moduleName = "Newsman"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/PhotoItem.swift"
+                  timestampString = "541428605.48306"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "528"
+                  endingLineNumber = "528"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.59624"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "602"
+            endingLineNumber = "602"
+            landmarkName = "movePhotos(from:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.596442"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "600"
+            endingLineNumber = "600"
+            landmarkName = "movePhotos(from:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.5966409"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "650"
+            endingLineNumber = "650"
+            landmarkName = "moveFolders(from:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetDragDropDelegate.swift"
+            timestampString = "541603494.596843"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "389"
+            endingLineNumber = "389"
+            landmarkName = "movePhotosBetweenCollectionViews(_:from:performDropWith:to:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
+            timestampString = "541617485.829918"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "460"
+            endingLineNumber = "460"
+            landmarkName = "getFolderCell(_:at:with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDataSource.swift"
+            timestampString = "541617485.829963"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "462"
+            endingLineNumber = "462"
+            landmarkName = "getFolderCell(_:at:with:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.597013"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "234"
+            endingLineNumber = "234"
+            landmarkName = "loadData(withTypeIdentifier:forItemProviderCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoItem.swift"
+            timestampString = "541603494.597244"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
+            landmarkName = "loadData(withTypeIdentifier:forItemProviderCompletionHandler:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDelegate.swift"
+            timestampString = "541603494.5974489"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "collectionView(_:didDeselectItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDelegate.swift"
+            timestampString = "541603494.597491"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "collectionView(_:didSelectItemAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/PhotoSnippetCollectionViewDelegate.swift"
+            timestampString = "541603494.597528"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "collectionView(_:didDeselectItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -89,7 +89,7 @@ extension PhotoSnippetViewController
   if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
   {
     photoItems.append(allPhotos.filter{$0.folder == nil}.map{PhotoItem(photo: $0)})
-    if let folders = photoSnippet.photos?.allObjects as? [PhotoFolder]
+    if let folders = photoSnippet.folders?.allObjects as? [PhotoFolder]
     {
       photoItems[0].append(contentsOf: folders.map{PhotoFolderItem(folder: $0)})
     }
@@ -119,32 +119,74 @@ extension PhotoSnippetViewController
 //MARK: -
     
 
+//MARK: ----------------- Deselect Selected Photo Items ----------------------
+//----------------------------------------------------------------------------
+func deselectSelectedItems(in collectionView: UICollectionView)
+//----------------------------------------------------------------------------
+{
+    photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.forEach
+    {section in
+      section.element.enumerated().filter{$0.element.isSelected}.forEach
+      {row in
+        var item = row.element
+        item.isSelected = false
+        let indexPath = IndexPath(row: row.offset, section: section.offset)
+        (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCellProtocol).deselect()
+       }
+    }
+   
+}// func deselectSelectedItems(in collectionView: UICollectionView)...
+//----------------------------------------------------------------------------
+//MARK: -
     
+ 
+    
+//MARK: -------------------- Select All Photo Items --------------------------
+//----------------------------------------------------------------------------
+func selectAllPhotoItems(in collectionView: UICollectionView)
+//----------------------------------------------------------------------------
+{
+    photoItems2D.enumerated().forEach
+    {section in
+      section.element.enumerated().forEach
+      {row in
+        var item = row.element
+        item.isSelected = true
+        let indexPath = IndexPath(row: row.offset, section: section.offset)
+        (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCellProtocol).select()
+      }
+    }
+   
+}// selectAllPhotoItems(in collectionView: UICollectionView)...
+ //----------------------------------------------------------------------------
+ //MARK: -
+ 
 //MARK: ----------------- Deleting Selected Photo Items ----------------------
 //----------------------------------------------------------------------------
  func deleteSelectedPhotos()
 //----------------------------------------------------------------------------
  {
-  for (sectionIndex, section) in photoItems2D.enumerated().filter({$0.element.first(where: {$0.isSelected}) != nil}).sorted(by: {$0.offset > $1.offset})
-  {
-      for (itemIndex, _) in section.enumerated().filter({$0.element.isSelected}).sorted(by: {$0.offset > $1.offset})
-      {
-          let deletedItem = photoItems2D[sectionIndex].remove(at: itemIndex)
-          deletedItem.deleteImages()
-          let itemIndexPath = IndexPath(row: itemIndex, section: sectionIndex)
-          photoCollectionView.deleteItems(at: [itemIndexPath])
-      }
-      if photoCollectionView.photoGroupType == .makeGroups
-      {
-          photoCollectionView.reloadSections([sectionIndex])
-      }
+  photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.sorted{$0.offset > $1.offset}.forEach
+  {section in
+    section.element.enumerated().filter{$0.element.isSelected}.sorted{$0.offset > $1.offset}.forEach
+    {row in
+       let deletedItem = photoItems2D[section.offset].remove(at: row.offset)
+       deletedItem.deleteImages()
+       let indexPath = IndexPath(row: row.offset, section: section.offset)
+       photoCollectionView.deleteItems(at: [indexPath])
+    }
+    
+    if photoCollectionView.photoGroupType == .makeGroups
+    {
+       photoCollectionView.reloadSections([section.offset])
+    }
   }
   
-  for section in photoItems2D.enumerated().filter({$0.element.count == 0}).sorted(by: {$0.offset > $1.offset})
-  {
-      photoItems2D.remove(at: section.offset)
-      sectionTitles?.remove(at: section.offset)
-      photoCollectionView.deleteSections([section.offset])
+  photoItems2D.enumerated().filter{$0.element.count == 0}.sorted{$0.offset > $1.offset}.forEach
+  {section in
+    photoItems2D.remove(at: section.offset)
+    sectionTitles?.remove(at: section.offset)
+    photoCollectionView.deleteSections([section.offset])
   }
   
  }// func deleteSelectedPhotos()...
@@ -332,7 +374,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
   if let path = photoCV.menuIndexPath, path == indexPath
   {
-   let cellPoint = CGPoint(x: round(cell.frame.width * photoCV.menuShift.x), y: round(cell.frame.height * photoCV.menuShift.y))
+   let cellPoint = CGPoint(x: round(cell.frame.width * photoCV.menuShift.x),
+                           y: round(cell.frame.height * photoCV.menuShift.y))
     
    let menuPoint = cell.photoIconView.layer.convert(cellPoint, to: photoCV.layer)
     
@@ -341,6 +384,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   }
  
   cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
+
     
   if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
   {
@@ -386,20 +430,50 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  {
    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCell", for: indexPath) as! PhotoFolderCell
 
+    print ("indexPath =\(indexPath)")
+    
+    let photoCV = collectionView as! PhotoSnippetCollectionView
+    
+    photoCV.layer.addSublayer(cell.layer)
+    
+    if let path = photoCV.menuIndexPath, path == indexPath
+    {
+        let cellPoint = CGPoint(x: round(cell.frame.width * photoCV.menuShift.x),
+                                y: round(cell.frame.height * photoCV.menuShift.y))
+        
+        let menuPoint = cell.photoCollectionView.layer.convert(cellPoint, to: photoCV.layer)
+        
+        photoCV.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuPoint, menuItems: mainMenuItems)
+        
+    }
+    
+    cell.photoCollectionView.isUserInteractionEnabled = !isEditingPhotos
+ 
+    if let flag = photoFolder.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
+    {
+        cell.drawFlag(flagColor: color)
+    }
+    else
+    {
+        cell.clearFlag()
+    }
+    
     
     if let items = photoFolder.folder.photos?.allObjects as? [Photo]
     {
-        cell.ds.photoItems = items.map{PhotoItem(photo: $0)}
+        cell.photoItems = items.map{PhotoItem(photo: $0)}
         
     }
     else
     {
-        cell.ds.photoItems = []
+        cell.photoItems = []
     }
     
+    cell.nphoto = nPhotoFolderMap[nphoto]!
+    cell.frameSize = imageSize
 
-    cell.photoCollectionView.reloadData()
-   
+        
+
     
    return cell
     

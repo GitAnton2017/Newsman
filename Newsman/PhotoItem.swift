@@ -1,6 +1,7 @@
 import Foundation
 import UIKit
 import CoreData
+import MobileCoreServices
 
 //MARK: ---------------- Image Risize Extension ---------------
 extension UIImage
@@ -97,11 +98,16 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
         do
         {
           try FileManager.default.removeItem(at: url)
+            
+          print("*****************************************************************")
           print("IMAGE FOLDER DIRECTORY DELETED SUCCESSFULLY AT PATH:\n\(url.path)")
+          print("*****************************************************************")
         }
         catch
         {
+          print("******************************************************************************************")
           print("ERROR DELETING IMAGE FOLDER DIRECTORY AT PATH:\n\(url.path)\n\(error.localizedDescription)")
+          print("******************************************************************************************")
         }
         
         //delete cascade the folder and photos from context and save...
@@ -133,7 +139,7 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
       set
       {
         folder.isSelected = newValue
-        folder.photos?.forEach{($0 as! Photo).isSelected = newValue}
+        folder.photos?.forEach {($0 as! Photo).isSelected = newValue}
       }
     }
 
@@ -161,18 +167,27 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
       do
       {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
-        print ("PHOTO SNIPPET NEW PHOTO FOLDER DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(url.path)")
+        
+        print("******************************************************************************************")
+        print ("PHOTO SNIPPET NEW PHOTO FOLDER DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\n \(url.path)")
+        print("******************************************************************************************")
         
         try selectedPhotos.map{PhotoItem(photo: $0)}.forEach
         {
+         $0.isSelected = false
          let newPhotoFolderURL = url.appendingPathComponent($0.id.uuidString)
          try FileManager.default.moveItem(at: $0.url, to: newPhotoFolderURL)
+            
+         print("******************************************************************************************")
          print("IMAGE FILE MOVED SUCCESSFULLY TO NEW PHOTO FOLDER AT PATH:\n\(newPhotoFolderURL.path)")
+         print("******************************************************************************************")
         }
       }
       catch
       {
+        print("******************************************************************************************")
         print("ERROR MOVING IMAGES TO NEW FOLDER:\n \(error.localizedDescription)")
+        print("******************************************************************************************")
       }
       
       newFolder.addToPhotos(NSSet(array: selectedPhotos))
@@ -202,8 +217,80 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
 
 //MARK: ----------------- Single Photo Item Class ----------------
 
+extension PhotoItem: NSItemProviderWriting
+{
+    enum UTIError : Error
+    {
+      case UnknownType
+    }
+    static var writableTypeIdentifiersForItemProvider: [String]
+    {
+        return [kUTTypeJPEG as String]
+    }
+    
+    func loadData(withTypeIdentifier typeIdentifier: String,
+                  forItemProviderCompletionHandler completionHandler: @escaping (Data?, Error?) -> Void) -> Progress?
+    {
+        switch typeIdentifier
+        {
+        case kUTTypeJPEG as String as String:
+         PhotoItem.queue.addOperation
+         {
+            do
+            {
+                print("******************************************************************************")
+                print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM URL : \n \(self.url.path)...")
+                print("******************************************************************************")
+                
+                let data = try Data(contentsOf: self.url)
+                completionHandler(data, nil)
+                
+            }
+            catch
+            {
+                print("******************************************************************************")
+                print("ERROR OCCURED WHEN READING IMAGE DATA FOR DRAG AND DROP FROM URL!\n\(error.localizedDescription)")
+                print("******************************************************************************")
+                completionHandler(nil, error)
+                
+            } //do-try-catch...
+         }
+         default:
+            completionHandler(nil, UTIError.UnknownType)
+            
+        }
+        
+        return nil
+    }
+    
+    
+} //extension PhotoItem: NSItemProviderWriting...
+
+/*extension PhotoItem: NSItemProviderReading
+{
+    static var readableTypeIdentifiersForItemProvider: [String]
+    {
+        return [photoItemUTI]
+    }
+    
+    static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> Self
+    {
+        switch typeIdentifier {
+         case PhotoItem.photoItemUTI:
+    
+     
+         
+         default: throw UTIError.UnknownType
+            
+        }
+    }
+    
+    
+}*/
+
 class PhotoItem: NSObject, PhotoItemProtocol
 {
+  static let photoItemUTI = "photoitem.newsman"
 //------------------------------------------
     var photo: Photo
 //------------------------------------------
@@ -293,7 +380,9 @@ class PhotoItem: NSObject, PhotoItemProtocol
         }
         else
         {
-            print ("IMAGE PROCESSING ERROR...")
+            print("*****************************")
+            print("IMAGE PROCESSING ERROR!!!!!!!")
+            print("*****************************")
             return nil
         }
     }
@@ -327,7 +416,9 @@ class PhotoItem: NSObject, PhotoItemProtocol
          }
          catch
          {
+          print("***************************************************")
           print ("JPEG WRITE ERROR: \(error.localizedDescription)")
+          print("**************************************************")
          }
       }
 
@@ -374,13 +465,19 @@ class PhotoItem: NSObject, PhotoItemProtocol
         }
         else
         {
-         print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL!")
+         print("**************************************************************************")
+         print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL: \n\(url.path)!")
+         print("**************************************************************************")
+            
          return nil
         }
        }
        catch
        {
+         print("******************************************************************************")
          print("ERROR OCCURED WHEN READING IMAGE DATA FROM URL!\n\(error.localizedDescription)")
+         print("******************************************************************************")
+        
          return nil
        } //do-try-catch...
      } //if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)]...
@@ -414,8 +511,12 @@ class PhotoItem: NSObject, PhotoItemProtocol
         if let cache = caches.min(by: {$0.key < $1.key})?.value,
            let biggerImage = cache.object(forKey: self.id.uuidString as NSString),
            let cachedImage = self.cacheThumbnailImage(imageID: self.id.uuidString, image: biggerImage, width: Int(requiredImageWidth))
+           
         {
-          OperationQueue.main.addOperation{completion(cachedImage)}
+          OperationQueue.main.addOperation
+          {
+            completion(cachedImage)
+          }
           //print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
           return
         }
@@ -423,22 +524,38 @@ class PhotoItem: NSObject, PhotoItemProtocol
         
         do
         {
+         print("******************************************************************************")
+         print ("ATTEMPT OF READING IMAGE FROM URL: \n \(self.url.path)...")
+         print("******************************************************************************")
+            
          let data = try Data(contentsOf: self.url)
          if let savedImage = UIImage(data: data, scale: 1),
-         let cachedImage = self.cacheThumbnailImage(imageID: self.id.uuidString, image: savedImage, width: Int(requiredImageWidth))
+            let cachedImage = self.cacheThumbnailImage(imageID: self.id.uuidString, image: savedImage, width: Int(requiredImageWidth))
+            
          {
           //print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
-          OperationQueue.main.addOperation{completion(cachedImage)}
+          OperationQueue.main.addOperation
+          {
+            
+            completion(cachedImage)
+            
+          }
          }
          else
          {
+          print("******************************************************************************")
           print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL!")
+          print("******************************************************************************")
+            
           OperationQueue.main.addOperation{completion(nil)}
          }
         }
         catch
         {
+          print("******************************************************************************")
           print("ERROR OCCURED WHEN READING IMAGE DATA FROM URL!\n\(error.localizedDescription)")
+          print("******************************************************************************")
+            
           OperationQueue.main.addOperation{completion(nil)}
         } //do-try-catch...
         
@@ -458,11 +575,16 @@ class PhotoItem: NSObject, PhotoItemProtocol
         do
         {
           try FileManager.default.removeItem(at: url)
+            
+          print("******************************************************************************")
           print("IMAGE FILE DELETED SUCCESSFULLY AT PATH:\n\(url.path)")
+          print("******************************************************************************")
         }
         catch
         {
+          print("******************************************************************************")
           print("ERROR DELETING IMAGE FILE AT PATH:\n\(url.path)\n\(error.localizedDescription)")
+          print("******************************************************************************")
         }
         
         PhotoItem.saveContext()
@@ -471,33 +593,39 @@ class PhotoItem: NSObject, PhotoItemProtocol
     @discardableResult
     class func movePhotos (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]?
     {
-     if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder == nil})
+     if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder == nil}), sourceSelectedPhotos.count > 0
      {
-      sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
-      destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
-        
+    
+
       let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
       let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
       let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
     
       sourceSelectedPhotos.forEach
       {
-        $0.isSelected = false
+
         let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
         let destPhotoURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
         
         do
         {
           try FileManager.default.moveItem(at: sourcePhotoURL, to: destPhotoURL)
+            
+          print("******************************************************************************")
           print("IMAGE FILE MOVED SUCCESSFULLY TO PATH:\n\(destSnippetURL.path)")
+          print("******************************************************************************")
         }
         catch
         {
+          print("******************************************************************************")
           print("ERROR MOVING IMAGE FILE FROM:\n\(sourcePhotoURL.path) TO \(destSnippetURL.path) \n\(error.localizedDescription)")
+          print("******************************************************************************")
         }
       }
       
-    
+      sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
+      destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
+        
       PhotoItem.saveContext()
         
       return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
@@ -512,32 +640,56 @@ class PhotoItem: NSObject, PhotoItemProtocol
     @discardableResult
     class func moveFolders (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet) -> [PhotoFolderItem]?
     {
-        if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected})
+        if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected}),
+               sourceSelectedFolders.count > 0
         {
-            sourcePhotoSnippet.removeFromFolders(NSSet(array: sourceSelectedFolders))
-            destPhotoSnippet.addToFolders(NSSet(array: sourceSelectedFolders))
-            
             let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
             let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
             let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
             
             sourceSelectedFolders.forEach
             {
-             $0.isSelected = false
-             let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
-             let destPhotoURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
+             
+             let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
+             let destPhotoFolderURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
                     
              do
              {
-                try FileManager.default.moveItem(at: sourcePhotoURL, to: destPhotoURL)
-                print("IMAGE FOLDER MOVED SUCCESSFULLY TO PATH:\n\(destSnippetURL.path)")
+                try FileManager.default.moveItem(at: sourcePhotoFolderURL, to: destPhotoFolderURL)
+                
+                print("**********************************************************************************")
+                print("IMAGE FOLDER MOVED SUCCESSFULLY TO NEW PHOTO SNIPPET PATH:\n\(destSnippetURL.path)")
+                print("**********************************************************************************")
+                let content = try FileManager.default.contentsOfDirectory(atPath: destPhotoFolderURL.path)
+                print ("IMAGE FOLDER FILE COUNT - \(content.count)")
+                print ("THE CONTENT OF NEW FOLDER :")
+                print("**********************************************************************************")
+                print ("\(destPhotoFolderURL.path)")
+                content.enumerated().forEach {print ("\($0.offset)) \($0.element)")}
+                print("**********************************************************************************")
              }
              catch
              {
-                 print("ERROR MOVING IMAGE FOLDER FROM:\n\(sourcePhotoURL.path) TO \(destSnippetURL.path) \n\(error.localizedDescription)")
+                print("**********************************************************************************")
+                print("""
+                      ERROR MOVING IMAGE FOLDER FROM:\n\(sourcePhotoFolderURL.path) TO \(destSnippetURL.path)
+                       \n\(error.localizedDescription)
+                      """)
+                print("**********************************************************************************")
              }
             }
             
+            sourcePhotoSnippet.removeFromFolders(NSSet(array: sourceSelectedFolders))
+            sourceSelectedFolders.forEach
+            {
+             if let folderPhotos = $0.photos?.allObjects as? [Photo]
+             {
+              sourcePhotoSnippet.removeFromPhotos(NSSet(array: folderPhotos))
+              destPhotoSnippet.addToPhotos(NSSet(array: folderPhotos))
+             }
+            }
+            
+            destPhotoSnippet.addToFolders(NSSet(array: sourceSelectedFolders))
             
             PhotoItem.saveContext()
             
@@ -557,7 +709,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
       sourceSelectedPhotos.forEach {$0.isSelected = false}
      }
         
-     if let sourceSelectedFolders = (sourcePhotoSnippet.photos?.allObjects as? [PhotoFolder])?.filter({$0.isSelected})
+     if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected})
      {
       sourceSelectedFolders.forEach {$0.isSelected = false}
      }

@@ -557,37 +557,41 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uV4-sc-8X5">
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uV4-sc-8X5">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="backgroundColor" red="0.8829182728292978" green="0.8829182728292978" blue="0.8829182728292978" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="tintColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="L7E-el-Wl0">
                                                         <size key="itemSize" width="30" height="30"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                                         <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                        <inset key="sectionInset" minX="1" minY="1" maxX="1" maxY="1"/>
+                                                        <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
-                                                            <rect key="frame" x="1" y="1" width="30" height="30"/>
+                                                            <rect key="frame" x="3" y="3" width="30" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
                                                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RMg-9Z-gHf">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                        <rect key="frame" x="1" y="1" width="28" height="28"/>
                                                                     </imageView>
-                                                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
-                                                                        <rect key="frame" x="4.5" y="5" width="20" height="20"/>
-                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                     </activityIndicatorView>
                                                                 </subviews>
                                                             </view>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" id="0ZL-fM-jfs"/>
-                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="MVH-fv-Hfl"/>
-                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="bcB-j6-hlH"/>
-                                                                <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" id="shd-L1-jco"/>
+                                                                <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" constant="1" id="0ZL-fM-jfs"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Mmv-vJ-BGZ" secondAttribute="trailing" id="LmW-El-mZy"/>
+                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" constant="1" id="MVH-fv-Hfl"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Mmv-vJ-BGZ" secondAttribute="bottom" id="OUG-7k-dDR"/>
+                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" constant="1" id="bcB-j6-hlH"/>
+                                                                <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="eWe-00-uxs"/>
+                                                                <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="s4D-ux-Hdj"/>
+                                                                <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" constant="1" id="shd-L1-jco"/>
                                                             </constraints>
                                                             <connections>
                                                                 <outlet property="photoIconView" destination="RMg-9Z-gHf" id="CsE-cw-0Fb"/>
@@ -598,7 +602,6 @@
                                                 </collectionView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.7801412646" green="1" blue="0.98771443459999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="uV4-sc-8X5" secondAttribute="trailing" id="beU-JE-YBp"/>
                                             <constraint firstItem="uV4-sc-8X5" firstAttribute="leading" secondItem="fnI-wr-opi" secondAttribute="leading" id="dgo-lB-F6G"/>
