@@ -179,7 +179,7 @@ class PhotoSnippetViewController: UIViewController
    {
     deselectSelectedItems(in: photoCollectionView)
    }
-        
+   PhotoItem.imageCacheDict.values.forEach{$0.removeAllObjects()}
  }
 //---------------------------------------------------------------------------
 //MARK:-
@@ -257,7 +257,8 @@ class PhotoSnippetViewController: UIViewController
 //---------------------------------------------------------------------------
  {
     super.didReceiveMemoryWarning()
-    print ("out of memory")
+    PhotoItem.imageCacheDict.values.forEach{$0.removeAllObjects()}
+    print ("MEMORY LOW!")
  }
 //---------------------------------------------------------------------------
 //MARK:-

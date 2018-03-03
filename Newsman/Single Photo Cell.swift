@@ -27,8 +27,7 @@ protocol PhotoSnippetCellProtocol
 {
     var photoItemView: UIView {get}
     var cellFrame: CGRect     {get}
-    func deselect ()
-    func select ()
+    var isPhotoItemSelected: Bool {get set}
     
     
 }
@@ -41,7 +40,7 @@ extension PhotoSnippetCellProtocol
         {
             prevFlagLayer.removeFromSuperlayer()
         }
-        deselect()
+
     }
     
     func imageRoundClip()
@@ -59,7 +58,7 @@ extension PhotoSnippetCellProtocol
         let flagLayer = FlagLayer()
         flagLayer.fillColor = flagColor
         flagLayer.name = "FlagLayer"
-        deselect()
+    
         
         let imageSize = cellFrame.width
         flagLayer.frame = CGRect(x:imageSize * 0.8, y: 0, width: imageSize * 0.2, height: imageSize * 0.25)
@@ -81,9 +80,19 @@ extension PhotoSnippetCellProtocol
 
 class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
-    func deselect() {photoIconView.alpha = 1}
-    func select()   {photoIconView.alpha = 0.5}
-
+    
+    var isPhotoItemSelected: Bool
+    {
+        set
+        {
+         photoIconView.alpha = newValue ? 0.5 : 1
+        }
+        get
+        {
+         return photoIconView.alpha == 0.5
+        }
+    }
+ 
     var photoItemView: UIView {return photoIconView}
     var cellFrame: CGRect     {return frame}
     
@@ -92,8 +101,9 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
     
     override func awakeFromNib()
     {
-        spinner.startAnimating()
+        
         super.awakeFromNib()
+        spinner.startAnimating()
         photoIconView.image = nil
         clearFlag()
         imageRoundClip()
@@ -101,8 +111,9 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
     
     override func prepareForReuse()
     {
-        spinner.startAnimating()
+
         super.prepareForReuse()
+        spinner.startAnimating()
         photoIconView.image = nil
         clearFlag()
         imageRoundClip()

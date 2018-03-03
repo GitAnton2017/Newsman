@@ -120,19 +120,18 @@ extension PhotoSnippetViewController
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
              if photoCollectionView.photoGroupType != .makeGroups
              {
-                 photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
-                     {
-                         var item = $0.element
-                         item.priorityFlag = flagStr
-                         if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
-                         {
-                             cell.drawFlag(flagColor: flagColor!)
-                         }
-                 }
+               photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
+               {item in
+                  item.element.priorityFlag = flagStr
+                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCell
+                  {
+                   cell.drawFlag(flagColor: flagColor!)
+                  }
+               }
              }
              else
              {
-                 flagGroupedSelectedPhotos(with: flagStr)
+                flagGroupedSelectedPhotos(with: flagStr)
              }
              
              togglePhotoEditingMode()
@@ -142,15 +141,14 @@ extension PhotoSnippetViewController
          case "unflagLayer"?:
              if photoCollectionView.photoGroupType != .makeGroups
              {
-                 photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
-                     {
-                         var item = $0.element
-                         item.priorityFlag = nil
-                         if let cell = photoCollectionView.cellForItem(at: IndexPath(row: $0.offset, section: 0)) as? PhotoSnippetCell
-                         {
-                             cell.clearFlag()
-                         }
-                 }
+               photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
+               {item in
+                  item.element.priorityFlag = nil
+                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCell
+                  {
+                    cell.clearFlag()
+                  }
+              }
              }
              else
              {

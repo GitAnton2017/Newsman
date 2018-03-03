@@ -335,7 +335,7 @@ class PhotoSnippetCollectionView: UICollectionView
         }
         else
         {
-            var movedItem = ds.photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+            let movedItem = ds.photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
             ds.photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
             let flagStr = ds.sectionTitles![destinationIndexPath.section]
             movedItem.priorityFlag = flagStr.isEmpty ? nil : flagStr
@@ -427,8 +427,7 @@ class PhotoSnippetCollectionView: UICollectionView
      }
      else
      {
-      let pred =
-      {(item: (offset : Int, element: [PhotoItemProtocol])) -> Bool in
+      let pred = {(item: (offset : Int, element: [PhotoItemProtocol])) -> Bool in
        let firstItem = item.element.first?.priorityFlag ?? ""
        let currRate = (firstItem.isEmpty ? -1 : PhotoPriorityFlags(rawValue: firstItem)!.rateIndex)
        let rate =     (flagStr ==  nil ? -1 : PhotoPriorityFlags(rawValue:    flagStr!)!.rateIndex)
@@ -469,7 +468,7 @@ class PhotoSnippetCollectionView: UICollectionView
      ds.photoItems2D.append([])
      ds.sectionTitles?.append(flagStr ?? "")
      insertSections([ds.photoItems2D.count - 1])
-     var moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+     let moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
      moved.priorityFlag = flagStr
      ds.photoItems2D[ds.photoItems2D.count - 1].append(moved)
      let destIndexPath = IndexPath(row: 0, section: ds.photoItems2D.count - 1)
@@ -485,7 +484,7 @@ class PhotoSnippetCollectionView: UICollectionView
      insertSections([section.offset])
      if section.offset > indexPath.section
      {
-      var moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+     let moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
       moved.priorityFlag = flagStr
       ds.photoItems2D[section.offset].append(moved)
       let destIndexPath = IndexPath(row: 0, section: section.offset)
@@ -494,7 +493,7 @@ class PhotoSnippetCollectionView: UICollectionView
      }
      else
      {
-      var moved = ds.photoItems2D[indexPath.section + 1].remove(at: indexPath.row)
+     let moved = ds.photoItems2D[indexPath.section + 1].remove(at: indexPath.row)
       moved.priorityFlag = flagStr
       ds.photoItems2D[section.offset].append(moved)
       let destIndexPath = IndexPath(row: 0, section: section.offset)
@@ -512,7 +511,7 @@ class PhotoSnippetCollectionView: UICollectionView
       }
     
       let ds = dataSource as! PhotoSnippetViewController
-      var moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
+      let moved = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
       moved.priorityFlag = flagStr
       ds.photoItems2D[section.offset].append(moved)
       let destIndexPath = IndexPath(row: section.element.count, section: section.offset)

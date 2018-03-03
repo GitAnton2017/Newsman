@@ -4,16 +4,13 @@ import Foundation
 
 class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
-    func deselect()
+    var isPhotoItemSelected: Bool = false
     {
-        photoCollectionView.reloadData()
+        didSet
+        {
+          photoCollectionView.reloadData()
+        }
     }
-    
-    func select()
-    {
-        photoCollectionView.reloadData()
-    }
-    
     var photoItemView: UIView {return photoCollectionView}
     var cellFrame: CGRect     {return frame}
     
@@ -86,16 +83,16 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell
     
     override func awakeFromNib()
     {
-        spinner.startAnimating()
         super.awakeFromNib()
+        spinner.startAnimating()
         photoIconView.image = nil
         imageRoundClip()
     }
     
     override func prepareForReuse()
     {
-        spinner.startAnimating()
         super.prepareForReuse()
+        spinner.startAnimating()
         photoIconView.image = nil
         imageRoundClip()
     }

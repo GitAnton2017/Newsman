@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import CoreData
-import MobileCoreServices
+
 
 //MARK: ---------------- Image Risize Extension ---------------
 extension UIImage
@@ -10,66 +10,41 @@ extension UIImage
     func resized(withPercentage percentage: CGFloat) -> UIImage?
     {
        
+        
         let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
-        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 2
+        let render = UIGraphicsImageRenderer(size: canvasSize, format: format)
+        let image = render.image
+        {_ in
+        
+         draw(in: CGRect(origin: .zero, size: canvasSize))
+        }
+        return image
+        /*UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
         defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(origin: .zero, size: canvasSize))
-        return UIGraphicsGetImageFromCurrentImageContext()
+        return UIGraphicsGetImageFromCurrentImageContext()*/
     }
     
 }//extension UIImage....
 //-------------------------------------------------------------
 //MARK: -
 
-//MARK: ----------------- Photo Item Protocol ----------------
-protocol PhotoItemProtocol
-//------------------------------------------------------------
-{
-    var photoSnippet: PhotoSnippet     { get     }
-    var date: Date                     { get     }
-    var position: Int16                { get set }
-    var priority: Int                  { get     }
-    var priorityFlag: String?          { get set }
-    var isSelected: Bool               { get set }
-    var id: UUID                       { get     }
-    var url: URL                       { get     }
-    
-    func deleteImages()
-
-}//protocol PhotoItemProtocol...
-//-------------------------------------------------------------
-//MARK: -
-
-//MARK: ----------------- Photo Item Protocol Extension ----------------
-extension PhotoItemProtocol
-//----------------------------------------------------------------------
-{
-    static var appDelegate: AppDelegate
-    {
-        return UIApplication.shared.delegate as! AppDelegate
-    }
-    
-    static func saveContext()
-    {
-        appDelegate.saveContext()
-    }
-    
-    static var MOC: NSManagedObjectContext
-    {
-        return appDelegate.persistentContainer.viewContext
-    }
-
-}//extension PhotoItemProtocol...
-//-------------------------------------------------------------
-//MARK: -
 
 //MARK: ----------------- Photo Folder Item Class ----------------
 class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
 {
+
 //-----------------------------------------
     var folder: PhotoFolder
 //-----------------------------------------
+    
+    var singlePhotoItems: [PhotoItem]?
+    {
+     return (folder.photos?.allObjects as? [Photo])?.map{PhotoItem(photo: $0)}
+    }
     
     var url: URL
     {
@@ -215,79 +190,10 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
 }
 //MARK: -
 
+
+
+
 //MARK: ----------------- Single Photo Item Class ----------------
-
-extension PhotoItem: NSItemProviderWriting
-{
-    enum UTIError : Error
-    {
-      case UnknownType
-    }
-    static var writableTypeIdentifiersForItemProvider: [String]
-    {
-        return [kUTTypeJPEG as String]
-    }
-    
-    func loadData(withTypeIdentifier typeIdentifier: String,
-                  forItemProviderCompletionHandler completionHandler: @escaping (Data?, Error?) -> Void) -> Progress?
-    {
-        switch typeIdentifier
-        {
-        case kUTTypeJPEG as String as String:
-         PhotoItem.queue.addOperation
-         {
-            do
-            {
-                print("******************************************************************************")
-                print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM URL : \n \(self.url.path)...")
-                print("******************************************************************************")
-                
-                let data = try Data(contentsOf: self.url)
-                completionHandler(data, nil)
-                
-            }
-            catch
-            {
-                print("******************************************************************************")
-                print("ERROR OCCURED WHEN READING IMAGE DATA FOR DRAG AND DROP FROM URL!\n\(error.localizedDescription)")
-                print("******************************************************************************")
-                completionHandler(nil, error)
-                
-            } //do-try-catch...
-         }
-         default:
-            completionHandler(nil, UTIError.UnknownType)
-            
-        }
-        
-        return nil
-    }
-    
-    
-} //extension PhotoItem: NSItemProviderWriting...
-
-/*extension PhotoItem: NSItemProviderReading
-{
-    static var readableTypeIdentifiersForItemProvider: [String]
-    {
-        return [photoItemUTI]
-    }
-    
-    static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> Self
-    {
-        switch typeIdentifier {
-         case PhotoItem.photoItemUTI:
-    
-     
-         
-         default: throw UTIError.UnknownType
-            
-        }
-    }
-    
-    
-}*/
-
 class PhotoItem: NSObject, PhotoItemProtocol
 {
   static let photoItemUTI = "photoitem.newsman"
@@ -715,5 +621,6 @@ class PhotoItem: NSObject, PhotoItemProtocol
      }
     }
     
+   
 }
 //MARK: -

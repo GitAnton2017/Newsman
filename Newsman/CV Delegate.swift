@@ -102,7 +102,7 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
 //-------------------------------------------------------------------------------------------------------------
  {
-  guard isEditingPhotos else {return}
+  /*guard isEditingPhotos else {return}
     
   photoItems2D[indexPath.section][indexPath.row].isSelected = true
   allPhotosSelected = true
@@ -111,26 +111,60 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
   switch (collectionView.cellForItem(at: indexPath))
   {
    case let cell as PhotoFolderCell:
-      cell.photoCollectionView.reloadData()
+      cell.isPhotoItemSelected = true
       cell.photoCollectionView.visibleCells.forEach{cellTouchAnimation(view: $0)}
       cellTouchAnimation(view: cell)
    case let cell as PhotoSnippetCell:
-      cell.photoIconView.alpha = 0.5
+      cell.isPhotoItemSelected = true
       cellTouchAnimation(view: cell)
    default: return
-  }
+  }*/
+    
+  toggleCellSelection(collectionView, at: indexPath)
     
  }//func collectionView(_ collectionView: UICollectionView, didSelectItem...
 //-------------------------------------------------------------------------------------------------------------
 //MARK: -
     
+
+ func toggleCellSelection(_ collectionView: UICollectionView, at indexPath: IndexPath)
+ {
+    guard isEditingPhotos else {return}
+    
+    let state = photoItems2D[indexPath.section][indexPath.row].isSelected
+    photoItems2D[indexPath.section][indexPath.row].isSelected = !state
+    
+    allPhotosSelected = !state
+    
+    if (photoItems2D.filter{$0.lazy.first{$0.isSelected} != nil}.count == 0)
+    {
+        selectBarButton.title = "★★★"
+    }
+    else
+    {
+        selectBarButton.title = "☆☆☆"
+    }
+    
+    switch (collectionView.cellForItem(at: indexPath))
+    {
+    case let cell as PhotoFolderCell:
+        cell.isPhotoItemSelected = !state
+        cell.photoCollectionView.visibleCells.forEach{cellTouchAnimation(view: $0)}
+        cellTouchAnimation(view: cell)
+    case let cell as PhotoSnippetCell:
+        cell.isPhotoItemSelected = !state
+        cellTouchAnimation(view: cell)
+    default: return
+    }
+    
+ }
     
 //MARK:------------------------------- PROCESSING CV CELLS DESELECTION  ---------------------------------------
 //-------------------------------------------------------------------------------------------------------------
  func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath)
 //-------------------------------------------------------------------------------------------------------------
  {
-  guard isEditingPhotos else {return}
+  /*guard isEditingPhotos else {return}
   
   photoItems2D[indexPath.section][indexPath.row].isSelected = false
   allPhotosSelected = false
@@ -143,14 +177,16 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
   switch (collectionView.cellForItem(at: indexPath))
   {
    case let cell as PhotoFolderCell:
-    cell.photoCollectionView.reloadData()
+    cell.isPhotoItemSelected = false
     cell.photoCollectionView.visibleCells.forEach{cellTouchAnimation(view: $0)}
     cellTouchAnimation(view: cell)
    case let cell as PhotoSnippetCell:
-    cell.photoIconView.alpha = 1
+    cell.isPhotoItemSelected = false
     cellTouchAnimation(view: cell)
    default: return
-  }
+  }*/
+    
+  toggleCellSelection(collectionView, at: indexPath)
     
  }//func collectionView(_ collectionView: UICollectionView, didDeselectItemAt...
 //-------------------------------------------------------------------------------------------------------------

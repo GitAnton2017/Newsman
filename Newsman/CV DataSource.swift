@@ -128,10 +128,13 @@ func deselectSelectedItems(in collectionView: UICollectionView)
     {section in
       section.element.enumerated().filter{$0.element.isSelected}.forEach
       {row in
-        var item = row.element
-        item.isSelected = false
+        row.element.isSelected = false
         let indexPath = IndexPath(row: row.offset, section: section.offset)
-        (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCellProtocol).deselect()
+        if var cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+        {
+          cell.isPhotoItemSelected = false
+          collectionView.deselectItem(at: indexPath, animated: false)
+        }
        }
     }
    
@@ -150,16 +153,36 @@ func selectAllPhotoItems(in collectionView: UICollectionView)
     {section in
       section.element.enumerated().forEach
       {row in
-        var item = row.element
-        item.isSelected = true
+        row.element.isSelected = true
         let indexPath = IndexPath(row: row.offset, section: section.offset)
-        (collectionView.cellForItem(at: indexPath) as! PhotoSnippetCellProtocol).select()
+        if var cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+        {
+          cell.isPhotoItemSelected = true
+          collectionView.selectItem(at: indexPath, animated: false, scrollPosition:[])
+        }
       }
     }
    
 }// selectAllPhotoItems(in collectionView: UICollectionView)...
  //----------------------------------------------------------------------------
  //MARK: -
+    
+//MARK: ----------------------- Deleting Empty Sections ----------------------
+//----------------------------------------------------------------------------
+func deleteEmptySections()
+//----------------------------------------------------------------------------
+{
+     photoItems2D.enumerated().filter{$0.element.count == 0}.sorted{$0.offset > $1.offset}.forEach
+     {section in
+       photoItems2D.remove(at: section.offset)
+       sectionTitles?.remove(at: section.offset)
+       photoCollectionView.deleteSections([section.offset])
+     }
+    
+}// func deleteSelectedPhotos()...
+//----------------------------------------------------------------------------
+//MARK: -
+ 
  
 //MARK: ----------------- Deleting Selected Photo Items ----------------------
 //----------------------------------------------------------------------------
@@ -182,12 +205,7 @@ func selectAllPhotoItems(in collectionView: UICollectionView)
     }
   }
   
-  photoItems2D.enumerated().filter{$0.element.count == 0}.sorted{$0.offset > $1.offset}.forEach
-  {section in
-    photoItems2D.remove(at: section.offset)
-    sectionTitles?.remove(at: section.offset)
-    photoCollectionView.deleteSections([section.offset])
-  }
+  deleteEmptySections()
   
  }// func deleteSelectedPhotos()...
 //----------------------------------------------------------------------------
@@ -201,10 +219,9 @@ func selectAllPhotoItems(in collectionView: UICollectionView)
 //----------------------------------------------------------------------------
  {
    photoItems2D.reduce([], {$0 + $1.filter({$0.isSelected})}).forEach
-   {
-    var selected = $0
-    selected.isSelected = false
-    let itemIndexPath = photoItemIndexPath(photoItem: selected)
+   {item in
+    item.isSelected = false
+    let itemIndexPath = photoItemIndexPath(photoItem: item)
     photoCollectionView.movePhoto(at: itemIndexPath, with: flagStr)
    }
  }//func flagGroupedSelectedPhotos(with flagStr: String?)...
