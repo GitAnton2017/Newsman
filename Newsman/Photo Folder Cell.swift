@@ -97,10 +97,12 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell
         imageRoundClip()
     }
     
+
+    
     func imageRoundClip()
     {
         photoIconView.clearsContextBeforeDrawing = true
-        photoIconView.layer.cornerRadius = 10.0
+        photoIconView.layer.cornerRadius = 2
         photoIconView.layer.borderWidth = 1.0
         photoIconView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
         photoIconView.layer.masksToBounds = true
@@ -141,6 +143,8 @@ extension PhotoFolderCell:  UICollectionViewDataSource
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCollectionViewCell", for: indexPath) as! PhotoFolderCollectionViewCell
         let photoItem = photoItems[indexPath.row]
         cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
+        
+        cell.photoIconView.layer.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
         
         photoItem.getImage(requiredImageWidth:  imageSize)
         {(image) in

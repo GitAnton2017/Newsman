@@ -130,7 +130,7 @@ func deselectSelectedItems(in collectionView: UICollectionView)
       {row in
         row.element.isSelected = false
         let indexPath = IndexPath(row: row.offset, section: section.offset)
-        if var cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
         {
           cell.isPhotoItemSelected = false
           collectionView.deselectItem(at: indexPath, animated: false)
@@ -155,7 +155,7 @@ func selectAllPhotoItems(in collectionView: UICollectionView)
       {row in
         row.element.isSelected = true
         let indexPath = IndexPath(row: row.offset, section: section.offset)
-        if var cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
         {
           cell.isPhotoItemSelected = true
           collectionView.selectItem(at: indexPath, animated: false, scrollPosition:[])
@@ -206,6 +206,7 @@ func deleteEmptySections()
   }
   
   deleteEmptySections()
+
   
  }// func deleteSelectedPhotos()...
 //----------------------------------------------------------------------------
@@ -401,7 +402,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   }
  
   cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
-
+  cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
     
   if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
   {
@@ -486,6 +487,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
         cell.photoItems = []
     }
     
+    cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
     cell.nphoto = nPhotoFolderMap[nphoto]!
     cell.frameSize = imageSize
 

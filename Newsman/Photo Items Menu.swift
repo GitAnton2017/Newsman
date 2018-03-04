@@ -123,7 +123,7 @@ extension PhotoSnippetViewController
                photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
                {item in
                   item.element.priorityFlag = flagStr
-                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCell
+                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCellProtocol
                   {
                    cell.drawFlag(flagColor: flagColor!)
                   }
@@ -144,7 +144,7 @@ extension PhotoSnippetViewController
                photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
                {item in
                   item.element.priorityFlag = nil
-                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCell
+                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCellProtocol
                   {
                     cell.clearFlag()
                   }

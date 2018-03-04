@@ -32,7 +32,7 @@ extension PhotoFolderItem
                         print("******************************************************************************")
                         
                         let data = try Data(contentsOf: photoItem.url)
-                        if let image = UIImage(data: data)
+                        if let image = UIImage(data: data, scale: 1)
                         {
                           imageSet.append(image)
                         }
@@ -52,6 +52,7 @@ extension PhotoFolderItem
                 
              }
              let irf = UIGraphicsImageRendererFormat.default()
+             irf.scale = 1
              let w = imageSet.map{$0.size.width}.max() ?? 0
              let h = imageSet.map{$0.size.height}.reduce(0, {$0 + $1})
         

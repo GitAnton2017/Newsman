@@ -23,7 +23,7 @@ class FlagLayer: CALayer
     }
 }
 
-protocol PhotoSnippetCellProtocol
+protocol PhotoSnippetCellProtocol: AnyObject
 {
     var photoItemView: UIView {get}
     var cellFrame: CGRect     {get}
@@ -34,6 +34,15 @@ protocol PhotoSnippetCellProtocol
 
 extension PhotoSnippetCellProtocol
 {
+    var cornerRadius: CGFloat
+    {
+     get {return photoItemView.layer.cornerRadius}
+     set
+     {
+      photoItemView.layer.cornerRadius = newValue
+     }
+    }
+    
     func clearFlag ()
     {
         if let prevFlagLayer = photoItemView.layer.sublayers?.first(where: {$0.name == "FlagLayer"})

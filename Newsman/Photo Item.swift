@@ -13,7 +13,8 @@ extension UIImage
         
         let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
         let format = UIGraphicsImageRendererFormat.default()
-        format.scale = 2
+        //format.scale = 1
+        format.prefersExtendedRange = false
         let render = UIGraphicsImageRenderer(size: canvasSize, format: format)
         let image = render.image
         {_ in

@@ -67,7 +67,7 @@ class PhotoSnippetViewController: UIViewController
  var menuTapGR: UITapGestureRecognizer!
  var maxPhotosInRow = 10
  var minPhotosInRow = 1
- let nPhotoFolderMap = [10: 2, 9: 2, 8: 2, 7: 2, 6: 2, 5: 2, 4: 3, 3: 3, 2: 3, 1: 5]
+ let nPhotoFolderMap = [10: 2, 9: 2, 8: 2, 7: 2, 6: 2, 5: 2, 4: 3, 3: 4, 2: 5, 1: 6]
  var sectionTitles: [String]? = nil //section titles for sectioned photo collection view if any...
     
  var menuView: UIView? = nil
