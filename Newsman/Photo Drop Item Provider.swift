@@ -6,13 +6,42 @@ import MobileCoreServices
 
 extension PhotoFolderItem
 {
+    
+    func getPhotoRect (photoSize: CGSize) -> CGRect
+    {
+      let rx = PDFContextSize.width
+      let ry = PDFContextSize.height
+        
+      let w = photoSize.width
+      let h = photoSize.height
+      
+      if (w <= rx && h <= ry)
+      {
+        return CGRect(x: (rx - w) / 2, y: (ry - h) / 2, width: w, height: h)
+      }
+      else if (rx/ry < w/h)
+      {
+        let l = h * rx / w
+        return CGRect(x: 0, y: (ry - l) / 2, width: rx, height: l)
+      }
+      else if (rx/ry > w/h)
+      {
+        let l = h * rx / w
+        return CGRect(x: (rx - l) / 2, y: 0, width: l, height: ry)
+      }
+      else
+      {
+        return CGRect(x: 0, y: 0, width: rx, height: ry)
+      }
+     
+    }
     enum UTIError : Error
     {
         case UnknownType
     }
     static var writableTypeIdentifiersForItemProvider: [String]
     {
-        return [kUTTypeJPEG as String]
+        return [kUTTypePDF as String]
     }
     
     func loadData(withTypeIdentifier typeIdentifier: String,
@@ -20,7 +49,7 @@ extension PhotoFolderItem
     {
         switch typeIdentifier
         {
-         case kUTTypeJPEG as String as String:
+         case kUTTypePDF as String as String:
             
              var imageSet: [UIImage] = []
              singlePhotoItems?.forEach
@@ -51,7 +80,7 @@ extension PhotoFolderItem
                 
                 
              }
-             let irf = UIGraphicsImageRendererFormat.default()
+             /*let irf = UIGraphicsImageRendererFormat.default()
              irf.scale = 1
              let w = imageSet.map{$0.size.width}.max() ?? 0
              let h = imageSet.map{$0.size.height}.reduce(0, {$0 + $1})
@@ -66,16 +95,39 @@ extension PhotoFolderItem
                 image.draw(at: CGPoint(x: 0, y: y));  y += image.size.height
               }
             
+             }*/
+             
+             /*if let aniImage = UIImage.animatedImage(with: imageSet, duration: 1)
+             {
+              let data = UIImagePNGRepresentation(aniImage)
+              completionHandler(data, nil)
+             }
+             else
+             {
+               completionHandler(nil, UTIError.UnknownType)
+             }*/
+            
+             let PDFRendSize = CGRect(origin: CGPoint.zero, size: PDFContextSize)
+             let PDFRend = UIGraphicsPDFRenderer(bounds: PDFRendSize)
+             let PDFData = PDFRend.pdfData
+             {context in
+                imageSet.forEach
+                {image in
+                 context.beginPage()
+                 let drawRect = getPhotoRect(photoSize: image.size)
+                 image.resized(withPercentage: 0.3)?.draw(in: drawRect)
+                    
+                }
              }
              
-             completionHandler(data, nil)
+             completionHandler(PDFData, nil)
             
             
         default: completionHandler(nil, UTIError.UnknownType)
             
        }
         
-                    return nil
+      return nil
     }
     
     

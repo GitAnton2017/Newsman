@@ -93,10 +93,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     // MARK: - Core Data Saving support
 
-    func saveContext () {
-        let context = persistentContainer.viewContext
-        if context.hasChanges {
-            do {
+    func saveContext ()
+    {
+
+       let context = persistentContainer.viewContext
+       context.performAndWait
+       {
+        
+        if context.hasChanges
+        {
+            do
+            {
                 try context.save()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
@@ -105,6 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                 print ("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+      }
     }
 
 }

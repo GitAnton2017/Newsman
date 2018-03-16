@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ZoomCollectionViewCell" id="Rjr-aT-XY6" userLabel="ZoomCollectionViewCell" customClass="ZoomViewCollectionViewCell" customModule="Newsman" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T3q-4L-78M">
+                        <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
+                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </imageView>
+                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="W40-d8-XIc">
+                        <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
+                        <color key="color" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    </activityIndicatorView>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="W40-d8-XIc" firstAttribute="leading" secondItem="Rjr-aT-XY6" secondAttribute="leading" id="Av8-3V-y2i"/>
+                <constraint firstAttribute="bottom" secondItem="W40-d8-XIc" secondAttribute="bottom" id="FW3-aA-Mu2"/>
+                <constraint firstAttribute="trailing" secondItem="T3q-4L-78M" secondAttribute="trailing" id="e4E-Sk-qMu"/>
+                <constraint firstItem="T3q-4L-78M" firstAttribute="leading" secondItem="Rjr-aT-XY6" secondAttribute="leading" id="gEx-s2-gud"/>
+                <constraint firstAttribute="trailing" secondItem="W40-d8-XIc" secondAttribute="trailing" id="iVU-Mv-vuO"/>
+                <constraint firstItem="W40-d8-XIc" firstAttribute="top" secondItem="Rjr-aT-XY6" secondAttribute="top" id="rmj-kr-G21"/>
+                <constraint firstAttribute="bottom" secondItem="T3q-4L-78M" secondAttribute="bottom" id="ruY-Pv-eaI"/>
+                <constraint firstItem="T3q-4L-78M" firstAttribute="top" secondItem="Rjr-aT-XY6" secondAttribute="top" id="uNy-gF-9aX"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="rZa-Mc-NNK"/>
+            <size key="customSize" width="127" height="125"/>
+            <connections>
+                <outlet property="photoIconView" destination="T3q-4L-78M" id="6O8-ip-DNE"/>
+                <outlet property="spinner" destination="W40-d8-XIc" id="ud9-Q0-vWp"/>
+            </connections>
+            <point key="canvasLocation" x="-659" y="-417"/>
+        </collectionViewCell>
+    </objects>
+</document>

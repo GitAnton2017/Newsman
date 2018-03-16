@@ -18,6 +18,7 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
     
     var photoItems: [PhotoItem]!
     var nphoto: Int = 3
+
     
     var frameSize: CGFloat = 0
     {
@@ -32,14 +33,16 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
         super.init(coder: aDecoder)
     }
     
+    
     override func awakeFromNib()
     {
         super.awakeFromNib()
         imageRoundClip()
+        
         photoCollectionView.dataSource = self
         photoCollectionView.delegate = self
         photoCollectionView.reloadData()
-
+    
     
     }
     

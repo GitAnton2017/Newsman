@@ -6,6 +6,7 @@ import CoreData
 class PhotoSnippetViewController: UIViewController
 {
     
+    
 //MARK: ===================== CALCULATED PROPERTIES =========================
     
 //---------------------------------------------------------------------------
@@ -179,7 +180,8 @@ class PhotoSnippetViewController: UIViewController
    {
     deselectSelectedItems(in: photoCollectionView)
    }
-   PhotoItem.imageCacheDict.values.forEach{$0.removeAllObjects()}
+    
+   //PhotoItem.imageCacheDict.values.forEach{$0.removeAllObjects()}
  }
 //---------------------------------------------------------------------------
 //MARK:-
@@ -432,11 +434,13 @@ class PhotoSnippetViewController: UIViewController
 
 //MARK: --------------------------- VC TRANSITIONS  -------------------------
 //---------------------------------------------------------------------------
- override func viewWillTransition(to size: CGSize,
-                                  with coordinator: UIViewControllerTransitionCoordinator)
+ override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
 //---------------------------------------------------------------------------
  {
 
+    print ("NEW SIZE \(size)")
+    print ("NEW VC VIEW \(view.frame)")
+    
     super.viewWillTransition(to: size, with: coordinator)
     if !isEditingPhotos
     {
@@ -450,12 +454,20 @@ class PhotoSnippetViewController: UIViewController
       showFlagPhotoMenu()
     }
     
+    /*if traitCollection.userInterfaceIdiom == .pad,
+       let zv = photoCollectionView.zoomView
+    {
+        zv.center = CGPoint (x: size.width/2 , y: size.height/2 - view.frame.origin.x)
+    }*/
+    
     photoCollectionView.reloadData()
  }
 //---------------------------------------------------------------------------
 //MARK: -
  
+   
     
+     
 //MARK: ---------------- IMAGE PICKER CONTROLLER PREPARE --------------------
 //---------------------------------------------------------------------------
  @objc func pickImageButtonPress()

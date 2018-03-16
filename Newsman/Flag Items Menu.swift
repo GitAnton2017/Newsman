@@ -78,7 +78,7 @@ extension PhotoSnippetViewController
  
  func openMenuAni()
  {
-     menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+     menuView!.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
      menuView!.alpha = 0
      UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
                     animations:

@@ -10,6 +10,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     var itemsType: SnippetType!
     var snippetsData: [[BaseSnippet]] = []
     
+    var aniImageSetDict: [BaseSnippet : [UIImage]] = [:]
+    
     
     var groupType: GroupSnippets!
     {
@@ -182,21 +184,39 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       switch (itemsType)
       {
        case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
+        
        case .photo:
+        
         let photoSnippet = item as! PhotoSnippet
+        aniImageSetDict[photoSnippet] = [UIImage]()
+        let photoSnippetCell = cell as! SnippetsViewCell
+        let iconView = photoSnippetCell.snippetImage!
+        iconView.layer.cornerRadius = 3.5
+        iconView.layer.borderWidth = 1.25
+        iconView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
+        iconView.layer.masksToBounds = true
+        
         let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-        if let lastPhoto = photoSnippet.photos?.sortedArray(using: [sort]).last as? Photo
+        if let latestPhoto = photoSnippet.photos?.sortedArray(using: [sort]).last as? Photo
         {
-          let photoItem = PhotoItem(photo: lastPhoto)
-          let iconWidth = (cell as! SnippetsViewCell).snippetImage.frame.width
-          photoItem.getImage(requiredImageWidth: iconWidth)
+          let iconWidth = iconView.frame.width
+          PhotoItem(photo: latestPhoto).getImage(requiredImageWidth: iconWidth)
           {(image) in
-            (cell as! SnippetsViewCell).snippetImage.image = image
+            iconView.image = image
+            
+            PhotoItem.getRandomImages(for: photoSnippet, number: 20, requiredImageWidth: iconWidth)
+            {images in
+              iconView.animationImages = images
+              iconView.animationDuration = (images != nil ? 2.0 * Double(images!.count) : 0)
+              iconView.animationRepeatCount = 0
+              iconView.startAnimating()
+                
+            }
           }
         }
         else
         {
-          (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "photo.main")
+            (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "photo.main")
         }
 
        case .video: break

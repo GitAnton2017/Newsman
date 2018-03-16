@@ -416,23 +416,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   photoItem.getImage(requiredImageWidth:  imageSize)
   {(image) in
     cell.photoIconView.image = image
-    cell.photoIconView.layer.contentsGravity = kCAGravityResizeAspect
-    
-    if let img = image
-    {
-      if img.size.height > img.size.width
-      {
-         let r = img.size.width/img.size.height
-         cell.photoIconView.layer.contentsRect = CGRect(x: 0, y: (1 - r)/2, width: 1, height: r)
-      }
-      else
-      {
-         let r = img.size.height/img.size.width
-         cell.photoIconView.layer.contentsRect = CGRect(x: (1 - r)/2, y: 0, width: r, height: 1)
-      }
-     }
-    
-     cell.spinner.stopAnimating()
+    image?.setSquared(in: cell.photoIconView)
+    cell.spinner.stopAnimating()
    }
     
    return cell

@@ -184,6 +184,7 @@ class PhotoSnippetCollectionView: UICollectionView
     var menuTapGR: UITapGestureRecognizer!
     var cellLongPressGR : UILongPressGestureRecognizer!
     var cellPanGR: UIPanGestureRecognizer!
+    var cellDoubleTapGR: UITapGestureRecognizer!
     
     let itemsInRow: Int = 3
     
@@ -203,12 +204,82 @@ class PhotoSnippetCollectionView: UICollectionView
         cellLongPressGR.minimumPressDuration = 0.4
         addGestureRecognizer(cellLongPressGR)
         
+        cellDoubleTapGR = UITapGestureRecognizer(target: self, action: #selector(cellDoubleTap))
+        cellDoubleTapGR.numberOfTapsRequired = 2
+        addGestureRecognizer(cellDoubleTapGR)
+        
         menuTapGR = UITapGestureRecognizer(target: self, action: #selector(tapCellMenuItem))
+        menuTapGR.require(toFail: cellDoubleTapGR)
         addGestureRecognizer(menuTapGR)
         
         cellPanGR = UIPanGestureRecognizer(target: self, action: #selector(cellPan))
         cellPanGR.isEnabled = false
         //addGestureRecognizer(cellPanGR)
+        
+        
+    }
+    
+    var photoItems2D: [[PhotoItemProtocol]]
+    {
+      return (dataSource as! PhotoSnippetViewController).photoItems2D
+    }
+    
+    var mainView: UIView
+    {
+      return (dataSource as! PhotoSnippetViewController).view
+    }
+    
+    var mainViewCenter: CGPoint
+    {
+      return CGPoint(x: mainView.center.x, y: mainView.center.y - mainView.frame.origin.y)
+    }
+    
+    var zoomSize: CGFloat
+    {
+      return 0.9 * min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)
+    }
+    
+    var zoomFrame: CGRect
+    {
+      return CGRect(origin: CGPoint.zero, size: CGSize(width: zoomSize, height: zoomSize))
+    }
+    
+
+    @objc func cellDoubleTap(_ gr: UITapGestureRecognizer)
+    {
+     for view in mainView.subviews
+     {
+        if let _ = view as? ZoomView {return}
+     }
+    
+     if let indexPath = indexPathForItem(at: gr.location(in: self))
+     {
+      let zoomView = ZoomView()
+      let tpMV = gr.location(in: mainView)
+      zoomView.center = CGPoint (x: tpMV.x, y: tpMV.y + mainView.frame.origin.y)
+      
+      switch cellForItem(at: indexPath)
+      {
+        case _ as PhotoSnippetCell:
+        
+        let imageView = zoomView.openWithIV(in: mainView)
+        (photoItems2D[indexPath.section][indexPath.row] as! PhotoItem).getImage(requiredImageWidth: zoomSize)
+        {image in
+         zoomView.stopSpinner()
+         imageView.image = image
+         image?.setSquared(in: imageView)
+        }
+    
+
+       case let cell as PhotoFolderCell:
+        let collectionView = zoomView.openWithCV(in: mainView)
+        zoomView.photoItems = cell.photoItems
+        collectionView.reloadData()
+        
+       default: break
+    
+      }
+     }
     }
     
     var hasUnfinishedMove = false
@@ -218,21 +289,6 @@ class PhotoSnippetCollectionView: UICollectionView
     var correctionY: CGFloat? = nil
     var movedCellBeginPosition = CGPoint.zero
     
-    /*var selectedPhotoCells: [PhotoSnippetCell]
-    {
-      var selected = [PhotoSnippetCell]()
-      let ds = dataSource as! PhotoSnippetViewController
-      ds.photoItems2D.reduce([], {$0 + $1.filter({$0.isSelected})}).forEach
-      {
-        let indexPath = ds.photoItemIndexPath(photoItem: $0)
-        if let cell = cellForItem(at: indexPath) as? PhotoSnippetCell
-        {
-         selected.append(cell)
-        }
-      }
-        
-      return selected
-    }*/
     
     @objc func cellPan (_ gr: UIPanGestureRecognizer)
     {

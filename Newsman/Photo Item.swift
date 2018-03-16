@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 import CoreData
-
+import GameplayKit
 
 //MARK: ---------------- Image Risize Extension ---------------
 extension UIImage
@@ -22,10 +22,28 @@ extension UIImage
          draw(in: CGRect(origin: .zero, size: canvasSize))
         }
         return image
+        
+        
         /*UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
         defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(origin: .zero, size: canvasSize))
         return UIGraphicsGetImageFromCurrentImageContext()*/
+    }
+    
+    func setSquared (in view: UIView)
+    {
+        view.layer.contentsGravity = kCAGravityResizeAspect
+        
+        if size.height > size.width
+        {
+            let r = size.width/size.height
+            view.layer.contentsRect = CGRect(x: 0, y: (1 - r)/2, width: 1, height: r)
+        }
+        else if size.height < size.width
+        {
+            let r = size.height/size.width
+            view.layer.contentsRect = CGRect(x: (1 - r)/2, y: 0, width: r, height: 1)
+        }
     }
     
 }//extension UIImage....
@@ -38,6 +56,8 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
 {
 
+    let PDFContextSize = CGSize(width: 300, height: 500)
+    
 //-----------------------------------------
     var folder: PhotoFolder
 //-----------------------------------------
@@ -123,23 +143,32 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
 
     init (folder: PhotoFolder)
     {
+      
       self.folder = folder
       super.init()
     }
+    
+
     
     convenience init?(photoSnippet: PhotoSnippet)
     {
      if let selectedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
      {
-      let newFolder = PhotoFolder(context: PhotoFolderItem.MOC)
-      self.init(folder: newFolder)
-      newFolder.id = UUID()
-      newFolder.photoSnippet = photoSnippet
-      newFolder.date = Date() as NSDate
-      newFolder.isSelected = false
-      let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
-      newFolder.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
     
+      var newFolder: PhotoFolder!
+      PhotoFolderItem.MOC.performAndWait
+      {
+       newFolder = PhotoFolder(context: PhotoFolderItem.MOC)
+       newFolder.id = UUID()
+       newFolder.photoSnippet = photoSnippet
+       newFolder.date = Date() as NSDate
+       newFolder.isSelected = false
+       let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
+       newFolder.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
+       
+      }
+      self.init(folder: newFolder)
+        
       do
       {
         try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
@@ -166,7 +195,10 @@ class PhotoFolderItem: NSObject, PhotoItemProtocol
         print("******************************************************************************************")
       }
       
-      newFolder.addToPhotos(NSSet(array: selectedPhotos))
+      PhotoFolderItem.MOC.performAndWait
+      {
+       newFolder.addToPhotos(NSSet(array: selectedPhotos))
+      }
         
       PhotoFolderItem.saveContext()
      
@@ -248,6 +280,10 @@ class PhotoItem: NSObject, PhotoItemProtocol
      return queue
     }()
     
+    static let dsQueue = DispatchQueue(label: "Images", attributes: .concurrent)
+    
+    static let dsGroup = DispatchGroup()
+    
     typealias ImagesCache = NSCache<NSString, UIImage>
     
     static var imageCacheDict = [Int: ImagesCache]()
@@ -256,6 +292,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
     
     init(photo : Photo)
     {
+        
         self.photo = photo
         super.init()
     }
@@ -296,18 +333,23 @@ class PhotoItem: NSObject, PhotoItemProtocol
     
     convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat)
     {
-      let newPhoto = Photo(context: PhotoItem.MOC)
-      self.init(photo: newPhoto)
-        
+      
+      var newPhoto: Photo!
       let newPhotoID = UUID()
-      newPhoto.date = Date() as NSDate
-      newPhoto.photoSnippet = photoSnippet
-      newPhoto.isSelected = false
-      newPhoto.id = newPhotoID
-      let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
-      newPhoto.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
         
-      photoSnippet.addToPhotos(newPhoto)
+      PhotoItem.MOC.performAndWait
+      {
+       newPhoto = Photo(context: PhotoItem.MOC)
+       newPhoto.date = Date() as NSDate
+       newPhoto.photoSnippet = photoSnippet
+       newPhoto.isSelected = false
+       newPhoto.id = newPhotoID
+       let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
+       newPhoto.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
+       photoSnippet.addToPhotos(newPhoto)
+      }
+        
+      self.init(photo: newPhoto)
         
       cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
 
@@ -622,6 +664,97 @@ class PhotoItem: NSObject, PhotoItemProtocol
      }
     }
     
-   
+    class func getAllImages(for photoSnippet: PhotoSnippet, requiredImageWidth: CGFloat,
+                            completion: @escaping ([UIImage]?) -> Void)
+    {
+      let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
+      if let photoItems = (photoSnippet.photos?.sortedArray(using: [sort]) as? [Photo])?.map({PhotoItem(photo: $0)}),
+           photoItems.count > 1
+            
+      {
+        
+         var imageSet = [UIImage]()
+        
+         photoItems.forEach
+         {photoItem in
+          PhotoItem.dsQueue.async(group: PhotoItem.dsGroup)
+          {
+           PhotoItem.dsGroup.enter()
+           photoItem.getImage(requiredImageWidth: requiredImageWidth)
+           {(image) in
+             if let img = image {imageSet.append(img)}
+             PhotoItem.dsGroup.leave()
+           }
+          }
+         }
+        
+         PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
+         {
+          print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "no name")\",  COUNT - \(imageSet.count)")
+          DispatchQueue.main.async{completion(imageSet)}
+            
+         }
+      }
+      else
+      {
+        DispatchQueue.main.async{completion(nil)}
+      }
+    }
+    
+    class func getRandomImages(for photoSnippet: PhotoSnippet, number: Int, requiredImageWidth: CGFloat,
+                               completion: @escaping ([UIImage]?) -> Void)
+    {
+        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
+        guard let photos = photoSnippet.photos?.sortedArray(using: [sort]) as? [Photo], photos.count > 1 else
+        {
+         DispatchQueue.main.async{completion(nil)}
+         return
+        }
+        
+        var photoItems: [PhotoItem]
+        if (number >= photos.count)
+        {
+         photoItems = photos.map({PhotoItem(photo: $0)})
+        }
+        else
+        {
+         var indexSet = Set<Int>()
+         let arc4rnd = GKRandomDistribution(lowestValue: 0, highestValue: photos.count - 1)
+        
+         while (indexSet.count < number)
+         {
+            indexSet.insert(arc4rnd.nextInt())
+         }
+         
+         photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
+        }
+        
+        
+        var imageSet = [UIImage]()
+            
+            photoItems.forEach
+                {photoItem in
+                    PhotoItem.dsQueue.async(group: PhotoItem.dsGroup)
+                    {
+                        PhotoItem.dsGroup.enter()
+                        photoItem.getImage(requiredImageWidth: requiredImageWidth)
+                        {(image) in
+                            if let img = image {imageSet.append(img)}
+                            PhotoItem.dsGroup.leave()
+                        }
+                    }
+            }
+            
+            PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
+            {
+                print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "no name")\",  COUNT - \(imageSet.count)")
+                DispatchQueue.main.async{completion(imageSet)}
+                
+            }
+        
+        
+    }
+            
 }
+
 //MARK: -

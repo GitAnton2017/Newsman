@@ -23,17 +23,16 @@ class FlagLayer: CALayer
     }
 }
 
-protocol PhotoSnippetCellProtocol: AnyObject
+@objc protocol PhotoSnippetCellProtocol: AnyObject
 {
-    var photoItemView: UIView {get}
-    var cellFrame: CGRect     {get}
+    var photoItemView: UIView     {get    }
+    var cellFrame: CGRect         {get    }
     var isPhotoItemSelected: Bool {get set}
-    
-    
 }
 
 extension PhotoSnippetCellProtocol
 {
+    
     var cornerRadius: CGFloat
     {
      get {return photoItemView.layer.cornerRadius}
@@ -42,6 +41,8 @@ extension PhotoSnippetCellProtocol
       photoItemView.layer.cornerRadius = newValue
      }
     }
+
+    
     
     func clearFlag ()
     {
@@ -89,6 +90,9 @@ extension PhotoSnippetCellProtocol
 
 class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    var cellView: UICollectionViewCell {return self}
+    
+    var zoomedIn: Bool = false
     
     var isPhotoItemSelected: Bool
     {
@@ -107,15 +111,16 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
     
     @IBOutlet weak var photoIconView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+
     
     override func awakeFromNib()
     {
-        
         super.awakeFromNib()
         spinner.startAnimating()
         photoIconView.image = nil
         clearFlag()
         imageRoundClip()
+        
     }
     
     override func prepareForReuse()
