@@ -24,6 +24,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     photoItem.isSelected = true
     let itemProvider = NSItemProvider(object: photoItem)
     let dragItem = UIDragItem(itemProvider: itemProvider)
+    dragItem.localObject = photoItem
     return [dragItem]
   }
   else
@@ -88,6 +89,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
         
     }
   
+    
     if session.items.count == 1
     {
       return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
@@ -103,7 +105,53 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
 //-------------------------------------------------------------------------------------------------------
 //MARK: -
     
- 
+    func performMergeIntoFolder (_ collectionView: PhotoSnippetCollectionView,
+                                   from photoItems: [PhotoItemProtocol],
+                                   into destinationIndexPath: IndexPath) -> PhotoFolderItem?
+    {
+        if let newFolder = PhotoFolderItem(photoSnippet: photoSnippet)
+        {
+            newFolder.priorityFlag = sectionTitles?[destinationIndexPath.section]
+            photoItems.forEach
+            {photoItem in
+               let sourceIndexPath = photoItemIndexPath(photoItem: photoItem)
+               photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+               collectionView.deleteItems(at: [sourceIndexPath])
+               
+               if (collectionView.photoGroupType == .makeGroups && sourceIndexPath.section != destinationIndexPath.section)
+               {
+                collectionView.reloadSections([sourceIndexPath.section])
+               }
+               
+            }//photoItems.forEach...
+            
+            let sectionCnt = photoItems2D[destinationIndexPath.section].count
+            if  (destinationIndexPath.row < sectionCnt)
+            {
+                photoItems2D[destinationIndexPath.section].insert(newFolder, at: destinationIndexPath.row)
+                collectionView.insertItems(at: [destinationIndexPath])
+            }
+            else
+            {
+                photoItems2D[destinationIndexPath.section].append(newFolder)
+                let indexPath = IndexPath(row: sectionCnt, section: destinationIndexPath.section)
+                collectionView.insertItems(at: [indexPath])
+            }
+            
+            if (collectionView.photoGroupType == .makeGroups)
+            {
+                collectionView.reloadSections([destinationIndexPath.section])
+            }
+            
+            deleteEmptySections()
+            
+            PhotoFolderItem.removeEmptyFolders(from: photoSnippet)
+            
+            return newFolder
+        }
+        
+        return nil
+    }
     
 //MARK:---------------------- MERGING DRAGED PHOTO ITEMS INTO PHOTO FOLDER --------------------------------
 //---------------------------------------------------------------------------------------------------------
@@ -112,57 +160,22 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  {
     
   let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+  let photoItems = coordinator.items.filter{$0.sourceIndexPath != nil}.map
+      {photoItems2D[$0.sourceIndexPath!.section][$0.sourceIndexPath!.row]}
     
-  if let newFolder = PhotoFolderItem(photoSnippet: photoSnippet)
+  let photoSnippetCV = collectionView as! PhotoSnippetCollectionView
+  _ = performMergeIntoFolder(photoSnippetCV, from: photoItems, into: destinationIndexPath)
+    
+  
+  coordinator.items.forEach
   {
-    
-    newFolder.priorityFlag = sectionTitles?[destinationIndexPath.section]
-    coordinator.items.filter{$0.sourceIndexPath != nil}.map
-    {photoItems2D[$0.sourceIndexPath!.section][$0.sourceIndexPath!.row]}.forEach
-    {photoItem in
-        
-       let sourceIndexPath = photoItemIndexPath(photoItem: photoItem)
-       photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-       collectionView.deleteItems(at: [sourceIndexPath])
-        
-       if (photoCollectionView.photoGroupType == .makeGroups && sourceIndexPath != destinationIndexPath)
-       {
-        photoCollectionView.reloadSections([sourceIndexPath.section])
-       }
-        
-    }//photoItems.forEach...
-    
-    let sectionCnt = photoItems2D[destinationIndexPath.section].count
-    if  (destinationIndexPath.row < sectionCnt)
-    {
-     photoItems2D[destinationIndexPath.section].insert(newFolder, at: destinationIndexPath.row)
-     collectionView.insertItems(at: [destinationIndexPath])
-    }
-    else
-    {
-     photoItems2D[destinationIndexPath.section].append(newFolder)
-     let indexPath = IndexPath(row: sectionCnt, section: destinationIndexPath.section)
-     collectionView.insertItems(at: [indexPath])
-    }
-    
-    if (photoCollectionView.photoGroupType == .makeGroups)
-    {
-      photoCollectionView.reloadSections([destinationIndexPath.section])
-    }
-    
-    deleteEmptySections()
-    
-    PhotoFolderItem.removeEmptyFolders(from: photoSnippet)
-    
-    coordinator.items.forEach
-    {
      if let dropCellRect = collectionView.cellForItem(at: destinationIndexPath)?.bounds
      {
-      coordinator.drop($0.dragItem, intoItemAt: destinationIndexPath, rect: dropCellRect)
+         coordinator.drop($0.dragItem, intoItemAt: destinationIndexPath, rect: dropCellRect)
      }
-    }
-    
   }
+    
+
  }//func performMergeIntoFolder (_ collectionView: UICollectionView...
 //---------------------------------------------------------------------------------------------------------
 //MARK: -

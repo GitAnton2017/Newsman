@@ -244,42 +244,65 @@ class PhotoSnippetCollectionView: UICollectionView
       return CGRect(origin: CGPoint.zero, size: CGSize(width: zoomSize, height: zoomSize))
     }
     
-
-    @objc func cellDoubleTap(_ gr: UITapGestureRecognizer)
+    func snippetCellZoom(at touchPoint: CGPoint, with centerAt: CGPoint) -> ZoomView?
     {
      for view in mainView.subviews
      {
-        if let _ = view as? ZoomView {return}
+         if let zoomView = view as? ZoomView {return zoomView}
      }
-    
-     if let indexPath = indexPathForItem(at: gr.location(in: self))
+     
+     if let indexPath = indexPathForItem(at: touchPoint)
      {
-      let zoomView = ZoomView()
-      let tpMV = gr.location(in: mainView)
-      zoomView.center = CGPoint (x: tpMV.x, y: tpMV.y + mainView.frame.origin.y)
-      
-      switch cellForItem(at: indexPath)
-      {
-        case _ as PhotoSnippetCell:
+         let zoomView = ZoomView()
+         zoomView.center = centerAt
+         zoomView.zoomedCellIndexPath = indexPath
+         zoomView.photoSnippetVC = dataSource as! PhotoSnippetViewController
         
-        let imageView = zoomView.openWithIV(in: mainView)
-        (photoItems2D[indexPath.section][indexPath.row] as! PhotoItem).getImage(requiredImageWidth: zoomSize)
-        {image in
-         zoomView.stopSpinner()
-         imageView.image = image
-         image?.setSquared(in: imageView)
-        }
-    
-
-       case let cell as PhotoFolderCell:
-        let collectionView = zoomView.openWithCV(in: mainView)
-        zoomView.photoItems = cell.photoItems
-        collectionView.reloadData()
+         let tappedItem = photoItems2D[indexPath.section][indexPath.row]
+         tappedItem.isSelected = true
         
-       default: break
-    
-      }
+         switch cellForItem(at: indexPath)
+         {
+          case _ as PhotoSnippetCell:
+            
+             let imageView = zoomView.openWithIV(in: mainView)
+            
+             (tappedItem as! PhotoItem).getImage(requiredImageWidth: zoomSize)
+             {image in
+                 zoomView.stopSpinner()
+                 imageView.image = image
+                 image?.setSquared(in: imageView)
+             }
+            
+            
+          case let cell as PhotoFolderCell:
+            
+            let collectionView = zoomView.openWithCV(in: mainView)
+            zoomView.photoItems = cell.photoItems
+            collectionView.reloadData()
+            
+          default: break
+            
+         }
+        
+         return zoomView
+        
      }
+        
+     return nil
+    }
+
+    func cellSpringInt (_ springContext: UISpringLoadedInteractionContext) -> ZoomView?
+    {
+     let tpMV = springContext.location(in: mainView)
+     return snippetCellZoom(at: springContext.location(in: self), with: CGPoint (x: tpMV.x, y: tpMV.y + mainView.frame.origin.y))
+    }
+    
+    
+    @objc func cellDoubleTap(_ gr: UITapGestureRecognizer)
+    {
+     let tpMV = gr.location(in: mainView)
+     _ = snippetCellZoom(at: gr.location(in: self), with: CGPoint (x: tpMV.x, y: tpMV.y + mainView.frame.origin.y))
     }
     
     var hasUnfinishedMove = false

@@ -15,6 +15,29 @@ class ZoomView: UIView
     var maxZoomRatio: CGFloat = 5.0
     var minPinchVelocity: CGFloat = 0.15
     var removingZoomView = false
+    weak var photoSnippetVC: PhotoSnippetViewController!
+    var zoomedCellIndexPath: IndexPath!
+    var hasNoDraggedSubviews = true
+    
+    var isShowingCV: Bool
+    {
+        for sv in subviews
+        {
+            if let _ = sv as? UICollectionView {return true}
+        }
+        
+        return false
+    }
+    
+    var isShowingIV: Bool
+    {
+        for sv in subviews
+        {
+            if let _ = sv as? UIImageView {return true}
+        }
+        
+        return false
+    }
     
     var zoomSize: CGFloat {return 0.9 * min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)}
 
@@ -62,6 +85,11 @@ class ZoomView: UIView
                        completion:
                        {[unowned self] _ in
                         self.removeFromSuperview()
+                        let ip = self.zoomedCellIndexPath!
+                        if self.hasNoDraggedSubviews
+                        {
+                         self.photoSnippetVC.photoItems2D[ip.section][ip.row].isSelected = false
+                        }
                         self.removingZoomView = false
                        })
     }
@@ -122,6 +150,14 @@ class ZoomView: UIView
     
     func openWithIV (in mainView: UIView) -> UIImageView
     {
+        
+      for sv in subviews
+      {
+        if let iv = sv as? UIImageView {return iv}
+      }
+        
+      subviews.forEach{$0.removeFromSuperview()}
+       
       mainView.addSubview(self)
       setConstraints(to: mainView)
       let iv = UIImageView()
@@ -132,6 +168,15 @@ class ZoomView: UIView
       self.addSubview(iv)
       setConstraints(of: iv)
       setConstraints(of: spinner)
+        
+      let dragger = UIDragInteraction(delegate: self)
+      addInteraction(dragger)
+      dragger.isEnabled = true
+        
+      let dropper = UIDropInteraction(delegate: self)
+      addInteraction(dropper)
+      
+        
       openAnim()
       return iv
       
@@ -139,6 +184,15 @@ class ZoomView: UIView
     
     func openWithCV (in mainView: UIView) -> UICollectionView
     {
+      for sv in subviews
+      {
+       if let cv = sv as? UICollectionView {return cv}
+      }
+      
+      subviews.forEach{$0.removeFromSuperview()}
+        
+      interactions.removeAll()
+        
       mainView.addSubview(self)
       setConstraints(to: mainView)
       let cv_lo = UICollectionViewFlowLayout()
@@ -149,8 +203,14 @@ class ZoomView: UIView
       cv_lo.minimumLineSpacing = 2
       
       let cv = UICollectionView(frame: bounds, collectionViewLayout: cv_lo)
+        
       cv.delegate = self
       cv.dataSource = self
+        
+      cv.dragInteractionEnabled = true
+      cv.dropDelegate = self
+      cv.dragDelegate = self
+        
       let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)
       cv.register(cellNib, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
       
@@ -242,98 +302,5 @@ class ZoomView: UIView
 
 
 
-extension ZoomView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
-{
-    func collectionView(_ collectionView: UICollectionView,
-                          layout collectionViewLayout: UICollectionViewLayout,
-                          sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-      return CGSize(width: imageSize, height: imageSize)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat
-    {
-        let fl = collectionViewLayout as! UICollectionViewFlowLayout
-        let w = collectionView.bounds.width
-        let li = fl.sectionInset.left
-        let ri = fl.sectionInset.right
-        let s  = fl.minimumInteritemSpacing
-        
-        let wr = (w - li - ri - s * CGFloat(nphoto - 1)).truncatingRemainder(dividingBy: CGFloat(nphoto)) / CGFloat(nphoto - 1)
-        
-        return s + wr
-        
-    }
-   
-    
-}
-extension ZoomView:  UICollectionViewDataSource
-{
-    
-    var imageSize: CGFloat
-    {
-      let w = self.bounds.width
-      let cv = self.subviews.first as! UICollectionView
-      let fl = cv.collectionViewLayout as! UICollectionViewFlowLayout
-      let li = fl.sectionInset.left
-      let ri = fl.sectionInset.right
-      let s = fl.minimumInteritemSpacing
-        
-      let size = (w - li - ri - s * CGFloat(nphoto - 1)) / CGFloat(nphoto)
-        
-      return trunc(size)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
-    {
-        return photoItems.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    {
-        // print ("LOADING FOLDER CELL WITH IP - \(indexPath)")
-        // print ("VISIBLE CELLS: \(collectionView.visibleCells.count)")
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ZoomCollectionViewCell", for: indexPath) as! ZoomViewCollectionViewCell
-        
-        let photoItem = photoItems[indexPath.row]
-        cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
-        
-        cell.photoIconView.layer.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
-        
-        photoItem.getImage(requiredImageWidth:  imageSize)
-        {(image) in
-            cell.photoIconView.image = image
-            cell.photoIconView.layer.contentsGravity = kCAGravityResizeAspect
-            
-            if let img = image
-            {
-                // print ("IMAGE LOADED FOR CELL WITH IP - \(indexPath)")
-                if img.size.height > img.size.width
-                {
-                    
-                    let r = img.size.width/img.size.height
-                    cell.photoIconView.layer.contentsRect = CGRect(x: 0, y: (1 - r)/2, width: 1, height: r)
-                    
-                    
-                }
-                else
-                {
-                    
-                    let r = img.size.height/img.size.width
-                    cell.photoIconView.layer.contentsRect = CGRect(x: (1 - r)/2, y: 0, width: r, height: 1)
-                    
-                    
-                }
-            }
-            
-            cell.spinner.stopAnimating()
-        }
-        
-        
-        return cell
-    }
-    
-}
+
+

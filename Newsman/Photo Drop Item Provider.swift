@@ -6,7 +6,6 @@ import MobileCoreServices
 
 extension PhotoFolderItem
 {
-    
     func getPhotoRect (photoSize: CGSize) -> CGRect
     {
       let rx = PDFContextSize.width
@@ -41,7 +40,7 @@ extension PhotoFolderItem
     }
     static var writableTypeIdentifiersForItemProvider: [String]
     {
-        return [kUTTypePDF as String]
+        return [folderItemUTI, kUTTypePDF as String]
     }
     
     func loadData(withTypeIdentifier typeIdentifier: String,
@@ -122,6 +121,19 @@ extension PhotoFolderItem
              
              completionHandler(PDFData, nil)
             
+        case PhotoFolderItem.folderItemUTI:
+            
+            do
+            {
+                let encoder = PropertyListEncoder()
+                let data = try encoder.encode(self)
+                completionHandler(data, nil)
+            }
+            catch
+            {
+                completionHandler(nil, error)
+                
+            } //do-try-catch...
             
         default: completionHandler(nil, UTIError.UnknownType)
             
@@ -130,7 +142,33 @@ extension PhotoFolderItem
       return nil
     }
     
+    static var readableTypeIdentifiersForItemProvider: [String]
+    {
+        return [folderItemUTI]
+    }
     
+    static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> Self
+    {
+       switch typeIdentifier
+       {
+        case folderItemUTI:
+            
+            do
+            {
+                let decoder = PropertyListDecoder()
+                let item = try decoder.decode(self, from: data)
+                return item
+            }
+            catch
+            {
+                throw error
+                
+            } //do-try-catch...
+            
+        default: throw UTIError.UnknownType
+       }
+        
+    }
 } //extension PhotoItem: NSItemProviderWriting...
 
 
@@ -142,7 +180,7 @@ extension PhotoItem
     }
     static var writableTypeIdentifiersForItemProvider: [String]
     {
-        return [kUTTypeJPEG as String]
+        return [photoItemUTI, kUTTypeJPEG as String]
     }
     
     func loadData(withTypeIdentifier typeIdentifier: String,
@@ -153,32 +191,75 @@ extension PhotoItem
          case kUTTypeJPEG as String as String:
             
             
-                    do
-                    {
-                        print("******************************************************************************")
-                        print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM URL : \n \(url.path)...")
-                        print("******************************************************************************")
-                        
-                        let data = try Data(contentsOf: self.url)
-                        completionHandler(data, nil)
-                        
-                    }
-                    catch
-                    {
-                        print("******************************************************************************")
-                        print("ERROR OCCURED WHEN READING IMAGE DATA FOR DRAG AND DROP FROM URL!\n\(error.localizedDescription)")
-                        print("******************************************************************************")
-                        completionHandler(nil, error)
-                        
-                    } //do-try-catch...
-                    
+           do
+           {
+               print("******************************************************************************")
+               print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM URL : \n \(url.path)...")
+               print("******************************************************************************")
+            
+               let data = try Data(contentsOf: self.url)
+               completionHandler(data, nil)
+            
+           }
+           catch
+           {
+               print("******************************************************************************")
+               print("ERROR OCCURED WHEN READING IMAGE DATA FOR DRAG AND DROP FROM URL!\n\(error.localizedDescription)")
+               print("******************************************************************************")
+               completionHandler(nil, error)
+            
+           } //do-try-catch...
+           
 
+         case PhotoItem.photoItemUTI:
+            
+           do
+           {
+               let encoder = PropertyListEncoder()
+               let data = try encoder.encode(self)
+               completionHandler(data, nil)
+           }
+           catch
+           {
+               completionHandler(nil, error)
+            
+           } //do-try-catch...
+        
+           
             
          default: completionHandler(nil, UTIError.UnknownType)
             
         }
         
         return nil
+    }
+    
+    static var readableTypeIdentifiersForItemProvider: [String]
+    {
+      return [photoItemUTI]
+    }
+    
+    static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> Self
+    {
+        switch typeIdentifier
+        {
+          case photoItemUTI:
+            
+            do
+            {
+                let decoder = PropertyListDecoder()
+                let item = try decoder.decode(self, from: data)
+                return item
+            }
+            catch
+            {
+                throw error
+                
+            } //do-try-catch...
+        
+          default: throw UTIError.UnknownType
+        }
+        
     }
     
     

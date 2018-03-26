@@ -36,7 +36,7 @@ class PhotoSnippetViewController: UIViewController
 
      if isEditingPhotos
      {
-      photoCollectionView.cancellUnfinishedMove()
+      //photoCollectionView.cancellUnfinishedMove()
      }
      else
      {

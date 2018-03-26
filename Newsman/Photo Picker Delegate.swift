@@ -8,7 +8,7 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
   {
     let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
     
-    let ratio: CGFloat = 1.0/9.0
+    let ratio: CGFloat = 1.0/5.0
 
     if let image = pickedImage.resized(withPercentage: ratio)
     {

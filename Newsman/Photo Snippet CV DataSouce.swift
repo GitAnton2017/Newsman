@@ -489,15 +489,23 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
 //------------------------------------------------------------------------------------------------------------------
  {
+   var cell = UICollectionViewCell()
    switch (photoItems2D[indexPath.section][indexPath.row])
    {
     case let item as PhotoItem:
-     return getPhotoCell (collectionView, at: indexPath, with: item)
+     cell = getPhotoCell (collectionView, at: indexPath, with: item)
     case let item as PhotoFolderItem:
-     return getFolderCell(collectionView, at: indexPath, with: item)
-    default:
-     return UICollectionViewCell()
+     cell = getFolderCell(collectionView, at: indexPath, with: item)
+    default: break
    }
+   let cellInter = UISpringLoadedInteraction
+   {inter, context in
+     _ = (collectionView as! PhotoSnippetCollectionView).cellSpringInt(context)
+    
+   }
+    
+   cell.addInteraction(cellInter)
+   return cell
  }
 }//func collectionView(_ collectionView: UICollectionView,...
 //-----------------------------------------------------------------------------------------------------------------

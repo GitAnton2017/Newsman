@@ -4,7 +4,7 @@ import UIKit
 import CoreData
 
 //MARK: ----------------- Photo Item Protocol ----------------
-protocol PhotoItemProtocol: NSItemProviderWriting
+protocol PhotoItemProtocol: NSItemProviderWriting, NSItemProviderReading, Codable
     //------------------------------------------------------------
 {
     var photoSnippet: PhotoSnippet     { get     }
@@ -41,6 +41,7 @@ extension PhotoItemProtocol
     {
         return appDelegate.persistentContainer.viewContext
     }
+    
     
 }//extension PhotoItemProtocol...
 //-------------------------------------------------------------

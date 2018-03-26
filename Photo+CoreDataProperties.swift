@@ -11,7 +11,8 @@ import Foundation
 import CoreData
 
 
-extension Photo {
+extension Photo
+{
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Photo> {
         return NSFetchRequest<Photo>(entityName: "Photo")
@@ -26,3 +27,5 @@ extension Photo {
     @NSManaged public var folder: PhotoFolder?
 
 }
+
+
