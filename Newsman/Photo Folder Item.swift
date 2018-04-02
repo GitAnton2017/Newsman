@@ -9,7 +9,9 @@ import CoreData
  class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
 {
-    
+  
+    weak var dragSession: UIDragSession?
+  
     static let folderItemUTI = "folderitem.newsman"
     
     let PDFContextSize = CGSize(width: 300, height: 500)
@@ -91,6 +93,14 @@ import CoreData
         get {return folder.isSelected}
         set
         {
+            
+            if newValue == false,
+                let session = PhotoFolderItem.appDelegate.currentDragSession,
+                (session.items.map{$0.localObject as! PhotoItemProtocol}.contains(where: {[weak self] in $0.id == self?.id}))
+            {
+                return
+            }
+            
             folder.isSelected = newValue
             folder.photos?.forEach {($0 as! Photo).isSelected = newValue}
         }

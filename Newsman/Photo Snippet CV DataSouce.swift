@@ -31,8 +31,8 @@ extension PhotoSnippetViewController
       photoItems = sectionedPhotoItems()
     }
    }
-    
-   return photoItems
+  
+  return photoItems
     
   }//func createPhotoItems2D()...
 
@@ -42,7 +42,7 @@ extension PhotoSnippetViewController
 //---------------------------------------------------------------------------
  {
   var photoItems = [[PhotoItemProtocol]]()
-  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
+  if let allPhotos = photoSnippet.photos?.allObjects as? [Photo], allPhotos.count > 0
   {
    // if photo has no folder we take the photo flag otherwise we take the flag of the folder...
    let flags = allPhotos.map{$0.folder == nil ? $0.priorityFlag ?? "" : $0.folder!.priorityFlag ?? ""}
@@ -70,9 +70,16 @@ extension PhotoSnippetViewController
     
      photoItems.append(newSection.sorted{$0.date <= $1.date})
    }
+   
    sectionTitles = sections
+   return photoItems
   }
-  return photoItems    //return all single photos and photo folders sectioned by priority flags...
+  
+  sectionTitles = [""]
+  photoItems.append([PhotoItemProtocol]())
+  return photoItems
+  
+  //return all single photos and photo folders sectioned by priority flags...
  } //func sectionedPhotoItems()...
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //MARK: -
@@ -305,6 +312,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
 //-------------------------------------------------------------------------------------
  {
+  
+     let itemsCount = photoItems2D[indexPath.section].count
+  
      switch (kind)
      {
       case UICollectionElementKindSectionHeader:
@@ -313,8 +323,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
                                                                   withReuseIdentifier: "photoSectionHeader",
                                                                   for: indexPath) as! PhotoSectionHeader
        
-
-       if photoCollectionView.photoGroupType == .makeGroups, let titles = sectionTitles
+       view.headerLabel.text = nil
+       
+       if photoCollectionView.photoGroupType == .makeGroups, let titles = sectionTitles, itemsCount > 0
        {
         let title = (titles[indexPath.section].isEmpty) ? "Not Flagged Yet" : titles[indexPath.section]
         view.headerLabel.text = NSLocalizedString(title, comment: title)
@@ -327,20 +338,26 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
          view.backgroundColor = UIColor.lightGray
         }
        }
+       
+       
        return view
        
         
       case UICollectionElementKindSectionFooter:
-        
+       
+       
+       
        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                   withReuseIdentifier: "photoSectionFooter",
                                                                   for: indexPath) as! PhotoSectionFooter
-       if photoCollectionView.photoGroupType == .makeGroups
+       view.footerLabel.text = nil
+       
+       if photoCollectionView.photoGroupType == .makeGroups, itemsCount > 0
        {
         view.backgroundColor = collectionView.backgroundColor
-        let itemsCount = photoItems2D[indexPath.section].count
         view.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") + ": \(itemsCount)"
        }
+       
        return view
         
       default:  return UICollectionReusableView()

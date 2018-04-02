@@ -15,6 +15,8 @@ protocol PhotoItemProtocol: NSItemProviderWriting, NSItemProviderReading, Codabl
     var isSelected: Bool               { get set }
     var id: UUID                       { get     }
     var url: URL                       { get     }
+ 
+    var dragSession: UIDragSession?    { get set }
     
     func deleteImages()
     

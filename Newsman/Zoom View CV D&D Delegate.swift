@@ -1,5 +1,6 @@
 
 
+
 import Foundation
 import CoreData
 import UIKit
@@ -7,73 +8,67 @@ import UIKit
 
 //MARK: -
 
-//MARK: =============================== CV ITEMS DRAG AND DROP DELEGATE =================================
 extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
-//=======================================================================================================
 {
+ //MARK: -
     
-    //MARK: -
+ func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
+ {
+    (UIApplication.shared.delegate as! AppDelegate).currentDragSession = session
+ }
     
-    //MARK:-------------------------------- PREPARING DRAG ITEMS --------------------------------------------
-    //-------------------------------------------------------------------------------------------------------
-    func getDragItems (_ collectionView: UICollectionView, forCellAt indexPath: IndexPath) -> [UIDragItem]
-    //-------------------------------------------------------------------------------------------------------
-    {
-        if collectionView.cellForItem(at: indexPath) != nil
-        {
-            let photoItem = photoItems[indexPath.row]
-            photoItem.isSelected = true
-            let itemProvider = NSItemProvider(object: photoItem)
-            let dragItem = UIDragItem(itemProvider: itemProvider)
-            dragItem.localObject = photoItem
-            hasNoDraggedSubviews = false
-            return [dragItem]
-        }
-        else
-        {
-            return []
-        }
-        
-    }//func getDragItems (forCellAt indexPath: IndexPath)...
-    //-------------------------------------------------------------------------------------------------------
-    //MARK: -
+ //MARK: -
     
-    //MARK:--------------------------- PREPARING DRAG ITEMS DELEGATE METHOD ---------------------------------
-    //-------------------------------------------------------------------------------------------------------
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
-                        at indexPath: IndexPath) -> [UIDragItem]
-        //-------------------------------------------------------------------------------------------------------
-    {
-        return getDragItems(collectionView, forCellAt: indexPath)
-    }//func collectionView(_ collectionView: UICollectionView, itemsForBeginning...
-    //-------------------------------------------------------------------------------------------------------
-    //MARK: -
+ func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
+ {
+    (UIApplication.shared.delegate as! AppDelegate).currentDragSession = nil
+    session.items.map{$0.localObject as! PhotoItemProtocol}.forEach{$0.isSelected = false}
+ }
     
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
-    {
-        //deselectSelectedItems(in: collectionView)
-    }
+ //MARK: -
     
-    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
-    {
-        //deselectSelectedItems(in: collectionView)
-    }
+ func getDragItems (_ collectionView: UICollectionView, for session: UIDragSession, forCellAt indexPath: IndexPath) -> [UIDragItem]
+ {
+  let photoItem = photoItems[indexPath.row]
+  
+  if (session.items.map{$0.localObject as! PhotoItemProtocol}.contains(where: {$0.id == photoItem.id}))
+  {
+    return []
+  }
+  
+  if collectionView.cellForItem(at: indexPath) != nil
+  {
+      photoItem.isSelected = true
+      let itemProvider = NSItemProvider(object: photoItem)
+      let dragItem = UIDragItem(itemProvider: itemProvider)
+      dragItem.localObject = photoItem
+      return [dragItem]
+  }
+  else
+  {
+      return []
+  }
+ }
     
-    //MARK:----------------- ADDING DRAG ITEMS TO CURRENT DRAG SESSION DELEGATE METHOD ----------------------
-    //-------------------------------------------------------------------------------------------------------
-    func collectionView(_ collectionView: UICollectionView,
-                        itemsForAddingTo session: UIDragSession,
-                        at indexPath: IndexPath, point: CGPoint) -> [UIDragItem]
-        //-------------------------------------------------------------------------------------------------------
-    {
-        return getDragItems(collectionView, forCellAt: indexPath)
-    }//func collectionView(_ collectionView: UICollectionView,itemsForAddingTo...
-    //-------------------------------------------------------------------------------------------------------
-    //MARK: -
+//MARK: -
     
+ func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
+                       at indexPath: IndexPath) -> [UIDragItem]
+ {
+    return getDragItems(collectionView, for: session, forCellAt: indexPath)
+ }
+
+//MARK: -
+ 
+
+ func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession,
+                     at indexPath: IndexPath, point: CGPoint) -> [UIDragItem]
+ {
+     return getDragItems(collectionView, for: session, forCellAt: indexPath)
+ }
     
-    //MARK:----------------------------- DROPPING PROPOSAL DELEGATE METHOD ----------------------------------
-    //-------------------------------------------------------------------------------------------------------
+//MARK: -
+    
     func collectionView(_ collectionView: UICollectionView,dropSessionDidUpdate session: UIDropSession,
                         withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
     {
@@ -190,17 +185,6 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
     //MARK: -
     
     
-    
-    
-    //MARK:------------------------ MAKING PREPARATIONS BEFORE DRAG SESSION BEGINS ----------------------------
-    //---------------------------------------------------------------------------------------------------------
-    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
-        //---------------------------------------------------------------------------------------------------------
-    {
-        session.localContext = self //getting strong reference to the current VC with current CV...
-    }//func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin...
-    //---------------------------------------------------------------------------------------------------------
-    //MARK: -
     
     
     

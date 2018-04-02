@@ -17,7 +17,6 @@ class ZoomView: UIView
     var removingZoomView = false
     weak var photoSnippetVC: PhotoSnippetViewController!
     var zoomedCellIndexPath: IndexPath!
-    var hasNoDraggedSubviews = true
     
     var isShowingCV: Bool
     {
@@ -86,10 +85,7 @@ class ZoomView: UIView
                        {[unowned self] _ in
                         self.removeFromSuperview()
                         let ip = self.zoomedCellIndexPath!
-                        if self.hasNoDraggedSubviews
-                        {
-                         self.photoSnippetVC.photoItems2D[ip.section][ip.row].isSelected = false
-                        }
+                        self.photoSnippetVC.photoItems2D[ip.section][ip.row].isSelected = false
                         self.removingZoomView = false
                        })
     }

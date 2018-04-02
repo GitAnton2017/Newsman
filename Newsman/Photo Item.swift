@@ -5,10 +5,13 @@ import GameplayKit
 
 
 
-
 //MARK: ----------------- Single Photo Item Class ----------------
 class PhotoItem: NSObject, PhotoItemProtocol
 {
+ 
+  weak var dragSession: UIDragSession?
+
+ 
   static let photoItemUTI = "photoitem.newsman"
 //------------------------------------------
     var photo: Photo
@@ -35,8 +38,25 @@ class PhotoItem: NSObject, PhotoItemProtocol
     var isSelected: Bool
     {
       get {return photo.isSelected}
-      set {photo.isSelected = newValue}
+      set
+      {
+        if newValue == false
+        {
+         for item in PhotoItem.appDelegate.globalDragItems
+         {
+          if let photoGlobalItem = item as? PhotoItemProtocol, photoGlobalItem.id == id
+          {
+           return
+          }
+         }
+        }
+        
+        photo.isSelected = newValue
+   
+      }
     }
+ 
+ 
     
     var priorityFlag: String?
     {
@@ -72,7 +92,6 @@ class PhotoItem: NSObject, PhotoItemProtocol
         try cont.encode(url, forKey: .photoURL)
         
     }
-    
     
     
     static let dsQueue = DispatchQueue(label: "Images")
@@ -297,9 +316,9 @@ class PhotoItem: NSObject, PhotoItemProtocol
       {
          do
           {
-              print("******************************************************************************")
-              print ("ATTEMPT OF READING IMAGE FROM URL IN SERIAL QUEUE: \n \(url.path)...")
-              print("******************************************************************************")
+              //print("******************************************************************************")
+              //print ("ATTEMPT OF READING IMAGE FROM URL IN SERIAL QUEUE: \n \(url.path)...")
+              //print("******************************************************************************")
             
               let data = try Data(contentsOf: url)
             
@@ -309,7 +328,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
                   let cachedImage = PhotoItem.cacheThumbnailImage(imageID: imageID.uuidString, image: savedImage, width: Int(requiredImageWidth))
                 
                {
-                  print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
+                  //print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
                   //OperationQueue.main.addOperation {completion(cachedImage)}
                   completion(cachedImage)
                }
@@ -448,149 +467,342 @@ class PhotoItem: NSObject, PhotoItemProtocol
      }
      } //func getImage(...)
 //-----------------------------------------------------------------------------------------------------------------
+ 
+/***************************************************************************************************************/
+class var docFolder: URL
+/***************************************************************************************************************/
+{
+ return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+}
+/***************************************************************************************************************/
+ 
+//MARK: -
+ 
+/***************************************************************************************************************/
+func deleteImages()
+/***************************************************************************************************************/
+{
+  PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: id.uuidString as NSString)}
+  PhotoItem.deletePhotoItemFromDisk(at: url)
+  PhotoItem.MOC.persist {PhotoItem.MOC.delete(self.photo)}
+}
+/***************************************************************************************************************/
+ class func deletePhotoItemFromDisk (at url: URL)
+/***************************************************************************************************************/
+ {
+  do
+  {
+   try FileManager.default.removeItem(at: url)
+   print("PHOTO ITEM IMAGE FILE OR FOLDER DELETED SUCCESSFULLY AT PATH:\n\(url.path)")
+  }
+  catch
+  {
+   print("ERROR DELETING PHOTO ITEM OR IMAGE FILE AT PATH:\n\(url.path)\n\(error.localizedDescription)")
+  }
+ }
+/***************************************************************************************************************/
+ 
+ //MARK: -
+ 
+/***************************************************************************************************************/
+ class func movePhotoItemOnDisk (from sourceURL: URL, to destinationURL: URL)
+/***************************************************************************************************************/
+ {
+  do
+  {
+   try FileManager.default.moveItem(at: sourceURL, to: destinationURL)
+   print("PHOTO ITEM IMAGE FILE OR FOLDER MOVED SUCCESSFULLY TO DESTINATION PATH:\n\(sourceURL.path)")
+  }
+  catch
+  {
+   print("ERROR MOVING PHOTO ITEM IMAGE FILE OR FOLDER FROM:\n\(sourceURL.path) TO \(destinationURL.path) \n\(error.localizedDescription)")
+  }
+ }
+/***************************************************************************************************************/
+ 
+//MARK: -
     
-    func deleteImages()
+/***************************************************************************************************************/
+@discardableResult class func movePhotos (from sourcePhotoSnippet: PhotoSnippet,
+                                          to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]?
+/***************************************************************************************************************/
+{
+ guard sourcePhotoSnippet !== destPhotoSnippet else {return nil}
+ 
+ if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder == nil}), sourceSelectedPhotos.count > 0
+ {
+  let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
+  let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+
+  sourceSelectedPhotos.forEach
+  {
+    let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
+    let destPhotoURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
+    movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
+  }
+  
+  MOC.persistAndWait
+  {
+   sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
+   destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
+  }
+  
+  return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
+ }
+ else
+ {
+   return nil
+ }
+}
+/***************************************************************************************************************/
+    
+//MARK: -
+
+/***************************************************************************************************************/
+@discardableResult class func unfolderPhotos (from sourcePhotoSnippet: PhotoSnippet,
+                                              to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]?
+ /***************************************************************************************************************/
+{
+ if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder != nil}), sourceSelectedPhotos.count > 0
+ {
+  MOC.persistAndWait
+  {
+   let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
+   let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+  
+   sourceSelectedPhotos.forEach
+   {photo in
+    let sourceFolderURL = sourceSnippetURL.appendingPathComponent(photo.folder!.id!.uuidString)
+    let sourcePhotoURL = sourceFolderURL.appendingPathComponent(photo.id!.uuidString)
+    let destPhotoURL  = destSnippetURL.appendingPathComponent(photo.id!.uuidString)
+    movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
+   
+    if let content = try? FileManager.default.contentsOfDirectory(atPath: sourceFolderURL.path)
     {
-        PhotoItem.MOC.performAndWait
-        {
-             PhotoItem.MOC.delete(photo)
-        }
-       
-        for item in PhotoItem.imageCacheDict
-        {
-          item.value.removeObject(forKey: id.uuidString as NSString)
-        }
+     switch (content.count)
+     {
+      case 1:
+       let singleFileSourceURL = sourceFolderURL.appendingPathComponent(content.first!)
+       let singleFileDestinURL = sourceSnippetURL.appendingPathComponent(content.first!)
+       movePhotoItemOnDisk(from: singleFileSourceURL, to: singleFileDestinURL)
+     
+       if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where: {$0.id!.uuidString == content.first!})
+       {
+        photo.folder!.removeFromPhotos(singlePhoto)
+       }
+       else
+       {
+        print("ERROR: No single photo to remove from folder in MOC")
+       }
     
-        do
-        {
-          try FileManager.default.removeItem(at: url)
-            
-          print("******************************************************************************")
-          print("IMAGE FILE DELETED SUCCESSFULLY AT PATH:\n\(url.path)")
-          print("******************************************************************************")
-        }
-        catch
-        {
-          print("******************************************************************************")
-          print("ERROR DELETING IMAGE FILE AT PATH:\n\(url.path)\n\(error.localizedDescription)")
-          print("******************************************************************************")
-        }
-        
-        PhotoItem.saveContext()
+       fallthrough
+      case 0: deletePhotoItemFromDisk(at: sourceFolderURL)
+      default: break
+     }
+    }
+    else
+    {
+    print("ERROR: Unable to enumerate content of source folder at path: \(sourceFolderURL.path)")
+    }
+   
+    photo.folder!.removeFromPhotos(photo)
+   
+   }
+  
+
+   if (sourcePhotoSnippet !== destPhotoSnippet)
+   {
+    sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
+    destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
+   }
+   
+   (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({($0.photos?.count ?? 0) == 0}).forEach
+   {emptyFolder in
+    MOC.delete(emptyFolder)
+   }
+   
+  } //MOC.persistAndWait...{}
+  
+  return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
+ }
+ else
+ {
+  return nil
+ }
+}
+/***************************************************************************************************************/
+
+//MARK: -
+ 
+/***************************************************************************************************************/
+ @discardableResult class func movePhotos (from sourcePhotoSnippet: PhotoSnippet,
+                                           to destPhotoSnippetFolder: PhotoFolder) -> [PhotoItem]?
+/***************************************************************************************************************/
+ {
+   if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder == nil}), sourceSelectedPhotos.count > 0
+   {
+    
+    let destPhotoSnippet = destPhotoSnippetFolder.photoSnippet!
+    let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
+    let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+    let destFolderURL = destSnippetURL.appendingPathComponent(destPhotoSnippetFolder.id!.uuidString)
+    
+    sourceSelectedPhotos.forEach
+    {
+      let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
+      let destPhotoURL   =   destFolderURL.appendingPathComponent($0.id!.uuidString)
+      movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
     }
     
-    @discardableResult
-    class func movePhotos (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]?
+    MOC.persistAndWait
     {
-     if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder == nil}), sourceSelectedPhotos.count > 0
+     if (sourcePhotoSnippet !== destPhotoSnippet)
      {
-    
-
-      let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-      let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
-      let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
-    
-      sourceSelectedPhotos.forEach
-      {
-
-        let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
-        let destPhotoURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
-        
-        do
-        {
-          try FileManager.default.moveItem(at: sourcePhotoURL, to: destPhotoURL)
-            
-          print("******************************************************************************")
-          print("IMAGE FILE MOVED SUCCESSFULLY TO PATH:\n\(destSnippetURL.path)")
-          print("******************************************************************************")
-        }
-        catch
-        {
-          print("******************************************************************************")
-          print("ERROR MOVING IMAGE FILE FROM:\n\(sourcePhotoURL.path) TO \(destSnippetURL.path) \n\(error.localizedDescription)")
-          print("******************************************************************************")
-        }
-      }
-      
       sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
+      destPhotoSnippetFolder.addToPhotos(NSSet(array: sourceSelectedPhotos))
       destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
-        
-      PhotoItem.saveContext()
-        
-      return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
-        
      }
      else
      {
-       return nil
+      destPhotoSnippetFolder.addToPhotos(NSSet(array: sourceSelectedPhotos))
      }
     }
+   
+    return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
     
-    @discardableResult
-    class func moveFolders (from sourcePhotoSnippet: PhotoSnippet, to destPhotoSnippet: PhotoSnippet) -> [PhotoFolderItem]?
-    {
-        if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected}),
-               sourceSelectedFolders.count > 0
+   }
+   else
+   {
+     return nil
+   }
+ }
+ 
+/***************************************************************************************************************/
+ 
+//MARK: -
+
+/***************************************************************************************************************/
+@discardableResult class func moveFolders (from sourcePhotoSnippet: PhotoSnippet,
+                                           to destPhotoSnippet: PhotoSnippet) -> [PhotoFolderItem]?
+/***************************************************************************************************************/
+{
+  guard sourcePhotoSnippet !== destPhotoSnippet else {return nil}
+ 
+  if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected}),
+         sourceSelectedFolders.count > 0
+  {
+      let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
+      let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+   
+      sourceSelectedFolders.forEach
+      {
+       let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
+       let destPhotoFolderURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
+       movePhotoItemOnDisk(from: sourcePhotoFolderURL, to: destPhotoFolderURL)
+      }
+   
+      MOC.persistAndWait
+      {
+       sourcePhotoSnippet.removeFromFolders(NSSet(array: sourceSelectedFolders))
+       sourceSelectedFolders.forEach
+       {
+        if let folderPhotos = $0.photos?.allObjects as? [Photo]
         {
-            let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
-            let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
-            
-            sourceSelectedFolders.forEach
-            {
-             
-             let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
-             let destPhotoFolderURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
-                    
-             do
-             {
-                try FileManager.default.moveItem(at: sourcePhotoFolderURL, to: destPhotoFolderURL)
+         sourcePhotoSnippet.removeFromPhotos(NSSet(array: folderPhotos))
+         destPhotoSnippet.addToPhotos(NSSet(array: folderPhotos))
+        }
+       }
+       destPhotoSnippet.addToFolders(NSSet(array: sourceSelectedFolders))
+      }
+   
+      
+      return sourceSelectedFolders.map{PhotoFolderItem(folder: $0)}
+      
+  }
+  else
+  {
+    return nil
+  }
+}
+/***************************************************************************************************************/
                 
-                print("**********************************************************************************")
-                print("IMAGE FOLDER MOVED SUCCESSFULLY TO NEW PHOTO SNIPPET PATH:\n\(destSnippetURL.path)")
-                print("**********************************************************************************")
-                let content = try FileManager.default.contentsOfDirectory(atPath: destPhotoFolderURL.path)
-                print ("IMAGE FOLDER FILE COUNT - \(content.count)")
-                print ("THE CONTENT OF NEW FOLDER :")
-                print("**********************************************************************************")
-                print ("\(destPhotoFolderURL.path)")
-                content.enumerated().forEach {print ("\($0.offset)) \($0.element)")}
-                print("**********************************************************************************")
-             }
-             catch
-             {
-                print("**********************************************************************************")
-                print("""
-                      ERROR MOVING IMAGE FOLDER FROM:\n\(sourcePhotoFolderURL.path) TO \(destSnippetURL.path)
-                       \n\(error.localizedDescription)
-                      """)
-                print("**********************************************************************************")
-             }
-            }
-            
-            sourcePhotoSnippet.removeFromFolders(NSSet(array: sourceSelectedFolders))
-            sourceSelectedFolders.forEach
-            {
-             if let folderPhotos = $0.photos?.allObjects as? [Photo]
-             {
-              sourcePhotoSnippet.removeFromPhotos(NSSet(array: folderPhotos))
-              destPhotoSnippet.addToPhotos(NSSet(array: folderPhotos))
-             }
-            }
-            
-            destPhotoSnippet.addToFolders(NSSet(array: sourceSelectedFolders))
-            
-            PhotoItem.saveContext()
-            
-            return sourceSelectedFolders.map{PhotoFolderItem(folder: $0)}
-            
-        }
-        else
-        {
-            return nil
-        }
+ //MARK: -
+                
+/***************************************************************************************************************/
+@discardableResult class func moveFolders (from sourcePhotoSnippet: PhotoSnippet,
+                                           to destPhotoSnippetFolder: PhotoFolder) -> [PhotoItem]?
+/***************************************************************************************************************/
+{
+ if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected}),
+  sourceSelectedFolders.count > 0
+ {
+  
+  let allPhotos = sourceSelectedFolders.reduce([])
+  { (result, folder) -> [Photo] in
+   if let photos = folder.photos?.allObjects as? [Photo]
+   {
+    return result + photos
+   }
+   else
+   {
+    return result
+   }
+  }
+  let destPhotoSnippet = destPhotoSnippetFolder.photoSnippet!
+  let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
+  let destSnippetURL =  docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+  let destFolderURL = destSnippetURL.appendingPathComponent(destPhotoSnippetFolder.id!.uuidString)
+  
+  allPhotos.forEach
+  {
+   let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.folder!.id!.uuidString)
+   let sourcePhotoURL = sourcePhotoFolderURL.appendingPathComponent($0.id!.uuidString)
+   let destPhotoURL   =  destFolderURL.appendingPathComponent($0.id!.uuidString)
+   movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
+   }
+  
+   sourceSelectedFolders.forEach
+   {
+    let url = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
+    deletePhotoItemFromDisk(at: url)
+   }
+  
+   MOC.persistAndWait
+   {
+    if (sourcePhotoSnippet !== destPhotoSnippet)
+    {
+     sourcePhotoSnippet.removeFromPhotos(NSSet(array: allPhotos))
+     destPhotoSnippetFolder.addToPhotos(NSSet(array: allPhotos))
+     destPhotoSnippet.addToPhotos(NSSet(array: allPhotos))
+    }
+    else
+    {
+     destPhotoSnippetFolder.addToPhotos(NSSet(array: allPhotos))
     }
     
+    sourceSelectedFolders.forEach
+    {folder in
+      if let folderPhotos = folder.photos?.allObjects as? [Photo]
+      {
+       folder.removeFromPhotos(NSSet(array: folderPhotos))
+      }
+     
+      MOC.delete(folder)
+    }
+ 
+   }
+  
+   return allPhotos.map{PhotoItem(photo: $0)}
+   
+ }
+ else
+ {
+  return nil
+ }
+          
+}
+ /***************************************************************************************************************/
+
     class func deselectSelectedItems (at sourcePhotoSnippet: PhotoSnippet)
     {
      if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})

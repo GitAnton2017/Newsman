@@ -3,92 +3,186 @@ import Foundation
 import CoreData
 import UIKit
 
-
 //MARK: -
 
-//MARK: =============================== CV ITEMS DRAG AND DROP DELEGATE =================================
+//***************************************************************************************************************
 extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate
-//=======================================================================================================
+//***************************************************************************************************************/
 {
-    
+ 
 //MARK: -
  
-//MARK:-------------------------------- PREPARING DRAG ITEMS --------------------------------------------
-//-------------------------------------------------------------------------------------------------------
- func getDragItems (_ collectionView: UICollectionView, forCellAt indexPath: IndexPath) -> [UIDragItem]
-//-------------------------------------------------------------------------------------------------------
+class func printAllDraggedItems()
+{
+ (UIApplication.shared.delegate as! AppDelegate).globalDragItems.forEach
  {
+  print("DRAG ITEM ID: \(($0 as! PhotoItemProtocol).id) DRAG SESSION: \(String(describing: ($0 as! PhotoItemProtocol).dragSession))")
+ }
+}
+ 
+class func removeDraggedItem(PhotoItemToRemove: PhotoItemProtocol)
+{
+ if let index = (UIApplication.shared.delegate as! AppDelegate).globalDragItems.index(where:
+ {
+  if let photoItem = $0 as? PhotoItemProtocol, photoItem.id == PhotoItemToRemove.id {return true}
+  return false
+ })
+ {
+  (UIApplication.shared.delegate as! AppDelegate).globalDragItems.remove(at: index)
+ }
+}
+ 
+class func clearAllDraggedItems()
+{
+ let globalDragItems = (UIApplication.shared.delegate as! AppDelegate).globalDragItems
+ 
+ (UIApplication.shared.delegate as! AppDelegate).globalDragItems.removeAll()
+ 
+ globalDragItems.forEach
+ {item in
+   if let photoItem = item as? PhotoItemProtocol {photoItem.isSelected = false}
+ }
+}
+ 
+//***************************************************************************************************************
+ func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
+//***************************************************************************************************************
+ {
+  print (#function)
+  
+  PhotoSnippetViewController.clearAllDraggedItems()
+  
+ }
+//***************************************************************************************************************
+ func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
+//***************************************************************************************************************
+ {
+  
+  print (#function, session.items.count)
+ 
+ }
+//***************************************************************************************************************
+ 
+//MARK: -
+ 
+//***************************************************************************************************************
+  func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
+//***************************************************************************************************************
+ {
+  print (#function)
+  
+ }
+//***************************************************************************************************************
+ 
+ //MARK: -
+ 
+//***************************************************************************************************************
+ class func getCancelledDraggedItems() -> [PhotoItemProtocol]
+//***************************************************************************************************************
+ {
+  let cnxxDragItems = (UIApplication.shared.delegate as! AppDelegate).globalDragItems.filter
+  {anyItem in
+   if let photoItem = anyItem as? PhotoItemProtocol, photoItem.dragSession == nil {return true}
+   return false
+  }
+  
+  return cnxxDragItems as! [PhotoItemProtocol]
+  
+ }
+ //***************************************************************************************************************
+ 
+ //MARK: -
+ 
+//***************************************************************************************************************
+ class func clearCancelledDraggedItems()
+//***************************************************************************************************************
+ {
+  getCancelledDraggedItems().forEach {removeDraggedItem(PhotoItemToRemove: $0)}
+ }
+//***************************************************************************************************************
+ 
+ //MARK: -
+ 
+//***************************************************************************************************************
+ func getDragItems (_ collectionView: UICollectionView,
+                      for session: UIDragSession,
+                      forCellAt indexPath: IndexPath) -> [UIDragItem]
+//***************************************************************************************************************
+ {
+  
+  PhotoSnippetViewController.clearCancelledDraggedItems()
+  
+  let photoItem = photoItems2D[indexPath.section][indexPath.row]
+  
   if collectionView.cellForItem(at: indexPath) != nil
   {
-    let photoItem = photoItems2D[indexPath.section][indexPath.row]
-    photoItem.isSelected = true
-    let itemProvider = NSItemProvider(object: photoItem)
-    let dragItem = UIDragItem(itemProvider: itemProvider)
-    dragItem.localObject = photoItem
-    return [dragItem]
+   let itemProvider = NSItemProvider(object: photoItem)
+   let dragItem = UIDragItem(itemProvider: itemProvider)
+ 
+   for item in (UIApplication.shared.delegate as! AppDelegate).globalDragItems
+   {
+    if let photoGlobalItem = item as? PhotoItemProtocol, photoGlobalItem.id == photoItem.id
+    {
+     return []
+    }
+   }
+   
+   (UIApplication.shared.delegate as! AppDelegate).globalDragItems.append(photoItem)
+   photoItem.isSelected = true
+   photoItem.dragSession = session
+   dragItem.localObject = photoItem
+   
+   PhotoSnippetViewController.printAllDraggedItems()
+   
+   return [dragItem]
+   
   }
   else
   {
     return []
   }
 
- }//func getDragItems (forCellAt indexPath: IndexPath)...
-//-------------------------------------------------------------------------------------------------------
-//MARK: -
-    
-//MARK:--------------------------- PREPARING DRAG ITEMS DELEGATE METHOD ---------------------------------
-//-------------------------------------------------------------------------------------------------------
- func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
-                        at indexPath: IndexPath) -> [UIDragItem]
-//-------------------------------------------------------------------------------------------------------
- {
-  return getDragItems(collectionView, forCellAt: indexPath)
- }//func collectionView(_ collectionView: UICollectionView, itemsForBeginning...
-//-------------------------------------------------------------------------------------------------------
-//MARK: -
-    
- func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
- {
-   deselectSelectedItems(in: collectionView)
  }
+/***************************************************************************************************************/
+    
+//MARK: -
+    
+/***************************************************************************************************************/
+ func collectionView(_ collectionView: UICollectionView,
+                       itemsForBeginning session: UIDragSession,
+                       at indexPath: IndexPath) -> [UIDragItem]
+/***************************************************************************************************************/
+ {
+  print (#function)
+  return getDragItems(collectionView, for: session, forCellAt: indexPath)
+ }
+/***************************************************************************************************************/
  
- func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
- {
-  deselectSelectedItems(in: collectionView)
- }
+ //MARK: -
     
-//MARK:----------------- ADDING DRAG ITEMS TO CURRENT DRAG SESSION DELEGATE METHOD ----------------------
-//-------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
  func collectionView(_ collectionView: UICollectionView,
                        itemsForAddingTo session: UIDragSession,
                        at indexPath: IndexPath, point: CGPoint) -> [UIDragItem]
-//-------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
  {
-  return getDragItems(collectionView, forCellAt: indexPath)
- }//func collectionView(_ collectionView: UICollectionView,itemsForAddingTo...
-//-------------------------------------------------------------------------------------------------------
-//MARK: -
+  print (#function)
+  return getDragItems(collectionView, for: session, forCellAt: indexPath)
+ }
+/***************************************************************************************************************/
+    
+ //MARK: -
 
-    
-//MARK:----------------------------- DROPPING PROPOSAL DELEGATE METHOD ----------------------------------
-//-------------------------------------------------------------------------------------------------------
- func collectionView(_ collectionView: UICollectionView,dropSessionDidUpdate session: UIDropSession,
+/***************************************************************************************************************/
+ func collectionView(_ collectionView: UICollectionView,
+                       dropSessionDidUpdate session: UIDropSession,
                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
- {
+/***************************************************************************************************************/
     
+ {
+  
   if session.localDragSession != nil
   {
-    
-    if destinationIndexPath == nil
-    {
-      guard let dragSessionVC = session.localDragSession?.localContext as? PhotoSnippetViewController, dragSessionVC !== self
-      else
-      {
-        return UICollectionViewDropProposal(operation: .cancel)
-      }
-        
-    }
-  
     
     if session.items.count == 1
     {
@@ -101,148 +195,205 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
   {
    return UICollectionViewDropProposal(operation: .copy , intent: .insertAtDestinationIndexPath)
   }
- }//func collectionView(_ collectionView: UICollectionView,dropSessionDidUpdate...
-//-------------------------------------------------------------------------------------------------------
+ }
+/***************************************************************************************************************/
+    
 //MARK: -
     
-    func performMergeIntoFolder (_ collectionView: PhotoSnippetCollectionView,
-                                   from photoItems: [PhotoItemProtocol],
-                                   into destinationIndexPath: IndexPath) -> PhotoFolderItem?
-    {
-        if let newFolder = PhotoFolderItem(photoSnippet: photoSnippet)
-        {
-            newFolder.priorityFlag = sectionTitles?[destinationIndexPath.section]
-            photoItems.forEach
-            {photoItem in
-               let sourceIndexPath = photoItemIndexPath(photoItem: photoItem)
-               photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-               collectionView.deleteItems(at: [sourceIndexPath])
-               
-               if (collectionView.photoGroupType == .makeGroups && sourceIndexPath.section != destinationIndexPath.section)
-               {
-                collectionView.reloadSections([sourceIndexPath.section])
-               }
-               
-            }//photoItems.forEach...
+/***************************************************************************************************************/
+ func performMergeIntoFolder (_ collectionView: PhotoSnippetCollectionView,
+                                from photoItems: [PhotoItemProtocol],
+                                into destinationIndexPath: IndexPath) -> PhotoFolderItem?
+/***************************************************************************************************************/
+ {
+     if let newFolder = PhotoFolderItem(photoSnippet: photoSnippet)
+     {
+         newFolder.priorityFlag = sectionTitles?[destinationIndexPath.section]
+         photoItems.forEach
+         {photoItem in
+            let sourceIndexPath = photoItemIndexPath(photoItem: photoItem)
+            photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+            PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: photoItem)
+            collectionView.deleteItems(at: [sourceIndexPath])
             
-            let sectionCnt = photoItems2D[destinationIndexPath.section].count
-            if  (destinationIndexPath.row < sectionCnt)
+            if (collectionView.photoGroupType == .makeGroups && sourceIndexPath.section != destinationIndexPath.section)
             {
-                photoItems2D[destinationIndexPath.section].insert(newFolder, at: destinationIndexPath.row)
-                collectionView.insertItems(at: [destinationIndexPath])
-            }
-            else
-            {
-                photoItems2D[destinationIndexPath.section].append(newFolder)
-                let indexPath = IndexPath(row: sectionCnt, section: destinationIndexPath.section)
-                collectionView.insertItems(at: [indexPath])
+             collectionView.reloadSections([sourceIndexPath.section])
             }
             
-            if (collectionView.photoGroupType == .makeGroups)
-            {
-                collectionView.reloadSections([destinationIndexPath.section])
-            }
-            
-            deleteEmptySections()
-            
-            PhotoFolderItem.removeEmptyFolders(from: photoSnippet)
-            
-            return newFolder
-        }
+         }//photoItems.forEach...
         
-        return nil
-    }
+         let sectionCnt = photoItems2D[destinationIndexPath.section].count
+         if  (destinationIndexPath.row < sectionCnt)
+         {
+             photoItems2D[destinationIndexPath.section].insert(newFolder, at: destinationIndexPath.row)
+             collectionView.insertItems(at: [destinationIndexPath])
+         }
+         else
+         {
+             photoItems2D[destinationIndexPath.section].append(newFolder)
+             let indexPath = IndexPath(row: sectionCnt, section: destinationIndexPath.section)
+             collectionView.insertItems(at: [indexPath])
+         }
+        
+         if (collectionView.photoGroupType == .makeGroups)
+         {
+             collectionView.reloadSections([destinationIndexPath.section])
+         }
+        
+         deleteEmptySections()
+        
+         PhotoFolderItem.removeEmptyFolders(from: photoSnippet)
+        
+         return newFolder
+     }
     
-//MARK:---------------------- MERGING DRAGED PHOTO ITEMS INTO PHOTO FOLDER --------------------------------
-//---------------------------------------------------------------------------------------------------------
- func performMergeIntoFolder (_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)
-//---------------------------------------------------------------------------------------------------------
+     return nil
+ }
+/***************************************************************************************************************/
+    
+//MARK: -
+    
+/***************************************************************************************************************/
+ func movedOuterPhotoItems (_ globalPhotoItems: [PhotoItemProtocol],
+                              in collectionView: PhotoSnippetCollectionView,
+                              at destinationIndexPath: IndexPath) -> [PhotoItemProtocol]
+/***************************************************************************************************************/
+ {
+ 
+  var movedItems: [PhotoItemProtocol] = []
+
+  globalPhotoItems.map{$0.photoSnippet}.filter{$0 !== photoSnippet}.forEach
+  {source in
+   let folders: [PhotoItemProtocol] = PhotoItem.moveFolders(from: source, to: photoSnippet) ?? []
+   let photos : [PhotoItemProtocol] = PhotoItem.movePhotos (from: source, to: photoSnippet) ?? []
+    
+   let totalMoved = photos + folders
+    
+   totalMoved.forEach
+   {movedItem in
+     photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
+     if collectionView.photoGroupType == .makeGroups
+     {
+      movedItem.priorityFlag = sectionTitles?[destinationIndexPath.section]
+     }
+     collectionView.insertItems(at: [destinationIndexPath])
+
+   }
+    
+   movedItems += totalMoved
+            
+  }
+  
+  if (collectionView.photoGroupType == .makeGroups && movedItems.count > 0)
+  {
+    collectionView.reloadSections([destinationIndexPath.section])
+  }
+  
+  return movedItems
+ }
+/***************************************************************************************************************/
+    
+//MARK: -
+    
+/***************************************************************************************************************/
+ func performMergeIntoFolder (_ globalPhotoItems: [PhotoItemProtocol],
+                                in collectionView: PhotoSnippetCollectionView,
+                                performDropWith coordinator: UICollectionViewDropCoordinator,
+                                at destinationIndexPath: IndexPath)
+/***************************************************************************************************************/
  {
     
-  let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
-  let photoItems = coordinator.items.filter{$0.sourceIndexPath != nil}.map
-      {photoItems2D[$0.sourceIndexPath!.section][$0.sourceIndexPath!.row]}
-    
-  let photoSnippetCV = collectionView as! PhotoSnippetCollectionView
-  _ = performMergeIntoFolder(photoSnippetCV, from: photoItems, into: destinationIndexPath)
-    
+  let localItems = globalPhotoItems.filter{$0.photoSnippet === photoSnippet}
+  let outerItems = movedOuterPhotoItems(globalPhotoItems, in: collectionView,  at: destinationIndexPath)
+  let totalItems = localItems + outerItems
   
-  coordinator.items.forEach
+  guard totalItems.count > 1 else {return}
+  
+  outerItems.forEach{$0.isSelected = true}
+
+  if let newFolderItem = performMergeIntoFolder(collectionView, from: totalItems, into: destinationIndexPath)
   {
-     if let dropCellRect = collectionView.cellForItem(at: destinationIndexPath)?.bounds
-     {
-         coordinator.drop($0.dragItem, intoItemAt: destinationIndexPath, rect: dropCellRect)
-     }
+    let ip = photoItemIndexPath(photoItem: newFolderItem)
+    if let cell = collectionView.cellForItem(at: ip) as? PhotoFolderCell
+    {
+     coordinator.session.items.forEach{coordinator.drop($0, intoItemAt: destinationIndexPath, rect: cell.bounds)}
+    }
+    else
+    {
+      print ("\(#function): Invalid Merged Folder Cell at Index Path: \(ip)")
+    }
+  }
+  else
+  {
+    print ("\(#function): Unable to merge into Photo Folder Item at Index Path \(destinationIndexPath)")
   }
     
-
- }//func performMergeIntoFolder (_ collectionView: UICollectionView...
-//---------------------------------------------------------------------------------------------------------
-//MARK: -
+ }
+/***************************************************************************************************************/
     
+ //MARK: -
     
-    
-//MARK:------------------------- MOVE OF DRAGED PHOTO ITEMS TO DESTINATION IP -----------------------------
-//---------------------------------------------------------------------------------------------------------
- func performItemsMove (_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+ func performItemsMove (_ globalPhotoItems: [PhotoItemProtocol],
+                          in collectionView: PhotoSnippetCollectionView,
+                          performDropWith coordinator: UICollectionViewDropCoordinator,
+                          at destinationIndexPath: IndexPath)
+/***************************************************************************************************************/
  {
-
-   let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
     
-    coordinator.items.filter{$0.sourceIndexPath != nil}.map
-    {photoItems2D[$0.sourceIndexPath!.section][$0.sourceIndexPath!.row]}.forEach
-    {photoItem in
+   let localItems = globalPhotoItems.filter{$0.photoSnippet === photoSnippet}
+    
+   localItems.forEach
+   {photoItem in
       let sourceIndexPath = photoItemIndexPath(photoItem: photoItem)
-      let photoCV = collectionView as! PhotoSnippetCollectionView
-      photoCV.movePhoto(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
+      collectionView.movePhoto(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
     
-
-    }
+   }
     
-    coordinator.items.forEach{coordinator.drop($0.dragItem, toItemAt: destinationIndexPath)}
+   let outerItems = movedOuterPhotoItems(globalPhotoItems, in: collectionView,  at: destinationIndexPath)
     
+   coordinator.session.items.forEach{coordinator.drop($0, toItemAt: destinationIndexPath)}
     
+   let totalItems = localItems + outerItems
+    
+   print ("TOTAL ITEMS MOVED SUCCESSFULLY TO \(destinationIndexPath) - \(totalItems.count)")
    
  }//func performItemsMove (_ collectionView: UICollectionView...
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+    
 //MARK: -
   
-
-    
-//MARK:------------------ MOVING DRAGED PHOTO ITEMS INSIDE CV ---------------------------------------------
-//---------------------------------------------------------------------------------------------------------
- func movePhotosInsideCV (_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+ func movePhotosInsideApp (_ globalPhotoItems: [PhotoItemProtocol],
+                             in collectionView: PhotoSnippetCollectionView,
+                             performDropWith coordinator: UICollectionViewDropCoordinator,
+                             at destinationIndexPath: IndexPath)
+/***************************************************************************************************************/
  {
-
-   let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
     
    let dropItems = coordinator.items.filter{$0.sourceIndexPath != nil}
 
-   if (dropItems.first{$0.sourceIndexPath! == destinationIndexPath} != nil && dropItems.count > 1)
+   if (dropItems.first{$0.sourceIndexPath == destinationIndexPath} != nil)
    {
-    performMergeIntoFolder(collectionView, performDropWith: coordinator)
+    performMergeIntoFolder(globalPhotoItems, in: collectionView, performDropWith: coordinator, at: destinationIndexPath)
    }
    else
    {
-    performItemsMove(collectionView, performDropWith: coordinator)
+    performItemsMove(globalPhotoItems, in: collectionView, performDropWith: coordinator, at: destinationIndexPath)
    }
+    
  }//func movePhotosInsideCollectionView (_ collectionView: UICollectionView...
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+    
 //MARK: -
     
-    
-    
-//MARK:-------------------------- MOVING DRAGED PHOTO FROM ANOTHER APP ------------------------------------
-//---------------------------------------------------------------------------------------------------------
- func copyPhotosFromSideApp (_ collectionView: UICollectionView,
-                              performDropWith coordinator: UICollectionViewDropCoordinator)
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+ func copyPhotosFromSideApp (_ collectionView: PhotoSnippetCollectionView,
+                              performDropWith coordinator: UICollectionViewDropCoordinator,
+                              at destinationIndexPath: IndexPath)
+/***************************************************************************************************************/
  {
-    
-  let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
-    
   for item in coordinator.items
   {
    let dragItem = item.dragItem
@@ -270,113 +421,53 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
     }
    }
  }//func copyPhotosFromSideApp (_ collectionView: UICollectionView...
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+    
 //MARK: -
-   
+
     
-    
-    
-//MARK:------------------------ MAKING PREPARATIONS BEFORE DRAG SESSION BEGINS ----------------------------
-//---------------------------------------------------------------------------------------------------------
- func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+ func collectionView(_ collectionView: UICollectionView,
+                       performDropWith coordinator: UICollectionViewDropCoordinator)
+/***************************************************************************************************************/
  {
-  session.localContext = self //getting strong reference to the current VC with current CV...
- }//func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin...
-//---------------------------------------------------------------------------------------------------------
-//MARK: -
-    
-   
-    
-//MARK:----------------------- MOVING DRAGED PHOTO ITEMS BETWEEN CVs --------------------------------------
-//---------------------------------------------------------------------------------------------------------
- func movePhotosBetweenCVs (_ collectionView: UICollectionView, from dragSessionVC: PhotoSnippetViewController,
-                              performDropWith coordinator: UICollectionViewDropCoordinator)
-//---------------------------------------------------------------------------------------------------------
- {
+   print (#function)
+   let photoCV = collectionView as! PhotoSnippetCollectionView
     
    let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
     
-   if dragSessionVC.photoSnippet === photoSnippet
-   {
-    dragSessionVC.photoItems2D.reduce([], {$0 + $1.filter({$0.isSelected})}).forEach
-    {movedItem in
-     let sourceIndexPath = photoItemIndexPath(photoItem: movedItem)
-     let photoCV = collectionView as! PhotoSnippetCollectionView
-     photoCV.movePhoto(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
- 
-    }
-   }
-   else
-   {
-    let movedPhotoItems: [PhotoItemProtocol] = PhotoItem.movePhotos(from: dragSessionVC.photoSnippet, to: photoSnippet) ?? []
-    let movedFolderItems: [PhotoItemProtocol] = PhotoItem.moveFolders(from: dragSessionVC.photoSnippet, to: photoSnippet) ?? []
-    
-    (movedPhotoItems + movedFolderItems).forEach
-    { movedItem in
-      photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
-      if photoCollectionView.photoGroupType == .makeGroups
-      {
-       movedItem.priorityFlag = sectionTitles?[destinationIndexPath.section]
-      }
-      (collectionView as! PhotoSnippetCollectionView).insertItems(at: [destinationIndexPath])
-    }
-   }
- 
-   coordinator.items.forEach{coordinator.drop($0.dragItem, toItemAt: destinationIndexPath)}
- 
- }//func movePhotosBetweenCollectionViews (_ collectionView: UICollectionView...
-//---------------------------------------------------------------------------------------------------------
-//MARK: -
-    
-    
-    
-    
-//MARK:-------------------------------- PERFORM DROP DELEGATE METHOD --------------------------------------
-//---------------------------------------------------------------------------------------------------------
- func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator)
-//---------------------------------------------------------------------------------------------------------
- {
    switch (coordinator.proposal.operation)
    {
     case .move:
-     if let dragSessionVC = coordinator.session.localDragSession?.localContext as? PhotoSnippetViewController, dragSessionVC !== self
+     var globalPhotoItems: [PhotoItemProtocol] = []
+     
+     for item in (UIApplication.shared.delegate as! AppDelegate).globalDragItems
      {
-      movePhotosBetweenCVs (collectionView, from: dragSessionVC, performDropWith: coordinator)
-      coordinator.session.localDragSession?.localContext = nil
+      if let photoItem = item as? PhotoItemProtocol
+      {
+       globalPhotoItems.append(photoItem)
+      }
      }
-     else
-     {
-      movePhotosInsideCV (collectionView, performDropWith: coordinator)
-     }
+     
+     if globalPhotoItems.isEmpty {return}
+     
+     movePhotosInsideApp (globalPhotoItems, in: photoCV, performDropWith: coordinator, at: destinationIndexPath)
+  
     
     case .copy:
-      copyPhotosFromSideApp (collectionView, performDropWith: coordinator)
-    
+     copyPhotosFromSideApp (photoCV, performDropWith: coordinator, at: destinationIndexPath)
     default: return
    }
   
+  
+  
  } //func collectionView(_ collectionView: UICollectionView, performDropWith...
-//---------------------------------------------------------------------------------------------------------
+/***************************************************************************************************************/
+    
 //MARK: -
-    
-    
-    
-//MARK:-------------------------------- DROP SESSION EXIT DELEGATE METHOD ---------------------------------
-//---------------------------------------------------------------------------------------------------------
- func collectionView(_ collectionView: UICollectionView, dropSessionDidExit session: UIDropSession)
- {
 
-  //self.navigationController?.popViewController(animated: true)
-    
- }//func collectionView(_ collectionView: UICollectionView, dropSessionDidExit ...
-//---------------------------------------------------------------------------------------------------------
-//MARK: -
- 
-    
-    
-//---------------------------------------------------------------------------------------------------------
+
+
 }//extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate...
-//---------------------------------------------------------------------------------------------------------
-//MARK: -
-//MARK: -
+
+

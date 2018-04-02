@@ -67,6 +67,7 @@
 		A77F74D3206242090074A915 /* Zoom View CV DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
 		A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7CB13731FD2D5EB00AA7294 /* Localizable.strings */; };
+		A7D93C6A206D3743007891ED /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D93C69206D3743007891ED /* Helpers.swift */; };
 		A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */; };
 		A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */; };
 		A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */; };
@@ -161,6 +162,7 @@
 		A7CB13721FD2D5EB00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7CB13741FD2D61200AA7294 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7CB13751FD2D61400AA7294 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A7D93C69206D3743007891ED /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Drop Item Provider.swift"; sourceTree = "<group>"; };
 		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Protocol.swift"; sourceTree = "<group>"; };
 		A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 			isa = PBXGroup;
 			children = (
 				A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */,
+				A7D93C69206D3743007891ED /* Helpers.swift */,
 				A7443F07202DDB7E0039BE41 /* Photo */,
 				A7443F08202DDBCF0039BE41 /* PhotoFolder */,
 				A7443F09202DDC130039BE41 /* PhotoSnippet */,
@@ -378,17 +381,17 @@
 				A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */,
 				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A7443F13203881790039BE41 /* Flag Items Menu.swift */,
-				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
 				A7304A9B1FCAFDB700207A52 /* Photo CV Cell.swift */,
 				A7443F112035D2F80039BE41 /* Folder CV Cell.swift */,
-				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
-				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
 				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
 				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
 				A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */,
 				A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */,
 				A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */,
+				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
+				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
+				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A71715C7201F86BA00112FFF /* MAIN CV D&D Delegate.swift */,
 				A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */,
 				A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */,
@@ -501,7 +504,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0910;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Anton2016;
 				TargetAttributes = {
 					A75489841FBC4F2900359C0C = {
@@ -622,6 +625,7 @@
 				A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */,
 				A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
+				A7D93C6A206D3743007891ED /* Helpers.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,
 				A71715C8201F86BA00112FFF /* MAIN CV D&D Delegate.swift in Sources */,
 				A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */,
@@ -716,6 +720,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -723,6 +728,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -774,6 +780,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -781,6 +788,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
