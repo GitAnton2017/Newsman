@@ -22,13 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 {
 
     var window: UIWindow?
-    
-    var currentDragSession: UIDragSession?
  
     var globalDragItems: [Any] = []
  
-    var activeDragSessions: [UIDragSession] = []
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     
     {

@@ -17,6 +17,7 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
     @IBOutlet weak var photoCollectionView: UICollectionView!
     
     var photoItems: [PhotoItem]!
+ 
     var nphoto: Int = 3
 
     
@@ -181,5 +182,11 @@ extension PhotoFolderCell:  UICollectionViewDataSource
         
         return cell
     }
+ 
+ func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
+ {
+  let path = photoItems.enumerated().lazy.first{$0.element.id == photoItem.id}
+  return IndexPath(row: path!.offset, section: 0)
+ }
     
 }

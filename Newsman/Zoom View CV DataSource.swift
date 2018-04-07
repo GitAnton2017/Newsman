@@ -73,10 +73,10 @@ extension ZoomView:  UICollectionViewDataSource
     }
     
 
-    func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
+    func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath?
     {
-        let path = photoItems.enumerated().lazy.first{$0.element.id == photoItem.id}
-        return IndexPath(row: path!.offset, section: 0)
+     guard let path = photoItems.enumerated().lazy.first(where:{$0.element.id == photoItem.id}) else {return nil}
+     return IndexPath(row: path.offset, section: 0)
     }
     
 }

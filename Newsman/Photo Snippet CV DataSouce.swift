@@ -111,15 +111,26 @@ extension PhotoSnippetViewController
     
 //MARK: ------------ Searching for Index path by Photo Item ID ---------------
 //----------------------------------------------------------------------------
- func photoItemIndexPath(photoItem: PhotoItemProtocol) -> IndexPath
+ func photoItemIndexPath(photoItem: PhotoItemProtocol) -> IndexPath?
 //----------------------------------------------------------------------------
  {
+  
+  if let photo = photoItem as? PhotoItem
+  {
+   if photo.photo.id == nil {return nil}
+  }
+  
+  if let photo = photoItem as? PhotoFolderItem
+  {
+   if photo.folder.id == nil {return nil}
+  }
+  
   let path = photoItems2D.enumerated().lazy.map
   {
    (section: $0.offset, item: $0.element.enumerated().lazy.first{$0.element.id == photoItem.id})
   }.first{$0.item != nil}
   
-  return IndexPath(row: path!.item!.offset, section: path!.section)
+  return path != nil ? IndexPath(row: path!.item!.offset, section: path!.section) : nil
     
  }//func photoItemIndexPath(photoItem: PhotoItemProtocol)...
 //----------------------------------------------------------------------------
@@ -230,7 +241,7 @@ func deleteEmptySections()
    {item in
     item.isSelected = false
     let itemIndexPath = photoItemIndexPath(photoItem: item)
-    photoCollectionView.movePhoto(at: itemIndexPath, with: flagStr)
+    photoCollectionView.movePhoto(at: itemIndexPath!, with: flagStr)
    }
  }//func flagGroupedSelectedPhotos(with flagStr: String?)...
 //----------------------------------------------------------------------------
@@ -517,7 +528,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
    }
    let cellInter = UISpringLoadedInteraction
    {inter, context in
-     _ = (collectionView as! PhotoSnippetCollectionView).cellSpringInt(context)
+    let photoCV = collectionView as! PhotoSnippetCollectionView
+    photoCV.zoomView = photoCV.cellSpringInt(context)
     
    }
     

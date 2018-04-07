@@ -7,8 +7,81 @@ import UIKit
 //*************************************************************************************************************************
 extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
 //*************************************************************************************************************************
- 
 {
+ //***************************************************************************************************************
+ var globalDragItems: [Any]
+ {
+  return (UIApplication.shared.delegate as! AppDelegate).globalDragItems
+ }
+ //***************************************************************************************************************
+ var allPhotoItems: [PhotoItemProtocol]
+ {
+  return globalDragItems.filter {$0 is PhotoItemProtocol} as! [PhotoItemProtocol]
+ }
+ 
+ //***************************************************************************************************************
+ var localPhotos: [PhotoItem]
+ {
+  let locals = globalDragItems.filter
+  {
+   if let photoItem = $0 as? PhotoItem, photoItem.photoSnippet === photoSnippetVC.photoSnippet, photoItem.photo.folder == nil
+   {
+    return true
+   }
+   return false
+  }
+  return locals as! [PhotoItem]
+ }
+ //***************************************************************************************************************
+ var localFolders: [PhotoFolderItem]
+ {
+  let locals = globalDragItems.filter
+  {
+   if let photoFolder = $0 as? PhotoFolderItem, photoFolder.photoSnippet === photoSnippetVC.photoSnippet
+   {
+    return true
+   }
+   return false
+  }
+  return locals as! [PhotoFolderItem]
+ }
+ //***************************************************************************************************************
+ var localItems: [PhotoItemProtocol]
+ {
+  return localPhotos as [PhotoItemProtocol] + localFolders as [PhotoItemProtocol]
+ }
+ //***************************************************************************************************************
+ var localFoldered: [PhotoItem]
+ {
+  let locals = globalDragItems.filter
+  {
+   if let photoItem = $0 as? PhotoItem,
+      photoItem.photoSnippet === photoSnippetVC.photoSnippet,
+      photoItem.photo.folder != nil,
+      !zoomedFolderPhotos.contains(where: {$0.id == photoItem.id})
+    
+   {
+    return true
+   }
+   return false
+  }
+  return locals as! [PhotoItem]
+ }
+ //***************************************************************************************************************
+ var outerSnippets: [PhotoSnippet]
+ {
+  let allPhotoItems = globalDragItems.filter
+  {
+   if let photoItem = $0 as? PhotoItemProtocol, photoItem.photoSnippet !== photoSnippetVC.photoSnippet
+   {
+    return true
+   }
+   return false
+   } as! [PhotoItemProtocol]
+  
+  return allPhotoItems.map{$0.photoSnippet}
+ }
+ 
 //*************************************************************************************************************************
  func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnd session: UIDropSession)
 //*************************************************************************************************************************
@@ -48,14 +121,16 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
     let itemProvider = NSItemProvider(object: photoItem)
     let dragItem = UIDragItem(itemProvider: itemProvider)
     
-    for item in (UIApplication.shared.delegate as! AppDelegate).globalDragItems
+    for item in globalDragItems
     {
      if let photoGlobalItem = item as? PhotoItemProtocol, photoGlobalItem.id == photoItem.id {return []}
     }
     
     (UIApplication.shared.delegate as! AppDelegate).globalDragItems.append(photoItem)
+    
     photoItem.isSelected = true
     photoItem.dragSession = session
+    
     PhotoSnippetViewController.printAllDraggedItems()
     
     return [dragItem]
@@ -153,19 +228,56 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
  
 //MARK: -
  
+//***************************************************************************************************************/
+ func unfolderedLocalPhotoItems () -> [PhotoItemProtocol]
+//***************************************************************************************************************/
+ {
+  let foldered = localFoldered
+  
+  if foldered.isEmpty {return []}
+  
+  let collectionView = photoSnippetVC.photoCollectionView!
+  
+  foldered.forEach
+  {item in
+    let folder = PhotoFolderItem(folder: item.photo.folder!)
+    let sourceIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: folder)
+    if let cell = collectionView.cellForItem(at: sourceIndexPath!) as? PhotoFolderCell
+    {
+     let sourceIndexPath = cell.photoItemIndexPath(photoItem: item)
+     cell.photoItems.remove(at: sourceIndexPath.row)
+     cell.photoCollectionView.deleteItems(at: [sourceIndexPath])
+    }
+  }
+  
+  let unfoldered = PhotoItem.unfolderPhotos(from: photoSnippetVC.photoSnippet, to: photoSnippetVC.photoSnippet) ?? []
+  
+  unfoldered.forEach
+  {movedItem in
+   photoSnippetVC.photoItems2D[zoomedCellIndexPath.section].insert(movedItem, at: zoomedCellIndexPath.row)
+   photoSnippetVC.photoCollectionView.insertItems(at: [zoomedCellIndexPath])
+  }
+  
+  return unfoldered
+ }
+ //***************************************************************************************************************/
+ 
+ //MARK: -
 //*************************************************************************************************************************
- func movedOuterPhotoItems (_ globalPhotoItems: [PhotoItemProtocol]) -> [PhotoItemProtocol]
+ func movedOuterPhotoItems () -> [PhotoItemProtocol]
 //*************************************************************************************************************************
  {
    var movedItems: [PhotoItemProtocol] = []
    let destin = photoSnippetVC.photoSnippet!
-   globalPhotoItems.map{$0.photoSnippet}.filter{$0 !== destin}.forEach
+   outerSnippets.forEach
    {source in
 
-     let folders: [PhotoItemProtocol] = PhotoItem.moveFolders(from: source, to: destin) ?? []
-     let photos : [PhotoItemProtocol] = PhotoItem.movePhotos (from: source, to: destin) ?? []
+     let folders:    [PhotoItemProtocol] = PhotoItem.moveFolders    (from: source, to: destin) ?? []
+     let photos :    [PhotoItemProtocol] = PhotoItem.movePhotos     (from: source, to: destin) ?? []
+     let unfoldered: [PhotoItemProtocol] = PhotoItem.unfolderPhotos (from: source, to: destin) ?? []
     
-     let totalMoved = photos + folders
+     let totalMoved = photos + folders + unfoldered
+    
      totalMoved.forEach
      {movedItem in
        photoSnippetVC.photoItems2D[zoomedCellIndexPath.section].insert(movedItem, at: zoomedCellIndexPath.row)
@@ -182,29 +294,30 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
  //MARK: -
  
 //*************************************************************************************************************************
- func movePhotoItemsInsideApp (_ globalPhotoItems: [PhotoItemProtocol])
+ func movePhotoItemsInsideApp ()
 //*************************************************************************************************************************
  {
-  
   let zoomedItem = photoSnippetVC.photoItems2D[zoomedCellIndexPath.section][zoomedCellIndexPath.row]
   
-  zoomedItem.isSelected = true
+  let local =  localItems
+  let unfold = unfolderedLocalPhotoItems()
+  let moved =  movedOuterPhotoItems ()
   
-  let localItems = globalPhotoItems.filter{$0.photoSnippet === photoSnippetVC.photoSnippet}
-  let outerItems = movedOuterPhotoItems(globalPhotoItems)
-  let totalItems = localItems + outerItems + (localItems.contains{$0.id == zoomedItem.id} ? [] : [zoomedItem])
-  
+  let totalItems = local + unfold + moved + (local.contains{$0.id == zoomedItem.id} ? [] : [zoomedItem])
+ 
   guard totalItems.count > 1 else {return}
   
-  outerItems.forEach{$0.isSelected = true}
+  totalItems.forEach{$0.isSelected = true}
  
   let photoCV = photoSnippetVC.photoCollectionView!
   
   if let newFolderItem = photoSnippetVC.performMergeIntoFolder(photoCV, from: totalItems, into: zoomedCellIndexPath)
   {
+   zoomedPhotoItem = newFolderItem
+   
    let cv = openWithCV(in: photoSnippetVC.view)
    let ip = photoSnippetVC.photoItemIndexPath(photoItem: newFolderItem)
-   if let newFolderCell = photoCV.cellForItem(at: ip) as? PhotoFolderCell
+   if let newFolderCell = photoCV.cellForItem(at: ip!) as? PhotoFolderCell
    {
     zoomedCellIndexPath = ip
     photoItems = newFolderCell.photoItems
@@ -212,7 +325,7 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
    }
    else
    {
-     print ("\(#function): Invalid Merged Folder Cell at Index Path: \(ip)")
+     print ("\(#function): Invalid Merged Folder Cell at Index Path: \(ip!)")
    }
   }
   else
@@ -230,22 +343,10 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
 //*************************************************************************************************************************
  {
    print (#function)
-   if session.localDragSession != nil
+  
+   if (session.localDragSession != nil && allPhotoItems.count > 0)
    {
-    var globalPhotoItems: [PhotoItemProtocol] = []
-    
-    for item in (UIApplication.shared.delegate as! AppDelegate).globalDragItems
-    {
-     if let photoItem = item as? PhotoItemProtocol
-     {
-      globalPhotoItems.append(photoItem)
-     }
-    }
-    
-    if globalPhotoItems.isEmpty {return}
-    
-    movePhotoItemsInsideApp (globalPhotoItems)
-
+    movePhotoItemsInsideApp ()
    }
    else
    {

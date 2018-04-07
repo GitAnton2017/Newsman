@@ -15,8 +15,12 @@ class ZoomView: UIView
     var maxZoomRatio: CGFloat = 5.0
     var minPinchVelocity: CGFloat = 0.15
     var removingZoomView = false
+ 
     weak var photoSnippetVC: PhotoSnippetViewController!
+    weak var zoomedPhotoItem: PhotoItemProtocol?
+ 
     var zoomedCellIndexPath: IndexPath!
+    var presentSubview: UIView!
     
     var isShowingCV: Bool
     {
@@ -84,8 +88,6 @@ class ZoomView: UIView
                        completion:
                        {[unowned self] _ in
                         self.removeFromSuperview()
-                        let ip = self.zoomedCellIndexPath!
-                        self.photoSnippetVC.photoItems2D[ip.section][ip.row].isSelected = false
                         self.removingZoomView = false
                        })
     }
@@ -174,6 +176,7 @@ class ZoomView: UIView
       
         
       openAnim()
+      presentSubview = iv
       return iv
       
     }
@@ -214,6 +217,7 @@ class ZoomView: UIView
       setConstraints(of: cv)
        
       openAnim()
+      presentSubview = cv
       return cv
     }
     

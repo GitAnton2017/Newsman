@@ -195,6 +195,8 @@ class PhotoSnippetCollectionView: UICollectionView
     
     var menuIndexPath: IndexPath? = nil
     var menuShift = CGPoint.zero
+ 
+    weak var zoomView: ZoomView?
   
     required init?(coder aDecoder: NSCoder)
     {
@@ -259,7 +261,7 @@ class PhotoSnippetCollectionView: UICollectionView
          zoomView.photoSnippetVC = dataSource as! PhotoSnippetViewController
         
          let tappedItem = photoItems2D[indexPath.section][indexPath.row]
-         tappedItem.isSelected = true
+         zoomView.zoomedPhotoItem = tappedItem
         
          switch cellForItem(at: indexPath)
          {
@@ -274,12 +276,10 @@ class PhotoSnippetCollectionView: UICollectionView
                  image?.setSquared(in: imageView)
              }
             
-            
           case let cell as PhotoFolderCell:
-            
-            let collectionView = zoomView.openWithCV(in: mainView)
+            let cv  = zoomView.openWithCV(in: mainView)
             zoomView.photoItems = cell.photoItems
-            collectionView.reloadData()
+            cv.reloadData()
             
           default: break
             
@@ -302,7 +302,7 @@ class PhotoSnippetCollectionView: UICollectionView
     @objc func cellDoubleTap(_ gr: UITapGestureRecognizer)
     {
      let tpMV = gr.location(in: mainView)
-     _ = snippetCellZoom(at: gr.location(in: self), with: CGPoint (x: tpMV.x, y: tpMV.y + mainView.frame.origin.y))
+     zoomView = snippetCellZoom(at: gr.location(in: self), with: CGPoint (x: tpMV.x, y: tpMV.y + mainView.frame.origin.y))
     }
     
     var hasUnfinishedMove = false
