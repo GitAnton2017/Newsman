@@ -87,8 +87,12 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
 //*************************************************************************************************************************
  {
   print (#function)
- 
-  PhotoSnippetViewController.clearAllDraggedItems()
+  if photoSnippetVC != nil
+  {
+   photoSnippetVC.animateDragItemsEnd(photoSnippetVC.photoCollectionView)
+
+   PhotoSnippetViewController.clearAllDraggedItems()
+  }
   
  }//func dropInteraction(_ interaction: UIDropInteraction...
 //*************************************************************************************************************************
@@ -101,6 +105,9 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
  {
   
   print (#function)
+  photoSnippetVC.animateDragItemsBegin(photoSnippetVC.photoCollectionView, dragItems: session.items)
+  
+  //PhotoSnippetViewController.printAllDraggedItems()
   
  }//dragInteraction(_ interaction: UIDragInteraction...
 //*************************************************************************************************************************
@@ -130,6 +137,7 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
     
     photoItem.isSelected = true
     photoItem.dragSession = session
+    dragItem.localObject = photoItem
     
     PhotoSnippetViewController.printAllDraggedItems()
     
@@ -150,6 +158,7 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
 //*************************************************************************************************************************
  {
    print (#function)
+   //PhotoSnippetViewController.printAllDraggedItems()
    return getDragItems(interaction, for: session)
  }
 //*************************************************************************************************************************
@@ -157,14 +166,16 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
 //MARK: -
  
 //*************************************************************************************************************************
- func dragInteraction(_ interaction: UIDragInteraction,
-                        itemsForAddingTo session: UIDragSession,
+ func dragInteraction(_ interaction: UIDragInteraction, itemsForAddingTo session: UIDragSession,
                         withTouchAt point: CGPoint) -> [UIDragItem]
 //*************************************************************************************************************************
  {
   
   print (#function)
-  return getDragItems(interaction, for: session)
+  let dragItems = getDragItems(interaction, for: session)
+  photoSnippetVC.animateDragItemsBegin(photoSnippetVC.photoCollectionView, dragItems: dragItems)
+  //PhotoSnippetViewController.printAllDraggedItems()
+  return dragItems
   
  }//func dragInteraction(_ interaction: UIDragInteraction,itemsForAddingTo session....
 //*************************************************************************************************************************
@@ -244,9 +255,10 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
     let sourceIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: folder)
     if let cell = collectionView.cellForItem(at: sourceIndexPath!) as? PhotoFolderCell
     {
-     let sourceIndexPath = cell.photoItemIndexPath(photoItem: item)
+     let sourceIndexPath = cell.photoItemIndexPath(photoItem: item)!
      cell.photoItems.remove(at: sourceIndexPath.row)
      cell.photoCollectionView.deleteItems(at: [sourceIndexPath])
+     
     }
   }
   

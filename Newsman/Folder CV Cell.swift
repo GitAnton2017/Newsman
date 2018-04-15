@@ -117,7 +117,12 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell
 
 extension PhotoFolderCell:  UICollectionViewDataSource
 {
-    
+    var globalDragItems: [Any]
+    {
+     return (UIApplication.shared.delegate as! AppDelegate).globalDragItems
+    }
+ 
+ 
     var imageSize: CGFloat
     {
      get
@@ -179,14 +184,21 @@ extension PhotoFolderCell:  UICollectionViewDataSource
             cell.spinner.stopAnimating()
         }
         
-        
+     if globalDragItems.contains(where:
+      {item in
+       if let dragPhotoItem = item as? PhotoItem, photoItem.id == dragPhotoItem.id {return true}
+       return false
+     })
+     {
+      PhotoSnippetViewController.startCellDragAnimation(cell: cell)
+     }
         return cell
     }
  
- func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
+ func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath?
  {
-  let path = photoItems.enumerated().lazy.first{$0.element.id == photoItem.id}
-  return IndexPath(row: path!.offset, section: 0)
+  guard let path = photoItems.enumerated().lazy.first(where: {$0.element.id == photoItem.id}) else {return nil}
+  return IndexPath(row: path.offset, section: 0)
  }
     
 }

@@ -10,6 +10,60 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
 {
  //MARK: -
  
+ 
+ func animateDragItemsBegin (_ collectionView: UICollectionView, dragItems: [UIDragItem])
+ {
+   dragItems.forEach
+   {item in
+    if let photoItem = item.localObject as? PhotoItem,
+       let itemIndexPath = photoItemIndexPath(photoItem: photoItem),
+       let cellInZoomCV = collectionView.cellForItem(at: itemIndexPath),
+       let zoomedCell = photoSnippetVC.photoCollectionView.cellForItem(at: zoomedCellIndexPath) as? PhotoFolderCell,
+       let cellInFolderIndexPath = zoomedCell.photoItemIndexPath(photoItem: photoItem),
+       let cellInFolder = zoomedCell.photoCollectionView.cellForItem(at: cellInFolderIndexPath)
+    {
+     PhotoSnippetViewController.startCellDragAnimation(cell: cellInZoomCV)
+     PhotoSnippetViewController.startCellDragAnimation(cell: cellInFolder)
+    }
+  }
+ }
+ 
+ func animateDragItemsEnd (_ collectionView: UICollectionView)
+ {
+  globalDragItems.forEach
+   {item in
+    if let photoItem = item as? PhotoItem,
+       let itemIndexPath = photoItemIndexPath(photoItem: photoItem),
+       let cell = collectionView.cellForItem(at: itemIndexPath),
+       let zoomedCell = photoSnippetVC.photoCollectionView.cellForItem(at: zoomedCellIndexPath) as? PhotoFolderCell,
+       let cellInFolderIndexPath = zoomedCell.photoItemIndexPath(photoItem: photoItem),
+       let cellInFolder = zoomedCell.photoCollectionView.cellForItem(at: cellInFolderIndexPath)
+     
+    {
+     PhotoSnippetViewController.stopCellDragAnimation(cell: cell)
+     PhotoSnippetViewController.stopCellDragAnimation(cell: cellInFolder)
+    }
+    else
+    if let photoItem = item as? PhotoItemProtocol,
+       let itemIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: photoItem),
+       let cell = photoSnippetVC.photoCollectionView.cellForItem(at: itemIndexPath)
+    {
+     PhotoSnippetViewController.stopCellDragAnimation(cell: cell)
+    }
+    else
+    if let photoItem = item as? PhotoItem,
+       let folder = photoItem.photo.folder,
+       let folderCellIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: PhotoFolderItem(folder: folder)),
+       let folderCell = photoSnippetVC.photoCollectionView.cellForItem(at: folderCellIndexPath) as? PhotoFolderCell,
+       let cellInFolderIndexPath = folderCell.photoItemIndexPath(photoItem: photoItem),
+       let cellInFolder = folderCell.photoCollectionView.cellForItem(at: cellInFolderIndexPath)
+    {
+     PhotoSnippetViewController.stopCellDragAnimation(cell: cellInFolder)
+    }
+     
+   
+  }
+ }
 //***************************************************************************************************************
  var zoomedFolderPhotos: [PhotoItem]
  {
@@ -33,6 +87,7 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
 //************************************************************************************************************************
  {
     print (#function)
+    animateDragItemsBegin(collectionView, dragItems: session.items)
  }
 //************************************************************************************************************************
  
@@ -43,8 +98,9 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
 //************************************************************************************************************************
  {
   print (#function)
-  
+  animateDragItemsEnd(collectionView)
   PhotoSnippetViewController.clearAllDraggedItems()
+  
  }
 //************************************************************************************************************************
  
@@ -67,7 +123,8 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
    
    for item in globalDragItems
    {
-    if let photoGlobalItem = item as? PhotoItemProtocol, photoGlobalItem.id == photoItem.id
+    if let photoGlobalItem = item as? PhotoItemProtocol,
+       photoGlobalItem.id == photoItem.id || photoGlobalItem.id == zoomedPhotoItem?.id
     {
      return []
     }
@@ -77,7 +134,7 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
    
    photoItem.isSelected = true
    photoItem.dragSession = session
-   
+   dragItem.localObject = photoItem
    PhotoSnippetViewController.printAllDraggedItems()
    
    return [dragItem]
@@ -109,7 +166,9 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
                      at indexPath: IndexPath, point: CGPoint) -> [UIDragItem]
 //************************************************************************************************************************
  {
-    return getDragItems(collectionView, for: session, forCellAt: indexPath)
+    let dragItems = getDragItems(collectionView, for: session, forCellAt: indexPath)
+    animateDragItemsBegin(collectionView, dragItems: dragItems)
+    return dragItems
  }
 //************************************************************************************************************************
  
@@ -124,7 +183,7 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
    {
     if session.items.count == 1
     {
-     return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+     return UICollectionViewDropProposal(operation: .move, intent: .unspecified)
     }
     
     return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)

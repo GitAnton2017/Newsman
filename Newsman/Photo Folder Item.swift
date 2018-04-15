@@ -43,7 +43,7 @@ import CoreData
   
     func deleteImages()
     {
-     
+     PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: self)
      (folder.photos?.allObjects as? [Photo])?.forEach
      {photo in
       PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: photo.id!.uuidString as NSString)}

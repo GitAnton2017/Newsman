@@ -44,8 +44,10 @@ class PhotoSnippetViewController: UIViewController
      }
      
      photoSnippet.nphoto = Int32(nphoto)
-     let visibleCells = photoCollectionView.indexPathsForVisibleItems
-     photoCollectionView.reloadItems(at: visibleCells)
+     //let visibleCells = photoCollectionView.indexPathsForVisibleItems
+     //photoCollectionView.reloadItems(at: visibleCells)
+   
+     photoCollectionView.reloadData()
     
     /*photoCollectionView.visibleCells.filter{$0 is PhotoFolderCell}.forEach
     {
@@ -176,10 +178,10 @@ class PhotoSnippetViewController: UIViewController
      savePhotoSnippetData()
    }
 
-   if !photoCollectionView.hasActiveDrag
+  /*if !photoCollectionView.hasActiveDrag
    {
     deselectSelectedItems(in: photoCollectionView)
-   }
+   }*/
     
    //PhotoItem.imageCacheDict.values.forEach{$0.removeAllObjects()}
  }

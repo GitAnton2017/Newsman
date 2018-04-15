@@ -466,6 +466,7 @@ func deleteImages()
 /***************************************************************************************************************/
 {
   PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: id.uuidString as NSString)}
+  PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: self)
   PhotoItem.deletePhotoItemFromDisk(at: url)
   PhotoItem.MOC.persistAndWait {[weak self] in PhotoItem.MOC.delete(self!.photo)}
 }
@@ -547,7 +548,7 @@ func deleteImages()
                                               to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]?
  /***************************************************************************************************************/
 {
- if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder != nil}), sourceSelectedPhotos.count > 0
+ if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected && $0.folder != nil && !$0.folder!.isSelected}), sourceSelectedPhotos.count > 0
  {
   
   MOC.persistAndWait
@@ -556,43 +557,40 @@ func deleteImages()
    let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
    let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
   
-   sourceSelectedPhotos.forEach
-   {photo in
+   for photo in sourceSelectedPhotos
+   {
     photo.isSelected = false //!!!!!!!!!
-    guard let photoFolder = photo.folder else {return}
+    guard let photoFolder = photo.folder else
+    {
+     print("ERROR: Unable to unfolder photo! Photo has no folder in MOC")
+     continue
+    }
     let sourceFolderURL = sourceSnippetURL.appendingPathComponent(photoFolder.id!.uuidString)
     let sourcePhotoURL = sourceFolderURL.appendingPathComponent(photo.id!.uuidString)
     let destPhotoURL  = destSnippetURL.appendingPathComponent(photo.id!.uuidString)
     
     movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
    
-    if let content = try? FileManager.default.contentsOfDirectory(atPath: sourceFolderURL.path)
+    if let content = try? FileManager.default.contentsOfDirectory(atPath: sourceFolderURL.path), content.count == 1
     {
-     switch (content.count)
-     {
-      case 1:
-       let singleFileSourceURL = sourceFolderURL.appendingPathComponent(content.first!)
-       let singleFileDestinURL = sourceSnippetURL.appendingPathComponent(content.first!)
-       movePhotoItemOnDisk(from: singleFileSourceURL, to: singleFileDestinURL)
+     let singleFileSourceURL = sourceFolderURL.appendingPathComponent(content.first!)
+     let singleFileDestinURL = sourceSnippetURL.appendingPathComponent(content.first!)
      
-       if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where: {$0.id!.uuidString == content.first!})
-       {
-        photo.folder!.removeFromPhotos(singlePhoto)
-       }
-       else
-       {
-        print("ERROR: No single photo to remove from folder in MOC")
-       }
-    
-       fallthrough
-      case 0: deletePhotoItemFromDisk(at: sourceFolderURL)
-      default: break
+     movePhotoItemOnDisk(from: singleFileSourceURL, to: singleFileDestinURL)
+     
+     if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where: {$0.id!.uuidString == content.first!})
+     {
+       photo.folder!.removeFromPhotos(singlePhoto)
+       photo.folder!.removeFromPhotos(photo)
+       deletePhotoItemFromDisk(at: sourceFolderURL)
+       break
+     }
+     else
+     {
+       print("ERROR: No single photo to remove from folder in MOC")
      }
     }
-    else
-    {
-     print("ERROR: Unable to enumerate content of source folder at path: \(sourceFolderURL.path)")
-    }
+    
    
     photo.folder!.removeFromPhotos(photo)
    

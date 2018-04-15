@@ -67,7 +67,13 @@ extension ZoomView:  UICollectionViewDataSource
             
             cell.spinner.stopAnimating()
         }
-        
+     
+        if globalDragItems.contains(where: {item in
+         if let dragPhotoItem = item as? PhotoItem, photoItem.id == dragPhotoItem.id {return true}
+         return false})
+        {
+         PhotoSnippetViewController.startCellDragAnimation(cell: cell)
+        }
         
         return cell
     }
@@ -75,7 +81,9 @@ extension ZoomView:  UICollectionViewDataSource
 
     func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath?
     {
-     guard let path = photoItems.enumerated().lazy.first(where:{$0.element.id == photoItem.id}) else {return nil}
+     guard let photoItems = photoItems,
+      let path = photoItems.enumerated().lazy.first(where: {$0.element.id == photoItem.id})
+      else {return nil}
      return IndexPath(row: path.offset, section: 0)
     }
     

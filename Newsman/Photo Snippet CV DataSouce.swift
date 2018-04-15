@@ -518,7 +518,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
 //------------------------------------------------------------------------------------------------------------------
  {
    var cell = UICollectionViewCell()
-   switch (photoItems2D[indexPath.section][indexPath.row])
+   let photoItem = photoItems2D[indexPath.section][indexPath.row]
+   switch (photoItem)
    {
     case let item as PhotoItem:
      cell = getPhotoCell (collectionView, at: indexPath, with: item)
@@ -534,6 +535,16 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
    }
     
    cell.addInteraction(cellInter)
+  
+   if globalDragItems.contains(where:
+    {item in
+     if let dragPhotoItem = item as? PhotoItemProtocol, photoItem.id == dragPhotoItem.id {return true}
+     return false
+    })
+   {
+    PhotoSnippetViewController.startCellDragAnimation(cell: cell)
+   }
+    
    return cell
  }
 }//func collectionView(_ collectionView: UICollectionView,...
