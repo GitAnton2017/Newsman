@@ -426,8 +426,12 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
   
   if foldered.isEmpty {return []}
  
+  var nextItemFlag = false
+  
   for item in foldered
   {
+     if (nextItemFlag) {nextItemFlag = false; continue}
+   
      let folder = PhotoFolderItem(folder: item.photo.folder!)
      let sourceIndexPath = photoItemIndexPath(photoItem: folder)!
    
@@ -445,7 +449,8 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
        cell.photoCollectionView.deleteItems(at: [IndexPath(row: 0, section: 0)])
        collectionView.deleteItems(at: [sourceIndexPath])
        
-       if (!singleItem.isSelected)
+       if (singleItem.isSelected) {nextItemFlag = true}
+       else
        {
         photoItems2D[sourceIndexPath.section].insert(singleItem, at: sourceIndexPath.row)
         
@@ -458,8 +463,7 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
        }
        
        if let zv = collectionView.zoomView {zv.removeZoomView()}
-       
-       break
+      
       }
       
      }

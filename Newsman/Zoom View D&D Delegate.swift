@@ -249,17 +249,43 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
   
   let collectionView = photoSnippetVC.photoCollectionView!
   
-  foldered.forEach
-  {item in
-    let folder = PhotoFolderItem(folder: item.photo.folder!)
-    let sourceIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: folder)
-    if let cell = collectionView.cellForItem(at: sourceIndexPath!) as? PhotoFolderCell
+  var nextItemFlag = false
+  
+  for item in foldered
+  {
+   if nextItemFlag {nextItemFlag = false; continue}
+   
+   let folder = PhotoFolderItem(folder: item.photo.folder!)
+   let sourceIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: folder)!
+   
+   if let cell = collectionView.cellForItem(at: sourceIndexPath) as? PhotoFolderCell
+   {
+    let ip = cell.photoItemIndexPath(photoItem: item)!
+    cell.photoItems.remove(at: ip.row)
+    cell.photoCollectionView.deleteItems(at: [ip])
+    
+    if (cell.photoItems.count == 1)
     {
-     let sourceIndexPath = cell.photoItemIndexPath(photoItem: item)!
-     cell.photoItems.remove(at: sourceIndexPath.row)
-     cell.photoCollectionView.deleteItems(at: [sourceIndexPath])
+     photoSnippetVC.photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+     PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: folder)
+     let singleItem = cell.photoItems.remove(at: 0)
+     cell.photoCollectionView.deleteItems(at: [IndexPath(row: 0, section: 0)])
+     collectionView.deleteItems(at: [sourceIndexPath])
      
+     if (singleItem.isSelected) {nextItemFlag = true}
+     else
+     {
+      photoSnippetVC.photoItems2D[sourceIndexPath.section].insert(singleItem, at: sourceIndexPath.row)
+      
+      if (collectionView.photoGroupType == .makeGroups)
+      {
+       singleItem.priorityFlag = photoSnippetVC.sectionTitles?[sourceIndexPath.section]
+      }
+      collectionView.insertItems(at: [sourceIndexPath])
+      collectionView.reloadSections([sourceIndexPath.section])
+     }
     }
+   }
   }
   
   let unfoldered = PhotoItem.unfolderPhotos(from: photoSnippetVC.photoSnippet, to: photoSnippetVC.photoSnippet) ?? []

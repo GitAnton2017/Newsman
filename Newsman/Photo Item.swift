@@ -557,9 +557,14 @@ func deleteImages()
    let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
    let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
   
+   var nextPhotoFlag = false
+   
    for photo in sourceSelectedPhotos
    {
     photo.isSelected = false //!!!!!!!!!
+    
+    if (nextPhotoFlag) {nextPhotoFlag = false; continue}
+    
     guard let photoFolder = photo.folder else
     {
      print("ERROR: Unable to unfolder photo! Photo has no folder in MOC")
@@ -581,16 +586,16 @@ func deleteImages()
      if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where: {$0.id!.uuidString == content.first!})
      {
        photo.folder!.removeFromPhotos(singlePhoto)
-       photo.folder!.removeFromPhotos(photo)
        deletePhotoItemFromDisk(at: sourceFolderURL)
-       break
+      
+       if (singlePhoto.isSelected) {nextPhotoFlag = true}
+      
      }
      else
      {
        print("ERROR: No single photo to remove from folder in MOC")
      }
     }
-    
    
     photo.folder!.removeFromPhotos(photo)
    
