@@ -17,14 +17,20 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
    {item in
     if let photoItem = item.localObject as? PhotoItem,
        let itemIndexPath = photoItemIndexPath(photoItem: photoItem),
-       let cellInZoomCV = collectionView.cellForItem(at: itemIndexPath),
-       let zoomedCell = photoSnippetVC.photoCollectionView.cellForItem(at: zoomedCellIndexPath) as? PhotoFolderCell,
-       let cellInFolderIndexPath = zoomedCell.photoItemIndexPath(photoItem: photoItem),
-       let cellInFolder = zoomedCell.photoCollectionView.cellForItem(at: cellInFolderIndexPath)
+       let cellInZoomCV = collectionView.cellForItem(at: itemIndexPath)
     {
      PhotoSnippetViewController.startCellDragAnimation(cell: cellInZoomCV)
+    }
+    
+    if let photoItem = item.localObject as? PhotoItem,
+     let zoomedCell = photoSnippetVC.photoCollectionView.cellForItem(at: zoomedCellIndexPath) as? PhotoFolderCell,
+     let cellInFolderIndexPath = zoomedCell.photoItemIndexPath(photoItem: photoItem),
+     let cellInFolder = zoomedCell.photoCollectionView.cellForItem(at: cellInFolderIndexPath)
+    {
      PhotoSnippetViewController.startCellDragAnimation(cell: cellInFolder)
     }
+    
+    
   }
  }
  
@@ -280,27 +286,33 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
   if let newFolderItem = photoSnippetVC.performMergeIntoFolder(photoCV, from: totalItems, into: zoomedCellIndexPath)
   {
    zoomedPhotoItem = newFolderItem
-   let ip = photoSnippetVC.photoItemIndexPath(photoItem: newFolderItem)
+   zoomedCellIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: newFolderItem)
    
-   if let newFolderCell = photoCV.cellForItem(at: ip!) as? PhotoFolderCell
+   var folderPhotoItems: [PhotoItem] = []
+   if let newFolderCell = photoCV.cellForItem(at: zoomedCellIndexPath!) as? PhotoFolderCell
    {
-    zoomedCellIndexPath = ip
-    let newPhotoItems = newFolderCell.photoItems.filter
-    {photo in
-     return !photoItems.contains{$0.id == photo.id}
-    }
-    
-    newPhotoItems.forEach
-    {photo in
-     photoItems.insert(photo, at: destinationIndexPath.row)
-     collectionView.insertItems(at: [destinationIndexPath])
-    }
- 
+    folderPhotoItems = newFolderCell.photoItems
+   }
+   else if let photosInFolder =  newFolderItem.folder.photos?.allObjects as? [Photo]
+   {
+    folderPhotoItems = photosInFolder.map{PhotoItem(photo: $0)}
    }
    else
    {
-    print ("\(#function): Invalid Merged Folder Cell at Index Path: \(ip!)")
+    print ("Invalid new merged folder at index path \(zoomedCellIndexPath!)")
    }
+   
+   let newPhotoItems = folderPhotoItems.filter
+   {photo in
+    return !photoItems.contains{$0.id == photo.id}
+   }
+   
+   newPhotoItems.forEach
+    {photo in
+     photoItems.insert(photo, at: destinationIndexPath.row)
+     collectionView.insertItems(at: [destinationIndexPath])
+   }
+   
   }
   else
   {

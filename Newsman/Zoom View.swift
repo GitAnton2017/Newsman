@@ -91,17 +91,29 @@ class ZoomView: UIView
                         self.removingZoomView = false
                        })
     }
-    
+ 
+    func changeAnim(to subView: UIView)
+    {
+     UIView.transition(with: self,
+                       duration: 1,
+                       options: [.curveEaseOut, .transitionFlipFromBottom, .transitionCrossDissolve],
+                       animations: {[unowned self]   in self.addSubview(subView)},
+                       completion: {[unowned self] _ in self.setConstraints(of: subView)})
+    }
+ 
+ 
     func openAnim()
     {
-        UIView.animate(withDuration: 1,
-                       delay: 0,
-                       options: [.curveEaseOut],
-                       animations:
-                       {[unowned self] in
-                        self.transform = CGAffineTransform.identity
-                        self.center = self.superview!.center
-                       }, completion: nil)
+     
+     UIView.animate(withDuration: 1,
+                    delay: 0,
+                    usingSpringWithDamping: 0.9,
+                    initialSpringVelocity: 12,
+                    options: [.curveEaseInOut],
+                    animations: {[unowned self] in
+                                  self.transform = CGAffineTransform.identity
+                                  self.center = self.superview!.center
+                                 }, completion: nil)
     }
     
     func setConstraints (to mainView: UIView)
@@ -212,15 +224,19 @@ class ZoomView: UIView
         
       let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)
       cv.register(cellNib, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
-      
-      self.addSubview(cv)
-      setConstraints(of: cv)
-       
-      openAnim()
+     
+      if (presentSubview != nil) {changeAnim(to: cv)}
+      else
+      {
+       self.addSubview(cv)
+       setConstraints(of: cv)
+       openAnim()
+      }
+     
       presentSubview = cv
       return cv
     }
-    
+ 
     @objc func zoomViewPinch (_ gr: UIPinchGestureRecognizer)
     {
         guard abs(gr.velocity) > minPinchVelocity else {return}

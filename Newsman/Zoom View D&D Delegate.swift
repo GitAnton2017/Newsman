@@ -251,6 +251,8 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
   
   var nextItemFlag = false
   
+  var photoItemsMap: [IndexPath : [PhotoItem]] = [:]
+  
   for item in foldered
   {
    if nextItemFlag {nextItemFlag = false; continue}
@@ -286,7 +288,50 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
      }
     }
    }
-  }
+   else 
+   {
+    var proxyPhotoItems: [PhotoItem] = []
+    if let photoItems = photoItemsMap[sourceIndexPath]
+    {
+     proxyPhotoItems = photoItems
+    }
+    else if let photosInFolder = folder.folder.photos?.allObjects as? [Photo]
+    {
+     proxyPhotoItems = photosInFolder.map{PhotoItem(photo: $0)}
+    }
+    else
+    {
+     print ("Invalid Folder at Index Path \(sourceIndexPath)")
+     continue
+    }
+    
+    let itemIndex = proxyPhotoItems.index{$0.id == item.id}
+    proxyPhotoItems.remove(at: itemIndex!)
+    photoItemsMap[sourceIndexPath] = proxyPhotoItems
+    
+    if (proxyPhotoItems.count == 1)
+    {
+     photoSnippetVC.photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+     PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: folder)
+     let singleItem = proxyPhotoItems.remove(at: 0)
+     photoItemsMap[sourceIndexPath] = nil
+     collectionView.deleteItems(at: [sourceIndexPath])
+     
+     if (singleItem.isSelected) {nextItemFlag = true}
+     else
+     {
+      photoSnippetVC.photoItems2D[sourceIndexPath.section].insert(singleItem, at: sourceIndexPath.row)
+      
+      if (collectionView.photoGroupType == .makeGroups)
+      {
+       singleItem.priorityFlag = photoSnippetVC.sectionTitles?[sourceIndexPath.section]
+      }
+      collectionView.insertItems(at: [sourceIndexPath])
+      collectionView.reloadSections([sourceIndexPath.section])
+     } //if (singleItem.isSelected)...
+    } //if (proxyPhotoItems.count == 1)...
+   } //if let cell = collectionView.cellForItem... else...
+  } //for item in...
   
   let unfoldered = PhotoItem.unfolderPhotos(from: photoSnippetVC.photoSnippet, to: photoSnippetVC.photoSnippet) ?? []
   
@@ -352,19 +397,22 @@ extension ZoomView: UIDragInteractionDelegate, UIDropInteractionDelegate
   if let newFolderItem = photoSnippetVC.performMergeIntoFolder(photoCV, from: totalItems, into: zoomedCellIndexPath)
   {
    zoomedPhotoItem = newFolderItem
+   zoomedCellIndexPath = photoSnippetVC.photoItemIndexPath(photoItem: newFolderItem)
    
    let cv = openWithCV(in: photoSnippetVC.view)
-   let ip = photoSnippetVC.photoItemIndexPath(photoItem: newFolderItem)
-   if let newFolderCell = photoCV.cellForItem(at: ip!) as? PhotoFolderCell
+   if let newFolderCell = photoCV.cellForItem(at: zoomedCellIndexPath!) as? PhotoFolderCell
    {
-    zoomedCellIndexPath = ip
     photoItems = newFolderCell.photoItems
-    cv.reloadData()
+   }
+   else if let photosInFolder = newFolderItem.folder.photos?.allObjects as? [Photo]
+   {
+    photoItems = photosInFolder.map{PhotoItem(photo: $0)}
    }
    else
    {
-     print ("\(#function): Invalid Merged Folder Cell at Index Path: \(ip!)")
+    print ("Invalid new merged folder at index path \(zoomedCellIndexPath!)")
    }
+   cv.reloadData()
   }
   else
   {

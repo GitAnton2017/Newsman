@@ -314,7 +314,7 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
                        at indexPath: IndexPath) -> [UIDragItem]
 //***************************************************************************************************************/
  {
-  print (#function)
+  print (#function, session.items.count)
   let dragItems = getDragItems(collectionView, for: session, forCellAt: indexPath)
   return dragItems
  }
@@ -421,17 +421,14 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
                                  at destinationIndexPath: IndexPath) -> [PhotoItemProtocol]
 //***************************************************************************************************************/
  {
-  
   let foldered = localFoldered
-  
   if foldered.isEmpty {return []}
- 
   var nextItemFlag = false
-  
+  var photoItemsMap: [IndexPath : [PhotoItem]] = [:]
+
   for item in foldered
   {
      if (nextItemFlag) {nextItemFlag = false; continue}
-   
      let folder = PhotoFolderItem(folder: item.photo.folder!)
      let sourceIndexPath = photoItemIndexPath(photoItem: folder)!
    
@@ -460,13 +457,50 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
         }
         collectionView.insertItems(at: [sourceIndexPath])
         collectionView.reloadSections([sourceIndexPath.section])
-       }
-       
+       }//if (singleItem.isSelected)....
        if let zv = collectionView.zoomView {zv.removeZoomView()}
-      
+      }//if (cell.photoItems.count == 1)...
+     }
+     else
+     {
+      var proxyPhotoItems: [PhotoItem] = []
+      if let photoItems = photoItemsMap[sourceIndexPath]
+      {
+       proxyPhotoItems = photoItems
+      }
+      else if let photosInFolder = folder.folder.photos?.allObjects as? [Photo]
+      {
+       proxyPhotoItems = photosInFolder.map{PhotoItem(photo: $0)}
       }
       
-     }
+      let itemIndex = proxyPhotoItems.index{$0.id == item.id}
+      proxyPhotoItems.remove(at: itemIndex!)
+      photoItemsMap[sourceIndexPath] = proxyPhotoItems
+     
+      if (proxyPhotoItems.count == 1)
+      {
+       photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+       PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: folder)
+       let singleItem = proxyPhotoItems.remove(at: 0)
+       photoItemsMap[sourceIndexPath] = nil
+       collectionView.deleteItems(at: [sourceIndexPath])
+       
+       if (singleItem.isSelected) {nextItemFlag = true}
+       else
+       {
+        photoItems2D[sourceIndexPath.section].insert(singleItem, at: sourceIndexPath.row)
+        
+        if (collectionView.photoGroupType == .makeGroups)
+        {
+         singleItem.priorityFlag = sectionTitles?[sourceIndexPath.section]
+        }
+        collectionView.insertItems(at: [sourceIndexPath])
+        collectionView.reloadSections([sourceIndexPath.section])
+       } // if (singleItem.isSelected)...
+       
+       if let zv = collectionView.zoomView {zv.removeZoomView()}
+      } //if (proxyPhotoItems.count == 1)...
+     } //if let cell = collectionView.cellForItem...
    
      if let zv = collectionView.zoomView,
         let cv = zv.presentSubview as? UICollectionView,
@@ -474,8 +508,8 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
      {
         zv.photoItems.remove(at: ip.row)
         cv.deleteItems(at: [ip])
-     }
-  }
+     }//if let zv = collectionView.zoomView...
+  } //for item in...
   
   let unfoldered = PhotoItem.unfolderPhotos(from: photoSnippet, to: photoSnippet) ?? []
   
