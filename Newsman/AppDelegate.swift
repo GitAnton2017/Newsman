@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+
 /*extension AppDelegate: NSCacheDelegate
 {
     func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any)
@@ -25,6 +26,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate
  
     var globalDragItems: [Any] = []
  
+    var anim: UIViewImplicitlyAnimating?
+ 
+    var ncDelegate: UINavigationControllerDelegate?
+ 
+ 
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask
+    {
+      return .all
+    }
+ 
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     
     {
@@ -32,6 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         
         //PhotoCash.queue.maxConcurrentOperationCount = 3
         //PhotoItem.imageCache.delegate = self
+     
+     
+        let nc = window!.rootViewController as! UINavigationController
+        ncDelegate = NCTransitionsDelegate(with: nc)
+        nc.delegate = ncDelegate
+     
         return true
     }
 

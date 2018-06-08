@@ -82,6 +82,7 @@ class PhotoSnippetViewController: UIViewController
 
 
  let imagePicker = UIImagePickerController()
+ let imagePickerTransitionDelegate = VCTransitionsDelegate(animator: SpringDoorAnimator(with: 0.6))
  var imagePickerTakeButton: UIButton!
  var imagePickerCnxxButton: UIButton!
     
@@ -124,6 +125,8 @@ class PhotoSnippetViewController: UIViewController
    
    photoCollectionView.allowsMultipleSelection = true
    imagePicker.delegate = self
+   imagePicker.transitioningDelegate = imagePickerTransitionDelegate
+  
    photoSnippetTitle.inputAccessoryView = createKeyBoardToolBar()
    currentToolBarItems = photoSnippetToolBar.items
    photoScaleStepper.value = Double(nphoto)
@@ -224,6 +227,8 @@ class PhotoSnippetViewController: UIViewController
 //---------------------------------------------------------------------------
  {
     isEditingMode = false
+  
+  
     
     if UIImagePickerController.isSourceTypeAvailable(.camera)
     {
@@ -243,7 +248,8 @@ class PhotoSnippetViewController: UIViewController
     {
         return
     }
-    
+  
+
     present(imagePicker, animated: true, completion: nil)
     
  }

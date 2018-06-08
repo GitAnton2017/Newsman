@@ -66,11 +66,20 @@
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
+		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
+		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
+		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
+		A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D520C82611005D566A /* Layer Transitions Animator.swift */; };
 		A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7CB13731FD2D5EB00AA7294 /* Localizable.strings */; };
 		A7D93C6A206D3743007891ED /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D93C69206D3743007891ED /* Helpers.swift */; };
 		A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */; };
 		A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */; };
+		A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7DD7D8D20A4517E00572A25 /* CloudKit.framework */; };
+		A7DD7D9020A9A43A00572A25 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */; };
 		A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */; };
+		A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */; };
+		A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */; };
+		A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +166,10 @@
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DataSource.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
+		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
+		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
+		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
+		A7C6A7D520C82611005D566A /* Layer Transitions Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Layer Transitions Animator.swift"; sourceTree = "<group>"; };
 		A7CB13671FD27E8700AA7294 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		A7CB13681FD2A63B00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		A7CB13721FD2D5EB00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -165,7 +178,12 @@
 		A7D93C69206D3743007891ED /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Drop Item Provider.swift"; sourceTree = "<group>"; };
 		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Protocol.swift"; sourceTree = "<group>"; };
+		A7DD7D8D20A4517E00572A25 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
 		A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionAnimation.swift; sourceTree = "<group>"; };
+		A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionsDelegate.swift; sourceTree = "<group>"; };
+		A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VC Transitions Delegate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */,
+				A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +235,7 @@
 		A7298E132015E99F00A7301D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A7DD7D8D20A4517E00572A25 /* CloudKit.framework */,
 				A7298E142015E9A000A7301D /* CoreData.framework */,
 			);
 			name = Frameworks;
@@ -342,8 +362,12 @@
 				A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */,
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
+				A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */,
+				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
+				A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */,
 				A75489971FBC4F2900359C0C /* Info.plist */,
 				A75489921FBC4F2900359C0C /* Assets.xcassets */,
+				A7C6A7D220C822AD005D566A /* VC Custom Transitions */,
 				A7CB136E1FD2D35E00AA7294 /* Assesory Menus */,
 				A7CB136D1FD2D31D00AA7294 /* Main Menu */,
 				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
@@ -370,6 +394,18 @@
 				A75489AD1FBC4F2900359C0C /* Info.plist */,
 			);
 			path = NewsmanUITests;
+			sourceTree = "<group>";
+		};
+		A7C6A7D220C822AD005D566A /* VC Custom Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */,
+				A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */,
+				A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */,
+				A7C6A7D520C82611005D566A /* Layer Transitions Animator.swift */,
+				A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */,
+			);
+			name = "VC Custom Transitions";
 			sourceTree = "<group>";
 		};
 		A7CB13691FD2D27000AA7294 /* Photo Snippets */ = {
@@ -509,8 +545,12 @@
 				TargetAttributes = {
 					A75489841FBC4F2900359C0C = {
 						CreatedOnToolsVersion = 9.1;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
 							com.apple.iCloud = {
 								enabled = 1;
 							};
@@ -588,6 +628,7 @@
 				A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */,
 				A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */,
 				A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */,
+				A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */,
 				A71C85BC1FBE192D000F2DD9 /* TextSnippet+CoreDataProperties.swift in Sources */,
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
 				A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */,
@@ -608,20 +649,26 @@
 				A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */,
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
+				A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */,
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
+				A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */,
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,
+				A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
 				A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
 				A7304AA01FCB160C00207A52 /* Photo Snippet CV DataSouce.swift in Sources */,
+				A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */,
 				A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
+				A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */,
 				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
 				A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */,
 				A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */,
 				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,
+				A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */,
 				A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */,
 				A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
@@ -629,6 +676,7 @@
 				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,
 				A71715C8201F86BA00112FFF /* MAIN CV D&D Delegate.swift in Sources */,
 				A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */,
+				A7DD7D9020A9A43A00572A25 /* AppDelegateExtensions.swift in Sources */,
 				A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */,
 				A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */,
 				A71C85E91FBED660000F2DD9 /* SnippetsViewDataSource.swift in Sources */,
@@ -756,7 +804,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -810,7 +858,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -822,6 +870,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Newsman/Newsman.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
@@ -829,6 +878,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = exp.Newsman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -838,6 +888,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Newsman/Newsman.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;

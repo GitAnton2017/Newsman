@@ -29,8 +29,6 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
     {
      PhotoSnippetViewController.startCellDragAnimation(cell: cellInFolder)
     }
-    
-    
   }
  }
  

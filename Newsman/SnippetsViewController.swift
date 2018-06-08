@@ -154,7 +154,19 @@ class SnippetsViewController: UIViewController
      snippetsTableView.reloadData()
         print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
     }
-    
+ 
+ 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
+    {
+     super.viewWillTransition(to: size, with: coordinator)
+     coordinator.animate(alongsideTransition:
+      {ctx in
+       self.snippetsTableView.alpha = size.width > size.height ? 0.85 : 1
+       self.currentToolBarItems.forEach{$0.tintColor = size.width > size.height ? UIColor.lightGray : UIColor.white}
+      },
+      completion: nil)
+    }
+ 
     @IBOutlet var createNewSnippet: UIBarButtonItem!
     
     @IBOutlet var groupSnippets: UIBarButtonItem!
@@ -277,7 +289,7 @@ class SnippetsViewController: UIViewController
      {
       return
      }
-     textSnippetVC.modalTransitionStyle = .partialCurl
+     textSnippetVC.modalTransitionStyle = .crossDissolve
       
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
