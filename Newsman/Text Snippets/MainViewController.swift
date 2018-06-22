@@ -6,6 +6,11 @@ class MainViewController: UIViewController
     @IBOutlet var mainCollectionView : UICollectionView!
     
     let mainViewDataSource = MainViewDataSource()
+ 
+    @IBAction func unwind(_ seg: UIStoryboardSegue)
+    {
+     
+    }
     
     override func viewDidLoad()
     {

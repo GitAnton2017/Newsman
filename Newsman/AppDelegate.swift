@@ -36,8 +36,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate
       return .all
     }
  
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+   
+ 
+ 
+ 
+    func application(_ application: UIApplication,
+                       willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     
     {
         // Override point for customization after application launch.
@@ -49,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         let nc = window!.rootViewController as! UINavigationController
         ncDelegate = NCTransitionsDelegate(with: nc)
         nc.delegate = ncDelegate
-     
+        self.window!.makeKeyAndVisible()
         return true
     }
 

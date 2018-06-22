@@ -87,6 +87,8 @@ class PhotoSnippetViewController: UIViewController
  var imagePickerCnxxButton: UIButton!
     
  lazy var photoItems2D: [[PhotoItemProtocol]] = createPhotoItems2D()
+ 
+ var photoSnippetRestorationID: String? = nil
     
 //---------------------------------------------------------------------------------
 //MARK:-
@@ -115,7 +117,8 @@ class PhotoSnippetViewController: UIViewController
  {
    super.viewDidLoad()
    navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
-   nphoto = Int(photoSnippet.nphoto)
+ 
+  
    photoCollectionView.dataSource = self
    photoCollectionView.delegate = self
    
@@ -135,6 +138,7 @@ class PhotoSnippetViewController: UIViewController
    photoScaleStepper.stepValue = 1.0
    photoScaleStepper.wraps = true
    menuFrameSize = view.frame.size
+   
         
  }
 //==========================================================================================
@@ -147,22 +151,28 @@ class PhotoSnippetViewController: UIViewController
 //---------------------------------------------------------------------------
  {
    super.viewWillAppear(animated)
-   
-   if isEditingMode
-   {
-     photoSnippetTitle.text = photoSnippet.tag
-   }
-   else
-   {
-     isEditingMode = true
-   }
-   
-   photoCollectionView.reloadData()
-        
+  
+   updatePhotoSnippet()
  }
 //---------------------------------------------------------------------------
 //MARK:-
-    
+ 
+func updatePhotoSnippet()
+{
+ guard photoSnippet != nil else {return}
+ 
+ if isEditingMode
+ {
+  photoSnippetTitle.text = photoSnippet.tag
+ }
+ else
+ {
+  isEditingMode = true
+ }
+
+ nphoto = Int(photoSnippet.nphoto)
+
+}
     
 //MARK: ------------------------- VIEW WILL DISAPPEAR -----------------------
 //---------------------------------------------------------------------------
@@ -228,8 +238,6 @@ class PhotoSnippetViewController: UIViewController
  {
     isEditingMode = false
   
-  
-    
     if UIImagePickerController.isSourceTypeAvailable(.camera)
     {
         imagePicker.sourceType = .camera
@@ -249,7 +257,6 @@ class PhotoSnippetViewController: UIViewController
         return
     }
   
-
     present(imagePicker, animated: true, completion: nil)
     
  }

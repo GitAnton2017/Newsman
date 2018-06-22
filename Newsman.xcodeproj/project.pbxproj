@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */; };
 		A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A704264E1FDA87CA000B3400 /* Photo Item.swift */; };
+		A70B2AA520DA9FED003AD4B5 /* SnippetsVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */; };
 		A71715C8201F86BA00112FFF /* MAIN CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715C7201F86BA00112FFF /* MAIN CV D&D Delegate.swift */; };
 		A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
@@ -36,7 +37,7 @@
 		A72B3EAA2057FE5500C02B52 /* ZoomCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */; };
 		A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */; };
 		A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAD2058419000C02B52 /* Zoom View.swift */; };
-		A7304A9A1FCAF9E400207A52 /* MAIN VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A991FCAF9E400207A52 /* MAIN VC.swift */; };
+		A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */; };
 		A7304A9C1FCAFDB700207A52 /* Photo CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9B1FCAFDB700207A52 /* Photo CV Cell.swift */; };
 		A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */; };
 		A7304AA01FCB160C00207A52 /* Photo Snippet CV DataSouce.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */; };
@@ -63,9 +64,12 @@
 		A75489AC1FBC4F2900359C0C /* NewsmanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489AB1FBC4F2900359C0C /* NewsmanUITests.swift */; };
 		A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BB1FBC620300359C0C /* MainViewCell.swift */; };
 		A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BD1FBC649000359C0C /* MainViewDataSource.swift */; };
+		A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */; };
+		A75C0A3320DBC802009929B8 /* PhotoSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3220DBC802009929B8 /* PhotoSnippetVCRestoration.swift */; };
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
+		A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
@@ -102,6 +106,7 @@
 /* Begin PBXFileReference section */
 		A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV Delegate.swift"; sourceTree = "<group>"; };
 		A704264E1FDA87CA000B3400 /* Photo Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item.swift"; sourceTree = "<group>"; };
+		A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsVCRestoration.swift; sourceTree = "<group>"; };
 		A71715C7201F86BA00112FFF /* MAIN CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -129,7 +134,7 @@
 		A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZoomCollectionViewCell.xib; sourceTree = "<group>"; };
 		A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Cell.swift"; sourceTree = "<group>"; };
 		A72B3EAD2058419000C02B52 /* Zoom View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View.swift"; sourceTree = "<group>"; };
-		A7304A991FCAF9E400207A52 /* MAIN VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN VC.swift"; sourceTree = "<group>"; };
+		A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC.swift"; sourceTree = "<group>"; };
 		A7304A9B1FCAFDB700207A52 /* Photo CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo CV Cell.swift"; sourceTree = "<group>"; };
 		A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Picker Delegate.swift"; sourceTree = "<group>"; };
 		A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DataSouce.swift"; sourceTree = "<group>"; };
@@ -163,9 +168,12 @@
 		A75489AD1FBC4F2900359C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A75489BB1FBC620300359C0C /* MainViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewCell.swift; sourceTree = "<group>"; };
 		A75489BD1FBC649000359C0C /* MainViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDataSource.swift; sourceTree = "<group>"; };
+		A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateVCRestoration.swift; sourceTree = "<group>"; };
+		A75C0A3220DBC802009929B8 /* PhotoSnippetVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetVCRestoration.swift; sourceTree = "<group>"; };
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DataSource.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
+		A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerVCRestoration.swift; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -362,6 +370,7 @@
 				A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */,
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
+				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
 				A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */,
 				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
 				A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */,
@@ -411,7 +420,9 @@
 		A7CB13691FD2D27000AA7294 /* Photo Snippets */ = {
 			isa = PBXGroup;
 			children = (
-				A7304A991FCAF9E400207A52 /* MAIN VC.swift */,
+				A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */,
+				A75C0A3220DBC802009929B8 /* PhotoSnippetVCRestoration.swift */,
+				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */,
 				A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */,
 				A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */,
 				A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */,
@@ -420,7 +431,6 @@
 				A7304A9B1FCAFDB700207A52 /* Photo CV Cell.swift */,
 				A7443F112035D2F80039BE41 /* Folder CV Cell.swift */,
 				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
-				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
 				A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */,
 				A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */,
@@ -447,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
+				A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
 				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
@@ -473,6 +484,7 @@
 			children = (
 				A7400E741FC731A2006F05DC /* DatePickerViewController.swift */,
 				A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */,
+				A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */,
 			);
 			name = "Assesory Menus";
 			sourceTree = "<group>";
@@ -623,18 +635,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */,
+				A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
 				A71C85E71FBED634000F2DD9 /* SnippetsViewController.swift in Sources */,
+				A75C0A3320DBC802009929B8 /* PhotoSnippetVCRestoration.swift in Sources */,
 				A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */,
+				A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */,
 				A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */,
 				A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */,
 				A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */,
 				A71C85BC1FBE192D000F2DD9 /* TextSnippet+CoreDataProperties.swift in Sources */,
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
 				A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */,
+				A70B2AA520DA9FED003AD4B5 /* SnippetsVCRestoration.swift in Sources */,
 				A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */,
 				A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */,
-				A7304A9A1FCAF9E400207A52 /* MAIN VC.swift in Sources */,
+				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
 				A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */,
 				A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */,
 				A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */,

@@ -110,6 +110,7 @@ class SnippetsViewController: UIViewController
     @IBOutlet var snippetsTableView: UITableView!
     
     let snippetsDataSource = SnippetsViewDataSource()
+ 
     let locationManager = CLLocationManager()
     
     override func viewDidLoad()
@@ -135,8 +136,7 @@ class SnippetsViewController: UIViewController
      editSnippets.title = "⚒︎"
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
-        
-     snippetsDataSource.itemsType = snippetType
+     
      snippetsDataSource.groupType = groupType
      snippetsTableView.dataSource = snippetsDataSource
      currentToolBarItems = snippetsToolBar.items
@@ -146,13 +146,23 @@ class SnippetsViewController: UIViewController
      setLocationPermissions()
 
     }
-    
+ 
+    func updateSnippets()
+    {
+     guard snippetType != nil else {return}
+     
+     snippetsDataSource.itemsType = snippetType
+     snippetsDataSource.rebuildData()
+     snippetsTableView.reloadData()
+    }
+ 
+ 
     override func viewWillAppear(_ animated: Bool)
     {
      super.viewWillAppear(animated)
-     snippetsDataSource.rebuildData()
-     snippetsTableView.reloadData()
-        print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
+     updateSnippets()
+     
+     print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
     }
  
  
@@ -289,6 +299,7 @@ class SnippetsViewController: UIViewController
      {
       return
      }
+     
      textSnippetVC.modalTransitionStyle = .crossDissolve
       
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -364,6 +375,48 @@ class SnippetsViewController: UIViewController
     
     func createNewVideoSnippet()
     {
+     guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
+      else
+     {
+      return
+     }
+    
+     
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     let moc = appDelegate.persistentContainer.viewContext
+     let newPhotoSnippet = PhotoSnippet(context: moc)
+     
+     newPhotoSnippet.date = Date() as NSDate
+     let newPhotoSnippetID = UUID()
+     newPhotoSnippet.id = newPhotoSnippetID
+     newPhotoSnippet.priority = SnippetPriority.normal.rawValue
+     newPhotoSnippet.type = SnippetType.video.rawValue
+     newPhotoSnippet.status = SnippetStatus.new.rawValue
+     
+     let fileManager = FileManager.default
+     let docFolder = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+     let newPhotoSnippetURL = docFolder.appendingPathComponent(newPhotoSnippetID.uuidString)
+     do
+     {
+      try fileManager.createDirectory(at: newPhotoSnippetURL, withIntermediateDirectories: false, attributes: nil)
+      print ("PHOTO SNIPPET PHOTOS DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newPhotoSnippetURL.path)")
+     }
+     catch
+     {
+      print ("ERROR OCCURED WHEN CREATING PHOTO SNIPPET PHOTOS DIRECTORY: \(error.localizedDescription)")
+     }
+     
+     if let location = snippetLocation
+     {
+      newPhotoSnippet.logitude = location.coordinate.longitude
+      newPhotoSnippet.latitude = location.coordinate.latitude
+     }
+     
+     getLocationString {location in newPhotoSnippet.location = location}
+     
+     photoSnippetVC.photoSnippet = newPhotoSnippet
+     snippetsDataSource.items.insert(newPhotoSnippet, at: 0)
+     self.navigationController?.pushViewController(photoSnippetVC, animated: true)
     }
     
     func createNewAudioSnippet()
