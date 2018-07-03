@@ -184,7 +184,10 @@ func selectAllPhotoItems(in collectionView: UICollectionView)
 }// selectAllPhotoItems(in collectionView: UICollectionView)...
  //----------------------------------------------------------------------------
  //MARK: -
-    
+ 
+ 
+ 
+ 
 //MARK: ----------------------- Deleting Empty Sections ----------------------
 //----------------------------------------------------------------------------
 func deleteEmptySections()
@@ -198,10 +201,61 @@ func deleteEmptySections()
      }
     
 }// func deleteSelectedPhotos()...
-//----------------------------------------------------------------------------
+//--------------------------------------------------------------------------------
 //MARK: -
  
  
+//MARK: ------------------------- Insert New Photo Item -------------------------
+//-------------------------------------------------------------------------------
+func insertNewPhotoItem(_ newPhotoItem: PhotoItem)
+//-------------------------------------------------------------------------------
+{
+ if (photoItems2D.isEmpty)
+ {
+  self.photoItems2D.append([])
+  if (self.photoCollectionView.photoGroupType == .makeGroups)
+  {
+   self.sectionTitles = [""]
+  }
+  photoCollectionView.insertSections([0])
+ }
+ 
+ if (self.photoCollectionView.photoGroupType == .makeGroups)
+ {
+  var section = 0
+  if let index = self.sectionTitles?.index(of: "")
+  {
+   section = index
+  }
+  else
+  {
+   self.photoItems2D.insert([], at: section)
+   self.sectionTitles?.insert("", at: section)
+   photoCollectionView.insertSections([section])
+  }
+  
+  self.photoItems2D[section].append(newPhotoItem)
+  let row = self.photoItems2D[section].count - 1
+  let indexPath = IndexPath(row: row, section: section)
+  self.photoCollectionView.insertItems(at: [indexPath])
+  self.photoCollectionView.reloadSections([section])
+  
+ }
+ else
+ {
+  self.photoItems2D[0].append(newPhotoItem)
+  let row = self.photoItems2D[0].count - 1
+  let indexPath = IndexPath(row: row, section: 0)
+  self.photoCollectionView.insertItems(at: [indexPath])
+  self.photoCollectionView.reloadSections([0])
+ }
+ 
+}// func insertNewPhotoItem(_:)...
+//----------------------------------------------------------------------------
+//MARK: -
+
+
+
 //MARK: ----------------- Deleting Selected Photo Items ----------------------
 //----------------------------------------------------------------------------
  func deleteSelectedPhotos()
@@ -440,12 +494,31 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   {
    cell.clearFlag()
   }
-    
+  
+  if (photoItem.type == .video) {cell.drawPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1))}
+  
   photoItem.getImage(requiredImageWidth:  imageSize)
   {(image) in
-    cell.photoIconView.image = image
     image?.setSquared(in: cell.photoIconView)
     cell.spinner.stopAnimating()
+
+    UIView.transition(with: cell.photoIconView,
+                      duration: 0.5,
+                      options: .transitionCrossDissolve,
+                      animations: {cell.photoIconView.image = image},
+                      completion:
+                      {_ in
+                       cell.photoIconView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                       UIView.animate(withDuration: 0.15,
+                                      delay: 0,
+                                      usingSpringWithDamping: 2500,
+                                      initialSpringVelocity: 0,
+                                      options: .curveEaseInOut,
+                                      animations: {cell.photoIconView.transform = .identity},
+                                      completion: nil)
+                       
+                      })
+   
    }
     
    return cell

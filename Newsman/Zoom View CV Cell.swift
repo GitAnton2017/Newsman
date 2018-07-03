@@ -2,8 +2,14 @@
 import Foundation
 import UIKit
 
-class ZoomViewCollectionViewCell: UICollectionViewCell
+class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    var photoItemView: UIView {return self.contentView}
+ 
+    var cellFrame: CGRect {return self.frame}
+ 
+    var isPhotoItemSelected: Bool = false
+ 
     @IBOutlet weak var photoIconView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     

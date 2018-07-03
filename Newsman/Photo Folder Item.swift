@@ -159,23 +159,23 @@ import CoreData
          let destFolderURL    = sourceSnippetURL.appendingPathComponent(newFolderID.uuidString)
        
          PhotoFolderItem.createNewPhotoFolderOnDisk(at: destFolderURL)
-       
+         let type = SnippetType(rawValue: photoSnippet.type!)!
+        
          selectedPhotos.forEach
          {photo in
           photo.isSelected = false
           var sourcePhotoURL: URL
-       
+          let fileName = photo.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
           if let folder = photo.folder
           {
-           sourcePhotoURL = sourceSnippetURL.appendingPathComponent(folder.id!.uuidString)
-                                            .appendingPathComponent( photo.id!.uuidString)
+           sourcePhotoURL = sourceSnippetURL.appendingPathComponent(folder.id!.uuidString).appendingPathComponent(fileName)
           }
           else
           {
-           sourcePhotoURL = sourceSnippetURL.appendingPathComponent(photo.id!.uuidString)
+           sourcePhotoURL = sourceSnippetURL.appendingPathComponent(fileName)
           }
           
-          let destPhotoURL  = destFolderURL.appendingPathComponent(photo.id!.uuidString)
+          let destPhotoURL  = destFolderURL.appendingPathComponent(fileName)
           PhotoItem.movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
          }
         

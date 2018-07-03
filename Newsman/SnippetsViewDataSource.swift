@@ -184,7 +184,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       switch (itemsType)
       {
        case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
-        
+       
+       case .video: fallthrough
        case .photo:
         
         let photoSnippet = item as! PhotoSnippet
@@ -219,7 +220,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
             (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "photo.main")
         }
 
-       case .video: break
+       
        case .audio: break
        case .sketch: break
        case .report: break

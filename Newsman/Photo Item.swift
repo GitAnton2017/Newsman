@@ -2,33 +2,39 @@ import Foundation
 import UIKit
 import CoreData
 import GameplayKit
+import AVKit
 
 
 
 //MARK: ----------------- Single Photo Item Class ----------------
+
+
 class PhotoItem: NSObject, PhotoItemProtocol
 {
  
-  weak var dragSession: UIDragSession?
-
+    static let videoFormatFile = ".mov"
  
-  static let photoItemUTI = "photoitem.newsman"
-//------------------------------------------
+    class var docFolder: URL {return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!}
+ 
+    weak var dragSession: UIDragSession?
+ 
+    static let photoItemUTI = "photoitem.newsman"
+
     var photo: Photo
-//------------------------------------------
+
     
     var url: URL
     {
-      let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-      let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
-        
+      let snippetURL = PhotoItem.docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
+      let fileName = id.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
+     
       if let photoFolderID = photo.folder?.id?.uuidString
       {
-        return snippetURL.appendingPathComponent(photoFolderID).appendingPathComponent(id.uuidString)
+        return snippetURL.appendingPathComponent(photoFolderID).appendingPathComponent(fileName)
       }
       else
       {
-        return snippetURL.appendingPathComponent(id.uuidString)
+        return snippetURL.appendingPathComponent(fileName)
       }
         
     }
@@ -53,8 +59,8 @@ class PhotoItem: NSObject, PhotoItemProtocol
     
     var position: Int16
     {
-        get {return photo.position}
-        set {photo.position = newValue}
+       get {return photo.position}
+       set {photo.position = newValue}
     }
     
     static let queue =
@@ -75,19 +81,18 @@ class PhotoItem: NSObject, PhotoItemProtocol
         try cont.encode(url, forKey: .photoURL)
         
     }
-    
-    
+ 
     static let dsQueue = DispatchQueue(label: "Images")
-    
     static let fsQueue = DispatchQueue(label: "File I/O")
-    
     static let dsGroup = DispatchGroup()
-    
+ 
     typealias ImagesCache = NSCache<NSString, UIImage>
-    
+ 
     static var imageCacheDict = [Int: ImagesCache]()
     
     var photoSnippet: PhotoSnippet {return photo.photoSnippet!}
+ 
+    var type: SnippetType {return SnippetType(rawValue: photoSnippet.type!)!}
     
     init(photo : Photo)
     {
@@ -95,31 +100,33 @@ class PhotoItem: NSObject, PhotoItemProtocol
         self.photo = photo
         super.init()
     }
-    
+
+ 
     @discardableResult class func cacheThumbnailImage(imageID: String, image: UIImage, width: Int) -> UIImage?
     {
         if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
         {
-            if let cache = PhotoItem.imageCacheDict[width]
-            {
-             cache.setObject(resizedImage, forKey: imageID as NSString)
-             //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
-            }
-            else
-            {
-             let newImageWidthCache = ImagesCache()
-             newImageWidthCache.name = "(\(width) x \(width))"
-             /*OperationQueue.main.addOperation
-             {
-              newImageWidthCache.delegate = PhotoItem.appDelegate
-             }*/
-        
-             newImageWidthCache.setObject(resizedImage, forKey: imageID as NSString)
-             PhotoItem.imageCacheDict[width] = newImageWidthCache
-             //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
-            }
-            
-            return resizedImage
+         if let cache = PhotoItem.imageCacheDict[width]
+         {
+          cache.setObject(resizedImage, forKey: imageID as NSString)
+          //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
+         }
+         else
+         {
+          let newImageWidthCache = ImagesCache()
+          newImageWidthCache.name = "(\(width) x \(width))"
+          /*OperationQueue.main.addOperation
+           {
+           newImageWidthCache.delegate = PhotoItem.appDelegate
+           }*/
+          
+          newImageWidthCache.setObject(resizedImage, forKey: imageID as NSString)
+          PhotoItem.imageCacheDict[width] = newImageWidthCache
+          //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
+         }
+         
+         return resizedImage
+         
         }
         else
         {
@@ -150,12 +157,11 @@ class PhotoItem: NSObject, PhotoItemProtocol
         
         PhotoItem.saveContext()
     }
-    
-    convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat)
+ 
+    convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat, newVideoID: UUID? = nil)
     {
-      
       var newPhoto: Photo!
-      let newPhotoID = UUID()
+      let newPhotoID = newVideoID ?? UUID()
         
       PhotoItem.MOC.performAndWait
       {
@@ -170,12 +176,11 @@ class PhotoItem: NSObject, PhotoItemProtocol
       }
         
       self.init(photo: newPhoto)
-        
-        
+     
       PhotoItem.cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
 
-      //PhotoItem.fsQueue.sync
-     // {
+      if (newVideoID == nil && SnippetType(rawValue: photoSnippet.type!)! == .photo)
+      {
          do
          {
           if let data = UIImagePNGRepresentation(image)
@@ -190,71 +195,31 @@ class PhotoItem: NSObject, PhotoItemProtocol
           print ("JPEG WRITE ERROR: \(error.localizedDescription)")
           print("**************************************************")
          }
-    //  }
+       }
 
       PhotoItem.saveContext()
         
     }
-    
-    
-//----------------------------- GETTING REQUIRED IMAGE FOR PHOTO ITEM SYNCRONOUSLY --------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-    func getImage(requiredImageWidth: CGFloat) -> UIImage?
-//-----------------------------------------------------------------------------------------------------------------
+ 
+    class func renderVideoPreview (for videoURL: URL) -> UIImage?
     {
-     if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)],
-        let cachedImage = imageCache.object(forKey: id.uuidString as NSString)
+     do
      {
-        return cachedImage // if there is an of image of required size in exisisting size cache return it...
+      let asset = AVURLAsset(url: videoURL, options: nil)
+      let imgGenerator = AVAssetImageGenerator(asset: asset)
+      imgGenerator.appliesPreferredTrackTransform = true
+      let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
+      let thumbnail = UIImage(cgImage: cgImage)
+      return thumbnail
+      
      }
-     else //otherwise we try to make in from exisiting bigger one in corresponding size cache...
+     catch let error
      {
-      //filtering caches holding the images with sizes bigger than required...
-      let caches = PhotoItem.imageCacheDict.filter
-      {pair in
-       if pair.key > Int(requiredImageWidth), let _ = pair.value.object(forKey: self.id.uuidString as NSString)
-       {return true} else {return false}
-      }
-        
-      if let cache = caches.min(by: {$0.key < $1.key})?.value,//getting the minimum size cache bigger than required image size...
-         let biggerImage = cache.object(forKey: id.uuidString as NSString),//has this cache hold required image???
-        let newCachedImage = PhotoItem.cacheThumbnailImage(imageID: id.uuidString, image: biggerImage, width: Int(requiredImageWidth))
-         //if yes try to resize it to required one and if ok with resize we return it...
-      {
-       return newCachedImage
-      }
-        
-      //otherwise try to load it from disk URL and cache it...
-      do
-      {
-        let data = try Data(contentsOf: url)
-        if let savedImage = UIImage(data: data, scale: 1),
-            let newCachedImage = PhotoItem.cacheThumbnailImage(imageID: id.uuidString, image: savedImage, width: Int(requiredImageWidth))
-        {
-         return newCachedImage
-        }
-        else
-        {
-         print("**************************************************************************")
-         print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL: \n\(url.path)!")
-         print("**************************************************************************")
-            
-         return nil
-        }
-       }
-       catch
-       {
-         print("******************************************************************************")
-         print("ERROR OCCURED WHEN READING IMAGE DATA FROM URL!\n\(error.localizedDescription)")
-         print("******************************************************************************")
-        
-         return nil
-       } //do-try-catch...
-     } //if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)]...
-    } //func getImage(...)
-//-----------------------------------------------------------------------------------------------------------------
-    
-    
+      print("**** Error generating thumbnail from video at URL:\n \"\(videoURL.path)\"\n\(error.localizedDescription)")
+      return nil
+     }
+    }
+ 
     class func getCachedImage(with imageID: UUID, requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
     {
         PhotoItem.queue.addOperation
@@ -262,9 +227,8 @@ class PhotoItem: NSObject, PhotoItemProtocol
            if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)],
               let cachedImage = imageCache.object(forKey: imageID.uuidString as NSString)
            {
-               //OperationQueue.main.addOperation {completion(cachedImage)}
-               completion(cachedImage)
-               return
+             completion(cachedImage)
+             return
            }
            else
            {
@@ -279,34 +243,55 @@ class PhotoItem: NSObject, PhotoItemProtocol
                    let cachedImage = self.cacheThumbnailImage(imageID: imageID.uuidString, image: biggerImage, width: Int(requiredImageWidth))
                 
                {
-                   //OperationQueue.main.addOperation {completion(cachedImage)}
-                   completion(cachedImage)
-                   //print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
-                   return
+                 print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
+                 completion(cachedImage)
+                 return
                }
            }
-            
-        // OperationQueue.main.addOperation{completion(nil)}
+         
           completion(nil)
         }
         
     }
-    
+ 
+    class func getRenderedPreview(with videoID: UUID, from videoURL: URL,
+                                  requiredImageWidth: CGFloat,
+                                  completion: @escaping (UIImage?) -> Void)
+    {
+     PhotoItem.queue.addOperation
+     {
+      
+        if let preview = PhotoItem.renderVideoPreview(for: videoURL),
+           let cachedImage = PhotoItem.cacheThumbnailImage(imageID: videoID.uuidString, image: preview, width: Int(requiredImageWidth))
+         
+        {
+         completion(cachedImage)
+        }
+        else
+        {
+         print("******************************************************************************")
+         print("ERROR OCCURED WHEN PROCESSING VIDEO IMAGE PREVIEW!")
+         print("******************************************************************************")
+         
+     
+         completion(nil)
+        }
+       
+     } //PhotoItem.queue.addOperation...
+     
+    }
+ 
     class func getSavedImage(with imageID: UUID, from url: URL,
-                             requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
+                             requiredImageWidth: CGFloat,
+                             completion: @escaping (UIImage?) -> Void)
     {
       PhotoItem.queue.addOperation //PhotoItem.fsQueue.async
       {
-         do
+          do
           {
-              //print("******************************************************************************")
-              //print ("ATTEMPT OF READING IMAGE FROM URL IN SERIAL QUEUE: \n \(url.path)...")
-              //print("******************************************************************************")
-            
-              let data = try Data(contentsOf: url)
-            
-              //PhotoItem.queue.addOperation
-              //{
+        
+               let data = try Data(contentsOf: url)
+           
                if let savedImage = UIImage(data: data),
                   let cachedImage = PhotoItem.cacheThumbnailImage(imageID: imageID.uuidString, image: savedImage, width: Int(requiredImageWidth))
                 
@@ -320,8 +305,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
                   print("******************************************************************************")
                   print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL!")
                   print("******************************************************************************")
-                
-                  //OperationQueue.main.addOperation{completion(nil)}
+       
                   completion(nil)
                }
              // }
@@ -332,8 +316,8 @@ class PhotoItem: NSObject, PhotoItemProtocol
               print("ERROR OCCURED WHEN READING IMAGE DATA FROM URL!\n\(error.localizedDescription)")
               print("******************************************************************************")
             
-              //OperationQueue.main.addOperation{completion(nil)}
-               completion(nil)
+           
+              completion(nil)
           } //do-try-catch...
         
       } //PhotoItem.queue.addOperation...
@@ -345,10 +329,11 @@ class PhotoItem: NSObject, PhotoItemProtocol
  func getImage(requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
  //-----------------------------------------------------------------------------------------------------------------
  {
-  PhotoItem.dsQueue.async
+  PhotoItem.dsQueue.async //serial queue!... ensure lock data...
   {
    let photoID = self.id
    let photoURL = self.url
+   let type = self.type
     
    PhotoItem.getCachedImage(with: photoID , requiredImageWidth: requiredImageWidth)
    {image in
@@ -358,106 +343,29 @@ class PhotoItem: NSObject, PhotoItemProtocol
     }
     else
     {
-     PhotoItem.getSavedImage(with: photoID , from: photoURL, requiredImageWidth: requiredImageWidth)
-     {image in
-      OperationQueue.main.addOperation {completion(image)}
+     switch (type)
+     {
+      case .photo:
+       PhotoItem.getSavedImage(with: photoID , from: photoURL, requiredImageWidth: requiredImageWidth)
+       {image in
+        OperationQueue.main.addOperation {completion(image)}
+       }
+      
+      case .video:
+       
+       PhotoItem.getRenderedPreview(with: photoID , from: photoURL, requiredImageWidth: requiredImageWidth)
+       {image in
+        OperationQueue.main.addOperation {completion(image)}
+       }
+      
+      default:
+       OperationQueue.main.addOperation {completion(nil)}
      }
     }
    }
   }
  }
-    
-//----------------------------- GETTING REQUIRED IMAGE FOR PHOTO ITEM ASYNCRONOUSLY -------------------------------
-//-----------------------------------------------------------------------------------------------------------------
-    func getImage1(requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
-//-----------------------------------------------------------------------------------------------------------------
-    {
-     PhotoItem.dsQueue.async
-     {
-        let photoID = self.id.uuidString
-        let photoURL = self.url
-        
-     PhotoItem.queue.addOperation
-     {
-       if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)],
-          let cachedImage = imageCache.object(forKey: photoID as NSString)
-       {
-        OperationQueue.main.addOperation {completion(cachedImage)}
-        //print("IMAGE LOADED FROM EXISTING CACHE: \(imageCache.name), SIZE: \(cachedImage.size)")
-        return
-       }
-       else
-       {
-        let caches = PhotoItem.imageCacheDict.filter
-        {pair in
-          if pair.key > Int(requiredImageWidth), let _ = pair.value.object(forKey: photoID as NSString)
-          {return true} else {return false}
-        }
-        
-        if let cache = caches.min(by: {$0.key < $1.key})?.value,
-           let biggerImage = cache.object(forKey: photoID as NSString),
-           let cachedImage = PhotoItem.cacheThumbnailImage(imageID: photoID, image: biggerImage, width: Int(requiredImageWidth))
-           
-        {
-          OperationQueue.main.addOperation
-          {
-            completion(cachedImage)
-          }
-          //print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
-          return
-        }
-        //otherwise try to load it from disk URL and cache it...
-        
-        do
-        {
-         print("******************************************************************************")
-         print ("ATTEMPT OF READING IMAGE FROM URL: \n \(photoURL.path)...")
-         print("******************************************************************************")
-            
-         let data = try Data(contentsOf: photoURL)
-         if let savedImage = UIImage(data: data, scale: 1),
-            let cachedImage = PhotoItem.cacheThumbnailImage(imageID: photoID, image: savedImage, width: Int(requiredImageWidth))
-            
-         {
-          //print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
-          OperationQueue.main.addOperation
-          {
-            
-            completion(cachedImage)
-            
-          }
-         }
-         else
-         {
-          print("******************************************************************************")
-          print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL!")
-          print("******************************************************************************")
-            
-          OperationQueue.main.addOperation{completion(nil)}
-         }
-        }
-        catch
-        {
-          print("******************************************************************************")
-          print("ERROR OCCURED WHEN READING IMAGE DATA FROM URL!\n\(error.localizedDescription)")
-          print("******************************************************************************")
-            
-          OperationQueue.main.addOperation{completion(nil)}
-        } //do-try-catch...
-        
-       } //main if-else...if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)]...
-      } //PhotoItem.queue.addOperation...
-     }
-     } //func getImage(...)
-//-----------------------------------------------------------------------------------------------------------------
- 
-/***************************************************************************************************************/
-class var docFolder: URL
-/***************************************************************************************************************/
-{
- return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-}
-/***************************************************************************************************************/
+
  
 //MARK: -
  
@@ -517,11 +425,14 @@ func deleteImages()
  {
   let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
   let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
+  let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
+  
 
   sourceSelectedPhotos.forEach
   {
-    let sourcePhotoURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
-    let destPhotoURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
+    let fileName = $0.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
+    let sourcePhotoURL = sourceSnippetURL.appendingPathComponent(fileName)
+    let destPhotoURL   =   destSnippetURL.appendingPathComponent(fileName)
    
     movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
   }
@@ -553,7 +464,7 @@ func deleteImages()
   
   MOC.persistAndWait
   {
-
+   let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
    let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
    let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
   
@@ -570,9 +481,11 @@ func deleteImages()
      print("ERROR: Unable to unfolder photo! Photo has no folder in MOC")
      continue
     }
+    
+    let fileName = photo.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
     let sourceFolderURL = sourceSnippetURL.appendingPathComponent(photoFolder.id!.uuidString)
-    let sourcePhotoURL = sourceFolderURL.appendingPathComponent(photo.id!.uuidString)
-    let destPhotoURL  = destSnippetURL.appendingPathComponent(photo.id!.uuidString)
+    let sourcePhotoURL = sourceFolderURL.appendingPathComponent(fileName)
+    let destPhotoURL  = destSnippetURL.appendingPathComponent(fileName)
     
     movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
    
@@ -583,7 +496,8 @@ func deleteImages()
      
      movePhotoItemOnDisk(from: singleFileSourceURL, to: singleFileDestinURL)
      
-     if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where: {$0.id!.uuidString == content.first!})
+     if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where:
+       {$0.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "") == content.first!})
      {
        photo.folder!.removeFromPhotos(singlePhoto)
        deletePhotoItemFromDisk(at: sourceFolderURL)
@@ -636,16 +550,19 @@ func deleteImages()
    {
     MOC.persistAndWait
     {
+     
      let destPhotoSnippet = destPhotoSnippetFolder.photoSnippet!
      let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
      let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
      let destFolderURL = destSnippetURL.appendingPathComponent(destPhotoSnippetFolder.id!.uuidString)
+     let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
     
      sourceSelectedPhotos.forEach
      {photo in
       photo.isSelected = false //!!!!!!!!!!!!
-      let sourcePhotoURL = sourceSnippetURL.appendingPathComponent(photo.id!.uuidString)
-      let destPhotoURL   =   destFolderURL.appendingPathComponent(photo.id!.uuidString)
+      let fileName = photo.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
+      let sourcePhotoURL = sourceSnippetURL.appendingPathComponent(fileName)
+      let destPhotoURL   =   destFolderURL.appendingPathComponent(fileName)
       movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
      }
    
@@ -742,6 +659,7 @@ func deleteImages()
     return result
    }
   }
+  let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
   let destPhotoSnippet = destPhotoSnippetFolder.photoSnippet!
   let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
   let destSnippetURL =  docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
@@ -749,9 +667,10 @@ func deleteImages()
   
   allPhotos.forEach
   {
+   let fileName = $0.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
    let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.folder!.id!.uuidString)
-   let sourcePhotoURL = sourcePhotoFolderURL.appendingPathComponent($0.id!.uuidString)
-   let destPhotoURL   =  destFolderURL.appendingPathComponent($0.id!.uuidString)
+   let sourcePhotoURL = sourcePhotoFolderURL.appendingPathComponent(fileName)
+   let destPhotoURL   =  destFolderURL.appendingPathComponent(fileName)
    movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
    }
   

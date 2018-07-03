@@ -47,6 +47,7 @@
 		A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* DatePickerViewController.swift */; };
 		A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */; };
 		A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */; };
+		A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD4920EBEECD0062AF27 /* Playback Button.swift */; };
 		A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */; };
 		A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */; };
 		A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */; };
@@ -65,11 +66,18 @@
 		A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BB1FBC620300359C0C /* MainViewCell.swift */; };
 		A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BD1FBC649000359C0C /* MainViewDataSource.swift */; };
 		A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */; };
-		A75C0A3320DBC802009929B8 /* PhotoSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3220DBC802009929B8 /* PhotoSnippetVCRestoration.swift */; };
+		A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */; };
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
 		A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */; };
+		A7826E3320DE311700FFBBFA /* Photo Snippet TF Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3220DE311700FFBBFA /* Photo Snippet TF Delegate.swift */; };
+		A7826E3520DE3FE100FFBBFA /* TextSnippet TF Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */; };
+		A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */; };
+		A7826E3920DFD48F00FFBBFA /* NCPushPopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */; };
+		A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */; };
+		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
+		A7826E5220E2618100FFBBFA /* Video Shooting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
@@ -79,11 +87,12 @@
 		A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */; };
 		A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */; };
 		A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7DD7D8D20A4517E00572A25 /* CloudKit.framework */; };
-		A7DD7D9020A9A43A00572A25 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */; };
+		A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */; };
 		A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */; };
 		A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */; };
 		A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */; };
 		A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */; };
+		A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EF606120EA1CB500FD09A7 /* Video Player View.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -145,6 +154,7 @@
 		A7400E741FC731A2006F05DC /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerViewController.swift; sourceTree = "<group>"; };
 		A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsCoreLocationDelegate.swift; sourceTree = "<group>"; };
+		A741BD4920EBEECD0062AF27 /* Playback Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Button.swift"; sourceTree = "<group>"; };
 		A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -169,11 +179,18 @@
 		A75489BB1FBC620300359C0C /* MainViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewCell.swift; sourceTree = "<group>"; };
 		A75489BD1FBC649000359C0C /* MainViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDataSource.swift; sourceTree = "<group>"; };
 		A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateVCRestoration.swift; sourceTree = "<group>"; };
-		A75C0A3220DBC802009929B8 /* PhotoSnippetVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSnippetVCRestoration.swift; sourceTree = "<group>"; };
+		A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC Restoration.swift"; sourceTree = "<group>"; };
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DataSource.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
 		A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerVCRestoration.swift; sourceTree = "<group>"; };
+		A7826E3220DE311700FFBBFA /* Photo Snippet TF Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet TF Delegate.swift"; sourceTree = "<group>"; };
+		A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextSnippet TF Delegate.swift"; sourceTree = "<group>"; };
+		A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollAnimator.swift; sourceTree = "<group>"; };
+		A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCPushPopAnimator.swift; sourceTree = "<group>"; };
+		A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollProtocol.swift; sourceTree = "<group>"; };
+		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
+		A7826E5120E2618100FFBBFA /* Video Shooting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting.swift"; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -187,11 +204,12 @@
 		A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Drop Item Provider.swift"; sourceTree = "<group>"; };
 		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Protocol.swift"; sourceTree = "<group>"; };
 		A7DD7D8D20A4517E00572A25 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
+		A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC Restoration.swift"; sourceTree = "<group>"; };
 		A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionAnimation.swift; sourceTree = "<group>"; };
 		A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionsDelegate.swift; sourceTree = "<group>"; };
 		A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VC Transitions Delegate.swift"; sourceTree = "<group>"; };
+		A7EF606120EA1CB500FD09A7 /* Video Player View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Player View.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -371,16 +389,18 @@
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
 				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
-				A7DD7D8F20A9A43A00572A25 /* AppDelegateExtensions.swift */,
 				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
+				A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */,
+				A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */,
 				A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */,
+				A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */,
 				A75489971FBC4F2900359C0C /* Info.plist */,
 				A75489921FBC4F2900359C0C /* Assets.xcassets */,
 				A7C6A7D220C822AD005D566A /* VC Custom Transitions */,
 				A7CB136E1FD2D35E00AA7294 /* Assesory Menus */,
 				A7CB136D1FD2D31D00AA7294 /* Main Menu */,
-				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
 				A7CB136B1FD2D2D900AA7294 /* Snippets Menu */,
+				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
 				A7CB136A1FD2D2AA00AA7294 /* Text Snippets */,
 				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
 			);
@@ -421,23 +441,28 @@
 			isa = PBXGroup;
 			children = (
 				A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */,
-				A75C0A3220DBC802009929B8 /* PhotoSnippetVCRestoration.swift */,
+				A7826E5120E2618100FFBBFA /* Video Shooting.swift */,
+				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
+				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
+				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
+				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
+				A7EF606120EA1CB500FD09A7 /* Video Player View.swift */,
+				A741BD4920EBEECD0062AF27 /* Playback Button.swift */,
+				A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */,
+				A7826E3220DE311700FFBBFA /* Photo Snippet TF Delegate.swift */,
+				A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */,
 				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */,
 				A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */,
 				A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */,
 				A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */,
-				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A7443F13203881790039BE41 /* Flag Items Menu.swift */,
 				A7304A9B1FCAFDB700207A52 /* Photo CV Cell.swift */,
 				A7443F112035D2F80039BE41 /* Folder CV Cell.swift */,
 				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
-				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
 				A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */,
 				A77F74D2206242090074A915 /* Zoom View CV DataSource.swift */,
 				A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */,
 				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
-				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
-				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A71715C7201F86BA00112FFF /* MAIN CV D&D Delegate.swift */,
 				A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */,
 				A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */,
@@ -448,7 +473,9 @@
 		A7CB136A1FD2D2AA00AA7294 /* Text Snippets */ = {
 			isa = PBXGroup;
 			children = (
+				A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */,
 				A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */,
+				A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */,
 			);
 			path = "Text Snippets";
 			sourceTree = "<group>";
@@ -457,10 +484,10 @@
 			isa = PBXGroup;
 			children = (
 				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
+				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
 				A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
-				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
 				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
 			);
@@ -638,7 +665,7 @@
 				A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
 				A71C85E71FBED634000F2DD9 /* SnippetsViewController.swift in Sources */,
-				A75C0A3320DBC802009929B8 /* PhotoSnippetVCRestoration.swift in Sources */,
+				A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */,
 				A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */,
 				A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */,
 				A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */,
@@ -650,13 +677,18 @@
 				A70B2AA520DA9FED003AD4B5 /* SnippetsVCRestoration.swift in Sources */,
 				A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */,
 				A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */,
+				A7826E3320DE311700FFBBFA /* Photo Snippet TF Delegate.swift in Sources */,
+				A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */,
+				A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */,
 				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
 				A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */,
 				A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */,
 				A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */,
+				A7826E3920DFD48F00FFBBFA /* NCPushPopAnimator.swift in Sources */,
 				A7443F122035D2F80039BE41 /* Folder CV Cell.swift in Sources */,
 				A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */,
 				A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */,
+				A7826E5220E2618100FFBBFA /* Video Shooting.swift in Sources */,
 				A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */,
 				A77F74D3206242090074A915 /* Zoom View CV DataSource.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
@@ -664,6 +696,7 @@
 				A7443F06202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift in Sources */,
 				A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */,
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
+				A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */,
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
 				A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */,
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
@@ -677,10 +710,14 @@
 				A7304AA01FCB160C00207A52 /* Photo Snippet CV DataSouce.swift in Sources */,
 				A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */,
 				A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */,
+				A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
+				A7826E3520DE3FE100FFBBFA /* TextSnippet TF Delegate.swift in Sources */,
 				A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */,
 				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
+				A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
+				A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */,
 				A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */,
 				A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */,
 				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,
@@ -692,7 +729,6 @@
 				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,
 				A71715C8201F86BA00112FFF /* MAIN CV D&D Delegate.swift in Sources */,
 				A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */,
-				A7DD7D9020A9A43A00572A25 /* AppDelegateExtensions.swift in Sources */,
 				A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */,
 				A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */,
 				A71C85E91FBED660000F2DD9 /* SnippetsViewDataSource.swift in Sources */,
@@ -820,7 +856,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -874,7 +910,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

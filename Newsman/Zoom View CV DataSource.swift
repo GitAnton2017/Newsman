@@ -4,9 +4,7 @@ import UIKit
 
 extension ZoomView:  UICollectionViewDataSource
 {
-    
-    
-    
+ 
     var imageSize: CGFloat
     {
         let w = self.bounds.width
@@ -28,44 +26,34 @@ extension ZoomView:  UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
-        // print ("LOADING FOLDER CELL WITH IP - \(indexPath)")
-        // print ("VISIBLE CELLS: \(collectionView.visibleCells.count)")
-        
+  
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ZoomCollectionViewCell", for: indexPath) as! ZoomViewCollectionViewCell
         
         let photoItem = photoItems[indexPath.row]
-        
-        //cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
-        
+     
         cell.photoIconView.layer.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
+     
+        if (photoItem.type == .video) {cell.drawPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1))}
         
         photoItem.getImage(requiredImageWidth:  imageSize)
         {(image) in
-            cell.photoIconView.image = image
-            cell.photoIconView.layer.contentsGravity = kCAGravityResizeAspect
-            
-            if let img = image
-            {
-                // print ("IMAGE LOADED FOR CELL WITH IP - \(indexPath)")
-                if img.size.height > img.size.width
-                {
-                    
-                    let r = img.size.width/img.size.height
-                    cell.photoIconView.layer.contentsRect = CGRect(x: 0, y: (1 - r)/2, width: 1, height: r)
-                    
-                    
-                }
-                else
-                {
-                    
-                    let r = img.size.height/img.size.width
-                    cell.photoIconView.layer.contentsRect = CGRect(x: (1 - r)/2, y: 0, width: r, height: 1)
-                    
-                    
-                }
-            }
-            
-            cell.spinner.stopAnimating()
+         image?.setSquared(in: cell.photoIconView)
+         cell.spinner.stopAnimating()
+         UIView.transition(with: cell.photoIconView,
+                           duration: 0.75,
+                           options: .transitionCrossDissolve,
+                           animations: {cell.photoIconView.image = image},
+                           completion:
+                           {_ in
+                            cell.photoIconView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                            UIView.animate(withDuration: 0.15,
+                                           delay: 0,
+                                           usingSpringWithDamping: 2500,
+                                           initialSpringVelocity: 0,
+                                           options: .curveEaseInOut,
+                                           animations: {cell.photoIconView.transform = .identity},
+                                           completion: nil)
+                           })
         }
      
         if globalDragItems.contains(where: {item in

@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "video.tab.icon.png",
+      "filename" : "start.recording.tab.icon.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "video.tab.icon@2x.png",
+      "filename" : "start.recording.tab.icon@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "video.tab.icon@3x.png",
+      "filename" : "start.recording.tab.icon@3x.png",
       "scale" : "3x"
     }
   ],

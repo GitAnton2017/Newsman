@@ -3,9 +3,22 @@ import Foundation
 import UIKit
 import CoreData
 
-class PhotoSnippetViewController: UIViewController
+class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
 {
-    
+ 
+ 
+ var currentViewController: UIViewController {return self}
+ var currentSnippet: BaseSnippet             {return photoSnippet}
+ 
+ 
+ let dateFormatter =
+ { () -> DateFormatter in
+  let df = DateFormatter()
+  df.dateStyle = .short
+  df.timeStyle = .none
+  return df
+  
+ }()
     
 //MARK: ===================== CALCULATED PROPERTIES =========================
     
@@ -13,7 +26,10 @@ class PhotoSnippetViewController: UIViewController
  var photoSnippet: PhotoSnippet!
 //---------------------------------------------------------------------------
  {
-  didSet {navigationItem.title = photoSnippet.tag}
+  didSet
+  {
+   navigationItem.title = photoSnippet.tag
+  }
  }
 //---------------------------------------------------------------------------
  var imageSize: CGFloat
@@ -89,6 +105,8 @@ class PhotoSnippetViewController: UIViewController
  lazy var photoItems2D: [[PhotoItemProtocol]] = createPhotoItems2D()
  
  var photoSnippetRestorationID: String? = nil
+ 
+ var photoSnippetVideoID: UUID?
     
 //---------------------------------------------------------------------------------
 //MARK:-
@@ -138,7 +156,8 @@ class PhotoSnippetViewController: UIViewController
    photoScaleStepper.stepValue = 1.0
    photoScaleStepper.wraps = true
    menuFrameSize = view.frame.size
-   
+  
+   photoSnippetTitle.delegate = self
         
  }
 //==========================================================================================
@@ -157,23 +176,56 @@ class PhotoSnippetViewController: UIViewController
 //---------------------------------------------------------------------------
 //MARK:-
  
-func updatePhotoSnippet()
+func updateDateLabel()
 {
- guard photoSnippet != nil else {return}
- 
- if isEditingMode
- {
-  photoSnippetTitle.text = photoSnippet.tag
- }
- else
- {
-  isEditingMode = true
- }
 
- nphoto = Int(photoSnippet.nphoto)
-
+ let dateLabel  = UILabel()
+ dateLabel.textColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+ dateLabel.font = UIFont(name: "Avenir", size: 20)
+ dateLabel.text = dateFormatter.string(from: photoSnippet.date! as Date)
+ navigationItem.titleView = dateLabel
 }
-    
+ 
+ func updatePhotoSnippet()
+ {
+ 
+  guard photoSnippet != nil else {return}
+ 
+  updateDateLabel()
+  
+  nphoto = Int(photoSnippet.nphoto)
+ 
+  if isEditingMode
+  {
+   photoSnippetTitle.text = photoSnippet.tag
+  
+   switch SnippetType(rawValue: photoSnippet.type!)!
+   {
+     case .video : takePhotoBarButton.image = UIImage(named: "video.tab.icon")
+     default: break
+   }
+   
+  }
+  else
+  {
+   isEditingMode = true
+  }
+ 
+  
+ 
+
+ }
+
+ override func viewDidAppear(_ animated: Bool)
+ {
+  
+  super.viewDidAppear(animated)
+  guard photoSnippet != nil else {return}
+  updateDateLabel()
+  
+ }
+ 
+ 
 //MARK: ------------------------- VIEW WILL DISAPPEAR -----------------------
 //---------------------------------------------------------------------------
  override func viewWillDisappear(_ animated: Bool)
@@ -232,11 +284,37 @@ func updatePhotoSnippet()
     
     savePhotoSnippetData()
  }
+ //---------------------------------------------------------------------------
+ @IBAction func itemUpBarButtonPress(_ sender: UIBarButtonItem)
+ //---------------------------------------------------------------------------
+ {
+  if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
+  savePhotoSnippetData()
+  moveToNextSnippet(in: -1)
+ }
+ //---------------------------------------------------------------------------
+ @IBAction func itemDownBarButtonPress(_ sender: UIBarButtonItem)
+  //---------------------------------------------------------------------------
+ {
+  if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
+  savePhotoSnippetData()
+  moveToNextSnippet(in: 1)
+ }
+ 
+ 
+ 
 //---------------------------------------------------------------------------
  @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
 //---------------------------------------------------------------------------
  {
     isEditingMode = false
+  
+    if SnippetType(rawValue: photoSnippet.type!)! == .video
+    {
+     showVideoShootingController ()
+     
+     return
+    }
   
     if UIImagePickerController.isSourceTypeAvailable(.camera)
     {
@@ -289,22 +367,6 @@ func updatePhotoSnippet()
   {
     photoSnippetTitle.resignFirstResponder()
   }
- }
-//---------------------------------------------------------------------------
-//MARK: -
-
-    
-//MARK: ------------- PREPARING PHOTO SNIPPET TOOLBAR -----------------------
-//---------------------------------------------------------------------------
- func createKeyBoardToolBar() -> UIToolbar
-//---------------------------------------------------------------------------
- {
-  let keyboardToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: photoSnippetToolBar.bounds.width, height: 44))
-  keyboardToolbar.backgroundColor = photoSnippetToolBar.backgroundColor
-  let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-  let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
-  keyboardToolbar.setItems([flexSpace,doneButton,flexSpace], animated: false)
-  return keyboardToolbar
  }
 //---------------------------------------------------------------------------
 //MARK: -
@@ -452,36 +514,24 @@ func updatePhotoSnippet()
  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
 //---------------------------------------------------------------------------
  {
-
-    print ("NEW SIZE \(size)")
-    print ("NEW VC VIEW \(view.frame)")
-    
     super.viewWillTransition(to: size, with: coordinator)
-    if !isEditingPhotos
+  
+    if (!isEditingPhotos)
     {
      photoCollectionView.locateCellMenu()
     }
-    else if let menu = menuView
+  
+    if isEditingMode
     {
-      menuFrameSize = size
-      menu.removeFromSuperview()
-      menuView = nil
-      showFlagPhotoMenu()
+     
+     photoCollectionView.reloadData()
     }
-    
-    /*if traitCollection.userInterfaceIdiom == .pad,
-       let zv = photoCollectionView.zoomView
-    {
-        zv.center = CGPoint (x: size.width/2 , y: size.height/2 - view.frame.origin.x)
-    }*/
-    
-    photoCollectionView.reloadData()
  }
 //---------------------------------------------------------------------------
 //MARK: -
  
    
-    
+ 
      
 //MARK: ---------------- IMAGE PICKER CONTROLLER PREPARE --------------------
 //---------------------------------------------------------------------------
@@ -507,7 +557,8 @@ func updatePhotoSnippet()
   return IndexPath(row: path!.1!, section: path!.0)
  }*/
 
-    
+ 
+ 
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
  {
   deleteSelectedPhotos()

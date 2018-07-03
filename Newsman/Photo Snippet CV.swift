@@ -129,8 +129,12 @@ class FlagItemLayer: CALayer
     }
 }
 
+
+
 class PhotoSnippetCollectionView: UICollectionView
 {
+ 
+ 
     var ascendingSort: Bool
     {
       get
@@ -197,6 +201,11 @@ class PhotoSnippetCollectionView: UICollectionView
     var menuShift = CGPoint.zero
  
     weak var zoomView: ZoomView?
+ 
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout)
+    {
+     super.init(frame: frame, collectionViewLayout: layout)
+    }
   
     required init?(coder aDecoder: NSCoder)
     {
@@ -266,15 +275,25 @@ class PhotoSnippetCollectionView: UICollectionView
          switch cellForItem(at: indexPath)
          {
           case _ as PhotoSnippetCell:
-            
-             let imageView = zoomView.openWithIV(in: mainView)
-            
-             (tappedItem as! PhotoItem).getImage(requiredImageWidth: zoomSize)
-             {image in
-                 zoomView.stopSpinner()
-                 imageView.image = image
-                 image?.setSquared(in: imageView)
+           
+             let photoItem = tappedItem as! PhotoItem
+             
+             switch (photoItem.type)
+             {
+              case .photo:
+               let imageView = zoomView.openWithIV(in: mainView)
+               photoItem.getImage(requiredImageWidth: zoomSize)
+               {image in
+                zoomView.stopSpinner()
+                imageView.image = image
+                image?.setSquared(in: imageView)
+               }
+              
+              case .video: zoomView.openWithVideoPlayer(in: mainView, for:  photoItem.url)
+              
+              default: break
              }
+          
             
           case let cell as PhotoFolderCell:
             let cv  = zoomView.openWithCV(in: mainView)
@@ -584,7 +603,7 @@ class PhotoSnippetCollectionView: UICollectionView
     
     func moveBetweenExistingSections(at indexPath: IndexPath, to section: (offset : Int, element: [PhotoItemProtocol]), with flagStr: String?)
     {
-      guard section.offset != indexPath.section else
+      guard (section.offset != indexPath.section) else
       {
        return
       }
@@ -605,13 +624,13 @@ class PhotoSnippetCollectionView: UICollectionView
      deleted.deleteImages()
     
      deleteItems(at: [indexPath])
-     if ds.photoItems2D[indexPath.section].count == 0
+     if (ds.photoItems2D[indexPath.section].count == 0)
      {
       ds.photoItems2D.remove(at: indexPath.section)
       ds.sectionTitles?.remove(at: indexPath.section)
       deleteSections([indexPath.section])
      }
-     else if photoGroupType == .makeGroups
+     else if (photoGroupType == .makeGroups)
      {
       reloadSections([indexPath.section])
      }
@@ -904,7 +923,7 @@ class PhotoSnippetCollectionView: UICollectionView
         
         layer.addSublayer(menuLayer)
         
-        menuLayer.display()
+        menuLayer.setNeedsDisplay()
         
     
     }

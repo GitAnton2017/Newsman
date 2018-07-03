@@ -129,10 +129,7 @@ class SnippetsViewController: UIViewController
      //snippetsTableView.rowHeight = UITableViewAutomaticDimension
      //createNewSnippet.image = createBarButtonIcon
         
-     createNewSnippet.title = createBarButtonTitle
-     createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
-     createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
-        
+     
      editSnippets.title = "⚒︎"
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
@@ -150,6 +147,10 @@ class SnippetsViewController: UIViewController
     func updateSnippets()
     {
      guard snippetType != nil else {return}
+     
+     createNewSnippet.title = createBarButtonTitle
+     createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
+     createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
      
      snippetsDataSource.itemsType = snippetType
      snippetsDataSource.rebuildData()
@@ -381,41 +382,40 @@ class SnippetsViewController: UIViewController
       return
      }
     
-     
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
-     let newPhotoSnippet = PhotoSnippet(context: moc)
+     let newVideoSnippet = PhotoSnippet(context: moc)
      
-     newPhotoSnippet.date = Date() as NSDate
-     let newPhotoSnippetID = UUID()
-     newPhotoSnippet.id = newPhotoSnippetID
-     newPhotoSnippet.priority = SnippetPriority.normal.rawValue
-     newPhotoSnippet.type = SnippetType.video.rawValue
-     newPhotoSnippet.status = SnippetStatus.new.rawValue
+     newVideoSnippet.date = Date() as NSDate
+     let newVideoSnippetID = UUID()
+     newVideoSnippet.id = newVideoSnippetID
+     newVideoSnippet.priority = SnippetPriority.normal.rawValue
+     newVideoSnippet.type = SnippetType.video.rawValue
+     newVideoSnippet.status = SnippetStatus.new.rawValue
      
      let fileManager = FileManager.default
      let docFolder = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-     let newPhotoSnippetURL = docFolder.appendingPathComponent(newPhotoSnippetID.uuidString)
+     let newVideoSnippetURL = docFolder.appendingPathComponent(newVideoSnippetID.uuidString)
      do
      {
-      try fileManager.createDirectory(at: newPhotoSnippetURL, withIntermediateDirectories: false, attributes: nil)
-      print ("PHOTO SNIPPET PHOTOS DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newPhotoSnippetURL.path)")
+      try fileManager.createDirectory(at: newVideoSnippetURL, withIntermediateDirectories: false, attributes: nil)
+      print ("VIDEO SNIPPET VIDEO FILES DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newVideoSnippetURL.path)")
      }
      catch
      {
-      print ("ERROR OCCURED WHEN CREATING PHOTO SNIPPET PHOTOS DIRECTORY: \(error.localizedDescription)")
+      print ("ERROR OCCURED WHEN CREATING VIDEO SNIPPET VIDEO FILES DIRECTORY: \(error.localizedDescription)")
      }
      
      if let location = snippetLocation
      {
-      newPhotoSnippet.logitude = location.coordinate.longitude
-      newPhotoSnippet.latitude = location.coordinate.latitude
+      newVideoSnippet.logitude = location.coordinate.longitude
+      newVideoSnippet.latitude = location.coordinate.latitude
      }
      
-     getLocationString {location in newPhotoSnippet.location = location}
+     getLocationString {location in newVideoSnippet.location = location}
      
-     photoSnippetVC.photoSnippet = newPhotoSnippet
-     snippetsDataSource.items.insert(newPhotoSnippet, at: 0)
+     photoSnippetVC.photoSnippet = newVideoSnippet
+     snippetsDataSource.items.insert(newVideoSnippet, at: 0)
      self.navigationController?.pushViewController(photoSnippetVC, animated: true)
     }
     

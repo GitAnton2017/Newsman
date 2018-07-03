@@ -69,7 +69,6 @@ extension PhotoSnippetCellProtocol
         flagLayer.fillColor = flagColor
         flagLayer.name = "FlagLayer"
     
-        
         let imageSize = cellFrame.width
         flagLayer.frame = CGRect(x:imageSize * 0.8, y: 0, width: imageSize * 0.2, height: imageSize * 0.25)
         flagLayer.contentsScale = UIScreen.main.scale
@@ -83,31 +82,62 @@ extension PhotoSnippetCellProtocol
             photoItemView.layer.addSublayer(flagLayer)
         }
         
-        flagLayer.display()
+        flagLayer.setNeedsDisplay()
     }
+ 
+    func drawPlayIcon (iconColor: UIColor)
+    {
+     let D = cellFrame.width // cell contentView diametr...
+     let shift: CGFloat = 0.07
+     let rect = CGRect(origin: .zero, size: CGSize(width: D, height: D))
+     let player = CAShapeLayer()
+     player.contentsScale = UIScreen.main.scale
+     player.frame = rect
+     player.name = "player"
+     let path = CGMutablePath()
+     let r: CGFloat = 0.3
+     let rs = r + shift
+     let r1 = r + 0.03 // 0.03 define the width of outer ring...
+     
+     path.addEllipse(in: rect.insetBy(dx: r * D, dy: r * D))
+     path.addEllipse(in: rect.insetBy(dx: r1 * D, dy: r1 * D))
+  
+     let p13x = D * (1/2 + (rs - 1/2) * cos(.pi/3))
+     let q = (rs - 1/2) * sin(.pi/3)
+     let p1 = CGPoint(x: p13x, y:  D * (1/2 + q))
+     let p2 = CGPoint(x:  D * (1 - rs), y:  D / 2)
+     let p3 = CGPoint(x:  p13x, y:  D * (1/2 - q))
+  
+     path.addLines(between: [p1, p2, p3]) // play icon internal triangle points...
+     player.path = path
+     player.strokeColor = iconColor.cgColor
+     player.fillColor = iconColor.cgColor
+     player.fillRule = kCAFillRuleEvenOdd
+     player.opacity = 0.5
+     
+     if let prevFlagLayer = photoItemView.layer.sublayers?.first(where: {$0.name == "player"})
+     {
+      photoItemView.layer.replaceSublayer(prevFlagLayer, with: player)
+     }
+     else
+     {
+      photoItemView.layer.addSublayer(player)
+     }
+     
+   }
 }
 
 
 class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
-    var cellView: UICollectionViewCell {return self}
-    
-    var zoomedIn: Bool = false
-    
     var isPhotoItemSelected: Bool
     {
-        set
-        {
-         photoIconView.alpha = newValue ? 0.5 : 1
-        }
-        get
-        {
-         return photoIconView.alpha == 0.5
-        }
+      set {photoIconView.alpha = newValue ? 0.5 : 1}
+      get {return photoIconView.alpha == 0.5       }
     }
  
-    var photoItemView: UIView {return photoIconView}
-    var cellFrame: CGRect     {return frame}
+    var photoItemView: UIView {return self.contentView}
+    var cellFrame: CGRect     {return self.frame}
     
     @IBOutlet weak var photoIconView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
@@ -125,7 +155,6 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
     
     override func prepareForReuse()
     {
-
         super.prepareForReuse()
         spinner.startAnimating()
         photoIconView.image = nil

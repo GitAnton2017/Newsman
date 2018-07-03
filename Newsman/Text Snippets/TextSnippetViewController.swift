@@ -2,8 +2,36 @@
 import Foundation
 import UIKit
 
-class TextSnippetViewController: UIViewController
+class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
 {
+   let dateFormatter =
+   { () -> DateFormatter in
+      let df = DateFormatter()
+      df.dateStyle = .short
+      df.timeStyle = .none
+      return df
+  
+   }()
+ 
+   var textSnippetRestorationID: String?
+ 
+   var currentViewController: UIViewController {return self}
+ 
+   var currentSnippet: BaseSnippet {return textSnippet}
+ 
+   @IBAction func itemUpBarButtonPress(_ sender: UIBarButtonItem)
+   {
+    if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
+    saveTextSnippetData()
+    moveToNextSnippet(in: -1)
+   }
+ 
+   @IBAction func itemDownBarButtonPress(_ sender: UIBarButtonItem)
+   {
+    if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
+    saveTextSnippetData()
+    moveToNextSnippet(in: 1)
+   }
     
     @IBOutlet var saveTextButton: UIBarButtonItem!
     @IBOutlet var clearTextButton: UIBarButtonItem!
@@ -46,22 +74,14 @@ class TextSnippetViewController: UIViewController
         if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
     }
     
-    func createKeyBoardToolBar() -> UIToolbar
-    {
-        let keyboardToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: textSnippetToolBar.bounds.width, height: 44))
-        keyboardToolbar.backgroundColor = textSnippetToolBar.backgroundColor
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonPressed))
-        keyboardToolbar.setItems([flexSpace,doneButton,flexSpace], animated: false)
-        return keyboardToolbar
-       
-    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
         textView.inputAccessoryView = createKeyBoardToolBar()
         textSnippetTitle.inputAccessoryView = textView.inputAccessoryView
+        textSnippetTitle.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool)
@@ -71,13 +91,35 @@ class TextSnippetViewController: UIViewController
         if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
         saveTextSnippetData()
     }
-    
+ 
+    func updateDateLabel()
+    {
+        let dateLabel  = UILabel()
+        dateLabel.textColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+        dateLabel.font = UIFont(name: "Avenir", size: 20)
+        dateLabel.text = dateFormatter.string(from: textSnippet.date! as Date)
+        navigationItem.titleView = dateLabel
+    }
+ 
+    func updateTextSnippet()
+    {
+        guard textSnippet != nil else {return}
+     
+        textView.text = textSnippet.text
+        textSnippetTitle.text = textSnippet.tag
+     
+    }
+ 
     override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
-        textView.text = textSnippet.text
-        textSnippetTitle.text = textSnippet.tag
-        print ("------------------------->\n" ,#function, textSnippet)
+        updateTextSnippet()
+    }
+ 
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        updateDateLabel()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)

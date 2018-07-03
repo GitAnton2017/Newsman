@@ -13,16 +13,9 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
     if let image = pickedImage.resized(withPercentage: ratio)
     {
      let newPhotoItem  = PhotoItem(photoSnippet: photoSnippet, image: image, cachedImageWidth: imageSize)
-     if photoCollectionView.photoGroupType == .makeGroups
-     {
-      photoItems2D = sectionedPhotoItems()
-     }
-     else
-     {
-      photoItems2D[0].append(newPhotoItem)
-     }
+     self.insertNewPhotoItem(newPhotoItem)
     }
-    
+  
     if UIImagePickerController.isSourceTypeAvailable(.camera)
     {
      imagePickerTakeButton.isEnabled = true
@@ -34,10 +27,10 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
     }
   }
     
-//MARK:-------------------------------------- CREATING PHOTO PICKER CUSTOM MENU -----------------------------------------------
-//-----------------------------------------------------------------------------------------------------------------------------
+//MARK:------------------------------- CREATING PHOTO PICKER CUSTOM MENU -----------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
  func createImagePickerCustomView(imagePickerView: UIView)
-//-----------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
  {
     let pickerViewHeight: CGFloat = 100.0
     let pickerView = UIView()
@@ -59,7 +52,7 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
     takePictureButton.backgroundColor = UIColor(red: 0.0, green: 0.563, blue: 0.319, alpha: 1.00)
     takePictureButton.contentMode = .center
     let titleAttrNormal =
-        [
+    [
             NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 25),
             NSAttributedStringKey.foregroundColor: UIColor.black
     ]

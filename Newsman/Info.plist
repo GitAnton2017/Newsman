@@ -26,6 +26,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Newsman needs access to your device camera to make photo snippets!</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Newsman needs access to your device microphone to make video shooting snippets!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Adds location information to your snippets when it is created!</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

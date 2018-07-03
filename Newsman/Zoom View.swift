@@ -1,6 +1,7 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 class ZoomView: UIView
 {
@@ -16,11 +17,17 @@ class ZoomView: UIView
     var minPinchVelocity: CGFloat = 0.15
     var removingZoomView = false
  
+    var videoPlayer: AVPlayer?
+ 
+    @objc dynamic var playerView: PlayerView?
+ 
     weak var photoSnippetVC: PhotoSnippetViewController!
     weak var zoomedPhotoItem: PhotoItemProtocol?
  
     var zoomedCellIndexPath: IndexPath!
     var presentSubview: UIView!
+ 
+    var zoomSize: CGFloat {return 0.9 * min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)}
     
     var isShowingCV: Bool
     {
@@ -41,8 +48,7 @@ class ZoomView: UIView
         
         return false
     }
-    
-    var zoomSize: CGFloat {return 0.9 * min(UIScreen.main.bounds.width, UIScreen.main.bounds.height)}
+ 
 
     init()
     {
@@ -62,6 +68,7 @@ class ZoomView: UIView
         layer.borderWidth = 5
         layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
         layer.masksToBounds = true
+        layer.backgroundColor = UIColor.black.cgColor
         
         
         transform = CGAffineTransform(scaleX: 0, y: 0)
@@ -102,7 +109,7 @@ class ZoomView: UIView
     }
  
  
-    func openAnim()
+    func openAnim(completion: ((Bool) -> Void)? = nil)
     {
      
      UIView.animate(withDuration: 1,
@@ -113,7 +120,7 @@ class ZoomView: UIView
                     animations: {[unowned self] in
                                   self.transform = CGAffineTransform.identity
                                   self.center = self.superview!.center
-                                 }, completion: nil)
+                                 }, completion: completion)
     }
     
     func setConstraints (to mainView: UIView)
@@ -130,20 +137,36 @@ class ZoomView: UIView
             ]
         )
     }
-    
+ 
+ 
+    func setRectConstraints (to mainView: UIView)
+    {
+     translatesAutoresizingMaskIntoConstraints = false
+  
+     NSLayoutConstraint.activate(
+      [
+        topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: 5),
+        leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
+        trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
+        bottomAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+      ]
+     )
+    }
+ 
+ 
     func setConstraints (of subView: UIView)
     {
-        subView.translatesAutoresizingMaskIntoConstraints = false
+      subView.translatesAutoresizingMaskIntoConstraints = false
         
-        NSLayoutConstraint.activate(
-            [
+      NSLayoutConstraint.activate(
+      [
                 
-                subView.bottomAnchor.constraint  (equalTo: bottomAnchor),
-                subView.topAnchor.constraint     (equalTo: topAnchor),
-                subView.leadingAnchor.constraint (equalTo: leadingAnchor),
-                subView.trailingAnchor.constraint(equalTo: trailingAnchor)
-            ]
-        )
+         subView.bottomAnchor.constraint  (equalTo: bottomAnchor),
+         subView.topAnchor.constraint     (equalTo: topAnchor),
+         subView.leadingAnchor.constraint (equalTo: leadingAnchor),
+         subView.trailingAnchor.constraint(equalTo: trailingAnchor)
+      ]
+     )
         
     }
     
@@ -157,7 +180,96 @@ class ZoomView: UIView
         }
       }
     }
+ 
+    func getVideoAspectRatio(asset: AVURLAsset, vtrack: AVAssetTrack)
+    {
+     print ("***** Video natural Size is: \(vtrack.naturalSize)")
+    }
+ 
+    func getAssetTracks(asset: AVURLAsset)
+    {
+      let vtrack = asset.tracks(withMediaType: .video).first!
+      let ratio = #keyPath(AVAssetTrack.naturalSize)
+      vtrack.loadValuesAsynchronously(forKeys: [ratio])
+      {
+       let status = asset.statusOfValue(forKey: ratio, error: nil)
+       if (status == .loaded)
+       {
+        DispatchQueue.main.async
+        {[unowned self] in
+         self.getVideoAspectRatio(asset: asset, vtrack: vtrack)
+        }
+       }
+      }
+    }
+ 
+    func loadAssetTracks(asset: AVURLAsset)
+    {
+     let track = #keyPath(AVURLAsset.tracks)
+     asset.loadValuesAsynchronously(forKeys: [track])
+     {
+      let status = asset.statusOfValue(forKey: track, error: nil)
+      if (status == .loaded)
+      {
+       DispatchQueue.main.async
+       {[unowned self] in
+        self.getAssetTracks(asset: asset)
+       }
+      }
+     }
+    }
+ 
+   
+    func configueVideoPlayback (for videoURL : URL)
+    {
+     let asset = AVURLAsset(url: videoURL)
     
+     loadAssetTracks(asset: asset)
+     let item = AVPlayerItem(asset: asset)
+     videoPlayer = AVPlayer(playerItem: item)
+     playerView = PlayerView(frame: self.bounds, with: .resizeAspectFill)
+     playerView!.player = videoPlayer
+    
+    }
+ 
+ 
+    override func observeValue(forKeyPath keyPath: String?,
+                               of object: Any?, change: [NSKeyValueChangeKey : Any]?,
+                               context: UnsafeMutableRawPointer?)
+    {
+     if (keyPath == #keyPath(playerView.playerLayer.isReadyForDisplay) && playerView!.playerLayer.isReadyForDisplay)
+     {
+      stopSpinner()
+      videoPlayer!.isMuted = false
+      videoPlayer!.volume = 1.0
+      videoPlayer!.play()
+      UIView.transition(with: self,
+                        duration: 1.5,
+                        options: [.transitionCrossDissolve, .curveEaseInOut],
+                        animations: {[unowned self] in self.addSubview(self.playerView!)},
+                        completion: nil)
+      
+      removeObserver(self, forKeyPath: #keyPath(playerView.playerLayer.isReadyForDisplay))
+      
+     }
+    }
+ 
+    func openWithVideoPlayer(in mainView: UIView, for videoURL : URL)
+    {
+     mainView.addSubview(self)
+     setRectConstraints(to: mainView)
+     
+     let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+     spinner.hidesWhenStopped = true
+     self.addSubview(spinner)
+     setConstraints(of: spinner)
+     spinner.startAnimating()
+     addObserver(self, forKeyPath: #keyPath(playerView.playerLayer.isReadyForDisplay), options: [.new], context: nil)
+     openAnim(completion: {[unowned self] _ in self.configueVideoPlayback (for: videoURL)})
+    
+     
+    }
+ 
     func openWithIV (in mainView: UIView) -> UIImageView
     {
         
@@ -171,10 +283,12 @@ class ZoomView: UIView
       mainView.addSubview(self)
       setConstraints(to: mainView)
       let iv = UIImageView()
+     
       let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
       spinner.hidesWhenStopped = true
-      spinner.startAnimating()
       self.addSubview(spinner)
+      spinner.startAnimating()
+     
       self.addSubview(iv)
       setConstraints(of: iv)
       setConstraints(of: spinner)
@@ -224,7 +338,7 @@ class ZoomView: UIView
         
       let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)
       cv.register(cellNib, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
-     
+      //cv.register(ZoomViewCollectionViewCell.self, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
       if (presentSubview != nil) {changeAnim(to: cv)}
       else
       {

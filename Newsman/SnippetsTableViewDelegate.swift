@@ -264,8 +264,8 @@ extension SnippetsViewController: UITableViewDelegate
         switch (snippetType)
         {
          case .text:    editTextSnippet(indexPath: indexPath)
+         case .video:   fallthrough
          case .photo:   editPhotoSnippet(indexPath: indexPath)
-         case .video:   editVideoSnippet(indexPath: indexPath)
          case .audio:   editAudioSnippet(indexPath: indexPath)
          case .sketch:  editSketchSnippet(indexPath: indexPath)
          case .report:  editReport(indexPath: indexPath)
@@ -283,9 +283,10 @@ extension SnippetsViewController: UITableViewDelegate
         {
             return
         }
-        textSnippetVC.modalTransitionStyle = .partialCurl
+     
         editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
         textSnippetVC.textSnippet = editedSnippet as! TextSnippet
+        (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = editedSnippet
         textSnippetVC.textSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(textSnippetVC, animated: true)
         
@@ -297,12 +298,13 @@ extension SnippetsViewController: UITableViewDelegate
         guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
             else
         {
-            return
+           return
         }
-        photoSnippetVC.modalTransitionStyle = .partialCurl
+     
         editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
         let photoSnippet = editedSnippet as! PhotoSnippet
         photoSnippetVC.photoSnippet = photoSnippet
+        (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
         photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
         self.navigationController?.pushViewController(photoSnippetVC, animated: true)
         

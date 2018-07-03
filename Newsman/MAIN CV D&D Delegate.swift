@@ -24,7 +24,7 @@ class func startCellDragAnimation (cell: UICollectionViewCell)
  
  class func stopCellDragAnimation (cell: UICollectionViewCell)
  {
-  UIView.animate(withDuration: 0.5,
+  UIView.animate(withDuration: 0.1,
                  delay: 0,
                  options: [.curveEaseInOut],
                  animations: {cell.transform = CGAffineTransform.identity},

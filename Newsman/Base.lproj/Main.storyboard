@@ -8,6 +8,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -239,7 +240,7 @@
                         <viewLayoutGuide key="safeArea" id="anT-34-Kv0"/>
                     </view>
                     <navigationItem key="navigationItem" title="SNIPPETS VC" largeTitleDisplayMode="never" id="hte-ci-Lpa">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="xzU-wy-zVM">
+                        <barButtonItem key="rightBarButtonItem" title="Home" image="home.tab.icon" id="xzU-wy-zVM">
                             <connections>
                                 <segue destination="6uu-d9-JNM" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="HdK-Qt-bAG"/>
                             </connections>
@@ -313,6 +314,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
+                                <connections>
+                                    <action selector="titleTextChanged:" destination="mw8-gL-CtC" eventType="editingChanged" id="gXj-Ll-XVL"/>
+                                </connections>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter your text snippet here!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EVW-0P-Phy">
                                 <rect key="frame" x="4" y="178" width="406" height="508"/>
@@ -338,11 +342,24 @@
                         <viewLayoutGuide key="safeArea" id="R3s-1E-Gqc"/>
                     </view>
                     <navigationItem key="navigationItem" title="Text Snippet VC" largeTitleDisplayMode="always" id="Mg3-pf-Wpy">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="XnB-zd-Dnw">
-                            <connections>
-                                <segue destination="386-oq-U0a" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="VPj-iS-dPv"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Item" image="home.tab.icon" id="XnB-zd-Dnw" userLabel="Home ">
+                                <connections>
+                                    <segue destination="386-oq-U0a" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="VPj-iS-dPv"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="item_down.tab.icon" id="c8J-h7-pgZ" userLabel="Down">
+                                <connections>
+                                    <action selector="itemDownBarButtonPress:" destination="mw8-gL-CtC" id="osq-9z-WQW"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="item_up.tab.icon" id="6ML-Ea-j06" userLabel="Up">
+                                <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
+                                <connections>
+                                    <action selector="itemUpBarButtonPress:" destination="mw8-gL-CtC" id="OrE-8w-kIW"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="clearTextButton" destination="ni3-eO-OXe" id="Vwr-7k-Zl4"/>
@@ -391,7 +408,7 @@
                         <viewLayoutGuide key="safeArea" id="ZAE-ZQ-X7M"/>
                     </view>
                     <navigationItem key="navigationItem" title="Priority Picker VC" id="dOX-XB-ySj">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="nKQ-MX-q4C">
+                        <barButtonItem key="rightBarButtonItem" title="Home" image="home.tab.icon" id="nKQ-MX-q4C">
                             <connections>
                                 <segue destination="cCZ-GQ-uAx" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="HFW-mv-ZH4"/>
                             </connections>
@@ -440,7 +457,7 @@
         <!--Date Picker VC-->
         <scene sceneID="9Aa-qw-KPT">
             <objects>
-                <viewController storyboardIdentifier="DadePickerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CV9-Jr-Pyu" customClass="DatePickerViewController" customModule="Newsman" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DatePickerVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="CV9-Jr-Pyu" customClass="DatePickerViewController" customModule="Newsman" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UbW-oT-dP8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -474,7 +491,7 @@
                         <viewLayoutGuide key="safeArea" id="Tx8-hx-svI"/>
                     </view>
                     <navigationItem key="navigationItem" title="Date Picker VC" id="taw-l0-qFd">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="MbG-gS-r9a">
+                        <barButtonItem key="rightBarButtonItem" title="Home" image="home.tab.icon" id="MbG-gS-r9a">
                             <connections>
                                 <segue destination="Rw6-Og-u8Z" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="h4S-LL-FGA"/>
                             </connections>
@@ -548,6 +565,9 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
+                                <connections>
+                                    <action selector="titleTextChanged:" destination="8Mi-lh-6Iq" eventType="editingChanged" id="Uyd-cO-HL3"/>
+                                </connections>
                             </textField>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fRa-jJ-dD6" customClass="PhotoSnippetCollectionView" customModule="Newsman">
                                 <rect key="frame" x="4" y="170" width="406" height="516"/>
@@ -726,11 +746,24 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Photo Snippet VC" largeTitleDisplayMode="always" id="Z6F-jH-QE6" userLabel="Photo Snippet VC">
-                        <barButtonItem key="rightBarButtonItem" systemItem="action" id="sMr-dD-efE">
-                            <connections>
-                                <segue destination="baP-jA-QKs" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="fpx-tw-f0G"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Item" image="home.tab.icon" id="sMr-dD-efE" userLabel="Home">
+                                <connections>
+                                    <segue destination="baP-jA-QKs" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="fpx-tw-f0G"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Down" image="item_down.tab.icon" id="yCO-vd-455">
+                                <connections>
+                                    <action selector="itemDownBarButtonPress:" destination="8Mi-lh-6Iq" id="OTu-gT-9KH"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Up" image="item_up.tab.icon" id="S9L-Rf-4pN">
+                                <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
+                                <connections>
+                                    <action selector="itemUpBarButtonPress:" destination="8Mi-lh-6Iq" id="yCV-Q7-7tv"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="datePickerBarButton" destination="YoK-vI-8El" id="BGo-AI-Drp"/>
@@ -753,15 +786,81 @@
             </objects>
             <point key="canvasLocation" x="1906" y="395"/>
         </scene>
+        <!--Video Shooting VC-->
+        <scene sceneID="bEz-36-dI8">
+            <objects>
+                <viewController storyboardIdentifier="VideoShootingVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Yym-NY-ket" userLabel="Video Shooting VC" customClass="VideoShootingViewController" customModule="Newsman" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ESH-pJ-cGI">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wh7-ld-6c4" customClass="VideoShootingPreviewView" customModule="Newsman" customModuleProvider="target">
+                                <rect key="frame" x="4" y="24" width="406" height="652"/>
+                                <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ev0-eL-FjS">
+                                <rect key="frame" x="0.0" y="676" width="414" height="60"/>
+                                <color key="backgroundColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.1019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <items>
+                                    <barButtonItem style="done" systemItem="stop" id="LeT-JM-SNG">
+                                        <inset key="imageInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="1"/>
+                                        <connections>
+                                            <action selector="cancellShootingPress:" destination="Yym-NY-ket" id="WWn-Mr-DRP"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ySa-ZV-9hZ"/>
+                                    <barButtonItem style="plain" id="kwJ-Cy-IfG">
+                                        <button key="customView" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iIg-NW-Oc1">
+                                            <rect key="frame" x="183" y="13.666666666666664" width="48" height="33"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                            <state key="normal" image="start.recording.tab.icon"/>
+                                            <connections>
+                                                <action selector="makeShootingPress:" destination="Yym-NY-ket" eventType="touchUpInside" id="hIi-pY-IPN"/>
+                                            </connections>
+                                        </button>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="MnF-X5-aIy"/>
+                                </items>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
+                        </subviews>
+                        <color key="backgroundColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Wh7-ld-6c4" firstAttribute="top" secondItem="3Oh-ph-Gpd" secondAttribute="top" constant="4" id="9l8-wD-oBE"/>
+                            <constraint firstItem="3Oh-ph-Gpd" firstAttribute="trailing" secondItem="Wh7-ld-6c4" secondAttribute="trailing" constant="4" id="CpK-Ca-k1T"/>
+                            <constraint firstItem="ev0-eL-FjS" firstAttribute="top" secondItem="Wh7-ld-6c4" secondAttribute="bottom" id="Iqc-6l-bN1"/>
+                            <constraint firstItem="3Oh-ph-Gpd" firstAttribute="trailing" secondItem="ev0-eL-FjS" secondAttribute="trailing" id="cyT-pJ-sqv" userLabel="Safe Area.trailing = Toolbar.trailing"/>
+                            <constraint firstItem="ev0-eL-FjS" firstAttribute="leading" secondItem="3Oh-ph-Gpd" secondAttribute="leading" id="eYi-6g-A3g" userLabel="Toolbar.leading = Safe Area.leading"/>
+                            <constraint firstItem="3Oh-ph-Gpd" firstAttribute="bottom" secondItem="Wh7-ld-6c4" secondAttribute="bottom" constant="60" id="l8x-8h-gpD"/>
+                            <constraint firstItem="3Oh-ph-Gpd" firstAttribute="bottom" secondItem="ev0-eL-FjS" secondAttribute="bottom" id="pZk-uC-kgx"/>
+                            <constraint firstItem="Wh7-ld-6c4" firstAttribute="leading" secondItem="3Oh-ph-Gpd" secondAttribute="leading" constant="4" id="wlb-a4-9XT"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3Oh-ph-Gpd"/>
+                    </view>
+                    <connections>
+                        <outlet property="preview" destination="Wh7-ld-6c4" id="7EG-1c-UKF"/>
+                        <outlet property="shootingBarButton" destination="iIg-NW-Oc1" id="K2X-z0-TkS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e9n-HL-amK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1144.9275362318842" y="690.48913043478262"/>
+        </scene>
     </scenes>
     <resources>
         <image name="back.nav.icon" width="32" height="32"/>
         <image name="clear.tab.icon" width="32" height="32"/>
         <image name="date.tab.icon" width="32" height="32"/>
         <image name="edit.tab.icon" width="32" height="32"/>
+        <image name="home.tab.icon" width="24" height="24"/>
+        <image name="item_down.tab.icon" width="18" height="24"/>
+        <image name="item_up.tab.icon" width="18" height="24"/>
         <image name="photo.tab.icon" width="32" height="32"/>
         <image name="priority.tab.icon" width="32" height="32"/>
         <image name="save.tab.icon" width="32" height="32"/>
+        <image name="start.recording.tab.icon" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="CdP-HO-XWj"/>

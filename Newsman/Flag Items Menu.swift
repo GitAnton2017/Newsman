@@ -4,13 +4,6 @@ import UIKit
 
 extension PhotoSnippetViewController
 {
- var menuViewOrigin: CGPoint
- {
-  let x = (menuFrameSize.width - CGFloat(photoCollectionView.itemsInRow) * photoCollectionView.menuItemSize.width)/2
-  let y = (menuFrameSize.height - ceil(CGFloat(editMenuItems.count) / CGFloat(photoCollectionView.itemsInRow)) * photoCollectionView.menuItemSize.height) / 2
-  return CGPoint(x: x, y: y)
- }
- 
  func showFlagPhotoMenu()
  {
    if menuView != nil
@@ -24,13 +17,24 @@ extension PhotoSnippetViewController
   
    if let menuLayer = photoCollectionView.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer
    {
-       let menuFrame = CGRect(origin: menuViewOrigin, size: menuLayer.frame.size)
-       menuView = UIView(frame: menuFrame)
+       menuView = UIView(frame: menuLayer.frame)
+       menuView!.center = self.view.center
+       //menuView!.autoresizingMask = [.flexibleLeftMargin,.flexibleTopMargin, .flexibleRightMargin, .flexibleBottomMargin]
        let flagMenuGR = UITapGestureRecognizer(target: self, action: #selector(tapPhotoEditMenu))
        let panMenuGR =  UIPanGestureRecognizer(target: self, action: #selector(panPhotoEditMenu))
        menuView!.addGestureRecognizer(flagMenuGR)
        menuView!.addGestureRecognizer(panMenuGR)
        view.addSubview(menuView!)
+       menuView!.translatesAutoresizingMaskIntoConstraints = false
+    
+       NSLayoutConstraint.activate(
+        [
+         menuView!.widthAnchor.constraint   (equalToConstant: menuLayer.frame.width),
+         menuView!.centerXAnchor.constraint (equalTo: self.view.centerXAnchor),
+         menuView!.centerYAnchor.constraint (equalTo: self.view.centerYAnchor),
+         menuView!.widthAnchor.constraint   (equalTo: menuView!.heightAnchor)
+        ]
+       )
        menuView!.layer.addSublayer(menuLayer)
        openMenuAni()
    }
