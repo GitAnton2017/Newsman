@@ -172,6 +172,11 @@ class VideoShootingViewController: UIViewController
   shootingSession.startRunning()
  }
  
+ override var supportedInterfaceOrientations: UIInterfaceOrientationMask
+ {
+  return [.portrait, .landscapeRight]
+ }
+ 
  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?)
  {
   super.traitCollectionDidChange(previousTraitCollection)

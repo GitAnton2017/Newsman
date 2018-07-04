@@ -188,7 +188,7 @@ func updateDateLabel()
  
  func updatePhotoSnippet()
  {
- 
+
   guard photoSnippet != nil else {return}
  
   updateDateLabel()
@@ -197,8 +197,8 @@ func updateDateLabel()
  
   if isEditingMode
   {
+   
    photoSnippetTitle.text = photoSnippet.tag
-  
    switch SnippetType(rawValue: photoSnippet.type!)!
    {
      case .video : takePhotoBarButton.image = UIImage(named: "video.tab.icon")

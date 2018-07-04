@@ -77,7 +77,7 @@
 		A7826E3920DFD48F00FFBBFA /* NCPushPopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */; };
 		A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */; };
 		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
-		A7826E5220E2618100FFBBFA /* Video Shooting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting.swift */; };
+		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
@@ -190,7 +190,7 @@
 		A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCPushPopAnimator.swift; sourceTree = "<group>"; };
 		A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollProtocol.swift; sourceTree = "<group>"; };
 		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
-		A7826E5120E2618100FFBBFA /* Video Shooting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting.swift"; sourceTree = "<group>"; };
+		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -265,6 +265,17 @@
 				A7298E142015E9A000A7301D /* CoreData.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A741BD4B20ECEDDC0062AF27 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				A7EF606120EA1CB500FD09A7 /* Video Player View.swift */,
+				A741BD4920EBEECD0062AF27 /* Playback Button.swift */,
+				A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */,
+				A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */,
+			);
+			name = "New Group";
 			sourceTree = "<group>";
 		};
 		A7443F07202DDB7E0039BE41 /* Photo */ = {
@@ -400,6 +411,7 @@
 				A7CB136E1FD2D35E00AA7294 /* Assesory Menus */,
 				A7CB136D1FD2D31D00AA7294 /* Main Menu */,
 				A7CB136B1FD2D2D900AA7294 /* Snippets Menu */,
+				A741BD4B20ECEDDC0062AF27 /* New Group */,
 				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
 				A7CB136A1FD2D2AA00AA7294 /* Text Snippets */,
 				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
@@ -441,14 +453,10 @@
 			isa = PBXGroup;
 			children = (
 				A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */,
-				A7826E5120E2618100FFBBFA /* Video Shooting.swift */,
 				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
 				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
-				A7EF606120EA1CB500FD09A7 /* Video Player View.swift */,
-				A741BD4920EBEECD0062AF27 /* Playback Button.swift */,
-				A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */,
 				A7826E3220DE311700FFBBFA /* Photo Snippet TF Delegate.swift */,
 				A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */,
 				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DataSouce.swift */,
@@ -688,7 +696,7 @@
 				A7443F122035D2F80039BE41 /* Folder CV Cell.swift in Sources */,
 				A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */,
 				A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */,
-				A7826E5220E2618100FFBBFA /* Video Shooting.swift in Sources */,
+				A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */,
 				A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */,
 				A77F74D3206242090074A915 /* Zoom View CV DataSource.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,

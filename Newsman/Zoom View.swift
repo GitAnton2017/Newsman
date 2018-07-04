@@ -17,8 +17,6 @@ class ZoomView: UIView
     var minPinchVelocity: CGFloat = 0.15
     var removingZoomView = false
  
-    var videoPlayer: AVPlayer?
- 
     @objc dynamic var playerView: PlayerView?
  
     weak var photoSnippetVC: PhotoSnippetViewController!
@@ -226,7 +224,7 @@ class ZoomView: UIView
     
      loadAssetTracks(asset: asset)
      let item = AVPlayerItem(asset: asset)
-     videoPlayer = AVPlayer(playerItem: item)
+     let videoPlayer = AVPlayer(playerItem: item)
      playerView = PlayerView(frame: self.bounds, with: .resizeAspectFill)
      playerView!.player = videoPlayer
     
@@ -240,14 +238,16 @@ class ZoomView: UIView
      if (keyPath == #keyPath(playerView.playerLayer.isReadyForDisplay) && playerView!.playerLayer.isReadyForDisplay)
      {
       stopSpinner()
-      videoPlayer!.isMuted = false
-      videoPlayer!.volume = 1.0
-      videoPlayer!.play()
+  
+      
       UIView.transition(with: self,
-                        duration: 1.5,
+                        duration: 1.0,
                         options: [.transitionCrossDissolve, .curveEaseInOut],
-                        animations: {[unowned self] in self.addSubview(self.playerView!)},
-                        completion: nil)
+                        animations:
+                        {[unowned self] in
+                         self.addSubview(self.playerView!)
+                         },
+                         completion: {[unowned self] _ in self.playerView?.showProgressView()})
       
       removeObserver(self, forKeyPath: #keyPath(playerView.playerLayer.isReadyForDisplay))
       
