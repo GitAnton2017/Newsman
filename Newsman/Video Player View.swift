@@ -10,19 +10,27 @@ class PlayerView: UIView
  var playbackHideDuration = 0.5
  var playbackShowDuration = 0.5
  
+ lazy var doubleTapGR: UITapGestureRecognizer =
+ {
+  let gr = UITapGestureRecognizer(target: self, action: #selector(viewDoubleTap))
+  gr.numberOfTapsRequired = 2
+  self.addGestureRecognizer(gr)
+  return gr
+ }()
+ 
  override static var layerClass: AnyClass {return AVPlayerLayer.self}
  
  @objc dynamic var playerLayer: AVPlayerLayer {return layer as! AVPlayerLayer}
  
  lazy var playbackButton: PlaybackButton =
  {
-  let insX = 0.1 * self.bounds.width
-  let insY = 0.1 * self.bounds.height
+  let insX = 0.35 * self.bounds.width
+  let insY = 0.35 * self.bounds.height
   let sq = AVMakeRect(aspectRatio: CGSize(width: 1, height: 1), insideRect: self.bounds.insetBy(dx: insX, dy: insY))
   let playButton = PlaybackButton(frame: sq)
   playButton.backgroundColor = UIColor.clear
   playButton.addTarget(self, action: #selector(self.playbackPress), for: .touchDown)
-  playButton.drawPlayIcon(iconColor: UIColor.red)
+  playButton.drawPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), r: 0, shift: 0.125, width: 0.075)
   playButton.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin, .flexibleBottomMargin, .flexibleLeftMargin]
   self.addSubview(playButton)
   return playButton
@@ -31,7 +39,10 @@ class PlayerView: UIView
  
  lazy var progressView: UIProgressView =
  {
-  let progress = UIProgressView(progressViewStyle: .default)
+  addEndObserver()
+  addPlayProgressObserver()
+  
+  let progress = PlaybackProgressView(progressViewStyle: .default)
   progress.progress = 0.0
   let render = UIGraphicsImageRenderer(size: CGSize(width: 15, height: 15))
   progress.trackImage = render.image
@@ -63,20 +74,44 @@ class PlayerView: UIView
   return progress
  }()
  
+ 
+ lazy var scrubView: VideoScrubView =
+ {
+  
+  let sv = VideoScrubView(frame: CGRect.zero, markersColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), markersDistance: 16)
+  
+  self.addSubview(sv)
+ 
+  sv.translatesAutoresizingMaskIntoConstraints = false
+ 
+  
+  NSLayoutConstraint.activate(
+   [
+    sv.centerYAnchor.constraint(equalTo: progressView.centerYAnchor),
+    sv.widthAnchor.constraint(equalToConstant: 25),
+    sv.heightAnchor.constraint(equalToConstant: 50),
+    sv.centerXAnchor.constraint(equalTo: progressView.leadingAnchor)
+   ]
+  )
+  return sv
+ }()
+ 
  func showProgressView()
  {
   progressView.progress = 0.0
   progressView.alpha = 0.0
+  scrubView.alpha = 0.0
   progressView.transform = CGAffineTransform(translationX: 0, y: 100)
+  
   UIView.animate(withDuration: progressShowDuration,
                  delay: 0.0,
                  usingSpringWithDamping: 50,
                  initialSpringVelocity: 0,
                  options: [.curveEaseInOut, .allowUserInteraction],
                  animations:
-                 {[unowned self] in
-                  self.progressView.transform = .identity
-                  self.progressView.alpha = 1.0
+                 {[weak self] in
+                  self?.progressView.transform = .identity
+                  self?.progressView.alpha = 1.0
                  },
                  completion: {[weak self] _ in self?.playFromStart()})
   
@@ -90,15 +125,16 @@ class PlayerView: UIView
                  initialSpringVelocity: 0,
                  options: [.curveEaseInOut, .allowUserInteraction],
                  animations:
-                 {[unowned self] in
-                  self.progressView.transform = CGAffineTransform(translationX: 0, y: 100)
-                  self.progressView.alpha = 0.0
+                 {[weak self] in
+                  self?.progressView.transform = CGAffineTransform(translationX: 0, y: 100)
+                  self?.progressView.alpha = 0.0
                  },
                  completion: nil)
  }
  
  func showPlayButton()
  {
+  doubleTapGR.isEnabled = false
   playbackButton.alpha = 0
   playbackButton.transform = CGAffineTransform(scaleX: 3, y: 3)
   UIView.animate(withDuration: playbackShowDuration,
@@ -107,13 +143,13 @@ class PlayerView: UIView
                  initialSpringVelocity: 0,
                  options: [.curveEaseInOut, .allowUserInteraction],
                  animations:
-                 {[unowned self] in
-                  self.playbackButton.transform = .identity
-                  self.playbackButton.alpha = 1
+                 {[weak self] in
+                  self?.playbackButton.transform = .identity
+                  self?.playbackButton.alpha = 1
                  },
                  completion:
-                 {[unowned self] _ in
-                  self.hideProgressView()
+                 {[weak self] _ in
+                  self?.hideProgressView()
                  })
   
  }
@@ -126,13 +162,13 @@ class PlayerView: UIView
                  initialSpringVelocity: 0,
                  options: [.curveEaseInOut],
                  animations:
-                 {[unowned self] in
-                  self.playbackButton.transform = CGAffineTransform(scaleX: 3, y: 3)
-                  self.playbackButton.alpha = 0
+                 {[weak self] in
+                  self?.playbackButton.transform = CGAffineTransform(scaleX: 3, y: 3)
+                  self?.playbackButton.alpha = 0
 
                  },
                  completion:
-                 {[unowned self] _ in self.showProgressView()})
+                 {[weak self] _ in self?.showProgressView()})
   
  }
  
@@ -146,8 +182,7 @@ class PlayerView: UIView
  
  func playFromStart()
  {
-  addEndObserver()
-  addPlayProgressObserver()
+  doubleTapGR.isEnabled = true
   player?.seek(to: kCMTimeZero)
   player?.play()
  }
@@ -159,8 +194,6 @@ class PlayerView: UIView
   set
   {
    playerLayer.player = newValue
-   
-   
   }
  }
  
@@ -173,8 +206,24 @@ class PlayerView: UIView
     return
   }
   progressObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main)
-  {[unowned self] time in
-   self.progressView.progress = Float(time.seconds/duration.seconds)
+  {[weak self] time in
+   guard let pv = self?.progressView else {return}
+   let progress = Float(time.seconds/duration.seconds)
+   pv.progress = progress
+   let newX = pv.frame.minX + pv.bounds.width  * CGFloat(progress)
+   let dx = abs(newX - (self?.scrubView.center.x ?? 0))
+   
+   if (dx < 5) {self?.scrubView.center.x = newX}
+   else
+   {
+    UIView.animate(withDuration: 0.5,
+                   delay: 0,
+                   usingSpringWithDamping: 10,
+                   initialSpringVelocity: 50,
+                   options: [.curveEaseInOut],
+                   animations: {[weak self] in self?.scrubView.center.x = newX},
+                   completion: nil)
+   }
   }
  }
  
@@ -185,21 +234,37 @@ class PlayerView: UIView
    return
   }
   endObserver = player?.addBoundaryTimeObserver(forTimes: [NSValue(time: duration)], queue: DispatchQueue.main)
-  {[unowned self] in
-   self.showPlayButton()
+  {[weak self] in
+   self?.showPlayButton()
   }
  }
-
- override func didMoveToSuperview()
+ 
+ 
+ @objc func viewDoubleTap(_ sender: UITapGestureRecognizer)
  {
-  super.didMoveToSuperview()
+  
+  guard let player = self.player else {return}
+  
+  if player.rate > 0
+  {
+   player.rate = 0
+   scrubView.alpha = 1
+  }
+  else
+  {
+   player.rate = 1
+   scrubView.alpha = 0
+  }
+ 
  }
+ 
  
  init(frame: CGRect, with gravity: AVLayerVideoGravity)
  {
   super.init(frame: frame)
   autoresizingMask = [.flexibleWidth, .flexibleHeight]
   (layer as! AVPlayerLayer).videoGravity = gravity
+  
  }
  
  required init?(coder aDecoder: NSCoder)

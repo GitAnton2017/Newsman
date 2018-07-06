@@ -379,8 +379,8 @@ class ZoomView: UIView
     
     @objc func zoomViewPan (_ gr: UIPanGestureRecognizer)
     {
-        switch (gr.state)
-        {
+       switch (gr.state)
+       {
         case .began:
             panInitTouchPoint = gr.location(in: self)
             UIView.animate(withDuration: 0.5,

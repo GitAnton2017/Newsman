@@ -48,6 +48,8 @@
 		A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */; };
 		A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */; };
 		A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD4920EBEECD0062AF27 /* Playback Button.swift */; };
+		A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */; };
+		A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD6120EF55540062AF27 /* Playback Progress View.swift */; };
 		A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */; };
 		A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */; };
 		A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */; };
@@ -155,6 +157,8 @@
 		A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerViewController.swift; sourceTree = "<group>"; };
 		A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsCoreLocationDelegate.swift; sourceTree = "<group>"; };
 		A741BD4920EBEECD0062AF27 /* Playback Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Button.swift"; sourceTree = "<group>"; };
+		A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Scrub View.swift"; sourceTree = "<group>"; };
+		A741BD6120EF55540062AF27 /* Playback Progress View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Progress View.swift"; sourceTree = "<group>"; };
 		A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -267,15 +271,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		A741BD4B20ECEDDC0062AF27 /* New Group */ = {
+		A741BD4B20ECEDDC0062AF27 /* VIDEO PROCESSING */ = {
 			isa = PBXGroup;
 			children = (
 				A7EF606120EA1CB500FD09A7 /* Video Player View.swift */,
+				A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */,
+				A741BD6120EF55540062AF27 /* Playback Progress View.swift */,
 				A741BD4920EBEECD0062AF27 /* Playback Button.swift */,
 				A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */,
 				A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */,
 			);
-			name = "New Group";
+			name = "VIDEO PROCESSING";
 			sourceTree = "<group>";
 		};
 		A7443F07202DDB7E0039BE41 /* Photo */ = {
@@ -411,7 +417,7 @@
 				A7CB136E1FD2D35E00AA7294 /* Assesory Menus */,
 				A7CB136D1FD2D31D00AA7294 /* Main Menu */,
 				A7CB136B1FD2D2D900AA7294 /* Snippets Menu */,
-				A741BD4B20ECEDDC0062AF27 /* New Group */,
+				A741BD4B20ECEDDC0062AF27 /* VIDEO PROCESSING */,
 				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
 				A7CB136A1FD2D2AA00AA7294 /* Text Snippets */,
 				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
@@ -706,6 +712,7 @@
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
 				A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */,
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
+				A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */,
 				A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */,
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
 				A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */,
@@ -725,6 +732,7 @@
 				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
 				A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
+				A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */,
 				A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */,
 				A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */,
 				A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */,

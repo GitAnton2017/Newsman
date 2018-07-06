@@ -85,22 +85,20 @@ extension PhotoSnippetCellProtocol
         flagLayer.setNeedsDisplay()
     }
  
-    func drawPlayIcon (iconColor: UIColor)
+    func drawPlayIcon (iconColor: UIColor, r: CGFloat = 0.3, shift: CGFloat = 0.07, width: CGFloat = 0.03)
     {
      let D = cellFrame.width // cell contentView diametr...
-     let shift: CGFloat = 0.07
      let rect = CGRect(origin: .zero, size: CGSize(width: D, height: D))
      let player = CAShapeLayer()
      player.contentsScale = UIScreen.main.scale
      player.frame = rect
      player.name = "player"
      let path = CGMutablePath()
-     let r: CGFloat = 0.3
      let rs = r + shift
-     let r1 = r + 0.03 // 0.03 define the width of outer ring...
+     let r1 = r + width // 0.03 define the width of outer ring...
      
-     path.addEllipse(in: rect.insetBy(dx: r * D, dy: r * D))
-     path.addEllipse(in: rect.insetBy(dx: r1 * D, dy: r1 * D))
+     path.addEllipse(in: rect.insetBy(dx: r * D, dy: r * D))    //outer circle
+     path.addEllipse(in: rect.insetBy(dx: r1 * D, dy: r1 * D))  //inner circle
   
      let p13x = D * (1/2 + (rs - 1/2) * cos(.pi/3))
      let q = (rs - 1/2) * sin(.pi/3)
