@@ -18,11 +18,19 @@ class VideoScrubView: UIView, UIGestureRecognizerDelegate
   
   let panGR = UIPanGestureRecognizer(target: self, action: #selector(scrubMove))
   addGestureRecognizer(panGR)
+  panGR.name = "VideoScrubViewPan"
   panGR.delegate = self
   
  }
  
- func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+ override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool
+ {
+  return gestureRecognizer.name == "VideoScrubViewPan"
+ }
+ 
+ func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                          shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
+ {
    return false
  }
  
@@ -33,6 +41,7 @@ class VideoScrubView: UIView, UIGestureRecognizerDelegate
   
   switch (gr.state)
   {
+
    case .began:
    
     UIView.animate(withDuration: 0.5,
@@ -48,16 +57,21 @@ class VideoScrubView: UIView, UIGestureRecognizerDelegate
    
    case .changed:
    
+   
     let dx = gr.translation(in: self.superview!).x
     
-    let dist = center.x + dx - pv.progressView.frame.minX
     
-    guard dist >= 0 && dist <= pv.progressView.frame.width else {return}
-   
-    center.x += dx
-    let progress = Double(dist / pv.progressView.bounds.width)
+    
+    //guard bounds.insetBy(dx: -15, dy: 0).contains(gr.location(in: self)) else {return}
+    
+    center.x = max(pv.progressView.frame.minX, min(center.x + dx, pv.progressView.frame.maxX))
+    
+    let progress = Double((center.x - pv.progressView.frame.minX) / pv.progressView.frame.width)
+    
+   // print (progress)
+    
     let time = CMTime(seconds: duration.seconds * progress, preferredTimescale: duration.timescale)
-    let tol = CMTime(seconds: 0.1, preferredTimescale: duration.timescale)
+    let tol = CMTime(seconds: 0.001, preferredTimescale: duration.timescale)
     pv.player?.seek(to: time, toleranceBefore: tol, toleranceAfter: tol)
    
     gr.setTranslation(CGPoint.zero, in: self.superview!)

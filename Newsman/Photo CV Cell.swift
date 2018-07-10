@@ -1,5 +1,6 @@
 import UIKit
 import Foundation
+import AVKit
 
 class FlagLayer: CALayer
 {
@@ -85,46 +86,71 @@ extension PhotoSnippetCellProtocol
         flagLayer.setNeedsDisplay()
     }
  
-    func drawPlayIcon (iconColor: UIColor, r: CGFloat = 0.3, shift: CGFloat = 0.07, width: CGFloat = 0.03)
+    func drawVideoDuration (textColor: UIColor, duration: CMTime)
     {
-     let D = cellFrame.width // cell contentView diametr...
-     let rect = CGRect(origin: .zero, size: CGSize(width: D, height: D))
-     let player = CAShapeLayer()
-     player.contentsScale = UIScreen.main.scale
-     player.frame = rect
-     player.name = "player"
-     let path = CGMutablePath()
-     let rs = r + shift
-     let r1 = r + width // 0.03 define the width of outer ring...
+     let HH = Int(duration.seconds/3600)
+     let MM = Int((duration.seconds - Double(HH) * 3600) / 60)
+     let SS = Int(duration.seconds - Double(HH) * 3600 - Double(MM) * 60)
      
-     path.addEllipse(in: rect.insetBy(dx: r * D, dy: r * D))    //outer circle
-     path.addEllipse(in: rect.insetBy(dx: r1 * D, dy: r1 * D))  //inner circle
-  
-     let p13x = D * (1/2 + (rs - 1/2) * cos(.pi/3))
-     let q = (rs - 1/2) * sin(.pi/3)
-     let p1 = CGPoint(x: p13x, y:  D * (1/2 + q))
-     let p2 = CGPoint(x:  D * (1 - rs), y:  D / 2)
-     let p3 = CGPoint(x:  p13x, y:  D * (1/2 - q))
-  
-     path.addLines(between: [p1, p2, p3]) // play icon internal triangle points...
-     player.path = path
-     player.strokeColor = iconColor.cgColor
-     player.fillColor = iconColor.cgColor
-     player.fillRule = kCAFillRuleEvenOdd
-     player.opacity = 0.5
+     let timeText = (HH > 0 ? "\(HH < 10 ? "0" : "")\(HH):" : "\u{20}\u{20}\u{20}") +
+                    (HH > 0 || MM > 0 ? "\(MM < 10 ? "0" : "")\(MM):" : "\u{20}\u{20}:") +
+                    "\(SS < 10 ? "0" : "")\(SS)"
      
-     if let prevFlagLayer = photoItemView.layer.sublayers?.first(where: {$0.name == "player"})
+     if let time = photoItemView.subviews.first(where: {$0.tag == 1}) as? UILabel
      {
-      photoItemView.layer.replaceSublayer(prevFlagLayer, with: player)
-     }
-     else
-     {
-      photoItemView.layer.addSublayer(player)
+      time.text = timeText
+      return
      }
      
-   }
+     let time = UILabel(frame: CGRect.zero)
+     time.tag = 1
+     time.font = UIFont.systemFont(ofSize: 25)
+     time.minimumScaleFactor = 0.01
+     time.numberOfLines = 1
+     time.baselineAdjustment = .alignBaselines
+     
+     time.text = timeText
+     
+     time.backgroundColor = UIColor.clear
+     time.textAlignment = .right
+     time.adjustsFontSizeToFitWidth = true
+     time.textColor = textColor
+     
+     photoItemView.addSubview(time)
+     time.translatesAutoresizingMaskIntoConstraints = false
+     NSLayoutConstraint.activate(
+      [
+       time.bottomAnchor.constraint  (equalTo:  photoItemView.bottomAnchor,  constant:  -5),
+       time.trailingAnchor.constraint (equalTo:  photoItemView.trailingAnchor, constant: -5),
+       time.widthAnchor.constraint(equalTo: photoItemView.widthAnchor, multiplier: 0.4),
+       time.firstBaselineAnchor.constraint(equalTo: time.bottomAnchor, constant: 5)
+ 
+      ]
+     )
+    }
+ 
+    func showPlayIcon (iconColor: UIColor, r: CGFloat = 0.3, shift: CGFloat = 0.07, width: CGFloat = 0.03)
+    {
+     if photoItemView.subviews.contains(where: {$0.tag == 2 && $0 is PlayIconView}) {return}
+     
+     let playIcon = PlayIconView(iconColor: iconColor, r: r, shift: shift, width: width)
+     playIcon.tag = 2
+     playIcon.isUserInteractionEnabled = true
+     photoItemView.addSubview(playIcon)
+     playIcon.translatesAutoresizingMaskIntoConstraints = false
+     NSLayoutConstraint.activate(
+      [
+       playIcon.bottomAnchor.constraint   (equalTo:  photoItemView.bottomAnchor  ),
+       playIcon.trailingAnchor.constraint (equalTo:  photoItemView.trailingAnchor),
+       playIcon.topAnchor.constraint      (equalTo:  photoItemView.topAnchor     ),
+       playIcon.leadingAnchor.constraint  (equalTo:  photoItemView.leadingAnchor )
+       
+      ]
+     )
+     
+    }
+ 
 }
-
 
 class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {

@@ -28,9 +28,7 @@ class PlayerView: UIView
   let insY = 0.35 * self.bounds.height
   let sq = AVMakeRect(aspectRatio: CGSize(width: 1, height: 1), insideRect: self.bounds.insetBy(dx: insX, dy: insY))
   let playButton = PlaybackButton(frame: sq)
-  playButton.backgroundColor = UIColor.clear
   playButton.addTarget(self, action: #selector(self.playbackPress), for: .touchDown)
-  playButton.drawPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), r: 0, shift: 0.125, width: 0.075)
   playButton.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin, .flexibleBottomMargin, .flexibleLeftMargin]
   self.addSubview(playButton)
   return playButton
@@ -75,9 +73,28 @@ class PlayerView: UIView
  }()
  
  
+ lazy var timer: UILabel =
+ {
+  let timer = UILabel(frame: CGRect.zero)
+  timer.backgroundColor = UIColor.clear
+  timer.textAlignment = .right
+  timer.textColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+  self.addSubview(timer)
+  timer.translatesAutoresizingMaskIntoConstraints = false
+  NSLayoutConstraint.activate(
+   [
+    timer.topAnchor.constraint  (equalTo:  topAnchor,  constant:  15),
+    timer.trailingAnchor.constraint (equalTo:  trailingAnchor, constant: -15),
+    timer.widthAnchor.constraint(equalToConstant: 150),
+    timer.heightAnchor.constraint (equalToConstant: 30)
+   ]
+  )
+  
+  return timer
+ }()
+ 
  lazy var scrubView: VideoScrubView =
  {
-  
   let sv = VideoScrubView(frame: CGRect.zero, markersColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), markersDistance: 16)
   
   self.addSubview(sv)
@@ -99,6 +116,9 @@ class PlayerView: UIView
  func showProgressView()
  {
   progressView.progress = 0.0
+  timer.alpha = 0.0
+  timer.transform = CGAffineTransform(translationX: 0, y: -100)
+  timer.text = "00:00:00"
   progressView.alpha = 0.0
   scrubView.alpha = 0.0
   progressView.transform = CGAffineTransform(translationX: 0, y: 100)
@@ -107,9 +127,11 @@ class PlayerView: UIView
                  delay: 0.0,
                  usingSpringWithDamping: 50,
                  initialSpringVelocity: 0,
-                 options: [.curveEaseInOut, .allowUserInteraction],
+                 options: [.curveEaseInOut],
                  animations:
                  {[weak self] in
+                  self?.timer.alpha = 1.0
+                  self?.timer.transform = .identity
                   self?.progressView.transform = .identity
                   self?.progressView.alpha = 1.0
                  },
@@ -123,11 +145,13 @@ class PlayerView: UIView
                  delay: 0.0,
                  usingSpringWithDamping: 50,
                  initialSpringVelocity: 0,
-                 options: [.curveEaseInOut, .allowUserInteraction],
+                 options: [.curveEaseInOut],
                  animations:
                  {[weak self] in
                   self?.progressView.transform = CGAffineTransform(translationX: 0, y: 100)
                   self?.progressView.alpha = 0.0
+                  self?.timer.alpha = 0.0
+                  self?.timer.transform = CGAffineTransform(translationX: 0, y: -100)
                  },
                  completion: nil)
  }
@@ -208,6 +232,12 @@ class PlayerView: UIView
   progressObserver = player?.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main)
   {[weak self] time in
    guard let pv = self?.progressView else {return}
+   let HH = Int(time.seconds/3600)
+   let MM = Int((time.seconds - Double(HH) * 3600) / 60)
+   let SS = Int(time.seconds - Double(HH) * 3600 - Double(MM) * 60)
+  
+   self?.timer.text = "\(HH < 10 ? "0" : "")\(HH):\(MM < 10 ? "0" : "")\(MM):\(SS < 10 ? "0" : "")\(SS)"
+   
    let progress = Float(time.seconds/duration.seconds)
    pv.progress = progress
    let newX = pv.frame.minX + pv.bounds.width  * CGFloat(progress)

@@ -204,7 +204,6 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
           PhotoItem(photo: latestPhoto).getImage(requiredImageWidth: iconWidth)
           {(image) in
             iconView.image = image
-            
             PhotoItem.getRandomImages3(for: photoSnippet, number: 20, requiredImageWidth: iconWidth)
             {images in
               iconView.animationImages = images

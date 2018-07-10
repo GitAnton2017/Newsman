@@ -51,15 +51,19 @@ class ZoomView: UIView
     init()
     {
         super.init(frame: CGRect.zero)
+     
         swipeGR = UISwipeGestureRecognizer(target: self, action: #selector(zoomViewSwipe))
+        swipeGR.name = "ZoomViewCloseSwipe"
         self.addGestureRecognizer(swipeGR)
         
         
         panGR = UIPanGestureRecognizer(target: self, action: #selector(zoomViewPan))
+        panGR.name = "ZoomViewPan"
         self.addGestureRecognizer(panGR)
         panGR.require(toFail: swipeGR)
         
         pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(zoomViewPinch))
+        pinchGR.name = "ZoomViewPinch"
         self.addGestureRecognizer(pinchGR)
         
         layer.cornerRadius = 10.0
@@ -331,14 +335,16 @@ class ZoomView: UIView
         
       cv.delegate = self
       cv.dataSource = self
-        
+      cv.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
       cv.dragInteractionEnabled = true
       cv.dropDelegate = self
       cv.dragDelegate = self
+     
         
       let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)
       cv.register(cellNib, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
       //cv.register(ZoomViewCollectionViewCell.self, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
+     
       if (presentSubview != nil) {changeAnim(to: cv)}
       else
       {

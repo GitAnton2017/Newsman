@@ -21,6 +21,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
   super.init()
   
   let edgePanGR = UIPanGestureRecognizer(target: self, action: #selector(handlePan))
+  edgePanGR.name = "NCTransitionPan"
   self.navigationController.view.addGestureRecognizer(edgePanGR)
   edgePanGR.delegate = self
   

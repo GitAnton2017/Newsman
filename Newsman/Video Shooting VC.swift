@@ -65,7 +65,39 @@ class VideoShootingViewController: UIViewController
  @IBOutlet var preview: VideoShootingPreviewView!
  @IBOutlet var shootingBarButton: UIButton!
  
-
+ weak var timer: Timer?
+ var recordTime: TimeInterval = 0.0
+ {
+  didSet
+  {
+   let HH = Int(recordTime/3600)
+   let MM = Int((recordTime - Double(HH) * 3600) / 60)
+   let SS = Int(recordTime - Double(HH) * 3600 - Double(MM) * 60)
+   timerLabel.text  = "\(HH < 10 ? "0" : "")\(HH):\(MM < 10 ? "0" : "")\(MM):\(SS < 10 ? "0" : "")\(SS)"
+   
+  }
+ }
+ 
+ lazy var timerLabel: UILabel =
+ {
+   let timer = UILabel(frame: CGRect.zero)
+   timer.backgroundColor = UIColor.clear
+   timer.textAlignment = .right
+   timer.font = .boldSystemFont(ofSize: 16)
+   timer.textColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+   preview.addSubview(timer)
+   timer.translatesAutoresizingMaskIntoConstraints = false
+   NSLayoutConstraint.activate(
+    [
+     timer.topAnchor.constraint  (equalTo:  preview.topAnchor,  constant:  15),
+     timer.trailingAnchor.constraint (equalTo:  preview.trailingAnchor, constant: -15),
+     timer.widthAnchor.constraint(equalToConstant: 150),
+     timer.heightAnchor.constraint (equalToConstant: 30)
+    ]
+   )
+   
+   return timer
+ }()
  
  func getVideoOuputURL(with newVideoID: UUID) -> URL
  {
@@ -209,14 +241,12 @@ class VideoShootingViewController: UIViewController
   super.viewDidLoad()
   shootingBarButton.isEnabled = false
   checkVideoAuthorization()
-
-
+ 
  }
 
  override func viewWillAppear(_ animated: Bool)
  {
    super.viewWillAppear(animated)
-  
  }
  
  override func viewWillDisappear(_ animated: Bool)
@@ -243,49 +273,83 @@ class VideoShootingViewController: UIViewController
   self.presentingViewController?.dismiss(animated: true, completion: nil)
  }
 
+ func startShooting(with recordDelegate: AVCaptureFileOutputRecordingDelegate)
+ {
+  shootingBarButton.setImage(UIImage(named: "stop.recording.tab.icon"), for: .normal)
+  
+  UIView.animate(withDuration: 0.35,
+                 delay: 0,
+                 options: [.curveEaseInOut, .repeat, .autoreverse, .allowUserInteraction],
+                 animations:
+                 {[weak self] in
+                  self?.shootingBarButton.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+                  self?.timerLabel.alpha = 0.5
+                 },
+                 completion: nil)
+  
+  let newVideoID = UUID()
+  (recordDelegate as! PhotoSnippetViewController).photoSnippetVideoID = newVideoID
+  let newVideoURL = getVideoOuputURL(with: newVideoID)
+  videoOutput!.startRecording(to: newVideoURL, recordingDelegate: recordDelegate)
+  timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {[weak self] _ in self?.recordTime += 1}
+ }
+ 
+ func stopShooting()
+ {
+  recordTime = 0.0
+  timer?.invalidate()
+  videoOutput!.stopRecording()
+ }
  
  @IBAction func makeShootingPress(_ sender: UIButton)
  {
   if (videoOutput == nil)
   {
    configueSessionVideoFileOutput()
-
   }
- 
+  
   if (videoOutput!.isRecording)
   {
-    videoOutput!.stopRecording()
     shootingBarButton.setImage(UIImage(named: "start.recording.tab.icon"), for: .normal)
     UIView.animate(withDuration: 0.3,
                    delay: 0,
                    options: [.curveEaseInOut],
                    animations:
-                   {[unowned self] in self.shootingBarButton.transform = CGAffineTransform.identity},
-                   completion: nil)
+                   {[weak self] in
+                     self?.shootingBarButton.transform = .identity
+                     self?.timerLabel.alpha = 0.0
+                     self?.timerLabel.transform = CGAffineTransform(translationX: 0, y: -150)
+                   },
+                   completion: {[weak self] _ in self?.stopShooting()})
    
   }
   else
   if let presenter = self.presentingViewController as? UINavigationController,
      let recordDelegate = presenter.topViewController as? PhotoSnippetViewController
   {
-   
-    shootingBarButton.setImage(UIImage(named: "stop.recording.tab.icon"), for: .normal)
+  
+    timerLabel.alpha = 0.0
+    timerLabel.transform = CGAffineTransform(translationX: 0, y: -150)
+    timerLabel.text = "00:00:00"
    
     UIView.animate(withDuration: 0.5,
-                   delay: 0,
-                   options: [.curveEaseInOut, .repeat, .autoreverse, .allowUserInteraction],
-                   animations: {[unowned self] in self.shootingBarButton.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)},
-                   completion: nil)
-   
-   
-   let newVideoID = UUID()
-   recordDelegate.photoSnippetVideoID = newVideoID
-   let newVideoURL = getVideoOuputURL(with: newVideoID)
-   videoOutput!.startRecording(to: newVideoURL, recordingDelegate: recordDelegate)
+                   delay: 0.0,
+                   usingSpringWithDamping: 50,
+                   initialSpringVelocity: 0,
+                   options: [.curveEaseInOut],
+                   animations:
+                   {[weak self] in
+                    self?.timerLabel.alpha = 1.0
+                    self?.timerLabel.transform = .identity
+                   },
+                   completion: {[weak self] _ in self?.startShooting(with: recordDelegate)})
    
   }
    
  }
 
- 
+ deinit
+ {
+  timer?.invalidate()
+ }
 }

@@ -1,6 +1,7 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 extension ZoomView:  UICollectionViewDataSource
 {
@@ -33,12 +34,17 @@ extension ZoomView:  UICollectionViewDataSource
      
         cell.photoIconView.layer.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
      
-        if (photoItem.type == .video) {cell.drawPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1))}
+        if (photoItem.type == .video)
+        {
+          cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
+          cell.drawVideoDuration(textColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), duration: AVURLAsset(url: photoItem.url).duration)
+        }
         
         photoItem.getImage(requiredImageWidth:  imageSize)
         {(image) in
-         image?.setSquared(in: cell.photoIconView)
+        
          cell.spinner.stopAnimating()
+         
          UIView.transition(with: cell.photoIconView,
                            duration: 0.75,
                            options: .transitionCrossDissolve,

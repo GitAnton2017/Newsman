@@ -2,22 +2,32 @@
 import Foundation
 import UIKit
 
-class PlaybackButton: UIButton
+class PlayIconView: UIView
 {
- var iconColor: UIColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.75)
+ var iconColor: UIColor = UIColor.black
  var r: CGFloat = 0
- var shift: CGFloat = 0.125
- var width: CGFloat = 0.075
+ var shift: CGFloat = 0
+ var width: CGFloat = 0
  
  override static var layerClass: AnyClass {return CAShapeLayer.self}
  
  var playIconLayer: CAShapeLayer {return self.layer as! CAShapeLayer}
+ 
+ convenience init (iconColor: UIColor, r: CGFloat, shift: CGFloat, width: CGFloat)
+ {
+  self.init(frame: .zero)
+  self.iconColor = iconColor
+  self.r = r
+  self.shift = shift
+  self.width = width
+ }
  
  override init(frame: CGRect)
  {
   super.init(frame: frame)
   backgroundColor = UIColor.clear
   playIconLayer.needsDisplayOnBoundsChange = true
+  self.isUserInteractionEnabled = true
  }
  
  required init?(coder aDecoder: NSCoder)
@@ -49,12 +59,11 @@ class PlaybackButton: UIButton
   playIconLayer.strokeColor = iconColor.cgColor
   playIconLayer.fillColor = iconColor.cgColor
   playIconLayer.fillRule = kCAFillRuleEvenOdd
- 
  }
  
  override func draw(_ rect: CGRect)
  {
   drawPlayIcon()
  }
-
+ 
 }

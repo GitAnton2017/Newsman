@@ -56,6 +56,7 @@
 		A7443F06202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F04202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift */; };
 		A7443F122035D2F80039BE41 /* Folder CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F112035D2F80039BE41 /* Folder CV Cell.swift */; };
 		A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F13203881790039BE41 /* Flag Items Menu.swift */; };
+		A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A748D8B420F4CD5500DA190A /* Play Icon View.swift */; };
 		A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */; };
 		A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F41FF656590009F03C /* Photo Snippet CV.swift */; };
 		A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489881FBC4F2900359C0C /* AppDelegate.swift */; };
@@ -165,6 +166,7 @@
 		A7443F04202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7443F112035D2F80039BE41 /* Folder CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder CV Cell.swift"; sourceTree = "<group>"; };
 		A7443F13203881790039BE41 /* Flag Items Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flag Items Menu.swift"; sourceTree = "<group>"; };
+		A748D8B420F4CD5500DA190A /* Play Icon View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Play Icon View.swift"; sourceTree = "<group>"; };
 		A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A75117F41FF656590009F03C /* Photo Snippet CV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV.swift"; sourceTree = "<group>"; };
 		A75489851FBC4F2900359C0C /* Newsman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Newsman.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -277,6 +279,7 @@
 				A7EF606120EA1CB500FD09A7 /* Video Player View.swift */,
 				A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */,
 				A741BD6120EF55540062AF27 /* Playback Progress View.swift */,
+				A748D8B420F4CD5500DA190A /* Play Icon View.swift */,
 				A741BD4920EBEECD0062AF27 /* Playback Button.swift */,
 				A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */,
 				A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */,
@@ -714,6 +717,7 @@
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
 				A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */,
 				A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */,
+				A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */,
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
 				A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */,
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,

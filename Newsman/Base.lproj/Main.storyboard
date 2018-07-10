@@ -183,7 +183,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="406" height="69.666666666666671"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lZK-7m-eLo">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lZK-7m-eLo">
                                                     <rect key="frame" x="20" y="11" width="48" height="48"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48" id="DNo-1m-suL"/>
@@ -259,7 +259,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aN1-gB-Oog" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="6uu-d9-JNM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1145" y="27"/>
+            <point key="canvasLocation" x="1144" y="-132"/>
         </scene>
         <!--Text Snippet VC-->
         <scene sceneID="bz8-Yl-1J6">
@@ -421,7 +421,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BYq-pV-TZg" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="cCZ-GQ-uAx" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2732" y="395"/>
+            <point key="canvasLocation" x="2949" y="448"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OAs-zD-MWr">
@@ -504,7 +504,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yvK-HL-uI5" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="Rw6-Og-u8Z" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2732" y="-307"/>
+            <point key="canvasLocation" x="2948" y="-333"/>
         </scene>
         <!--Photo Snippet VC-->
         <scene sceneID="73f-d3-2I9">
@@ -586,24 +586,24 @@
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
-                                                    <rect key="frame" x="1" y="1" width="98" height="98"/>
-                                                    <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
+                                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                    <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </imageView>
-                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rcR-EZ-aT9">
+                                                <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rcR-EZ-aT9">
                                                     <rect key="frame" x="32" y="32" width="37" height="37"/>
                                                     <color key="tintColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <color key="color" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="color" red="0.92549019610000005" green="0.23660613729999999" blue="0.1019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="ENq-06-ukX" firstAttribute="leading" secondItem="pDB-24-B3G" secondAttribute="leading" constant="1" id="DiH-EU-eHs"/>
+                                            <constraint firstItem="ENq-06-ukX" firstAttribute="leading" secondItem="pDB-24-B3G" secondAttribute="leading" id="DiH-EU-eHs"/>
                                             <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerX" secondItem="pDB-24-B3G" secondAttribute="centerX" id="KZr-sE-z7K"/>
-                                            <constraint firstAttribute="bottom" secondItem="ENq-06-ukX" secondAttribute="bottom" constant="1" id="SqO-Km-52O"/>
-                                            <constraint firstAttribute="trailing" secondItem="ENq-06-ukX" secondAttribute="trailing" constant="1" id="Zas-sI-EcY"/>
+                                            <constraint firstAttribute="bottom" secondItem="ENq-06-ukX" secondAttribute="bottom" id="SqO-Km-52O"/>
+                                            <constraint firstAttribute="trailing" secondItem="ENq-06-ukX" secondAttribute="trailing" id="Zas-sI-EcY"/>
                                             <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerY" secondItem="pDB-24-B3G" secondAttribute="centerY" id="j9C-Mr-smu"/>
-                                            <constraint firstItem="ENq-06-ukX" firstAttribute="top" secondItem="pDB-24-B3G" secondAttribute="top" constant="1" id="zPY-Di-34k"/>
+                                            <constraint firstItem="ENq-06-ukX" firstAttribute="top" secondItem="pDB-24-B3G" secondAttribute="top" id="zPY-Di-34k"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="photoIconView" destination="ENq-06-ukX" id="i47-2F-JdN"/>
@@ -619,8 +619,7 @@
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uV4-sc-8X5">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                                    <color key="backgroundColor" red="0.8829182728292978" green="0.8829182728292978" blue="0.8829182728292978" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <color key="tintColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="L7E-el-Wl0">
                                                         <size key="itemSize" width="30" height="30"/>
                                                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -628,30 +627,32 @@
                                                         <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
-                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
                                                             <rect key="frame" x="3" y="3" width="30" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RMg-9Z-gHf">
-                                                                        <rect key="frame" x="1" y="1" width="28" height="28"/>
-                                                                    </imageView>
-                                                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RMg-9Z-gHf">
                                                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                        <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    </imageView>
+                                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
+                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                        <color key="color" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     </activityIndicatorView>
                                                                 </subviews>
                                                             </view>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" constant="1" id="0ZL-fM-jfs"/>
+                                                                <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" id="0ZL-fM-jfs"/>
                                                                 <constraint firstAttribute="trailing" secondItem="Mmv-vJ-BGZ" secondAttribute="trailing" id="LmW-El-mZy"/>
-                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" constant="1" id="MVH-fv-Hfl"/>
+                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="MVH-fv-Hfl"/>
                                                                 <constraint firstAttribute="bottom" secondItem="Mmv-vJ-BGZ" secondAttribute="bottom" id="OUG-7k-dDR"/>
-                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" constant="1" id="bcB-j6-hlH"/>
+                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="bcB-j6-hlH"/>
                                                                 <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="eWe-00-uxs"/>
                                                                 <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="s4D-ux-Hdj"/>
-                                                                <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" constant="1" id="shd-L1-jco"/>
+                                                                <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" id="shd-L1-jco"/>
                                                             </constraints>
                                                             <connections>
                                                                 <outlet property="photoIconView" destination="RMg-9Z-gHf" id="CsE-cw-0Fb"/>
@@ -673,7 +674,7 @@
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="photoSectionHeader" id="OXL-QE-zfg" customClass="PhotoSectionHeader" customModule="Newsman" customModuleProvider="target">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="photoSectionHeader" id="OXL-QE-zfg" customClass="PhotoSectionHeader" customModule="Newsman" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="367" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
@@ -718,7 +719,7 @@
                             </collectionView>
                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="BrJ-Xz-Uta">
                                 <rect key="frame" x="160" y="640" width="94" height="29"/>
-                                <color key="tintColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="photoScaleStepperChanged:" destination="8Mi-lh-6Iq" eventType="valueChanged" id="6Jn-YC-8Ew"/>
                                 </connections>
@@ -784,7 +785,7 @@
                     </connections>
                 </pinchGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1906" y="395"/>
+            <point key="canvasLocation" x="1905.7971014492755" y="670.92391304347836"/>
         </scene>
         <!--Video Shooting VC-->
         <scene sceneID="bEz-36-dI8">
