@@ -251,7 +251,7 @@ class ZoomView: UIView
                         {[unowned self] in
                          self.addSubview(self.playerView!)
                          },
-                         completion: {[unowned self] _ in self.playerView?.showProgressView()})
+                        completion: {[weak self] _ in self?.playerView?.showProgressView()})
       
       removeObserver(self, forKeyPath: #keyPath(playerView.playerLayer.isReadyForDisplay))
       

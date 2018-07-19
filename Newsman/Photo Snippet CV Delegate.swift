@@ -6,21 +6,11 @@ import UIKit
 extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 //=============================================================================================================
 {
-    
-    /*func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath)
-    {
-     if let folderCell = collectionView.cellForItem(at: indexPath) as? PhotoFolderCell
-     {
-      folderCell.photoCollectionView.reloadData()
-     }
-    }*/
-    
 //MARK:------------------------------ SETTING SECTION HEADERS SIZES -------------------------------------------
 //-------------------------------------------------------------------------------------------------------------
- func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize
+ func collectionView(_ collectionView: UICollectionView,
+                       layout collectionViewLayout: UICollectionViewLayout,
+                       referenceSizeForHeaderInSection section: Int) -> CGSize
 //-------------------------------------------------------------------------------------------------------------
  {
    if photoCollectionView.photoGroupType == .makeGroups

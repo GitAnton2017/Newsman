@@ -32,7 +32,7 @@ extension ZoomView:  UICollectionViewDataSource
         
         let photoItem = photoItems[indexPath.row]
      
-        cell.photoIconView.layer.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
+        cell.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
      
         if (photoItem.type == .video)
         {

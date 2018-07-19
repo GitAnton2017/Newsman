@@ -627,7 +627,7 @@
                                                         <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
                                                     </collectionViewFlowLayout>
                                                     <cells>
-                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
+                                                        <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
                                                             <rect key="frame" x="3" y="3" width="30" height="30"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">

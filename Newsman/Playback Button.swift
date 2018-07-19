@@ -18,6 +18,7 @@ class PlaybackButton: UIButton
   super.init(frame: frame)
   backgroundColor = UIColor.clear
   playIconLayer.needsDisplayOnBoundsChange = true
+  playIconLayer.contentsScale = UIScreen.main.scale
  }
  
  required init?(coder aDecoder: NSCoder)
@@ -29,7 +30,7 @@ class PlaybackButton: UIButton
  {
   let D = self.bounds.width // cell contentView diametr...
   let rect = self.bounds
-  playIconLayer.contentsScale = UIScreen.main.scale
+  
   
   let path = CGMutablePath()
   let rs = r + shift

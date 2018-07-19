@@ -294,6 +294,7 @@ class PlayerView: UIView
   super.init(frame: frame)
   autoresizingMask = [.flexibleWidth, .flexibleHeight]
   (layer as! AVPlayerLayer).videoGravity = gravity
+  playerLayer.contentsScale = UIScreen.main.scale
   
  }
  

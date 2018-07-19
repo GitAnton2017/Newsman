@@ -4,14 +4,16 @@ import UIKit
 
 extension ZoomView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
-    func collectionView(_ collectionView: UICollectionView,  layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize
+    func collectionView(_ collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                          sizeForItemAt indexPath: IndexPath) -> CGSize
     {
-        return CGSize(width: imageSize, height: imageSize)
+       return CGSize(width: imageSize, height: imageSize)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat
+    func collectionView(_ collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                          minimumLineSpacingForSectionAt section: Int) -> CGFloat
     {
         let fl = collectionViewLayout as! UICollectionViewFlowLayout
         let w = collectionView.bounds.width

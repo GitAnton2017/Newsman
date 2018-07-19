@@ -31,13 +31,13 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
  func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                         shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool
  {
-  return true
+  return !(otherGestureRecognizer.view is ZoomView || otherGestureRecognizer.view is VideoScrubView)
  }
  
  @objc func handlePan(gr: UIPanGestureRecognizer)
  {
   guard let view = self.navigationController.view else {return}
-  
+ 
   let dX = gr.translation(in: view).x
   let dY = gr.translation(in: view).y
   

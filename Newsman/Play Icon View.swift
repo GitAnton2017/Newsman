@@ -27,7 +27,7 @@ class PlayIconView: UIView
   super.init(frame: frame)
   backgroundColor = UIColor.clear
   playIconLayer.needsDisplayOnBoundsChange = true
-  self.isUserInteractionEnabled = true
+  playIconLayer.contentsScale = UIScreen.main.scale
  }
  
  required init?(coder aDecoder: NSCoder)
@@ -39,7 +39,7 @@ class PlayIconView: UIView
  {
   let D = self.bounds.width // cell contentView diametr...
   let rect = self.bounds
-  playIconLayer.contentsScale = UIScreen.main.scale
+  
   
   let path = CGMutablePath()
   let rs = r + shift

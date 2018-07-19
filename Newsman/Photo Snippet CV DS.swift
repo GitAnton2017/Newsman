@@ -485,23 +485,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   }
  
   cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
+  
   cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
-    
-  if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
-  {
-   cell.drawFlag(flagColor: color)
-  }
-  else
-  {
-   cell.clearFlag()
-  }
-  
-  if (photoItem.type == .video)
-  {
-   cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
-   cell.drawVideoDuration(textColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), duration: AVURLAsset(url: photoItem.url).duration)
-  }
-  
+ 
   photoItem.getImage(requiredImageWidth:  imageSize)
   {(image) in
 
@@ -510,10 +496,30 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     UIView.transition(with: cell.photoIconView,
                       duration: 0.5,
                       options: .transitionCrossDissolve,
-                      animations: {cell.photoIconView.image = image},
+                      animations:
+                      {
+                       cell.photoIconView.image = image
+                      },
                       completion:
                       {_ in
+                       
+                       if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
+                       {
+                        cell.drawFlagMarker(flagColor: color)
+                       }
+                       else
+                       {
+                        cell.clearFlagMarker()
+                       }
+                       
+                       if (photoItem.type == .video)
+                       {
+                        cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
+                        cell.showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: photoItem.url).duration)
+                       }
+                       
                        cell.photoIconView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                       
                        UIView.animate(withDuration: 0.15,
                                       delay: 0,
                                       usingSpringWithDamping: 2500,
@@ -560,18 +566,17 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  
     if let flag = photoFolder.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
     {
-        cell.drawFlag(flagColor: color)
+        cell.drawFlagMarker(flagColor: color)
     }
     else
     {
-        cell.clearFlag()
+        cell.clearFlagMarker()
     }
     
     
     if let items = photoFolder.folder.photos?.allObjects as? [Photo]
     {
         cell.photoItems = items.map{PhotoItem(photo: $0)}
-        
     }
     else
     {
@@ -579,13 +584,11 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     }
     
     cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
+  
     cell.nphoto = nPhotoFolderMap[nphoto]!
     cell.frameSize = imageSize
 
-        
-
-    
-   return cell
+    return cell
     
  }//func getFolderCell (_ collectionView: UICollectionView,...
 //------------------------------------------------------------------------------------------------------------------
@@ -614,11 +617,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
    cell.addInteraction(cellInter)
   
-   if globalDragItems.contains(where:
-    {item in
-     if let dragPhotoItem = item as? PhotoItemProtocol, photoItem.id == dragPhotoItem.id {return true}
-     return false
-    })
+   if globalDragItems.contains(where: {($0 as! PhotoItemProtocol).id == photoItem.id})
    {
     PhotoSnippetViewController.startCellDragAnimation(cell: cell)
    }

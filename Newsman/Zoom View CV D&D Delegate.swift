@@ -9,8 +9,7 @@ import UIKit
 extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
 {
  //MARK: -
- 
- 
+
  func animateDragItemsBegin (_ collectionView: UICollectionView, dragItems: [UIDragItem])
  {
    dragItems.forEach

@@ -3,6 +3,20 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "TimeStampView.draw(_:):Duration Stamp View.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.bounds">
+            </PersistentString>
+            <PersistentString
+               value = "duration.seconds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TimeStampView.duration.didset:Duration Stamp View.swift">
+      </ContextState>
+      <ContextState
          contextName = "closure #1 in PhotoSnippetViewController.collectionView(_:cellForItemAt:):PhotoSnippetCollectionViewDataSource.swift">
          <PersistentStrings>
             <PersistentString

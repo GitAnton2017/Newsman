@@ -10,25 +10,49 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
 //***************************************************************************************************************
 {
  
-class func startCellDragAnimation (cell: UICollectionViewCell)
+ class func startCellDragAnimation (cell: UICollectionViewCell)
  {
+  var slt = CATransform3DIdentity
+  slt.m34 = -1.0/600
+  cell.contentView.layer.superlayer!.sublayerTransform = slt
  
-  cell.transform = CGAffineTransform(rotationAngle: -CGFloat.pi/100)
-  UIView.animate(withDuration: 0.1,
-                 delay: 0,
-                 options: [.curveEaseInOut, .`repeat`, .autoreverse],
-                 animations: {cell.transform = CGAffineTransform(rotationAngle: CGFloat.pi/100).scaledBy(x: 0.95, y: 0.95)},
-                 completion: nil
-  )
- }
+  let ag = CAAnimationGroup()
+ 
+  let bc = CABasicAnimation(keyPath: #keyPath(CALayer.borderColor))
+  bc.fromValue = UIColor.brown.cgColor
+  bc.toValue = UIColor.red.cgColor
+ 
+  let bw = CABasicAnimation(keyPath: #keyPath(CALayer.borderWidth))
+  bw.fromValue = 0.5
+  bw.toValue = 1.25
+ 
+  let kft = CAKeyframeAnimation(keyPath: #keyPath(CALayer.transform))
+  kft.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+  kft.values =
+  [
+   CATransform3DMakeScale(0.98, 0.98, 1),
+   CATransform3DMakeRotation( .pi/15, 1, 1, 0),  CATransform3DMakeRotation(-.pi/15, 1, 1, 0),
+   CATransform3DMakeRotation( .pi/15, -1, 1, 0), CATransform3DMakeRotation(-.pi/15, -1, 1, 0),
+   CATransform3DMakeRotation( .pi/90, 0, 0, 1),  CATransform3DMakeRotation(-.pi/90, 0, 0, 1),
+   CATransform3DMakeScale(1.02, 1.02, 1)
+  ]
+ 
+  kft.calculationMode = kCAAnimationCubic
+  kft.rotationMode = kCAAnimationRotateAuto
+ 
+  ag.duration = 0.35
+  ag.autoreverses = true
+  ag.repeatCount = .infinity
+ 
+  ag.animations = [bc, bw, kft]
+ 
+  cell.contentView.layer.add(ag, forKey: "waggle")
+  
+ }//class func startCellDragAnimation ...
  
  class func stopCellDragAnimation (cell: UICollectionViewCell)
  {
-  UIView.animate(withDuration: 0.1,
-                 delay: 0,
-                 options: [.curveEaseInOut],
-                 animations: {cell.transform = CGAffineTransform.identity},
-                 completion: nil)
+  cell.contentView.layer.removeAnimation(forKey: "waggle")
  }
  
  func animateDragItemsBegin (_ collectionView: UICollectionView, dragItems: [UIDragItem])

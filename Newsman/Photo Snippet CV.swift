@@ -133,8 +133,6 @@ class FlagItemLayer: CALayer
 
 class PhotoSnippetCollectionView: UICollectionView
 {
- 
- 
     var ascendingSort: Bool
     {
       get
@@ -213,6 +211,7 @@ class PhotoSnippetCollectionView: UICollectionView
         
         cellLongPressGR = UILongPressGestureRecognizer(target: self, action: #selector(cellLongPress))
         cellLongPressGR.minimumPressDuration = 0.4
+        cellLongPressGR.name = "CellMenuLongPress"
         addGestureRecognizer(cellLongPressGR)
         
         cellDoubleTapGR = UITapGestureRecognizer(target: self, action: #selector(cellDoubleTap))
@@ -497,23 +496,24 @@ class PhotoSnippetCollectionView: UICollectionView
         }
     
     }
-    
+ 
+ 
     @objc func cellLongPress(_ gr: UILongPressGestureRecognizer)
     {
-          guard !isPhotoEditing else {return}
-        
-          let touchPoint = gr.location(in: self)
-          if let _ = indexPathForItem(at: touchPoint), gr.state == .ended
-          {
-           drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
-          }
-          else
-          {
-           dismissCellMenu()
-          }
-      
-        
-        
+ 
+      guard !isPhotoEditing else {return}
+ 
+      let touchPoint = gr.location(in: self)
+      if let _ = indexPathForItem(at: touchPoint), gr.state == .ended
+      {
+       PhotoSnippetViewController.clearAllDraggedItems()
+       drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
+      }
+      else
+      {
+       dismissCellMenu()
+       }
+ 
     }
     
     func movePhoto (at indexPath: IndexPath, with flagStr: String?)
