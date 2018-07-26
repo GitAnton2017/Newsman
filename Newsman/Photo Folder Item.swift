@@ -9,6 +9,7 @@ import CoreData
  class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
 {
+    let  group =  DispatchGroup()
   
     weak var dragSession: UIDragSession?
   

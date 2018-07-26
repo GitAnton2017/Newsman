@@ -3,6 +3,14 @@ import Foundation
 
 class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    let dsGroup = DispatchGroup()
+ 
+    var groupBusy = false
+ 
+    var groupTaskCount: Int = 0
+ 
+    weak var photoFolder: PhotoFolderItem!
+ 
     var isPhotoItemSelected: Bool = false
     {
         didSet
@@ -10,7 +18,7 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
           photoCollectionView.reloadData()
         }
     }
-    var photoItemView: UIView {return self.contentView}
+    var photoItemView: UIView    {return self.contentView}
     var cellFrame: CGRect     {return frame}
     
     @IBOutlet weak var photoCollectionView: UICollectionView!
@@ -27,14 +35,10 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
         }
     }
     
-    required init?(coder aDecoder: NSCoder)
-    {
-        super.init(coder: aDecoder)
-    }
-    
-    
+ 
     override func awakeFromNib()
     {
+    
         super.awakeFromNib()
         clearFlagMarker()
         imageRoundClip(cornerRadius: 10)
@@ -47,14 +51,15 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
     
     override func prepareForReuse()
     {
+    
        super.prepareForReuse()
+       groupTaskCount = 0
        clearFlagMarker()
        imageRoundClip(cornerRadius: 10)
      
     
     }
-    
-    
+ 
     
 }
 

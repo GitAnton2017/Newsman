@@ -431,11 +431,6 @@ class SnippetsViewController: UIViewController
     {
     }
     
-    func snippetIndexPath(snippet: BaseSnippet) -> IndexPath
-    {
-      let path = snippetsDataSource.snippetsData.enumerated().lazy.map({($0.offset, $0.element.index(of: snippet))}).first(where: {$0.1 != nil})
-        
-        return IndexPath(row: path!.1!, section: path!.0)
-    }
+    
 }
 

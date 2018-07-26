@@ -48,8 +48,30 @@ extension PhotoSnippetCellProtocol
   photoItemView.layer.masksToBounds = true
  }
  
+ func unsetFlagMarker()
+ {
+  if let flag = photoItemView.subviews.first(where: {$0.tag == 3}) as? FlagMarkerView
+  {
+   UIView.animate(withDuration: 0.85,
+                  delay: 0.0,
+                  usingSpringWithDamping: 50,
+                  initialSpringVelocity: 0,
+                  options: [.curveEaseInOut],
+                  animations:
+                  {[weak self] in
+                   flag.alpha = 0
+                   flag.transform = CGAffineTransform(translationX:  (self?.photoItemView.bounds.width  ?? 0) * 0.20,
+                                                                 y: -(self?.photoItemView.bounds.height ?? 0) * 0.25)
+                  },
+                  completion: {_ in flag.flagColor = UIColor.clear})
+   
+   
+  }
+ }
+ 
  func clearFlagMarker()
  {
+
   if let flag = photoItemView.subviews.first(where: {$0.tag == 3}) as? FlagMarkerView
   {
    flag.flagColor = UIColor.clear
@@ -61,9 +83,9 @@ extension PhotoSnippetCellProtocol
   func animateShowFlagMarker (_ flag: FlagMarkerView)
   {
    flag.alpha = 0
-   flag.transform = CGAffineTransform(translationX: 0, y: -150)
-   UIView.animate(withDuration: 0.35,
-                  delay: 0.15,
+   flag.transform = CGAffineTransform(translationX: 0, y: -photoItemView.bounds.height * 0.25).scaledBy(x: 1.25, y: 4.25)
+   UIView.animate(withDuration: 0.5,
+                  delay: 0.0,
                   usingSpringWithDamping: 50,
                   initialSpringVelocity: 0,
                   options: [.curveEaseInOut],
@@ -76,22 +98,21 @@ extension PhotoSnippetCellProtocol
    flag.flagColor = flagColor
    animateShowFlagMarker(flag)
    return
-   
   }
   
   let flag = FlagMarkerView(frame: .zero)
   flag.flagColor = flagColor
   flag.tag = 3
+  
   photoItemView.addSubview(flag)
   flag.translatesAutoresizingMaskIntoConstraints = false
-  
   NSLayoutConstraint.activate(
    [
-    flag.widthAnchor.constraint    (equalTo:  photoItemView.widthAnchor, multiplier: 0.2),
-    flag.heightAnchor.constraint   (equalTo:  photoItemView.heightAnchor, multiplier: 0.25),
-    flag.trailingAnchor.constraint (equalTo:  photoItemView.trailingAnchor),
-    flag.topAnchor.constraint      (equalTo:  photoItemView.topAnchor     )
- 
+    flag.widthAnchor.constraint    (equalTo:  self.photoItemView.widthAnchor, multiplier: 0.2),
+    flag.heightAnchor.constraint   (equalTo:  self.photoItemView.heightAnchor, multiplier: 0.25),
+    flag.trailingAnchor.constraint (equalTo:  self.photoItemView.trailingAnchor),
+    flag.topAnchor.constraint      (equalTo:  self.photoItemView.topAnchor     )
+    
    ]
   )
   

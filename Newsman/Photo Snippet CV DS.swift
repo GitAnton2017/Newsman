@@ -518,14 +518,14 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
                         cell.showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: photoItem.url).duration)
                        }
                        
-                       cell.photoIconView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                       cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                        
                        UIView.animate(withDuration: 0.15,
                                       delay: 0,
                                       usingSpringWithDamping: 2500,
                                       initialSpringVelocity: 0,
                                       options: .curveEaseInOut,
-                                      animations: {cell.photoIconView.transform = .identity},
+                                      animations: {cell.photoItemView.transform = .identity},
                                       completion: nil)
                        
                       })
@@ -564,15 +564,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
     cell.photoCollectionView.isUserInteractionEnabled = !isEditingPhotos
  
-    if let flag = photoFolder.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
-    {
-        cell.drawFlagMarker(flagColor: color)
-    }
-    else
-    {
-        cell.clearFlagMarker()
-    }
-    
+ 
+    cell.photoFolder = photoFolder
+    cell.groupTaskCount = 0
     
     if let items = photoFolder.folder.photos?.allObjects as? [Photo]
     {

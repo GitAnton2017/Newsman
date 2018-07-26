@@ -3,6 +3,41 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "PhotoSnippetViewController.savePhotoSnippetData():PhotoSnippetViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(UIImage)((UIKit.UIImage)0x00006040000aa320)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "animateShowFlagMarker #1 &lt;A&gt;(_:) in PhotoSnippetCellProtocol.drawFlagMarker(flagColor:):Snippet Cell Protocol.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoItemView.bounds.height">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "TimeStampView.duration.didset:Duration Stamp View.swift">
+      </ContextState>
+      <ContextState
+         contextName = "PhotoFolderCell.collectionView(_:cellForItemAt:):Folder Nested CV DS.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "collectionView.visibleCells.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in closure #3 in SnippetsViewDataSource.imagesAnimators.getter:SnippetsViewDataSource.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.imgs.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "TimeStampView.draw(_:):Duration Stamp View.swift">
          <PersistentStrings>
             <PersistentString
@@ -12,9 +47,6 @@
                value = "duration.seconds">
             </PersistentString>
          </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "TimeStampView.duration.didset:Duration Stamp View.swift">
       </ContextState>
       <ContextState
          contextName = "closure #1 in PhotoSnippetViewController.collectionView(_:cellForItemAt:):PhotoSnippetCollectionViewDataSource.swift">
@@ -27,14 +59,6 @@
             </PersistentString>
             <PersistentString
                value = "scaledImage.size">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "PhotoSnippetViewController.savePhotoSnippetData():PhotoSnippetViewController.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "(UIImage)((UIKit.UIImage)0x00006040000aa320)">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

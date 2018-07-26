@@ -908,7 +908,9 @@ func deleteImages()
         
     }
    }
-    
+ 
+    static var dsGroupMap = [PhotoSnippet : DispatchGroup]()
+ 
     class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int, requiredImageWidth: CGFloat,
                                 completion: @escaping ([UIImage]?) -> Void)
     {
@@ -925,8 +927,6 @@ func deleteImages()
                 do
                 {
                     let photos = try context.fetch(request)
-                    //let _ = try context.fetch(request1)
-                    //let _ = try context.fetch(request2)
                     
                     guard photos.count > 1 else
                     {
@@ -947,12 +947,13 @@ func deleteImages()
                         photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
                     }
                     
-                    
+                 
                     var imageSet = [UIImage]()
-                    
-                    
+                 
+                    //let group = DispatchGroup()
+                    //PhotoItem.dsGroupMap[photoSnippet] = group
                     photoItems.forEach
-                        {photoItem in
+                    {photoItem in
                             PhotoItem.dsGroup.enter()
                             photoItem.getImage(requiredImageWidth: requiredImageWidth)
                             {(image) in
@@ -962,7 +963,7 @@ func deleteImages()
                                     imageSet.append(img)
                                     
                                 }
-                               PhotoItem.dsGroup.leave()
+                                PhotoItem.dsGroup.leave()
                             }
                     }
                     

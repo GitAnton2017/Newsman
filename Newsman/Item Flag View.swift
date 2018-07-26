@@ -1,5 +1,4 @@
 
-
 import Foundation
 import UIKit
 
@@ -32,7 +31,9 @@ class FlagMarkerView: UIView
   didSet
   {
    flagLayer.fillColor = flagColor
-   flagLayer.setNeedsDisplay()
+   //flagLayer.setNeedsDisplay()
+   self.setNeedsDisplay()
+  
   }
  }
  
@@ -53,5 +54,5 @@ class FlagMarkerView: UIView
   super.init(coder: aDecoder)
  }
  
- 
+ override func draw(_ rect: CGRect) {}
 }

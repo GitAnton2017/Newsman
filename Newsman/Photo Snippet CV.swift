@@ -497,10 +497,8 @@ class PhotoSnippetCollectionView: UICollectionView
     
     }
  
- 
     @objc func cellLongPress(_ gr: UILongPressGestureRecognizer)
     {
- 
       guard !isPhotoEditing else {return}
  
       let touchPoint = gr.location(in: self)
@@ -512,7 +510,7 @@ class PhotoSnippetCollectionView: UICollectionView
       else
       {
        dismissCellMenu()
-       }
+      }
  
     }
     
@@ -667,7 +665,7 @@ class PhotoSnippetCollectionView: UICollectionView
              {
               let cell = cellForItem(at: indexPath) as! PhotoSnippetCellProtocol
               ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
-              cell.drawFlag(flagColor: flagColor!)
+              cell.drawFlagMarker(flagColor: flagColor!)
               
               if photoGroupType != .makeGroups
               {
@@ -686,7 +684,7 @@ class PhotoSnippetCollectionView: UICollectionView
              {
               let cell = cellForItem(at: indexPath) as!  PhotoSnippetCellProtocol
               ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
-              cell.clearFlag()
+              cell.unsetFlagMarker()
               if photoGroupType != .makeGroups
               {
                 ds.photoItems2D[indexPath.section][indexPath.row].priorityFlag = nil

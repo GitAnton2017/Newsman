@@ -1,10 +1,68 @@
 
 import Foundation
 import UIKit
+import GameplayKit
 
 extension SnippetsViewController: UITableViewDelegate
 {
-    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+     let cell = cell as! SnippetsViewCell
+     let a4r = GKRandomDistribution(lowestValue: 2, highestValue: 3)
+     let div = CGFloat(a4r.nextUniform())
+     let dir = CGFloat(a4r.nextBool() ? 1 : -1)
+     cell.transform = CGAffineTransform(translationX: -cell.bounds.width/div, y: dir * cell.bounds.height)
+     UIView.animate(withDuration: 0.5,
+                    delay: 0,
+                    usingSpringWithDamping: 0.85,
+                    initialSpringVelocity: 1.25,
+                    options: .curveEaseInOut,
+                    animations:
+                    {
+                     cell.transform = .identity
+                     
+                     
+                    },
+                    completion:
+                    {_ in
+                     cell.transform =  CGAffineTransform(rotationAngle: .pi / 80)
+                     UIView.animate(withDuration: 0.25,
+                                    delay: 0,
+                                    usingSpringWithDamping: 0.045,
+                                    initialSpringVelocity: 0.85,
+                                    options: .curveEaseInOut,
+                                    animations:
+                                    {cell.transform = .identity},
+                                    completion:
+                      {_ in
+                       
+                       cell.transform =  CGAffineTransform (scaleX: 0.95, y: 0.75)
+                       
+                       UIView.animate(withDuration: 0.25,
+                                      delay: 0,
+                                      usingSpringWithDamping: 1.25,
+                                      initialSpringVelocity: 0,
+                                      options: .curveEaseInOut,
+                                      animations:
+                                      {cell.transform = .identity
+                                       
+                                      },
+                                      completion:
+                                      {_ in
+                                       let color = cell.backgroundColor
+                                       cell.backgroundColor = color?.withAlphaComponent(0.5)
+                                       UIView.animate(withDuration: 0.25)
+                                       {
+                                        cell.backgroundColor = color
+                                       }
+                                      }
+                       )
+                       
+                      })
+                     
+                    })
+    }
+ 
     //*************************************************************************************************
     func changeSnippetPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
     //*************************************************************************************************

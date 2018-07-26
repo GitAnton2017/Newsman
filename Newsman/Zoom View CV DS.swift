@@ -33,12 +33,6 @@ extension ZoomView:  UICollectionViewDataSource
         let photoItem = photoItems[indexPath.row]
      
         cell.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
-     
-        if (photoItem.type == .video)
-        {
-          cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
-          cell.drawVideoDuration(textColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), duration: AVURLAsset(url: photoItem.url).duration)
-        }
         
         photoItem.getImage(requiredImageWidth:  imageSize)
         {(image) in
@@ -51,20 +45,28 @@ extension ZoomView:  UICollectionViewDataSource
                            animations: {cell.photoIconView.image = image},
                            completion:
                            {_ in
-                            cell.photoIconView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                         
+                            if (photoItem.type == .video)
+                            {
+                             cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
+                             cell.showVideoDuration(textColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), duration: AVURLAsset(url: photoItem.url).duration)
+                            }
+                            
+                            cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
                             UIView.animate(withDuration: 0.15,
                                            delay: 0,
                                            usingSpringWithDamping: 2500,
                                            initialSpringVelocity: 0,
                                            options: .curveEaseInOut,
-                                           animations: {cell.photoIconView.transform = .identity},
+                                           animations:
+                                           {
+                                            cell.photoItemView.transform = .identity
+                                           },
                                            completion: nil)
                            })
         }
      
-        if globalDragItems.contains(where: {item in
-         if let dragPhotoItem = item as? PhotoItem, photoItem.id == dragPhotoItem.id {return true}
-         return false})
+        if globalDragItems.contains(where: {($0 as! PhotoItemProtocol).id == photoItem.id})
         {
          PhotoSnippetViewController.startCellDragAnimation(cell: cell)
         }

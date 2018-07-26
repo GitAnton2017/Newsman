@@ -119,7 +119,7 @@ extension PhotoSnippetViewController
      {
          switch (buttonLayer.name)
          {
-         case "flagLayer"?:
+          case "flagLayer"?:
              let flagColor = (buttonLayer as! FlagItemLayer).flagColor
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
              if photoCollectionView.photoGroupType != .makeGroups
@@ -129,7 +129,7 @@ extension PhotoSnippetViewController
                   item.element.priorityFlag = flagStr
                   if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCellProtocol
                   {
-                   cell.drawFlag(flagColor: flagColor!)
+                   cell.drawFlagMarker(flagColor: flagColor!)
                   }
                }
              }
@@ -142,7 +142,7 @@ extension PhotoSnippetViewController
              closeMenuAni()
             
             
-         case "unflagLayer"?:
+          case "unflagLayer"?:
              if photoCollectionView.photoGroupType != .makeGroups
              {
                photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
@@ -150,7 +150,7 @@ extension PhotoSnippetViewController
                   item.element.priorityFlag = nil
                   if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCellProtocol
                   {
-                    cell.clearFlag()
+                    cell.unsetFlagMarker()
                   }
               }
              }
@@ -163,9 +163,9 @@ extension PhotoSnippetViewController
              closeMenuAni()
             
             
-         case "cnxLayer"?: closeMenuAni()
+          case "cnxLayer"?: closeMenuAni()
             
-         default: break
+          default: break
             
          }
      }
