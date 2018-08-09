@@ -176,7 +176,7 @@
                                 <color key="sectionIndexBackgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="0.0" reuseIdentifier="SnippetCell" rowHeight="70" id="i7N-u2-v6g" customClass="SnippetsViewCell" customModule="Newsman">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" showsReorderControl="YES" indentationWidth="0.0" reuseIdentifier="SnippetCell" rowHeight="70" id="i7N-u2-v6g" customClass="SnippetsViewCell" customModule="Newsman">
                                         <rect key="frame" x="0.0" y="28" width="406" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i7N-u2-v6g" id="YtZ-ZP-IsY">

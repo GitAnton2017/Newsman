@@ -27,7 +27,30 @@ extension UIImage
          draw(in: CGRect(origin: .zero, size: canvasSize))
          return UIGraphicsGetImageFromCurrentImageContext()*/
     }
-    
+ 
+    func resized(withPercentage percentage: CGFloat, completion: @escaping (UIImage?) -> Void)
+    {
+     PhotoItem.queue.addOperation
+     {[weak self] in
+      guard let size = self?.size else {return}
+      let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
+      let format = UIGraphicsImageRendererFormat.default()
+      //format.scale = 1
+      format.prefersExtendedRange = false
+      let render = UIGraphicsImageRenderer(size: canvasSize, format: format)
+      let image = render.image
+      {_ in
+       self?.draw(in: CGRect(origin: .zero, size: canvasSize))
+      }
+      PhotoItem.queue.addOperation
+      {
+        completion(image)
+      }
+     }
+     
+    }
+ 
+ 
     func setSquared (in view: UIView)
     {
         view.layer.contentsGravity = kCAGravityResizeAspect

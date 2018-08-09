@@ -69,14 +69,13 @@ class SnippetsViewController: UIViewController
     {
         get
         {
-          if (!appSettings.isEmpty)
+         if let savedGroupingRaw = appSettings.first?.grouping,
+            let savedGrouping = GroupSnippets(rawValue: savedGroupingRaw)
           {
-            return GroupSnippets(rawValue: appSettings.first!.grouping!)!
+            currentGrouping = savedGrouping
           }
-          else
-          {
-            return currentGrouping
-          }
+         
+          return currentGrouping
         }
         set
         {
@@ -119,6 +118,8 @@ class SnippetsViewController: UIViewController
      navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
      snippetsTableView.delegate = self
      snippetsTableView.dropDelegate = self
+     snippetsTableView.dragInteractionEnabled = true
+     
      //Core Location Manager Settings ************************
      locationManager.delegate = self
      locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -138,6 +139,7 @@ class SnippetsViewController: UIViewController
      snippetsTableView.dataSource = snippetsDataSource
      currentToolBarItems = snippetsToolBar.items
      snippetsTableView.allowsMultipleSelectionDuringEditing = true
+     
      //snippetsTableView.translatesAutoresizingMaskIntoConstraints = false
         
      setLocationPermissions()

@@ -1,4 +1,4 @@
-
+//
 import Foundation
 import UIKit
 import CoreData
@@ -11,7 +11,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  
     lazy var imagesAnimators: [([UIImage], SnippetsViewCell, TimeInterval, TimeInterval) -> Void] =
     [
-     {imgs, cell, duration, delay in
+     /*{imgs, cell, duration, delay in
       let kfa = CAKeyframeAnimation(keyPath: #keyPath(CALayer.contents))
       kfa.beginTime = CACurrentMediaTime() + delay
       kfa.values = imgs.map{$0.cgImage!}
@@ -21,15 +21,18 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       kfa.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
       kfa.calculationMode = kCAAnimationCubic
       cell.snippetImage.layer.add(kfa, forKey: "movie")
-     },
+      
+     },*/
      
      {imgs, cell, duration, delay in
+      
+      cell.animating["trans1" + cell.snippetID] = true
+      
       var i = 0
       
       let options: [UIViewAnimationOptions] =
        [.transitionFlipFromTop,
         .transitionFlipFromBottom,
-        .transitionCrossDissolve,
         .transitionFlipFromRight,
         .transitionFlipFromLeft
        ]
@@ -38,21 +41,72 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       
       func animate ()
       {
+       guard let status = cell.animating["trans1" + cell.snippetID], status else {return}
        let option = options[arc4rnd.nextInt()]
-       UIView.transition(with: cell.snippetImage, duration: duration,
+       UIView.transition(with: cell.snippetImage, duration: 0.25 * duration,
                          options: [option, .curveEaseInOut],
                          animations: {cell.snippetImage.image = imgs[i]},
                          completion:
                          {finished  in
                           guard finished else {return}
+                          guard let status = cell.animating["trans1" + cell.snippetID], status else {return}
                           if (i < imgs.count - 1) {i += 1} else {i = 0}
-                          animate()
+                          let id = cell.snippetID
+                          DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.75 * duration)
+                          {
+                           guard cell.snippetID == id else {return}
+                           animate()
+                          }
+                          
                          })
       }
       
-      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay) {animate()}
+      let id = cell.snippetID
+      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay)
+      {
+       guard cell.snippetID == id else {return}
+       animate()
+      }
+      
+     },
+     
+     {imgs, cell, duration, delay in
+      
+      cell.animating["trans2" + cell.snippetID] = true
+      
+      var i = 0
+      
+      let types = [kCATransitionPush, kCATransitionMoveIn, kCATransitionReveal]
+      let a4rnd_t = GKRandomDistribution(lowestValue: 0, highestValue: types.count - 1)
+      let subtypes = [kCATransitionFromTop, kCATransitionFromBottom, kCATransitionFromRight, kCATransitionFromLeft]
+      let a4rnd_st = GKRandomDistribution(lowestValue: 0, highestValue: subtypes.count - 1)
+     
+      func animate (_ duration: TimeInterval)
+      {
+       guard let status = cell.animating["trans2" + cell.snippetID], status else {return}
+       let trans = CATransition()
+       trans.delegate = cell
+       trans.type = types[a4rnd_t.nextInt()]
+       trans.subtype = subtypes[a4rnd_st.nextInt()]
+       trans.duration = duration
+       cell.snippetImage.layer.add(trans, forKey: "trans2")
+       cell.snippetImage.image = imgs[i]
+       if (i < imgs.count - 1) {i += 1} else {i = 0}
+       
+      }
+      
+      cell.transDuration = duration
+      cell.animate = animate
+      
+      let id = cell.snippetID
+      DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay)
+      {
+       guard cell.snippetID == id else {return}
+       animate(duration * 0.25)
+      }
       
      }
+     
      
      
     ]
@@ -219,10 +273,15 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath)
+     
       let item = snippetsData[indexPath.section][indexPath.row]
+      (cell as! SnippetsViewCell).clear()
+      (cell as! SnippetsViewCell).snippetID = (item.id?.uuidString)!
       (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
       (cell as! SnippetsViewCell).snippetTextTag.text = item.tag
-      if let snippetPriority = item.priority, let priority = SnippetPriority(rawValue: snippetPriority)
+     
+      if let snippetPriority = item.priority,
+         let priority = SnippetPriority(rawValue: snippetPriority)
       {
        (cell as! SnippetsViewCell).backgroundColor = priority.color
       }
@@ -247,47 +306,61 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         {
           let iconWidth = photoSnippetCell.snippetImage.frame.width
          
-          PhotoItem(photo: latestPhoto).getImage(requiredImageWidth: iconWidth)
+          PhotoItem(photo: latestPhoto).getImage(requiredImageWidth: iconWidth, context: photoSnippetCell)
           {[weak self] (image) in
-          
+           
+           guard image != nil else {return}
            guard let indexPath = self?.snippetIndexPath(snippet: photoSnippet),
                  let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {return}
-     
-           photoSnippetCell.imageSpinner.stopAnimating()
-           UIView.transition(with: cell.snippetImage, duration: 0.35, options: [.transitionFlipFromTop, .curveEaseInOut],
-                             animations: {cell.snippetImage.image = image},
-                             completion:
-                             {_ in
-                              
-                              cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
-                              UIView.animate(withDuration: 0.15, delay: 0.25, usingSpringWithDamping: 3500,
-                              initialSpringVelocity: 0,
-                              options: .curveEaseInOut,
-                              animations: {cell.snippetImage.transform = .identity},
+       
+           
+           DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
+           {
+            cell.imageSpinner.stopAnimating()
+            
+            UIView.transition(with: cell.snippetImage, duration: 0.35, options: [.transitionFlipFromTop, .curveEaseInOut],
+                              animations: {cell.snippetImage.image = image},
                               completion:
                               {_ in
-                     
-                               PhotoItem.getRandomImages3(for: photoSnippet, number: 20, requiredImageWidth: iconWidth)
-                               {[weak self] images in
-                            
-                                guard let indexPath = self?.snippetIndexPath(snippet: photoSnippet),
-                                      let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {return}
-             
-                                guard var imgs = images else {return}
+                              
+                               cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
+                               UIView.animate(withDuration: 0.15, delay: 0.25, usingSpringWithDamping: 3500,
+                               initialSpringVelocity: 0,
+                               options: .curveEaseInOut,
+                               animations: {cell.snippetImage.transform = .identity},
+                               completion:
+                               {_ in
                                 
-                                if let firstImage = image {imgs.insert(firstImage, at: 0)}
+                                PhotoItem.getRandomImages3(for: photoSnippet, number: 20,
+                                                           requiredImageWidth: iconWidth,
+                                                           loadContext: cell)
+                                {[weak self] images in
+                                 
+                                 guard let indexPath = self?.snippetIndexPath(snippet: photoSnippet),
+                                       let _cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {return}
                                 
-                                let a4r = GKRandomDistribution(lowestValue: 0,highestValue: self!.imagesAnimators.count - 1)
-                                
-                                self?.imagesAnimators[a4r.nextInt()](imgs, cell, 2.0, 5.0)
+                                 _cell.snippetImage.layer.removeAllAnimations()
+                                 _cell.animating = [:]
+                                 
+                                 guard var imgs = images else {return}
+                                 
+                                 if let firstImage = image
+                                 {
+                                  imgs.insert(firstImage, at: 0)
+                                 }
+                                 
+                                 let a4rnd = GKRandomDistribution(lowestValue: 0,
+                                                                highestValue: self!.imagesAnimators.count - 1)
+                                 
+                                 self?.imagesAnimators[a4rnd.nextInt()](imgs, _cell, 2.0, 5.0)
                                 
                               
-                               }
+                                }
+                               })
                               })
-                             })
                               
            
-          
+           }
           }
         }
         else
@@ -307,15 +380,17 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       return cell
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath)
+ 
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
     {
-        
+     return (groupType == .byPriority || groupType == .plainList)
     }
-    
+ 
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     {
      
-     let from = sourceIndexPath;  let to = destinationIndexPath
+     let from = sourceIndexPath
+     let to = destinationIndexPath
       
      if (from.section == to.section)
      {
@@ -334,12 +409,9 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         cell?.backgroundColor = SnippetPriority.priorityColorMap[priority]
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
        }
-       else
-       {
-        tableView.moveRow(at: to, to: from)
-       }
-       
      }
+     
+     
      tableView.reloadData()
     
     }

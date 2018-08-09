@@ -5,8 +5,22 @@ import GameplayKit
 
 extension SnippetsViewController: UITableViewDelegate
 {
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+     (cell as! SnippetsViewCell).snippetImage.layer.removeAllAnimations()
+     (cell as! SnippetsViewCell).animating = [:]
+     (cell as! SnippetsViewCell).snippetID = ""
+     
+     if var cell = cell as? ImageContextLoadProtocol
+     {
+      cell.isLoadTaskCancelled = true
+     }
+    }
+ 
+ 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
+     
      let cell = cell as! SnippetsViewCell
      let a4r = GKRandomDistribution(lowestValue: 2, highestValue: 3)
      let div = CGFloat(a4r.nextUniform())
@@ -20,8 +34,6 @@ extension SnippetsViewController: UITableViewDelegate
                     animations:
                     {
                      cell.transform = .identity
-                     
-                     
                     },
                     completion:
                     {_ in
@@ -34,31 +46,24 @@ extension SnippetsViewController: UITableViewDelegate
                                     animations:
                                     {cell.transform = .identity},
                                     completion:
-                      {_ in
+                                    {_ in
                        
-                       cell.transform =  CGAffineTransform (scaleX: 0.95, y: 0.75)
+                                     cell.transform =  CGAffineTransform (scaleX: 0.95, y: 0.75)
                        
-                       UIView.animate(withDuration: 0.25,
-                                      delay: 0,
-                                      usingSpringWithDamping: 1.25,
-                                      initialSpringVelocity: 0,
-                                      options: .curveEaseInOut,
-                                      animations:
-                                      {cell.transform = .identity
-                                       
-                                      },
-                                      completion:
-                                      {_ in
-                                       let color = cell.backgroundColor
-                                       cell.backgroundColor = color?.withAlphaComponent(0.5)
-                                       UIView.animate(withDuration: 0.25)
-                                       {
-                                        cell.backgroundColor = color
-                                       }
-                                      }
-                       )
+                                     UIView.animate(withDuration: 0.25,
+                                                    delay: 0,
+                                                    usingSpringWithDamping: 1.25,
+                                                    initialSpringVelocity: 0,
+                                                    options: .curveEaseInOut,
+                                                    animations: {cell.transform = .identity},
+                                                    completion:
+                                                    {_ in
+                                                      let color = cell.backgroundColor
+                                                      cell.backgroundColor = color?.withAlphaComponent(0.5)
+                                                      UIView.animate(withDuration: 0.25){cell.backgroundColor = color}
+                                                    })
                        
-                      })
+                                     })
                      
                     })
     }
@@ -163,10 +168,15 @@ extension SnippetsViewController: UITableViewDelegate
             for photo in photos
             {
                 let photoID = (photo as! Photo).id!.uuidString
-                for item in PhotoItem.imageCacheDict
+                PhotoItem.imageCacheDict.forEach
+                {
+                  $0.value.removeObject(forKey: photoID as NSString)
+                }
+             
+                /*for item in PhotoItem.imageCacheDict
                 {
                   item.value.removeObject(forKey: photoID as NSString)
-                }
+                }*/
             }
         }
         let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -311,7 +321,6 @@ extension SnippetsViewController: UITableViewDelegate
     //*************************************************************************************************
     {
      return .delete
-     
     }
     //*************************************************************************************************
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)

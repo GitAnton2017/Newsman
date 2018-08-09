@@ -5,9 +5,11 @@ import UIKit
 extension SnippetsViewController: UITableViewDropDelegate
 {
  
- 
  func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator)
  {
+  
+  guard editedSnippet != nil else {return}
+  
   let sourceIndexPath = snippetsDataSource.snippetIndexPath(snippet: editedSnippet)
   
   if let destIndexPath = coordinator.destinationIndexPath

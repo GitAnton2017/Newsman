@@ -141,7 +141,7 @@
 		A71C85C51FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SketchSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A71C85C61FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SketchSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewController.swift; sourceTree = "<group>"; };
-		A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewDataSource.swift; sourceTree = "<group>"; };
+		A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewDataSource.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItems.swift; sourceTree = "<group>"; };
 		A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewCell.swift; sourceTree = "<group>"; };
 		A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSnippetViewController.swift; sourceTree = "<group>"; };
@@ -478,12 +478,12 @@
 				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
 				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
+				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
 				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */,
 				A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */,
 				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
 				A7443F13203881790039BE41 /* Flag Items Menu.swift */,
-				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
 				A7D39CFB2100EF3700F80CAA /* Item Flag View.swift */,
 				A7D39CF82100E32800F80CAA /* Delegates */,
 				A7D39CF32100D27900F80CAA /* CV Data Sources */,
@@ -506,13 +506,13 @@
 		A7CB136B1FD2D2D900AA7294 /* Snippets Menu */ = {
 			isa = PBXGroup;
 			children = (
-				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
+				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
+				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
 				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
+				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
 				A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
-				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
 				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
-				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
 			);
 			name = "Snippets Menu";
 			sourceTree = "<group>";

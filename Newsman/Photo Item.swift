@@ -4,15 +4,62 @@ import CoreData
 import GameplayKit
 import AVKit
 
-
+class SafeMap<H: Hashable, T>
+{
+ let isq = DispatchQueue.global(qos: .userInitiated)// Read/Write map access
+ 
+ private var map: [H : T] = [:] //internal map
+ 
+ subscript (key: H) -> T?
+ {
+  get {return isq.sync {return map[key]}}
+  set {isq.async(flags: .barrier) {self.map[key] = newValue}
+  }
+ }
+ 
+ func filter (predicate: ((key: H, value: T)) -> Bool) -> [H : T]
+ {
+  return isq.sync {return map.filter(predicate)}
+ }
+ 
+ func forEach(body: @escaping ((key: H, value: T)) -> ())
+ {
+  isq.async(flags: .barrier) {self.map.forEach(body)}
+ }
+ 
+ var values: Dictionary<H, T>.Values {return isq.sync {return map.values}}
+}
 
 //MARK: ----------------- Single Photo Item Class ----------------
 
-
 class PhotoItem: NSObject, PhotoItemProtocol
 {
- 
     static let videoFormatFile = ".mov"
+ 
+    typealias ImagesCache = NSCache<NSString, UIImage>
+    static var imageCacheDict = SafeMap<Int, ImagesCache>()
+    //[Int: ImagesCache]()
+ 
+    static let queue =
+    { () -> OperationQueue in
+      let queue = OperationQueue()
+      queue.qualityOfService = .userInteractive
+      return queue
+    }()
+ 
+    static let uQueue =
+    { () -> OperationQueue in
+     let queue = OperationQueue()
+     queue.qualityOfService = .background
+     //queue.maxConcurrentOperationCount = 1 //serial to prevent data race with caches dictionary....
+     return queue
+    }()
+
+    
+ 
+    static let dsQueue = DispatchQueue(label: "Images i/o", qos: .userInitiated)
+    static let dsGroup = DispatchGroup()
+ 
  
     class var docFolder: URL {return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!}
  
@@ -21,26 +68,31 @@ class PhotoItem: NSObject, PhotoItemProtocol
     static let photoItemUTI = "photoitem.newsman"
 
     var photo: Photo
-
-    
+ 
+    lazy var date: Date = {photo.date! as Date}()
+    lazy var photoSnippet: PhotoSnippet = {photo.photoSnippet!}()
+    lazy var id: UUID = {photo.id!}()
+    lazy var type: SnippetType = {SnippetType(rawValue: photoSnippet.type!)!}()
+ 
     var url: URL
     {
-      let snippetURL = PhotoItem.docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
-      let fileName = id.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
+      var snippetURL = PhotoItem.docFolder
      
-      if let photoFolderID = photo.folder?.id?.uuidString
-      {
-        return snippetURL.appendingPathComponent(photoFolderID).appendingPathComponent(fileName)
-      }
-      else
-      {
-        return snippetURL.appendingPathComponent(fileName)
-      }
-        
+       snippetURL = snippetURL.appendingPathComponent(photoSnippet.id!.uuidString)
+       let fileName = id.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
+     
+       if let photoFolderID = photo.folder?.id?.uuidString
+       {
+         snippetURL = snippetURL.appendingPathComponent(photoFolderID).appendingPathComponent(fileName)
+       }
+       else
+       {
+        snippetURL =  snippetURL.appendingPathComponent(fileName)
+       }
+     
+      return snippetURL
     }
-    
-    var id: UUID {return photo.id!}
-    
+ 
     var isSelected: Bool
     {
       get {return photo.isSelected}
@@ -54,8 +106,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
     }
     
     var priority: Int {return PhotoPriorityFlags(rawValue: photo.priorityFlag ?? "")?.rateIndex ?? -1}
-    
-    var date: Date {return photo.date! as Date}
+ 
     
     var position: Int16
     {
@@ -63,12 +114,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
        set {photo.position = newValue}
     }
     
-    static let queue =
-    { () -> OperationQueue in
-     let queue = OperationQueue()
-     //queue.maxConcurrentOperationCount = 1
-     return queue
-    }()
+ 
     
     enum PhotoMOKeys: CodingKey
     {
@@ -81,18 +127,9 @@ class PhotoItem: NSObject, PhotoItemProtocol
         try cont.encode(url, forKey: .photoURL)
         
     }
+
  
-    static let dsQueue = DispatchQueue(label: "Images")
-    static let fsQueue = DispatchQueue(label: "File I/O")
-    static let dsGroup = DispatchGroup()
  
-    typealias ImagesCache = NSCache<NSString, UIImage>
- 
-    static var imageCacheDict = [Int: ImagesCache]()
-    
-    var photoSnippet: PhotoSnippet {return photo.photoSnippet!}
- 
-    var type: SnippetType {return SnippetType(rawValue: photoSnippet.type!)!}
     
     init(photo : Photo)
     {
@@ -102,41 +139,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
     }
 
  
-    @discardableResult class func cacheThumbnailImage(imageID: String, image: UIImage, width: Int) -> UIImage?
-    {
-        if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
-        {
-         if let cache = PhotoItem.imageCacheDict[width]
-         {
-          cache.setObject(resizedImage, forKey: imageID as NSString)
-          //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
-         }
-         else
-         {
-          let newImageWidthCache = ImagesCache()
-          newImageWidthCache.name = "(\(width) x \(width))"
-          /*OperationQueue.main.addOperation
-           {
-           newImageWidthCache.delegate = PhotoItem.appDelegate
-           }*/
-          
-          newImageWidthCache.setObject(resizedImage, forKey: imageID as NSString)
-          PhotoItem.imageCacheDict[width] = newImageWidthCache
-          //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
-         }
-         
-         return resizedImage
-         
-        }
-        else
-        {
-            print("*****************************")
-            print("IMAGE PROCESSING ERROR!!!!!!!")
-            print("*****************************")
-            return nil
-        }
-    }
-    
+ 
     convenience required init(from decoder: Decoder) throws
     {
         let cont = try decoder.container(keyedBy: PhotoMOKeys.self)
@@ -154,8 +157,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
         }
         
         self.init(photo: newPhoto)
-        
-        PhotoItem.saveContext()
+     
     }
  
     convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat, newVideoID: UUID? = nil)
@@ -197,8 +199,6 @@ class PhotoItem: NSObject, PhotoItemProtocol
          }
        }
 
-      PhotoItem.saveContext()
-        
     }
  
     class func renderVideoPreview (for videoURL: URL) -> UIImage?
@@ -220,52 +220,107 @@ class PhotoItem: NSObject, PhotoItemProtocol
      }
     }
  
-    class func getCachedImage(with imageID: UUID, requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
+   @discardableResult class func cacheThumbnailImage(imageID: String , image: UIImage, width: Int) -> UIImage?
+   {
+     if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
+     {
+      if let cache = imageCacheDict[width]
+      {
+       cache.setObject(resizedImage, forKey: imageID as NSString)
+       //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
+      }
+      else
+      {
+       let newImagesCache = ImagesCache()
+       newImagesCache.name = "(\(width) x \(width))"
+       newImagesCache.setObject(resizedImage, forKey: imageID as NSString)
+       imageCacheDict[width] = newImagesCache
+       
+       //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
+      }
+     
+      return resizedImage
+   
+     }
+     else
+     {
+      print("*****************************")
+      print("IMAGE PROCESSING ERROR!!!!!!!")
+      print("*****************************")
+      return nil
+     }
+    }
+ 
+    class func getCachedImage(with imageID: UUID,
+                              requiredImageWidth: CGFloat,
+                              with loadContext: ImageContextLoadProtocol? = nil,
+                              queue: OperationQueue,
+                              completion: @escaping (UIImage?) -> Void)
     {
-        PhotoItem.queue.addOperation
+        queue.addOperation
         {
-           if let imageCache = PhotoItem.imageCacheDict[Int(requiredImageWidth)],
+           if loadContext?.isLoadTaskCancelled ?? false
+           {
+            print ("Aborted CASHED...")
+            OperationQueue.main.addOperation{completion(nil)}
+            return
+           }
+         
+           if let imageCache = imageCacheDict[Int(requiredImageWidth)],
               let cachedImage = imageCache.object(forKey: imageID.uuidString as NSString)
            {
-             completion(cachedImage)
+             OperationQueue.main.addOperation{completion(cachedImage)}
              return
            }
            else
            {
-               let caches = PhotoItem.imageCacheDict.filter
-               {pair in
-                   if pair.key > Int(requiredImageWidth), let _ = pair.value.object(forKey: imageID.uuidString as NSString)
-                   {return true} else {return false}
-               }
+             let caches = imageCacheDict.filter
+             {pair in
+              if pair.key > Int(requiredImageWidth),
+                 let _ = pair.value.object(forKey: imageID.uuidString as NSString) {return true} else {return false}
+             }
+           
             
-               if let cache = caches.min(by: {$0.key < $1.key})?.value,
-                   let biggerImage = cache.object(forKey: imageID.uuidString as NSString),
-                   let cachedImage = self.cacheThumbnailImage(imageID: imageID.uuidString, image: biggerImage, width: Int(requiredImageWidth))
+             if let cache = caches.min(by: {$0.key < $1.key})?.value,
+                let biggerImage = cache.object(forKey: imageID.uuidString as NSString),
+                let cachedImage = cacheThumbnailImage(imageID: imageID.uuidString, image:
+                                                      biggerImage,
+                                                      width: Int(requiredImageWidth))
                 
-               {
-                 print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
-                 completion(cachedImage)
-                 return
-               }
+             {
+               print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
+               OperationQueue.main.addOperation{completion(cachedImage)}
+               return
+             }
            }
          
-          completion(nil)
+          OperationQueue.main.addOperation{completion(nil)}
         }
         
     }
  
     class func getRenderedPreview(with videoID: UUID, from videoURL: URL,
                                   requiredImageWidth: CGFloat,
+                                  with loadContext: ImageContextLoadProtocol? = nil,
+                                  queue: OperationQueue,
                                   completion: @escaping (UIImage?) -> Void)
-    {
-     PhotoItem.queue.addOperation
+    { 
+     queue.addOperation
      {
+        if loadContext?.isLoadTaskCancelled ?? false
+        {
+         print ("Aborted VIDEO...")
+         OperationQueue.main.addOperation{completion(nil)}
+         return
+        }
       
         if let preview = PhotoItem.renderVideoPreview(for: videoURL),
-           let cachedImage = PhotoItem.cacheThumbnailImage(imageID: videoID.uuidString, image: preview, width: Int(requiredImageWidth))
+           let cachedImage = PhotoItem.cacheThumbnailImage(imageID: videoID.uuidString,
+                                                           image: preview,
+                                                           width: Int(requiredImageWidth))
          
         {
-         completion(cachedImage)
+         OperationQueue.main.addOperation{completion(cachedImage)}
         }
         else
         {
@@ -274,31 +329,41 @@ class PhotoItem: NSObject, PhotoItemProtocol
          print("******************************************************************************")
          
      
-         completion(nil)
+         OperationQueue.main.addOperation{completion(nil)}
         }
        
      } //PhotoItem.queue.addOperation...
      
     }
  
-    class func getSavedImage(with imageID: UUID, from url: URL,
+    class func getSavedImage(with imageID: UUID,
+                             from url: URL,
                              requiredImageWidth: CGFloat,
+                             with loadContext: ImageContextLoadProtocol? = nil,
+                             queue: OperationQueue,
                              completion: @escaping (UIImage?) -> Void)
     {
-      PhotoItem.queue.addOperation //PhotoItem.fsQueue.async
+      queue.addOperation
       {
+          if loadContext?.isLoadTaskCancelled ?? false
+          {
+           print ("Aborted SAVED...")
+           OperationQueue.main.addOperation{completion(nil)}
+           return
+          }
+       
           do
           {
-        
+           
                let data = try Data(contentsOf: url)
            
                if let savedImage = UIImage(data: data),
-                  let cachedImage = PhotoItem.cacheThumbnailImage(imageID: imageID.uuidString, image: savedImage, width: Int(requiredImageWidth))
+                  let cachedImage = PhotoItem.cacheThumbnailImage(imageID: imageID.uuidString,
+                                                                  image: savedImage,
+                                                                  width: Int(requiredImageWidth))
                 
                {
-                  //print("IMAGE DATA SIZE:\(data.count) bytes LOADED FROM DISK! SIZE: \(savedImage.size)")
-                  //OperationQueue.main.addOperation {completion(cachedImage)}
-                  completion(cachedImage)
+                OperationQueue.main.addOperation{completion(cachedImage)}
                }
                else
                {
@@ -306,9 +371,9 @@ class PhotoItem: NSObject, PhotoItemProtocol
                   print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL!")
                   print("******************************************************************************")
        
-                  completion(nil)
+                  OperationQueue.main.addOperation{completion(nil)}
                }
-             // }
+      
           }
           catch
           {
@@ -317,7 +382,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
               print("******************************************************************************")
             
            
-              completion(nil)
+              OperationQueue.main.addOperation{completion(nil)}
           } //do-try-catch...
         
       } //PhotoItem.queue.addOperation...
@@ -326,16 +391,27 @@ class PhotoItem: NSObject, PhotoItemProtocol
    
  //----------------------------- GETTING REQUIRED IMAGE FOR PHOTO ITEM ASYNCRONOUSLY -------------------------------
  //-----------------------------------------------------------------------------------------------------------------
- func getImage(requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
+ func getImage(requiredImageWidth: CGFloat,
+               context: ImageContextLoadProtocol? = nil,
+               queue: OperationQueue = PhotoItem.queue,
+               completion: @escaping (UIImage?) -> Void)
  //-----------------------------------------------------------------------------------------------------------------
  {
-  PhotoItem.dsQueue.async //serial queue!... ensure lock data...
+  
+  PhotoItem.dsQueue.async//serial queue!... ensure lock MO faults ...
   {
+   if context?.isLoadTaskCancelled ?? false
+   {
+    print ("Aborted MAIN")
+    OperationQueue.main.addOperation {completion(nil)}
+    return
+   }
+   
    let photoID = self.id
    let photoURL = self.url
    let type = self.type
     
-   PhotoItem.getCachedImage(with: photoID , requiredImageWidth: requiredImageWidth)
+   PhotoItem.getCachedImage(with: photoID , requiredImageWidth: requiredImageWidth, with: context, queue: PhotoItem.queue)
    {image in
     if let image = image
     {
@@ -346,14 +422,17 @@ class PhotoItem: NSObject, PhotoItemProtocol
      switch (type)
      {
       case .photo:
-       PhotoItem.getSavedImage(with: photoID , from: photoURL, requiredImageWidth: requiredImageWidth)
+       PhotoItem.getSavedImage(with: photoID , from: photoURL,
+                               requiredImageWidth: requiredImageWidth,
+                               with: context, queue: PhotoItem.queue)
        {image in
         OperationQueue.main.addOperation {completion(image)}
        }
       
       case .video:
        
-       PhotoItem.getRenderedPreview(with: photoID , from: photoURL, requiredImageWidth: requiredImageWidth)
+       PhotoItem.getRenderedPreview(with: photoID , from: photoURL,
+                                    requiredImageWidth: requiredImageWidth, with: context, queue: PhotoItem.queue)
        {image in
         OperationQueue.main.addOperation {completion(image)}
        }
@@ -373,7 +452,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
 func deleteImages()
 /***************************************************************************************************************/
 {
-  PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: id.uuidString as NSString)}
+  PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: self.id.uuidString as NSString)}
   PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: self)
   PhotoItem.deletePhotoItemFromDisk(at: url)
   PhotoItem.MOC.persistAndWait {[weak self] in PhotoItem.MOC.delete(self!.photo)}
@@ -714,188 +793,92 @@ func deleteImages()
  }
           
 }
- /***************************************************************************************************************/
+ 
+ 
+class func deselectSelectedItems (at sourcePhotoSnippet: PhotoSnippet)
+{
+  if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
+  {
+   sourceSelectedPhotos.forEach {$0.isSelected = false}
+  }
+  
+  if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected})
+  {
+   sourceSelectedFolders.forEach {$0.isSelected = false}
+  }
+}
 
-    class func deselectSelectedItems (at sourcePhotoSnippet: PhotoSnippet)
-    {
-     if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
-     {
-      sourceSelectedPhotos.forEach {$0.isSelected = false}
-     }
-        
-     if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected})
-     {
-      sourceSelectedFolders.forEach {$0.isSelected = false}
-     }
-    }
-    
-    class func getAllImages(for photoSnippet: PhotoSnippet, requiredImageWidth: CGFloat,
-                            completion: @escaping ([UIImage]?) -> Void)
-    {
-      let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-      if let photoItems = (photoSnippet.photos?.sortedArray(using: [sort]) as? [Photo])?.map({PhotoItem(photo: $0)}),
-           photoItems.count > 1
-            
-      {
-        
-         var imageSet = [UIImage]()
-        
-         photoItems.forEach
-         {photoItem in
-          PhotoItem.dsQueue.async(group: PhotoItem.dsGroup)
-          {
-           PhotoItem.dsGroup.enter()
-           photoItem.getImage(requiredImageWidth: requiredImageWidth)
-           {(image) in
-             if let img = image {imageSet.append(img)}
-             PhotoItem.dsGroup.leave()
-           }
-          }
-         }
-        
-         PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
-         {
-          print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "no name")\",  COUNT - \(imageSet.count)")
-          DispatchQueue.main.async{completion(imageSet)}
-            
-         }
-      }
-      else
-      {
-        DispatchQueue.main.async{completion(nil)}
-      }
-    }
-    
-    class func getRandomImages(for photoSnippet: PhotoSnippet, number: Int, requiredImageWidth: CGFloat,
-                               completion: @escaping ([UIImage]?) -> Void)
-    {
-        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-        guard let photos = photoSnippet.photos?.sortedArray(using: [sort]) as? [Photo], photos.count > 1 else
+
+
+class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
+                             requiredImageWidth: CGFloat,
+                             loadContext: ImageContextLoadProtocol? = nil,
+                             completion: @escaping ([UIImage]?) -> Void)
+{
+     appDelegate.persistentContainer.performBackgroundTask
+     {context in
+        if loadContext?.isLoadTaskCancelled ?? false
         {
+         print ("Aborted getRandomImages3")
          DispatchQueue.main.async{completion(nil)}
          return
         }
-        
-        var photoItems: [PhotoItem]
-        if (number >= photos.count)
-        {
-         photoItems = photos.map({PhotoItem(photo: $0)})
-        }
-        else
-        {
-         var indexSet = Set<Int>()
-         let arc4rnd = GKRandomDistribution(lowestValue: 0, highestValue: photos.count - 1)
-        
-         while (indexSet.count < number)
-         {
-            indexSet.insert(arc4rnd.nextInt())
-         }
-         
-         photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
-        }
-        
-        
-        var imageSet = [UIImage]()
-            
-            photoItems.forEach
-                {photoItem in
-                   // PhotoItem.dsQueue.async(group: PhotoItem.dsGroup)
-                  // PhotoItem.MOC.performAndWait
-                  // {
-                        PhotoItem.dsGroup.enter()
-                        photoItem.getImage(requiredImageWidth: requiredImageWidth)
-                        {(image) in
-                            if let img = image {imageSet.append(img)}
-                            PhotoItem.dsGroup.leave()
-                        }
-                   //}
-            }
-            
-            PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
-            {
-                print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "no name")\",  COUNT - \(imageSet.count)")
-                DispatchQueue.main.async{completion(imageSet)}
-                
-            }
-        
-        
-    }
-    
-    
-    static let MOC2 =
-    { () -> NSManagedObjectContext in
-        let privateMOC = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        privateMOC.parent = PhotoItem.MOC
-        //privateMOC.persistentStoreCoordinator = PhotoItem.MOC.persistentStoreCoordinator
-        return privateMOC
-    }()
-    
-    class func getRandomImages2(for photoSnippet: PhotoSnippet, number: Int, requiredImageWidth: CGFloat,
-                               completion: @escaping ([UIImage]?) -> Void)
-    {
-      appDelegate.persistentContainer.performBackgroundTask
-      {context in
-        
         let request: NSFetchRequest<Photo> = Photo.fetchRequest()
         let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
         let pred = NSPredicate(format: "%K = %@", #keyPath(Photo.photoSnippet), photoSnippet)
         request.predicate = pred
         request.sortDescriptors = [sort]
-        
+        request.returnsObjectsAsFaults = false
+      
         do
         {
-          let photos = try context.fetch(request)
-        
-          guard photos.count > 1 else
-          {
-            DispatchQueue.main.async{completion(nil)}
-            return
-          }
-            
-          var photoItems: [(photoID: UUID, photoURL: URL)]
-          if (number >= photos.count)
-          {
-            photoItems = photos.map{($0.id!, PhotoItem(photo: $0).url)}
-          }
-          else
-          {
-             var indexSet = Set<Int>()
-             let arc4rnd = GKRandomDistribution(lowestValue: 0, highestValue: photos.count - 1)
-             while (indexSet.count < number) {indexSet.insert(arc4rnd.nextInt())}
-             photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{($0.element.id!, PhotoItem(photo: $0.element).url)}
-          }
+            let photos = try context.fetch(request)
          
-         
-          var imageSet = [UIImage]()
-    
-          photoItems.forEach
-          {photoItem in
-            PhotoItem.dsGroup.enter()
-            PhotoItem.getCachedImage(with: photoItem.photoID, requiredImageWidth: requiredImageWidth)
-            {(image) in
-              if let img = image
-              {
-                imageSet.append(img)
-                PhotoItem.dsGroup.leave()
-              }
-              else
-              {
-               PhotoItem.getSavedImage(with: photoItem.photoID, from: photoItem.photoURL, requiredImageWidth: requiredImageWidth)
-               {(image) in
-                if let img = image {imageSet.append(img)}
-                PhotoItem.dsGroup.leave()
-               }
-              }
+            guard photos.count > 1 else
+            {
+                DispatchQueue.main.async{completion(nil)}
+                return
             }
-          }
          
-          PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
-          {
-             print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "")\",  COUNT - \(imageSet.count)" )
-             DispatchQueue.main.async{completion(imageSet)}
-            
-          }
-          
+            var photoItems: [PhotoItem]
+            if (number >= photos.count)
+            {
+                photoItems = photos.map{PhotoItem(photo: $0)}
+            }
+            else
+            {
+                var indexSet = Set<Int>()
+                let arc4rnd = GKRandomDistribution(lowestValue: 0, highestValue: photos.count - 1)
+                while (indexSet.count < number) {indexSet.insert(arc4rnd.nextInt())}
+                photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
+            }
+         
+         
+            var imageSet = [UIImage]()
+         
+            photoItems.forEach
+            {photoItem in
+             PhotoItem.dsGroup.enter()
+             photoItem.getImage(requiredImageWidth: requiredImageWidth, context: loadContext, queue: uQueue)
+             {(image) in
+                 _ = context
+                 if let img = image {imageSet.append(img)}
+                 PhotoItem.dsGroup.leave()
+             }
+            }
+         
+            PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
+            {
+                print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "")\",  COUNT - \(imageSet.count)" )
+                if imageSet.count < photoItems.count
+                {
+                 completion(nil)
+                }
+             
+                completion(imageSet)
+             
+            }
+         
         }
         catch
         {
@@ -904,88 +887,10 @@ func deleteImages()
             DispatchQueue.main.async{completion(nil)}
          
         }
-        
-        
-    }
-   }
- 
-    static var dsGroupMap = [PhotoSnippet : DispatchGroup]()
- 
-    class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int, requiredImageWidth: CGFloat,
-                                completion: @escaping ([UIImage]?) -> Void)
-    {
-        appDelegate.persistentContainer.performBackgroundTask
-            {context in
-                
-                let request: NSFetchRequest<Photo> = Photo.fetchRequest()
-                let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-                let pred = NSPredicate(format: "%K = %@", #keyPath(Photo.photoSnippet), photoSnippet)
-                request.predicate = pred
-                request.sortDescriptors = [sort]
-                request.returnsObjectsAsFaults = false
-                
-                do
-                {
-                    let photos = try context.fetch(request)
-                    
-                    guard photos.count > 1 else
-                    {
-                        DispatchQueue.main.async{completion(nil)}
-                        return
-                    }
-                    
-                    var photoItems: [PhotoItem]
-                    if (number >= photos.count)
-                    {
-                        photoItems = photos.map{PhotoItem(photo: $0)}
-                    }
-                    else
-                    {
-                        var indexSet = Set<Int>()
-                        let arc4rnd = GKRandomDistribution(lowestValue: 0, highestValue: photos.count - 1)
-                        while (indexSet.count < number) {indexSet.insert(arc4rnd.nextInt())}
-                        photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
-                    }
-                    
-                 
-                    var imageSet = [UIImage]()
-                 
-                    //let group = DispatchGroup()
-                    //PhotoItem.dsGroupMap[photoSnippet] = group
-                    photoItems.forEach
-                    {photoItem in
-                            PhotoItem.dsGroup.enter()
-                            photoItem.getImage(requiredImageWidth: requiredImageWidth)
-                            {(image) in
-                                _ = context
-                                if let img = image
-                                {
-                                    imageSet.append(img)
-                                    
-                                }
-                                PhotoItem.dsGroup.leave()
-                            }
-                    }
-                    
-                    PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
-                    {
-                        print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "")\",  COUNT - \(imageSet.count)" )
-                        DispatchQueue.main.async{completion(imageSet)}
-                        
-                    }
-                    
-                }
-                catch
-                {
-                    let e = error as NSError
-                    print ("Unresolved error \(e) \(e.userInfo)")
-                    DispatchQueue.main.async{completion(nil)}
-                    
-                }
-                
-                
-        }
-    }
+      
+      
+     }
+ }
 }
 
 //MARK: -
