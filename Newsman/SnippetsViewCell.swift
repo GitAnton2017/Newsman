@@ -7,18 +7,29 @@ import UIKit
 protocol ImageContextLoadProtocol
 {
  var isLoadTaskCancelled: Bool {get set}
+ func stopAllContextTasks()
 }
 
 class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadProtocol
 {
+ 
     static let isq = DispatchQueue.global(qos: .userInitiated)
     private var _stop_flag = false
     var snippetID: String = ""
  
     var isLoadTaskCancelled: Bool
     {
-     get {return DispatchQueue.main.sync {return _stop_flag}}
+     get
+     {
+      guard Thread.current != Thread.main else {return _stop_flag}
+      return DispatchQueue.main.sync {return _stop_flag}
+     }
      set {DispatchQueue.main.async {[weak self] in self?._stop_flag = newValue}}
+    }
+ 
+    func stopAllContextTasks()
+    {
+     isLoadTaskCancelled = true
     }
  
     @IBOutlet var snippetTextTag: UILabel!

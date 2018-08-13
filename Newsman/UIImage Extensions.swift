@@ -28,24 +28,35 @@ extension UIImage
          return UIGraphicsGetImageFromCurrentImageContext()*/
     }
  
-    func resized(withPercentage percentage: CGFloat, completion: @escaping (UIImage?) -> Void)
+    func resized(withPercentage percentage: CGFloat,
+                 with loadContext: ImageContextLoadProtocol? = nil,
+                 queue: OperationQueue,
+                 completion: @escaping (UIImage?) -> Void)
     {
-     PhotoItem.queue.addOperation
-     {[weak self] in
-      guard let size = self?.size else {return}
-      let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
+     if loadContext?.isLoadTaskCancelled ?? false
+     {
+      print ("Aborted UIImage Resized")
+      completion(nil)
+      return
+     }
+     
+     queue.addOperation
+     {
+      if loadContext?.isLoadTaskCancelled ?? false
+      {
+       print ("Aborted UIImage Resized from Queue")
+       completion(nil)
+       return
+      }
+      
+      let canvasSize = CGSize(width: self.size.width * percentage, height: self.size.height * percentage)
       let format = UIGraphicsImageRendererFormat.default()
       //format.scale = 1
       format.prefersExtendedRange = false
       let render = UIGraphicsImageRenderer(size: canvasSize, format: format)
-      let image = render.image
-      {_ in
-       self?.draw(in: CGRect(origin: .zero, size: canvasSize))
-      }
-      PhotoItem.queue.addOperation
-      {
-        completion(image)
-      }
+      let image = render.image {_ in self.draw(in: CGRect(origin: .zero, size: canvasSize))}
+      completion(image)
+     
      }
      
     }

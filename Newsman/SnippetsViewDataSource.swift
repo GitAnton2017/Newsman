@@ -9,6 +9,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  
     var images: [UIImage] = []
  
+    let imagesForAnimation = 30
     lazy var imagesAnimators: [([UIImage], SnippetsViewCell, TimeInterval, TimeInterval) -> Void] =
     [
      /*{imgs, cell, duration, delay in
@@ -275,6 +276,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath)
      
       let item = snippetsData[indexPath.section][indexPath.row]
+    
+     
       (cell as! SnippetsViewCell).clear()
       (cell as! SnippetsViewCell).snippetID = (item.id?.uuidString)!
       (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
@@ -290,7 +293,9 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
        (cell as! SnippetsViewCell).backgroundColor = SnippetPriority.normal.color
        item.priority = SnippetPriority.normal.rawValue
       }
-      
+     
+     
+     
       switch (itemsType)
       {
        case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
@@ -310,8 +315,10 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
           {[weak self] (image) in
            
            guard image != nil else {return}
-           guard let indexPath = self?.snippetIndexPath(snippet: photoSnippet),
-                 let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {return}
+           
+           guard let ip = {self?.groupType == .byPriority ? self?.snippetIndexPath(snippet: photoSnippet) : indexPath}(),
+                 let cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
+           
        
            
            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
@@ -331,13 +338,14 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
                                completion:
                                {_ in
                                 
-                                PhotoItem.getRandomImages3(for: photoSnippet, number: 20,
+                                
+                                PhotoItem.getRandomImages3(for: photoSnippet, number: self!.imagesForAnimation,
                                                            requiredImageWidth: iconWidth,
                                                            loadContext: cell)
                                 {[weak self] images in
                                  
-                                 guard let indexPath = self?.snippetIndexPath(snippet: photoSnippet),
-                                       let _cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {return}
+                                 guard let ip  = {self?.groupType == .byPriority ? self?.snippetIndexPath(snippet:          photoSnippet) : indexPath}(),
+                                       let _cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
                                 
                                  _cell.snippetImage.layer.removeAllAnimations()
                                  _cell.animating = [:]

@@ -30,21 +30,16 @@ class SnippetsViewController: UIViewController
     
     var editedSnippet: BaseSnippet!
     {
-        didSet
-        {
-          sourceSnippet = oldValue
-        }
+       didSet {sourceSnippet = oldValue}
     }
+ 
     var sourceSnippet: BaseSnippet!
     
     var snippetLocation: CLLocation?
     
     var menuTitle: String!
     {
-     didSet
-     {
-      navigationItem.title = menuTitle
-     }
+     didSet {navigationItem.title = menuTitle}
     }
     
     private lazy var appSettings: [Settings] =
@@ -168,6 +163,14 @@ class SnippetsViewController: UIViewController
      print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
     }
  
+    override func viewWillDisappear(_ animated: Bool)
+    {
+     super.viewWillDisappear(animated)
+     snippetsTableView.visibleCells.map{$0 as! SnippetsViewCell}.forEach
+     {
+       $0.isLoadTaskCancelled = true
+     }
+    }
  
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
     {

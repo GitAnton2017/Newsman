@@ -38,25 +38,36 @@ class PhotoItem: NSObject, PhotoItemProtocol
  
     typealias ImagesCache = NSCache<NSString, UIImage>
     static var imageCacheDict = SafeMap<Int, ImagesCache>()
-    //[Int: ImagesCache]()
- 
+
     static let queue =
     { () -> OperationQueue in
       let queue = OperationQueue()
-      queue.qualityOfService = .userInteractive
+      queue.qualityOfService = .userInitiated
       return queue
     }()
  
     static let uQueue =
     { () -> OperationQueue in
      let queue = OperationQueue()
-     queue.qualityOfService = .background
-     //queue.maxConcurrentOperationCount = 1 //serial to prevent data race with caches dictionary....
+     queue.qualityOfService = .utility
+     //queue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
+     return queue
+    }()
+ 
+    static let sQueue =
+    { () -> OperationQueue in
+     let queue = OperationQueue()
+      queue.qualityOfService = .userInitiated
+      //queue.maxConcurrentOperationCount = 10
+      //queue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
      return queue
     }()
 
-    
+    static var taskCount: Int = 0
+    static let MaxTask = 40
+    //static let cvTimeOut = 1.0
  
+    static let cv = NSCondition()
     static let dsQueue = DispatchQueue(label: "Images i/o", qos: .userInitiated)
     static let dsGroup = DispatchGroup()
  
@@ -193,9 +204,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
          }
          catch
          {
-          print("***************************************************")
           print ("JPEG WRITE ERROR: \(error.localizedDescription)")
-          print("**************************************************")
          }
        }
 
@@ -244,12 +253,60 @@ class PhotoItem: NSObject, PhotoItemProtocol
      }
      else
      {
-      print("*****************************")
       print("IMAGE PROCESSING ERROR!!!!!!!")
-      print("*****************************")
       return nil
      }
     }
+ 
+ 
+ class func cacheThumbnailImage(imageID: String , image: UIImage,  width: Int,
+                                with loadContext: ImageContextLoadProtocol? = nil,
+                                queue: OperationQueue,
+                                completion: @escaping (UIImage?) -> Void)
+ {
+  if loadContext?.isLoadTaskCancelled ?? false
+  {
+    print ("Aborted THUMBNAIL")
+    completion(nil)
+    return
+  }
+  
+  queue.addOperation
+  {
+   if loadContext?.isLoadTaskCancelled ?? false
+   {
+    print ("Aborted THUMBNAIL from Queue")
+    completion(nil)
+    return
+   }
+   
+   if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
+   {
+    if let cache = imageCacheDict[width]
+    {
+     cache.setObject(resizedImage, forKey: imageID as NSString)
+    //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
+    }
+    else
+    {
+     let newImagesCache = ImagesCache()
+     newImagesCache.name = "(\(width) x \(width))"
+     newImagesCache.setObject(resizedImage, forKey: imageID as NSString)
+     imageCacheDict[width] = newImagesCache
+    
+    //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
+    }
+   
+    completion(resizedImage)
+   }
+   else
+   {
+    completion(nil)
+   }
+   
+  }
+  
+ }
  
     class func getCachedImage(with imageID: UUID,
                               requiredImageWidth: CGFloat,
@@ -257,19 +314,27 @@ class PhotoItem: NSObject, PhotoItemProtocol
                               queue: OperationQueue,
                               completion: @escaping (UIImage?) -> Void)
     {
+     
+        if loadContext?.isLoadTaskCancelled ?? false
+        {
+         print ("Aborted CASHED")
+         completion(nil)
+         return
+        }
+     
         queue.addOperation
         {
            if loadContext?.isLoadTaskCancelled ?? false
            {
-            print ("Aborted CASHED...")
-            OperationQueue.main.addOperation{completion(nil)}
+            print ("Aborted CASHED from Queue")
+            completion(nil)
             return
            }
          
            if let imageCache = imageCacheDict[Int(requiredImageWidth)],
               let cachedImage = imageCache.object(forKey: imageID.uuidString as NSString)
            {
-             OperationQueue.main.addOperation{completion(cachedImage)}
+             completion(cachedImage)
              return
            }
            else
@@ -282,19 +347,28 @@ class PhotoItem: NSObject, PhotoItemProtocol
            
             
              if let cache = caches.min(by: {$0.key < $1.key})?.value,
-                let biggerImage = cache.object(forKey: imageID.uuidString as NSString),
+                let biggerImage = cache.object(forKey: imageID.uuidString as NSString)/*,
                 let cachedImage = cacheThumbnailImage(imageID: imageID.uuidString, image:
                                                       biggerImage,
-                                                      width: Int(requiredImageWidth))
+                                                      width: Int(requiredImageWidth))*/
                 
              {
-               print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
-               OperationQueue.main.addOperation{completion(cachedImage)}
-               return
+               cacheThumbnailImage(imageID: imageID.uuidString,
+                                   image: biggerImage,
+                                   width: Int(requiredImageWidth),
+                                   with: loadContext,
+                                   queue: queue)
+               {cachedImage in
+                print("IMAGE RESIZED FROM CACHED IMAGE IN EXISTING CACHE: \(cache.name), SIZE: \(biggerImage.size)")
+                completion(cachedImage)
+                //return
+               }
+              
+               return //!!!!!!!!!!!
              }
            }
          
-          OperationQueue.main.addOperation{completion(nil)}
+          completion(nil)
         }
         
     }
@@ -304,32 +378,40 @@ class PhotoItem: NSObject, PhotoItemProtocol
                                   with loadContext: ImageContextLoadProtocol? = nil,
                                   queue: OperationQueue,
                                   completion: @escaping (UIImage?) -> Void)
-    { 
+    {
+     
+     if loadContext?.isLoadTaskCancelled ?? false
+     {
+      print ("Aborted VIDEO")
+      completion(nil)
+      return
+     }
+     
      queue.addOperation
      {
         if loadContext?.isLoadTaskCancelled ?? false
         {
-         print ("Aborted VIDEO...")
-         OperationQueue.main.addOperation{completion(nil)}
+         print ("Aborted VIDEO from Queue")
+         completion(nil)
          return
         }
       
-        if let preview = PhotoItem.renderVideoPreview(for: videoURL),
+        if let preview = PhotoItem.renderVideoPreview(for: videoURL)/*,
            let cachedImage = PhotoItem.cacheThumbnailImage(imageID: videoID.uuidString,
                                                            image: preview,
-                                                           width: Int(requiredImageWidth))
+                                                           width: Int(requiredImageWidth))*/
          
         {
-         OperationQueue.main.addOperation{completion(cachedImage)}
+         cacheThumbnailImage(imageID: videoID.uuidString,
+                             image: preview,
+                             width: Int(requiredImageWidth),
+                             with: loadContext,
+                             queue: queue) {completion($0)}
         }
         else
         {
-         print("******************************************************************************")
          print("ERROR OCCURED WHEN PROCESSING VIDEO IMAGE PREVIEW!")
-         print("******************************************************************************")
-         
-     
-         OperationQueue.main.addOperation{completion(nil)}
+         completion(nil)
         }
        
      } //PhotoItem.queue.addOperation...
@@ -343,46 +425,68 @@ class PhotoItem: NSObject, PhotoItemProtocol
                              queue: OperationQueue,
                              completion: @escaping (UIImage?) -> Void)
     {
+     if loadContext?.isLoadTaskCancelled ?? false
+     {
+      print ("Aborted SAVED")
+      completion(nil)
+      return
+     }
+     
       queue.addOperation
       {
           if loadContext?.isLoadTaskCancelled ?? false
           {
-           print ("Aborted SAVED...")
-           OperationQueue.main.addOperation{completion(nil)}
+    
+           print ("Aborted SAVED from Queue")
+           completion(nil)
            return
           }
+       
+          /* cv.lock()
+           while (taskCount >= MaxTask)
+           {
+             print ("TASK timed out Task Count \(taskCount)")
+             cv.wait(/*until: Date() + cvTimeOut*/)
+            
+           }
+       
+           taskCount += 1
+           cv.unlock()
+          */
        
           do
           {
            
                let data = try Data(contentsOf: url)
            
-               if let savedImage = UIImage(data: data),
+               if let savedImage = UIImage(data: data)/*,
                   let cachedImage = PhotoItem.cacheThumbnailImage(imageID: imageID.uuidString,
                                                                   image: savedImage,
-                                                                  width: Int(requiredImageWidth))
+                                                                  width: Int(requiredImageWidth))*/
                 
                {
-                OperationQueue.main.addOperation{completion(cachedImage)}
+                cacheThumbnailImage(imageID: imageID.uuidString, image: savedImage,
+                                    width: Int(requiredImageWidth),
+                                    with: loadContext, queue: queue)
+                {
+                 
+                 
+                 completion($0)
+                 
+                }
+               
                }
                else
                {
-                  print("******************************************************************************")
                   print("ERROR OCCURED WHEN PROCESSING ORIGINAL IMAGE FROM DATA URL!")
-                  print("******************************************************************************")
-       
-                  OperationQueue.main.addOperation{completion(nil)}
+                  completion(nil)
                }
       
           }
           catch
           {
-              print("******************************************************************************")
               print("ERROR OCCURED WHEN READING IMAGE DATA FROM URL!\n\(error.localizedDescription)")
-              print("******************************************************************************")
-            
-           
-              OperationQueue.main.addOperation{completion(nil)}
+              completion(nil)
           } //do-try-catch...
         
       } //PhotoItem.queue.addOperation...
@@ -391,18 +495,16 @@ class PhotoItem: NSObject, PhotoItemProtocol
    
  //----------------------------- GETTING REQUIRED IMAGE FOR PHOTO ITEM ASYNCRONOUSLY -------------------------------
  //-----------------------------------------------------------------------------------------------------------------
- func getImage(requiredImageWidth: CGFloat,
-               context: ImageContextLoadProtocol? = nil,
+ func getImage(requiredImageWidth: CGFloat, context: ImageContextLoadProtocol? = nil,
                queue: OperationQueue = PhotoItem.queue,
                completion: @escaping (UIImage?) -> Void)
  //-----------------------------------------------------------------------------------------------------------------
  {
-  
   PhotoItem.dsQueue.async//serial queue!... ensure lock MO faults ...
   {
    if context?.isLoadTaskCancelled ?? false
    {
-    print ("Aborted MAIN")
+    print ("Aborted MAIN from serial Queue")
     OperationQueue.main.addOperation {completion(nil)}
     return
    }
@@ -411,7 +513,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
    let photoURL = self.url
    let type = self.type
     
-   PhotoItem.getCachedImage(with: photoID , requiredImageWidth: requiredImageWidth, with: context, queue: PhotoItem.queue)
+   PhotoItem.getCachedImage(with: photoID , requiredImageWidth: requiredImageWidth, with: context, queue: queue)
    {image in
     if let image = image
     {
@@ -422,17 +524,26 @@ class PhotoItem: NSObject, PhotoItemProtocol
      switch (type)
      {
       case .photo:
+       let savedQueue = queue.qualityOfService == .userInitiated ? queue : PhotoItem.sQueue
        PhotoItem.getSavedImage(with: photoID , from: photoURL,
                                requiredImageWidth: requiredImageWidth,
-                               with: context, queue: PhotoItem.queue)
+                               with: context, queue: savedQueue)
        {image in
+        /*PhotoItem.cv.lock()
+        PhotoItem.taskCount -= 1
+        
+        print ("TASK finished Task Count \(PhotoItem.taskCount)")
+        if PhotoItem.taskCount < PhotoItem.MaxTask {PhotoItem.cv.broadcast()}
+        PhotoItem.cv.unlock()*/
+        
         OperationQueue.main.addOperation {completion(image)}
+
        }
       
       case .video:
        
        PhotoItem.getRenderedPreview(with: photoID , from: photoURL,
-                                    requiredImageWidth: requiredImageWidth, with: context, queue: PhotoItem.queue)
+                                    requiredImageWidth: requiredImageWidth, with: context, queue: queue)
        {image in
         OperationQueue.main.addOperation {completion(image)}
        }
@@ -815,14 +926,22 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                              loadContext: ImageContextLoadProtocol? = nil,
                              completion: @escaping ([UIImage]?) -> Void)
 {
+ if loadContext?.isLoadTaskCancelled ?? false
+ {
+  print ("Aborted getRandomImages3")
+  DispatchQueue.main.async{completion(nil)}
+  return
+ }
      appDelegate.persistentContainer.performBackgroundTask
      {context in
+      
         if loadContext?.isLoadTaskCancelled ?? false
         {
-         print ("Aborted getRandomImages3")
+         print ("Aborted getRandomImages3 from BackgroundTask")
          DispatchQueue.main.async{completion(nil)}
          return
         }
+      
         let request: NSFetchRequest<Photo> = Photo.fetchRequest()
         let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
         let pred = NSPredicate(format: "%K = %@", #keyPath(Photo.photoSnippet), photoSnippet)
@@ -856,18 +975,56 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
          
             var imageSet = [UIImage]()
          
-            photoItems.forEach
-            {photoItem in
-             PhotoItem.dsGroup.enter()
+            //photoItems.forEach
+            for photoItem in photoItems
+            {/*photoItem in*/
+             
+              cv.lock()
+              let deadline = Date() + 2.5
+              while (taskCount >= MaxTask)
+              {
+               cv.unlock()
+               if loadContext?.isLoadTaskCancelled ?? false
+               {
+                print ("Aborted from  WAIT...")
+                DispatchQueue.main.async{completion(nil)}
+                return
+               }
+               cv.lock()
+               
+               //print ("TASK timed out Task Count \(taskCount)")
+               let flag = cv.wait(until: deadline)
+               if !flag {print ("TASK timed out Expired!!!")}
+              }
+              
+              taskCount += 1
+             
+              cv.unlock()
+             
+             if loadContext?.isLoadTaskCancelled ?? false
+             {
+              print ("Aborted after WAIT...")
+              DispatchQueue.main.async{completion(nil)}
+              return
+             }
+            
+             dsGroup.enter()
              photoItem.getImage(requiredImageWidth: requiredImageWidth, context: loadContext, queue: uQueue)
              {(image) in
+              
+                 cv.lock()
+                 taskCount -= 1
+                 //print ("TASK finished Task Count \(taskCount)")
+                 if taskCount < MaxTask {cv.broadcast()}
+                 cv.unlock()
+              
                  _ = context
                  if let img = image {imageSet.append(img)}
-                 PhotoItem.dsGroup.leave()
+                 dsGroup.leave()
              }
             }
          
-            PhotoItem.dsGroup.notify(queue: DispatchQueue.main)
+            dsGroup.notify(queue: DispatchQueue.main)
             {
                 print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "")\",  COUNT - \(imageSet.count)" )
                 if imageSet.count < photoItems.count
