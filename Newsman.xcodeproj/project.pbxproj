@@ -70,6 +70,7 @@
 		A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BD1FBC649000359C0C /* MainViewDataSource.swift */; };
 		A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */; };
 		A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */; };
+		A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A2824212AD0610094AA5F /* Photo Item Operations.swift */; };
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DS.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
@@ -192,6 +193,7 @@
 		A75489BD1FBC649000359C0C /* MainViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDataSource.swift; sourceTree = "<group>"; };
 		A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateVCRestoration.swift; sourceTree = "<group>"; };
 		A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC Restoration.swift"; sourceTree = "<group>"; };
+		A76A2824212AD0610094AA5F /* Photo Item Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Operations.swift"; sourceTree = "<group>"; };
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
 				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
+				A76A2824212AD0610094AA5F /* Photo Item Operations.swift */,
 				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
 				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */,
@@ -804,6 +807,7 @@
 				A7D93C6A206D3743007891ED /* Helpers.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,
 				A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */,
+				A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */,
 				A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */,
 				A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */,
 				A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */,

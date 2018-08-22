@@ -127,17 +127,16 @@ class ZoomView: UIView
     
     func setConstraints (to mainView: UIView)
     {
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate(
-            [
-                
-                widthAnchor.constraint   (equalToConstant: zoomSize),
-                centerXAnchor.constraint (equalTo: mainView.centerXAnchor),
-                centerYAnchor.constraint (equalTo: mainView.centerYAnchor),
-                widthAnchor.constraint   (equalTo: heightAnchor)
-            ]
-        )
+     translatesAutoresizingMaskIntoConstraints = false
+     
+     NSLayoutConstraint.activate(
+      [
+       widthAnchor.constraint   (equalToConstant: zoomSize),
+       centerXAnchor.constraint (equalTo: mainView.centerXAnchor),
+       centerYAnchor.constraint (equalTo: mainView.centerYAnchor),
+       widthAnchor.constraint   (equalTo: heightAnchor)
+      ]
+     )
     }
  
  
@@ -145,12 +144,12 @@ class ZoomView: UIView
     {
      translatesAutoresizingMaskIntoConstraints = false
   
-     NSLayoutConstraint.activate(
+      NSLayoutConstraint.activate(
       [
-        topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: 5),
-        leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
-        trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
-        bottomAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.bottomAnchor, constant: -5)
+       topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: 5),
+       leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 5),
+       trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -5),
+       bottomAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.bottomAnchor, constant: -5)
       ]
      )
     }
@@ -162,11 +161,10 @@ class ZoomView: UIView
         
       NSLayoutConstraint.activate(
       [
-                
-         subView.bottomAnchor.constraint  (equalTo: bottomAnchor),
-         subView.topAnchor.constraint     (equalTo: topAnchor),
-         subView.leadingAnchor.constraint (equalTo: leadingAnchor),
-         subView.trailingAnchor.constraint(equalTo: trailingAnchor)
+       subView.bottomAnchor.constraint  (equalTo: bottomAnchor),
+       subView.topAnchor.constraint     (equalTo: topAnchor),
+       subView.leadingAnchor.constraint (equalTo: leadingAnchor),
+       subView.trailingAnchor.constraint(equalTo: trailingAnchor)
       ]
      )
         

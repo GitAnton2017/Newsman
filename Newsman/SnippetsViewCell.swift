@@ -79,12 +79,17 @@ class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadPr
      {
       DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + transDuration * 0.75)
       {[weak self] in
-       guard self?.snippetID == id else {return}
-       guard let status = self?.animating["trans2" + (self?.snippetID ?? "")], status else {return}
-       self?.animate?(0.25 * (self?.transDuration ?? 0.0))
+       guard let cell = self, cell.snippetID == id else {return}
+       guard let status = cell.animating["trans2" + cell.snippetID], status else {return}
+       cell.animate?(0.25 * cell.transDuration)
      
       }
      }
+    }
+ 
+    deinit
+    {
+     print ("Snippet cell with ID\(snippetID) DESTROYED!")
     }
 }
 

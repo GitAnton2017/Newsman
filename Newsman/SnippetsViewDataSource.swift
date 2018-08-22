@@ -54,8 +54,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
                           if (i < imgs.count - 1) {i += 1} else {i = 0}
                           let id = cell.snippetID
                           DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.75 * duration)
-                          {
-                           guard cell.snippetID == id else {return}
+                          {[weak cell] in
+                           guard let cell = cell, cell.snippetID == id else {return}
                            animate()
                           }
                           
@@ -64,8 +64,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       
       let id = cell.snippetID
       DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay)
-      {
-       guard cell.snippetID == id else {return}
+      {[weak cell] in
+       guard let cell = cell, cell.snippetID == id else {return}
        animate()
       }
       
@@ -101,8 +101,8 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       
       let id = cell.snippetID
       DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay)
-      {
-       guard cell.snippetID == id else {return}
+      {[weak cell] in
+       guard let cell = cell, cell.snippetID == id else {return}
        animate(duration * 0.25)
       }
       
@@ -314,12 +314,11 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
           PhotoItem(photo: latestPhoto).getImage(requiredImageWidth: iconWidth, context: photoSnippetCell)
           {[weak self] (image) in
            
-           guard image != nil else {return}
+           guard let ds = self, let firstImage = image else {return}
+      
+           let ip = ds.groupType == .byPriority ? ds.snippetIndexPath(snippet: photoSnippet) : indexPath
            
-           guard let ip = {self?.groupType == .byPriority ? self?.snippetIndexPath(snippet: photoSnippet) : indexPath}(),
-                 let cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
-           
-       
+           guard let cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
            
            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
            {
@@ -336,31 +335,30 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
                                options: .curveEaseInOut,
                                animations: {cell.snippetImage.transform = .identity},
                                completion:
-                               {_ in
+                               {[weak self] _ in
                                 
-                                
-                                PhotoItem.getRandomImages3(for: photoSnippet, number: self!.imagesForAnimation,
+                                guard let ds = self else {return}
+                                PhotoItem.getRandomImages3(for: photoSnippet, number: ds.imagesForAnimation,
                                                            requiredImageWidth: iconWidth,
                                                            loadContext: cell)
                                 {[weak self] images in
                                  
-                                 guard let ip  = {self?.groupType == .byPriority ? self?.snippetIndexPath(snippet:          photoSnippet) : indexPath}(),
-                                       let _cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
+                                 guard let ds = self else {return}
+                                 
+                                 let ip = ds.groupType == .byPriority ? ds.snippetIndexPath(snippet: photoSnippet) : indexPath
+                                 
+                                 guard let _cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
                                 
                                  _cell.snippetImage.layer.removeAllAnimations()
                                  _cell.animating = [:]
                                  
                                  guard var imgs = images else {return}
                                  
-                                 if let firstImage = image
-                                 {
-                                  imgs.insert(firstImage, at: 0)
-                                 }
+                                 imgs.insert(firstImage, at: 0)
                                  
-                                 let a4rnd = GKRandomDistribution(lowestValue: 0,
-                                                                highestValue: self!.imagesAnimators.count - 1)
+                                 let a4rnd = GKRandomDistribution(lowestValue: 0, highestValue: ds.imagesAnimators.count - 1)
                                  
-                                 self?.imagesAnimators[a4rnd.nextInt()](imgs, _cell, 2.0, 5.0)
+                                 ds.imagesAnimators[a4rnd.nextInt()](Array(Set(imgs)), _cell, 2.0, 5.0)
                                 
                               
                                 }

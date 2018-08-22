@@ -929,7 +929,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
  if loadContext?.isLoadTaskCancelled ?? false
  {
   print ("Aborted getRandomImages3")
-  DispatchQueue.main.async{completion(nil)}
+  //DispatchQueue.main.async{completion(nil)}
   return
  }
      appDelegate.persistentContainer.performBackgroundTask
@@ -938,7 +938,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
         if loadContext?.isLoadTaskCancelled ?? false
         {
          print ("Aborted getRandomImages3 from BackgroundTask")
-         DispatchQueue.main.async{completion(nil)}
+         //DispatchQueue.main.async{completion(nil)}
          return
         }
       
@@ -955,7 +955,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
          
             guard photos.count > 1 else
             {
-                DispatchQueue.main.async{completion(nil)}
+                //DispatchQueue.main.async{completion(nil)}
                 return
             }
          
@@ -987,7 +987,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                if loadContext?.isLoadTaskCancelled ?? false
                {
                 print ("Aborted from  WAIT...")
-                DispatchQueue.main.async{completion(nil)}
+               // DispatchQueue.main.async{completion(nil)}
                 return
                }
                cv.lock()
@@ -1004,13 +1004,13 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
              if loadContext?.isLoadTaskCancelled ?? false
              {
               print ("Aborted after WAIT...")
-              DispatchQueue.main.async{completion(nil)}
+              //DispatchQueue.main.async{completion(nil)}
               return
              }
             
              dsGroup.enter()
              photoItem.getImage(requiredImageWidth: requiredImageWidth, context: loadContext, queue: uQueue)
-             {(image) in
+             { (image) in
               
                  cv.lock()
                  taskCount -= 1
@@ -1029,7 +1029,8 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                 print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "")\",  COUNT - \(imageSet.count)" )
                 if imageSet.count < photoItems.count
                 {
-                 completion(nil)
+                 print ("Aborted in NOTIFY GROUP ...")
+                 return
                 }
              
                 completion(imageSet)
