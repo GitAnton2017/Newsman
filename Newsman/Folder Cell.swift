@@ -48,10 +48,10 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
      
    
     }
-    
+ 
     override func prepareForReuse()
     {
-    
+       
        super.prepareForReuse()
        groupTaskCount = 0
        clearFlagMarker()

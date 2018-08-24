@@ -1,11 +1,87 @@
 
 import Foundation
 import UIKit
+import AVKit
+
+
 
 //MARK:================================== PHOTO SNIPPET CV DELEGATE ===========================================
 extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 //=============================================================================================================
 {
+ 
+ func collectionView(_ collectionView: UICollectionView,
+                       willDisplay cell: UICollectionViewCell,
+                       forItemAt indexPath: IndexPath)
+ {
+  
+  guard let photoItem = photoItems2D[indexPath.section][indexPath.row] as? PhotoItem else {return}
+  
+  photoItem.getImageOperation(requiredImageWidth:  imageSize)
+  {[weak self] (image) in
+   
+   guard let dataSource = self,
+         let ip = dataSource.photoItemIndexPath(photoItem: photoItem),
+         let cell = collectionView.cellForItem(at: ip) as? PhotoSnippetCell else {return}
+   
+   cell.spinner.stopAnimating()
+   
+   UIView.transition(with: cell.photoIconView, duration: 0.5,  options: .transitionCrossDissolve,
+                     animations: {cell.photoIconView.image = image},
+                     completion:
+                     {_ in
+                      
+                      if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
+                      {
+                       cell.drawFlagMarker(flagColor: color)
+                      }
+                      else
+                      {
+                       cell.clearFlagMarker()
+                      }
+                      
+                      if (photoItem.type == .video)
+                      {
+                       cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
+                       cell.showVideoDuration(textColor: UIColor.red,
+                                              duration: AVURLAsset(url: photoItem.url).duration)
+                      }
+                      
+                      cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                      
+                      UIView.animate(withDuration: 0.15, delay: 0,
+                                     usingSpringWithDamping: 2500,
+                                     initialSpringVelocity: 0,
+                                     options: .curveEaseInOut,
+                                     animations: {cell.photoItemView.transform = .identity},
+                                     completion: nil)
+                      
+                    })
+   
+  }
+ }
+ 
+ func collectionView(_ collectionView: UICollectionView,
+                       didEndDisplaying cell: UICollectionViewCell,
+                       forItemAt indexPath: IndexPath)
+ {
+  
+  let photoItem = photoItems2D[indexPath.section][indexPath.row]
+  
+  switch (photoItem)
+  {
+   case let item as PhotoItem: item.cQ.cancelAllOperations()
+   case _ as PhotoFolderItem:
+    (cell as! PhotoFolderCell).photoItems.forEach{$0.cQ.cancelAllOperations()}
+//    (cell as! PhotoFolderCell).photoItems = []
+   
+   default: break
+  }
+  
+ }
+ 
+ 
+ 
 //MARK:------------------------------ SETTING SECTION HEADERS SIZES -------------------------------------------
 //-------------------------------------------------------------------------------------------------------------
  func collectionView(_ collectionView: UICollectionView,

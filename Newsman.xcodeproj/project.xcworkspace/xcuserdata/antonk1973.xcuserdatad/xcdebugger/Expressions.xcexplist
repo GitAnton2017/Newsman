@@ -30,14 +30,6 @@
          </PersistentStrings>
       </ContextState>
       <ContextState
-         contextName = "closure #2 in closure #3 in SnippetsViewDataSource.imagesAnimators.getter:SnippetsViewDataSource.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.imgs.count">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
          contextName = "TimeStampView.draw(_:):Duration Stamp View.swift">
          <PersistentStrings>
             <PersistentString
@@ -45,6 +37,14 @@
             </PersistentString>
             <PersistentString
                value = "duration.seconds">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in closure #3 in SnippetsViewDataSource.imagesAnimators.getter:SnippetsViewDataSource.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.imgs.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -59,6 +59,17 @@
             </PersistentString>
             <PersistentString
                value = "scaledImage.size">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "PhotoFolderCell.collectionView(_:didEndDisplaying:forItemAt:):Folder Nested CV Delegate.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "photoItems.count">
+            </PersistentString>
+            <PersistentString
+               value = "indexPath.row">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

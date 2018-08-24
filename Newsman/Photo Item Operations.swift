@@ -4,18 +4,11 @@ import UIKit
 
 extension PhotoItem
 {
- static let sQ =
+ static let contextQ =
  { () -> OperationQueue in
   let queue = OperationQueue()
   queue.qualityOfService = .userInitiated
   queue.maxConcurrentOperationCount = 1
-  return queue
- }()
- 
- static let cQ =
- { () -> OperationQueue in
-  let queue = OperationQueue()
-  queue.qualityOfService = .userInitiated
   return queue
  }()
  
@@ -41,15 +34,17 @@ extension PhotoItem
   thumbnail_op.addDependency(cache_op)
   thumbnail_op.completionBlock =
   {
+   guard let finalImage = thumbnail_op.thumbnailImage else {return}
    OperationQueue.main.addOperation
    {
-    completion(thumbnail_op.thumbnailImage)
+    completion(finalImage)
    }
   }
-  let operations = [context_op, cache_op, save_op, resize_op, thumbnail_op]
+  let operations = [cache_op, save_op, resize_op, thumbnail_op]
   
-  PhotoItem.sQ.addOperation(context_op)
-  PhotoItem.cQ.addOperations(operations, waitUntilFinished: false)
+  PhotoItem.contextQ.addOperation(context_op)
+  
+  cQ.addOperations(operations, waitUntilFinished: false)
   
  }
  
@@ -93,12 +88,19 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
  
  override func main()
  {
-  if isCancelled {return}
+  print ("\(self.description) in \(Thread.current)")
+  
+  if isCancelled
+  {
+   print ("\(self.description) CNXX!")
+   return
+  }
   guard let photoItem = self.photoItem else {return}
   
   photoID = photoItem.id
   photoURL = photoItem.url
   type = photoItem.type
+ 
  }
 }
 
@@ -122,11 +124,23 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
  
  override func main()
  {
-  if isCancelled {return}
+  print ("\(self.description) in \(Thread.current)")
+  
+  if isCancelled
+  {
+   print ("\(self.description) CNXX 1!")
+   return
+  }
+  
   guard cachedImage == nil, let ID = cachedImageID?.uuidString else {return}
   cachedImage = PhotoItem.imageCacheDict[width]?.object(forKey: ID as NSString)
   
-  if isCancelled {return}
+  if isCancelled
+  {
+   print ("\(self.description) CNXX 2!")
+   return
+  }
+  
   guard cachedImage == nil else {return}
   let caches = PhotoItem.imageCacheDict.filter{$0.key > width && $0.value.object(forKey: ID as NSString) != nil}
   let cache = caches.min(by: {$0.key < $1.key})?.value
@@ -149,7 +163,14 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  
  override func main()
  {
-  if isCancelled {return}
+  print ("\(self.description) in \(Thread.current)")
+  
+  if isCancelled
+  {
+   print ("\(self.description) CNXX!")
+   return
+  }
+  
   guard let url = savedImageURL, type == .photo, cachedImage == nil, savedImage == nil else {return}
   
   do
@@ -194,7 +215,14 @@ class ThumbnailImageOperation: Operation
  
  override func main()
  {
-  if isCancelled {return}
+  print ("\(self.description) in \(Thread.current)")
+  
+  if isCancelled
+  {
+   print ("\(self.description) CNXX!")
+   return
+  }
+  
   guard let image = thumbnailDepend?.thumbnailImage, let ID = cachedImageID?.uuidString else
   {
    thumbnailImage = cachedImage
@@ -236,7 +264,13 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  
  override func main()
  {
-  if isCancelled {return}
+  print ("\(self.description) in \(Thread.current)")
+  
+  if isCancelled
+  {
+   print ("\(self.description) CNXX!")
+   return
+  }
   guard let image = imageToResize else {return}
   resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
  }

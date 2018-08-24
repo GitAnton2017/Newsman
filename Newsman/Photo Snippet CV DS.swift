@@ -488,50 +488,50 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   
   cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
  
-  photoItem.getImage(requiredImageWidth:  imageSize)
-  {(image) in
-
-    cell.spinner.stopAnimating()
-
-    UIView.transition(with: cell.photoIconView,
-                      duration: 0.5,
-                      options: .transitionCrossDissolve,
-                      animations:
-                      {
-                       cell.photoIconView.image = image
-                      },
-                      completion:
-                      {_ in
-                       
-                       if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
-                       {
-                        cell.drawFlagMarker(flagColor: color)
-                       }
-                       else
-                       {
-                        cell.clearFlagMarker()
-                       }
-                       
-                       if (photoItem.type == .video)
-                       {
-                        cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
-                        cell.showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: photoItem.url).duration)
-                       }
-                       
-                       cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                       
-                       UIView.animate(withDuration: 0.15,
-                                      delay: 0,
-                                      usingSpringWithDamping: 2500,
-                                      initialSpringVelocity: 0,
-                                      options: .curveEaseInOut,
-                                      animations: {cell.photoItemView.transform = .identity},
-                                      completion: nil)
-                       
-                      })
-   
-   }
-    
+//  photoItem.getImageOperation(requiredImageWidth:  imageSize)
+//  {(image) in
+//
+////    guard /*let ds = self, let ip = ds.photoItemIndexPath(photoItem: photoItem),*/
+////     let _cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCell else {return}
+//
+//    cell.spinner.stopAnimating()
+//
+//    UIView.transition(with: cell.photoIconView,
+//                      duration: 0.5,
+//                      options: .transitionCrossDissolve,
+//                      animations: {cell.photoIconView.image = image},
+//                      completion:
+//                      {_ in
+//
+//                       if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
+//                       {
+//                        cell.drawFlagMarker(flagColor: color)
+//                       }
+//                       else
+//                       {
+//                        cell.clearFlagMarker()
+//                       }
+//
+//                       if (photoItem.type == .video)
+//                       {
+//                        cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
+//                        cell.showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: photoItem.url).duration)
+//                       }
+//
+//                       cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+//
+//                       UIView.animate(withDuration: 0.15,
+//                                      delay: 0,
+//                                      usingSpringWithDamping: 2500,
+//                                      initialSpringVelocity: 0,
+//                                      options: .curveEaseInOut,
+//                                      animations: {cell.photoItemView.transform = .identity},
+//                                      completion: nil)
+//
+//                      })
+//
+//   }
+  
    return cell
     
  }//func getPhotoCell (_ collectionView: UICollectionView...

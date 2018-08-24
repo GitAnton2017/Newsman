@@ -46,6 +46,13 @@ class PhotoItem: NSObject, PhotoItemProtocol
       return queue
     }()
  
+    lazy var cQ =
+    { () -> OperationQueue in
+     let queue = OperationQueue()
+     queue.qualityOfService = .userInitiated
+     return queue
+    }()
+ 
     static let uQueue =
     { () -> OperationQueue in
      let queue = OperationQueue()
@@ -1007,9 +1014,9 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
               //DispatchQueue.main.async{completion(nil)}
               return
              }
-            
+           
              dsGroup.enter()
-             photoItem.getImage(requiredImageWidth: requiredImageWidth, context: loadContext, queue: uQueue)
+             photoItem.getImageOperation(requiredImageWidth: requiredImageWidth/*, context: loadContext, queue: uQueue*/)
              { (image) in
               
                  cv.lock()
