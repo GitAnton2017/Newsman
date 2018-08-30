@@ -306,19 +306,27 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         let photoSnippet = item as! PhotoSnippet
         let photoSnippetCell = cell as! SnippetsViewCell
         
-        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-        if let latestPhoto = photoSnippet.photos?.sortedArray(using: [sort]).last as? Photo
-        {
+//        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
+//        if let latestPhoto = photoSnippet.photos?.sortedArray(using: [sort]).last as? Photo
+//        {
           let iconWidth = photoSnippetCell.snippetImage.frame.width
-         
-          PhotoItem(photo: latestPhoto).getImage(requiredImageWidth: iconWidth, context: photoSnippetCell)
+//          let latestPhotoItem = PhotoItem(photo: latestPhoto)
+//          latestPhotoItem.getImageOperation(requiredImageWidth: iconWidth/*, context: photoSnippetCell*/)
+          photoSnippet.imageProvider.getLatestImage(requiredImageWidth: iconWidth)
           {[weak self] (image) in
            
-           guard let ds = self, let firstImage = image else {return}
+           guard let ds = self else {return}
       
            let ip = ds.groupType == .byPriority ? ds.snippetIndexPath(snippet: photoSnippet) : indexPath
            
            guard let cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
+           
+           guard let firstImage = image else
+           {
+            cell.imageSpinner.stopAnimating()
+            cell.snippetImage.image = UIImage(named: "photo.main")
+            return
+           }
            
            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
            {
@@ -337,11 +345,12 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
                                completion:
                                {[weak self] _ in
                                 
-                                guard let ds = self else {return}
-                                PhotoItem.getRandomImages3(for: photoSnippet, number: ds.imagesForAnimation,
-                                                           requiredImageWidth: iconWidth,
-                                                           loadContext: cell)
-                                {[weak self] images in
+//                                guard let ds = self else {return}
+//                                PhotoItem.getRandomImages3(for: photoSnippet, number: ds.imagesForAnimation,
+//                                                           requiredImageWidth: iconWidth,
+//                                                           loadContext: cell)
+                                photoSnippet.imageProvider.getRandomImages(requiredImageWidth: iconWidth)
+                                 {[weak self] images in
                                  
                                  guard let ds = self else {return}
                                  
@@ -368,13 +377,13 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
            
            }
           }
-        }
-        else
-        {
-         
-           photoSnippetCell.imageSpinner.stopAnimating()
-           photoSnippetCell.snippetImage.image = UIImage(named: "photo.main")
-        }
+//        }
+//        else
+//        {
+//
+//           photoSnippetCell.imageSpinner.stopAnimating()
+//           photoSnippetCell.snippetImage.image = UIImage(named: "photo.main")
+//        }
 
        
        case .audio: break

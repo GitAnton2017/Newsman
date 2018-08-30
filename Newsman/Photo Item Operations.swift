@@ -4,6 +4,9 @@ import UIKit
 
 extension PhotoItem
 {
+ 
+// static let contextQ = DispatchQueue(label: "Context Queue")
+ 
  static let contextQ =
  { () -> OperationQueue in
   let queue = OperationQueue()
@@ -12,6 +15,12 @@ extension PhotoItem
   return queue
  }()
  
+ func cancelImageOperation()
+ {
+  cQ.cancelAllOperations()
+//  PhotoItem.contextQ.operations.filter{($0 as? ContextDataOperation)?.photoItem === self}.forEach{$0.cancel()}
+ }
+
  func getImageOperation(requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
  {
   let context_op = ContextDataOperation()
@@ -72,6 +81,11 @@ protocol ThumbnailImageDataProvider
  var thumbnailImage: UIImage? {get}
 }
 
+protocol ImageSetDataProvider
+{
+ var finalImage: UIImage? {get}
+}
+
 class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataProvider
 {
  var savedImageID: UUID? {return photoID}
@@ -86,9 +100,23 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
  var photoURL: URL?
  var type: SnippetType?
  
+ var cnxObserver: NSKeyValueObservation?
+ 
+ override init()
+ {
+  super.init()
+  cnxObserver = observe(\.isCancelled)
+  {obs, val in
+    if obs.isCancelled
+    {
+     print ("\(self.description) is cancelled!")
+    }
+  }
+ }
+ 
  override func main()
  {
-  print ("\(self.description) in \(Thread.current)")
+//  print ("\(self.description) in \(Thread.current)")
   
   if isCancelled
   {
@@ -100,9 +128,10 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
   photoID = photoItem.id
   photoURL = photoItem.url
   type = photoItem.type
- 
+  
  }
 }
+
 
 class CachedImageOperation: Operation, ResizeImageDataProvider
 {
@@ -116,15 +145,27 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
  
  var width: Int
  
+ var cnxObserver: NSKeyValueObservation?
+ 
  init (requiredImageSize: CGFloat)
  {
   width = Int(requiredImageSize)
+  
   super.init()
+  
+  cnxObserver = observe(\.isCancelled)
+  {[unowned self] obs, val in
+   if obs.isCancelled
+   {
+    print ("\(self.description) is cancelled!")
+   }
+  }
+  
  }
  
  override func main()
  {
-  print ("\(self.description) in \(Thread.current)")
+//  print ("\(self.description) in \(Thread.current)")
   
   if isCancelled
   {
@@ -161,9 +202,23 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  var type: SnippetType?    {return contextDepend?.imageSnippetType}
  var savedImage: UIImage?
  
+ var cnxObserver: NSKeyValueObservation?
+ 
+ override init()
+ {
+  super.init()
+  cnxObserver = observe(\.isCancelled)
+  {[unowned self] obs, val in
+   if obs.isCancelled
+   {
+    print ("\(self.description) is cancelled!")
+   }
+  }
+ }
+ 
  override func main()
  {
-  print ("\(self.description) in \(Thread.current)")
+//  print ("\(self.description) in \(Thread.current)")
   
   if isCancelled
   {
@@ -194,8 +249,11 @@ class RenderVideoPreviewOperation: Operation
 }
 
 
-class ThumbnailImageOperation: Operation
+
+class ThumbnailImageOperation: Operation, ImageSetDataProvider
 {
+ var finalImage: UIImage? {return thumbnailImage}
+ 
  var thumbnailImage: UIImage?
  
  lazy var thumbnailDepend = {dependencies.compactMap{$0 as? ThumbnailImageDataProvider}.first}()
@@ -207,15 +265,25 @@ class ThumbnailImageOperation: Operation
  
  var width: Int
  
+ var cnxObserver: NSKeyValueObservation?
+ 
  init (requiredImageSize: CGFloat)
  {
   width = Int(requiredImageSize)
   super.init()
+  
+  cnxObserver = observe(\.isCancelled)
+  {[unowned self] obs, val in
+   if obs.isCancelled
+   {
+    print ("\(self.description) is canclled!")
+   }
+  }
  }
  
  override func main()
  {
-  print ("\(self.description) in \(Thread.current)")
+//  print ("\(self.description) in \(Thread.current)")
   
   if isCancelled
   {
@@ -256,15 +324,25 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  
  var width: Int
  
+ var cnxObserver: NSKeyValueObservation?
+ 
  init (requiredImageSize: CGFloat)
  {
   width = Int(requiredImageSize)
   super.init()
+  
+  cnxObserver = observe(\.isCancelled)
+  {[unowned self] obs, val in
+   if obs.isCancelled
+   {
+    print ("\(self.description) is cancelled!")
+   }
+  }
  }
  
  override func main()
  {
-  print ("\(self.description) in \(Thread.current)")
+//  print ("\(self.description) in \(Thread.current)")
   
   if isCancelled
   {
@@ -275,3 +353,31 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
  }
 }
+
+class ImageSetOperation: Operation
+{
+ var imageSet: [UIImage]?
+ 
+ var cnxObserver: NSKeyValueObservation?
+ 
+ override init()
+ {
+  super.init()
+  cnxObserver = observe(\.isCancelled)
+  {[unowned self] obs, val in
+   if obs.isCancelled
+   {
+    print ("\(self.description) is cancelled!")
+   }
+  }
+ }
+ 
+ override func main()
+ {
+  imageSet = dependencies.compactMap{($0 as? ImageSetDataProvider)?.finalImage}
+ }
+ 
+ 
+}
+
+

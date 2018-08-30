@@ -78,7 +78,7 @@ extension PhotoFolderCell: UICollectionViewDelegate, UICollectionViewDelegateFlo
  {
   if isHidden {return}
   let photoItem = photoItems[indexPath.row]
-  photoItem.cQ.cancelAllOperations()
+  photoItem.cancelImageOperation()
  }
  
 }

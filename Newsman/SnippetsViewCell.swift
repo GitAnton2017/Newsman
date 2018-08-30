@@ -7,14 +7,16 @@ import UIKit
 protocol ImageContextLoadProtocol
 {
  var isLoadTaskCancelled: Bool {get set}
- func stopAllContextTasks()
+ var photoItems: [PhotoItem] {get set}
 }
 
 class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadProtocol
 {
  
-    static let isq = DispatchQueue.global(qos: .userInitiated)
+   var photoItems: [PhotoItem] = []
+ 
     private var _stop_flag = false
+ 
     var snippetID: String = ""
  
     var isLoadTaskCancelled: Bool
@@ -24,13 +26,15 @@ class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadPr
       guard Thread.current != Thread.main else {return _stop_flag}
       return DispatchQueue.main.sync {return _stop_flag}
      }
-     set {DispatchQueue.main.async {[weak self] in self?._stop_flag = newValue}}
+     set
+     {
+      DispatchQueue.main.async {[weak self] in self?._stop_flag = newValue}
+      //if newValue {photoItems.forEach{$0.cancelImageOperation()}
+       //photoItems = []
+      //}
+     }
     }
- 
-    func stopAllContextTasks()
-    {
-     isLoadTaskCancelled = true
-    }
+
  
     @IBOutlet var snippetTextTag: UILabel!
     @IBOutlet var snippetDateTag: UILabel!

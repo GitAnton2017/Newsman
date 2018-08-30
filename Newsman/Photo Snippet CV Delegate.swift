@@ -70,11 +70,8 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
   
   switch (photoItem)
   {
-   case let item as PhotoItem: item.cQ.cancelAllOperations()
-   case _ as PhotoFolderItem:
-    (cell as! PhotoFolderCell).photoItems.forEach{$0.cQ.cancelAllOperations()}
-//    (cell as! PhotoFolderCell).photoItems = []
-   
+   case let item as PhotoItem: item.cancelImageOperation()
+   case _ as PhotoFolderItem: (cell as! PhotoFolderCell).photoItems.forEach{$0.cancelImageOperation()}
    default: break
   }
   

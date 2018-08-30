@@ -28,6 +28,9 @@ class SafeMap<H: Hashable, T>
  }
  
  var values: Dictionary<H, T>.Values {return isq.sync {return map.values}}
+ var pairs:  Dictionary<H, T>        {return isq.sync {return map}}
+
+
 }
 
 //MARK: ----------------- Single Photo Item Class ----------------
@@ -936,7 +939,6 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
  if loadContext?.isLoadTaskCancelled ?? false
  {
   print ("Aborted getRandomImages3")
-  //DispatchQueue.main.async{completion(nil)}
   return
  }
      appDelegate.persistentContainer.performBackgroundTask
@@ -945,7 +947,6 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
         if loadContext?.isLoadTaskCancelled ?? false
         {
          print ("Aborted getRandomImages3 from BackgroundTask")
-         //DispatchQueue.main.async{completion(nil)}
          return
         }
       
@@ -960,11 +961,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
         {
             let photos = try context.fetch(request)
          
-            guard photos.count > 1 else
-            {
-                //DispatchQueue.main.async{completion(nil)}
-                return
-            }
+            guard photos.count > 1 else {return}
          
             var photoItems: [PhotoItem]
             if (number >= photos.count)
@@ -979,6 +976,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                 photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
             }
          
+            if var ctx = loadContext {ctx.photoItems = photoItems}
          
             var imageSet = [UIImage]()
          
@@ -998,16 +996,16 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                 return
                }
                cv.lock()
-               
+
                //print ("TASK timed out Task Count \(taskCount)")
                let flag = cv.wait(until: deadline)
                if !flag {print ("TASK timed out Expired!!!")}
               }
-              
+
               taskCount += 1
-             
+
               cv.unlock()
-             
+
              if loadContext?.isLoadTaskCancelled ?? false
              {
               print ("Aborted after WAIT...")
@@ -1029,6 +1027,9 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                  if let img = image {imageSet.append(img)}
                  dsGroup.leave()
              }
+             
+            
+            
             }
          
             dsGroup.notify(queue: DispatchQueue.main)

@@ -5,16 +5,26 @@ import GameplayKit
 
 extension SnippetsViewController: UITableViewDelegate
 {
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell,
+                     forRowAt indexPath: IndexPath)
     {
      (cell as! SnippetsViewCell).snippetImage.layer.removeAllAnimations()
      (cell as! SnippetsViewCell).animating = [:]
      (cell as! SnippetsViewCell).snippetID = ""
      
-     if var cell = cell as? ImageContextLoadProtocol
+     let dataSource = (tableView.dataSource as! SnippetsViewDataSource)
+     if let item = dataSource.snippetsData[indexPath.section][indexPath.row] as? PhotoSnippet
      {
-      cell.isLoadTaskCancelled = true
+      item.imageProvider.cancel()
      }
+     
+     
+//     if var cell = cell as? ImageContextLoadProtocol
+//     {
+//      cell.isLoadTaskCancelled = true
+//     }
+//
+     
     }
  
  
