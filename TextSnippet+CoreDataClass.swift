@@ -10,7 +10,7 @@
 import Foundation
 import CoreData
 
-@objc(TextSnippet)
-public class TextSnippet: BaseSnippet {
-
+@objc(TextSnippet) public class TextSnippet: BaseSnippet, SnippetImagesPreviewProvidable
+{
+ lazy var imageProvider: SnippetPreviewImagesProvider = {TextPreviewProvider(textSnippet: self)}()
 }

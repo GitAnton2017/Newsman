@@ -10,12 +10,10 @@
 import Foundation
 import CoreData
 
-@objc(PhotoSnippet)
-public class PhotoSnippet: BaseSnippet
+@objc(PhotoSnippet) public class PhotoSnippet: BaseSnippet, SnippetImagesPreviewProvidable
 {
- lazy var imageProvider = {SnippetImagesProvider(photoSnippet: self, number: 30)}()
+ lazy var imageProvider: SnippetPreviewImagesProvider = {SnippetImagesProvider(photoSnippet: self, number: 30)}()
 }
-
 
 enum GroupPhotos: String
 {

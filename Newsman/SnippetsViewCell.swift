@@ -2,8 +2,6 @@
 import Foundation
 import UIKit
 
-
-
 protocol ImageContextLoadProtocol
 {
  var isLoadTaskCancelled: Bool {get set}
@@ -13,11 +11,16 @@ protocol ImageContextLoadProtocol
 class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadProtocol
 {
  
-   var photoItems: [PhotoItem] = []
+    var photoItems: [PhotoItem] = []
  
     private var _stop_flag = false
  
-    var snippetID: String = ""
+    var snippetID: String
+    {
+     return (snippet as? BaseSnippet)?.id?.uuidString ?? ""
+    }
+ 
+    var snippet: SnippetImagesPreviewProvidable?
  
     var isLoadTaskCancelled: Bool
     {
@@ -56,6 +59,15 @@ class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadPr
      
     }
  
+    func stopImageProvider()
+    {
+      if let snippet = self.snippet
+      {
+       snippet.imageProvider.cancel()
+       self.snippet = nil
+      }
+    }
+ 
     func clear()
     {
      isLoadTaskCancelled = false
@@ -65,7 +77,7 @@ class SnippetsViewCell: UITableViewCell, CAAnimationDelegate, ImageContextLoadPr
      transDuration = 0.0
      imageSpinner.startAnimating()
      snippetImage.image = nil
-     snippetID = ""
+
     }
  
     override func prepareForReuse()

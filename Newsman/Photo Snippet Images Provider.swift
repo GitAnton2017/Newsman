@@ -4,22 +4,27 @@ import UIKit
 import CoreData
 import GameKit
 
-class SnippetImagesProvider
+
+class SnippetImagesProvider: SnippetPreviewImagesProvider, Equatable
 {
- 
- lazy var cQ = { () -> OperationQueue in
+ static func == (lhs: SnippetImagesProvider, rhs: SnippetImagesProvider) -> Bool
+ {
+  return lhs.photoSnippet == rhs.photoSnippet
+ }
+
+ private lazy var cQ = { () -> OperationQueue in
    let queue = OperationQueue()
    queue.qualityOfService = .userInitiated
    return queue
  }()
  
- lazy var uQ = { () -> OperationQueue in
+ fileprivate lazy var uQ = { () -> OperationQueue in
   let queue = OperationQueue()
   queue.qualityOfService = .utility
   return queue
  }()
  
- static var rQ = { () -> OperationQueue in
+ private static var randomQ = { () -> OperationQueue in
   let queue = OperationQueue()
   //queue.maxConcurrentOperationCount = 10
   queue.qualityOfService = .utility
@@ -28,16 +33,24 @@ class SnippetImagesProvider
  
 // static let lock = NSLock()
 // static let cv = NSCondition()
- 
 // static var taskCount = 0
  
- static let maxTask = 5
+ fileprivate var prevResizeOperations: [ResizeImageOperation] = []
+ fileprivate var currResizeOperations: [ResizeImageOperation] = []
+ 
+ private static let maxRandomTasks = 3
+ 
+ private static let maxRandomPayload: UInt64 = 1024 * 1024 * 512
 
- static var currentRandomOperation: GetRandomImagesOperation?
+// static var currentRandomOperation: GetRandomImagesOperation?
  
- static var currentRandomOperations: [GetRandomImagesOperation] = []
+ private static var currRandomOperations: [GetRandomImagesOperation] = []
+ private static var prevRandomOperations: [GetRandomImagesOperation] = []
+
  
- static var prevRandomOperations: [GetRandomImagesOperation] = []
+ private static var prevPayload: UInt64 = 0
+ private static var currPayload: UInt64 = 0
+
  
  private lazy var snippetPhotos: [Photo]? = {return photoSnippet.photos?.allObjects as? [Photo]}()
  
@@ -75,16 +88,27 @@ class SnippetImagesProvider
   self.number = number
  }
  
+ func cancelLocal()
+ {
+  uQ.cancelAllOperations()
+  cQ.cancelAllOperations()
+ }
+ 
+ static func cancelGlobal()
+ {
+  SnippetImagesProvider.randomQ.cancelAllOperations()
+  PhotoItem.contextQ.cancelAllOperations()
+ }
+ 
  func cancel()
  {
  
-  SnippetImagesProvider.rQ.operations.filter
+  SnippetImagesProvider.randomQ.operations.filter
   {
-   ($0 as! GetRandomImagesOperation).provider === self
+   ($0 as! GetRandomImagesOperation).provider == self
   }.forEach{$0.cancel()}
   
-  uQ.cancelAllOperations()
-  cQ.cancelAllOperations()
+  cancelLocal()
   
   var cnxItems = photoItems
   if let latest = latestPhotoItem {cnxItems.append(latest)}
@@ -100,7 +124,7 @@ class SnippetImagesProvider
  {
    if latestPhotoItem == nil
    {
-    OperationQueue.main.addOperation{completion(nil)}
+    OperationQueue.main.addOperation{completion(UIImage(named: "photo.main"))}
     return
    }
   
@@ -117,9 +141,15 @@ class SnippetImagesProvider
    save_op.addDependency(context_op)
    save_op.addDependency(cache_op)
    operations.append(save_op)
+  
+   let video_op = RenderVideoPreviewOperation()
+   video_op.addDependency(context_op)
+   video_op.addDependency(cache_op)
+   operations.append(video_op)
    
    let resize_op = ResizeImageOperation(requiredImageSize: requiredImageWidth)
    resize_op.addDependency(save_op)
+   resize_op.addDependency(video_op)
    resize_op.addDependency(cache_op)
    operations.append(resize_op)
    
@@ -131,11 +161,11 @@ class SnippetImagesProvider
   
    thumbnail_op.completionBlock =
    {
-    OperationQueue.main.addOperation{completion(thumbnail_op.thumbnailImage)}
+    OperationQueue.main.addOperation{completion(thumbnail_op.finalImage)}
    }
   
    PhotoItem.contextQ.addOperation(context_op)
-   self.cQ.addOperations(operations, waitUntilFinished: false)
+   cQ.addOperations(operations, waitUntilFinished: false)
  }
  
  func getRandomImages (requiredImageWidth: CGFloat, completion: @escaping ([UIImage]?) -> Void)
@@ -153,51 +183,69 @@ class SnippetImagesProvider
   
 //  SnippetImagesProvider.currentRandomOperation = random_op
   
-  if (SnippetImagesProvider.prevRandomOperations.count == SnippetImagesProvider.maxTask)
+  let payload = random_op.payload
+  
+  SnippetImagesProvider.prevPayload += payload
+  
+  if (SnippetImagesProvider.prevPayload  >= SnippetImagesProvider.maxRandomPayload)
   {
-   print ("Adding dependancies from prevRandomOperations to: \(random_op.description)")
-   SnippetImagesProvider.prevRandomOperations.forEach{random_op.addDependency($0)}
+
+   SnippetImagesProvider.currPayload += payload
    
-   if (SnippetImagesProvider.currentRandomOperations.count < SnippetImagesProvider.maxTask)
+   if (SnippetImagesProvider.currPayload <= SnippetImagesProvider.maxRandomPayload)
    {
-    print ("Appending currentRandomOperations: \(random_op.description)")
-    SnippetImagesProvider.currentRandomOperations.append(random_op)
+    SnippetImagesProvider.prevRandomOperations.forEach{random_op.addDependency($0)}
+    SnippetImagesProvider.currRandomOperations.append(random_op)
    }
-   
-   if (SnippetImagesProvider.currentRandomOperations.count == SnippetImagesProvider.maxTask)
+   else
    {
-    print ("Exchange...")
-    SnippetImagesProvider.prevRandomOperations = SnippetImagesProvider.currentRandomOperations
-    SnippetImagesProvider.currentRandomOperations.removeAll()
+    print("----------------------------------------------------")
+    print("PREVIOUS BLOCK:")
+    print("----------------------------------------------------")
+    SnippetImagesProvider.prevRandomOperations.enumerated().forEach{print("\($0.0 + 1)) \($0.1.description)")}
+
+    print("----------------------------------------------------")
+    print("DEPENDENT BLOCK (CURRENT):")
+    print("----------------------------------------------------")
+    SnippetImagesProvider.currRandomOperations.enumerated().forEach{print("\($0.0 + 1)) \($0.1.description)")}
+    
+    SnippetImagesProvider.prevRandomOperations = SnippetImagesProvider.currRandomOperations
+    SnippetImagesProvider.prevPayload = SnippetImagesProvider.currPayload
+    
+    SnippetImagesProvider.currRandomOperations.removeAll()
+    SnippetImagesProvider.currPayload = 0
    }
    
   }
   else
   {
-   print ("Appending prevRandomOperations: \(random_op.description)")
+//   print ("Appending prevRandomOperations: \(random_op.description)")
+  
    SnippetImagesProvider.prevRandomOperations.append(random_op)
+   
   }
   
-  SnippetImagesProvider.rQ.addOperation(random_op)
+  
+  SnippetImagesProvider.randomQ.addOperation(random_op)
   
  }
  
 }
 
- extension GetRandomImagesOperation
+ fileprivate extension GetRandomImagesOperation
  {
-  enum State: String
+  private enum State: String
   {
    case Ready, Executing, Finished
    fileprivate var keyPath: String {return "is" + rawValue}
   }
   
-  override var isReady:        Bool {return super.isReady && state == .Ready }
-  override var isExecuting:    Bool {return state == .Executing              }
-  override var isFinished:     Bool {return state == .Finished               }
-  override var isAsynchronous: Bool {return true                             }
+  fileprivate override var isReady:        Bool {return super.isReady && state == .Ready }
+  fileprivate override var isExecuting:    Bool {return state == .Executing              }
+  fileprivate override var isFinished:     Bool {return state == .Finished               }
+  fileprivate override var isAsynchronous: Bool {return true                             }
   
-  override func start()
+  fileprivate override func start()
   {
    if isCancelled
    {
@@ -215,10 +263,26 @@ class SnippetImagesProvider
   }
  }
 
- class GetRandomImagesOperation: Operation
+ fileprivate class GetRandomImagesOperation: Operation
  {
+  private let maxResizeTask = 15
+ 
+  fileprivate var payload: UInt64
+  {
+   return provider.photoItems.filter
+   {item in
+    let ID = item.id.uuidString
+    let cashedImage = PhotoItem.imageCacheDict[Int(requiredImageWidth)]?.object(forKey: ID as NSString)
+    return cashedImage == nil
+   }.compactMap
+   {item in
+     let attr = try? FileManager.default.attributesOfItem(atPath: item.url.path) as NSDictionary
+     return attr?.fileSize()
+   }.reduce(0, {$0 + $1})
+   
+  }
   
-  var state = State.Ready
+  private var state = State.Ready
   {
    willSet
    {
@@ -233,10 +297,10 @@ class SnippetImagesProvider
    }
   }
   
-  var cnxObserver: NSKeyValueObservation?
-  var requiredImageWidth: CGFloat
-  var completion: ([UIImage]?) -> Void
-  var provider: SnippetImagesProvider
+  private var cnxObserver: NSKeyValueObservation?
+  private var requiredImageWidth: CGFloat
+  private var completion: ([UIImage]?) -> Void
+  fileprivate var provider: SnippetImagesProvider
   
   init (from provider: SnippetImagesProvider, requiredImageWidth: CGFloat, completion: @escaping ([UIImage]?) -> Void)
   {
@@ -251,7 +315,7 @@ class SnippetImagesProvider
    {[unowned self] obs, val in
     if obs.isCancelled
     {
-     print ("\(self.description) is canclled!")
+     print ("\(self.description) is cancelled before started!")
     }
    }
   }
@@ -259,9 +323,8 @@ class SnippetImagesProvider
   
   override func main()
   {
-   
-   
-     var operations: [Operation] = []
+  
+     var operations:         [Operation] = []
      var contextOperations : [Operation] = []
      
      let image_set_op = ImageSetOperation()
@@ -270,7 +333,7 @@ class SnippetImagesProvider
      {
       if isCancelled
       {
-       print(#function, "cancel from FOR...")
+       print(#function, "cancelled from FOR...")
        return
        
       }
@@ -288,9 +351,48 @@ class SnippetImagesProvider
       save_op.addDependency(cache_op)
       operations.append(save_op)
       
+      let video_op = RenderVideoPreviewOperation()
+      video_op.addDependency(context_op)
+      video_op.addDependency(cache_op)
+      operations.append(video_op)
+      
       let resize_op = ResizeImageOperation(requiredImageSize: requiredImageWidth)
       resize_op.addDependency(save_op)
+      resize_op.addDependency(video_op)
       resize_op.addDependency(cache_op)
+      
+      if (provider.prevResizeOperations.count == maxResizeTask)
+      {
+        provider.prevResizeOperations.forEach{resize_op.addDependency($0)}
+
+       if (provider.currResizeOperations.count < maxResizeTask)
+       {
+        provider.currResizeOperations.append(resize_op)
+       }
+
+       if (provider.currResizeOperations.count == maxResizeTask)
+       {
+//        print("----------------------------------------------------")
+//        print("PREVIOUS RESIZE BLOCK:")
+//        print("----------------------------------------------------")
+//        provider.prevResizeOperations.enumerated().forEach{print("\($0.0 + 1)) \($0.1.description)")}
+//
+//        print("----------------------------------------------------")
+//        print("DEPENDENT RESIZE BLOCK (CURRENT):")
+//        print("----------------------------------------------------")
+//        provider.currResizeOperations.enumerated().forEach{print("\($0.0 + 1)) \($0.1.description)")}
+//
+        provider.prevResizeOperations = provider.currResizeOperations
+        provider.currResizeOperations.removeAll()
+       }
+      }
+      else
+      {
+//       print ("Filling the array of previous Resize Operations: \(resize_op.description)")
+       provider.prevResizeOperations.append(resize_op)
+      }
+      
+      
       operations.append(resize_op)
       
       let thumbnail_op = ThumbnailImageOperation(requiredImageSize: requiredImageWidth)
@@ -317,6 +419,9 @@ class SnippetImagesProvider
       
       
        self.state = .Finished //!!!!!!!!!!
+       self.provider.prevResizeOperations.removeAll()
+       self.provider.currResizeOperations.removeAll()
+      
        OperationQueue.main.addOperation{self.completion(image_set_op.imageSet)}
      }
      
@@ -336,6 +441,13 @@ class SnippetImagesProvider
 //      print(#function, "cancel after CV wait")
 //      return
 //     }
+   
+     if isCancelled
+     {
+        print(#function, "Cancelled from before sending operations to queues...")
+        return
+    
+     }
    
      operations.append(image_set_op)
      PhotoItem.contextQ.addOperations(contextOperations, waitUntilFinished: false)

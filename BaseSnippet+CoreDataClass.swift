@@ -11,9 +11,16 @@ import Foundation
 import CoreData
 import UIKit
 
-@objc(BaseSnippet)
 
-public class BaseSnippet: NSManagedObject{}
+protocol SnippetImagesPreviewProvidable
+{
+ var imageProvider: SnippetPreviewImagesProvider {get set}
+}
+
+@objc(BaseSnippet) public class BaseSnippet: NSManagedObject
+{
+ var snippetType: SnippetType {return SnippetType(rawValue: type!)!}
+}
 
 struct SnippetDates
 {

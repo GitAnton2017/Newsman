@@ -166,10 +166,12 @@ class SnippetsViewController: UIViewController
     override func viewWillDisappear(_ animated: Bool)
     {
      super.viewWillDisappear(animated)
-     snippetsTableView.visibleCells.map{$0 as! SnippetsViewCell}.forEach
-     {
-       $0.isLoadTaskCancelled = true
-     }
+     snippetsDataSource.cancelAllImageLoadTasks()
+  
+//     snippetsTableView.visibleCells.map{$0 as! SnippetsViewCell}.forEach
+//     {
+//       $0.isLoadTaskCancelled = true
+//     }
     }
  
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)

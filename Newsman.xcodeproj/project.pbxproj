@@ -30,6 +30,8 @@
 		A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */; };
 		A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */; };
 		A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */; };
+		A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */; };
+		A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */; };
 		A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */; };
 		A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */; };
 		A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */; };
@@ -147,6 +149,8 @@
 		A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItems.swift; sourceTree = "<group>"; };
 		A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewCell.swift; sourceTree = "<group>"; };
 		A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSnippetViewController.swift; sourceTree = "<group>"; };
+		A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Preview Images Provider.swift"; sourceTree = "<group>"; };
+		A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet Preview Provider.swift"; sourceTree = "<group>"; };
 		A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extensions.swift"; sourceTree = "<group>"; };
 		A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder Item.swift"; sourceTree = "<group>"; };
 		A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV D&D Delegate.swift"; sourceTree = "<group>"; };
@@ -504,6 +508,7 @@
 			children = (
 				A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */,
 				A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */,
+				A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */,
 				A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */,
 			);
 			path = "Text Snippets";
@@ -516,6 +521,7 @@
 				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
 				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
 				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
+				A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */,
 				A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
 				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
@@ -753,6 +759,7 @@
 				A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */,
 				A7826E3320DE311700FFBBFA /* Photo Snippet TF Delegate.swift in Sources */,
 				A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */,
+				A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */,
 				A7D39CF72100E21500F80CAA /* Folder Nested CV DS.swift in Sources */,
 				A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */,
 				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
@@ -821,6 +828,7 @@
 				A71C85CC1FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift in Sources */,
 				A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */,
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
+				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,
 				A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

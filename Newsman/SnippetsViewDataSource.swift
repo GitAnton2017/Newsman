@@ -7,9 +7,11 @@ import GameplayKit
 class SnippetsViewDataSource: NSObject, UITableViewDataSource
 {
  
-    var images: [UIImage] = []
+    //var images: [UIImage] = []
  
-    let imagesForAnimation = 30
+ 
+//    let imagesForAnimation = 30
+ 
     lazy var imagesAnimators: [([UIImage], SnippetsViewCell, TimeInterval, TimeInterval) -> Void] =
     [
      /*{imgs, cell, duration, delay in
@@ -270,127 +272,35 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     {
         return snippetsData[section].count
     }
-    
+ 
+ 
+    func cancelAllImageLoadTasks()
+    {
+     snippetsData.joined().compactMap{$0 as? SnippetImagesPreviewProvidable}.forEach{$0.imageProvider.cancelLocal()}
+     SnippetImagesProvider.cancelGlobal()
+    }
+ 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-      let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath)
+      let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetsViewCell
      
       let item = snippetsData[indexPath.section][indexPath.row]
     
-     
-      (cell as! SnippetsViewCell).clear()
-      (cell as! SnippetsViewCell).snippetID = (item.id?.uuidString)!
-      (cell as! SnippetsViewCell).snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
-      (cell as! SnippetsViewCell).snippetTextTag.text = item.tag
+      cell.clear()
+      cell.snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
+      cell.snippetTextTag.text = item.tag
      
       if let snippetPriority = item.priority,
          let priority = SnippetPriority(rawValue: snippetPriority)
       {
-       (cell as! SnippetsViewCell).backgroundColor = priority.color
+       cell.backgroundColor = priority.color
       }
       else
       {
-       (cell as! SnippetsViewCell).backgroundColor = SnippetPriority.normal.color
+       cell.backgroundColor = SnippetPriority.normal.color
        item.priority = SnippetPriority.normal.rawValue
       }
      
-     
-     
-      switch (itemsType)
-      {
-       case .text: (cell as! SnippetsViewCell).snippetImage.image = UIImage(named: "text.main")
-       
-       case .video: fallthrough
-       case .photo:
-        
-        let photoSnippet = item as! PhotoSnippet
-        let photoSnippetCell = cell as! SnippetsViewCell
-        
-//        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-//        if let latestPhoto = photoSnippet.photos?.sortedArray(using: [sort]).last as? Photo
-//        {
-          let iconWidth = photoSnippetCell.snippetImage.frame.width
-//          let latestPhotoItem = PhotoItem(photo: latestPhoto)
-//          latestPhotoItem.getImageOperation(requiredImageWidth: iconWidth/*, context: photoSnippetCell*/)
-          photoSnippet.imageProvider.getLatestImage(requiredImageWidth: iconWidth)
-          {[weak self] (image) in
-           
-           guard let ds = self else {return}
-      
-           let ip = ds.groupType == .byPriority ? ds.snippetIndexPath(snippet: photoSnippet) : indexPath
-           
-           guard let cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
-           
-           guard let firstImage = image else
-           {
-            cell.imageSpinner.stopAnimating()
-            cell.snippetImage.image = UIImage(named: "photo.main")
-            return
-           }
-           
-           DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
-           {
-            cell.imageSpinner.stopAnimating()
-            
-            UIView.transition(with: cell.snippetImage, duration: 0.35, options: [.transitionFlipFromTop, .curveEaseInOut],
-                              animations: {cell.snippetImage.image = image},
-                              completion:
-                              {_ in
-                              
-                               cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
-                               UIView.animate(withDuration: 0.15, delay: 0.25, usingSpringWithDamping: 3500,
-                               initialSpringVelocity: 0,
-                               options: .curveEaseInOut,
-                               animations: {cell.snippetImage.transform = .identity},
-                               completion:
-                               {[weak self] _ in
-                                
-//                                guard let ds = self else {return}
-//                                PhotoItem.getRandomImages3(for: photoSnippet, number: ds.imagesForAnimation,
-//                                                           requiredImageWidth: iconWidth,
-//                                                           loadContext: cell)
-                                photoSnippet.imageProvider.getRandomImages(requiredImageWidth: iconWidth)
-                                 {[weak self] images in
-                                 
-                                 guard let ds = self else {return}
-                                 
-                                 let ip = ds.groupType == .byPriority ? ds.snippetIndexPath(snippet: photoSnippet) : indexPath
-                                 
-                                 guard let _cell = tableView.cellForRow(at: ip) as? SnippetsViewCell else {return}
-                                
-                                 _cell.snippetImage.layer.removeAllAnimations()
-                                 _cell.animating = [:]
-                                 
-                                 guard var imgs = images else {return}
-                                 
-                                 imgs.insert(firstImage, at: 0)
-                                 
-                                 let a4rnd = GKRandomDistribution(lowestValue: 0, highestValue: ds.imagesAnimators.count - 1)
-                                 
-                                 ds.imagesAnimators[a4rnd.nextInt()](Array(Set(imgs)), _cell, 2.0, 5.0)
-                                
-                              
-                                }
-                               })
-                              })
-                              
-           
-           }
-          }
-//        }
-//        else
-//        {
-//
-//           photoSnippetCell.imageSpinner.stopAnimating()
-//           photoSnippetCell.snippetImage.image = UIImage(named: "photo.main")
-//        }
-
-       
-       case .audio: break
-       case .sketch: break
-       case .report: break
-       default: break
-      }
         
       return cell
     }

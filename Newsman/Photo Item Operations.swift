@@ -1,6 +1,7 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 extension PhotoItem
 {
@@ -33,10 +34,15 @@ extension PhotoItem
   save_op.addDependency(context_op)
   save_op.addDependency(cache_op)
   
+  let video_op = RenderVideoPreviewOperation()
+  video_op.addDependency(context_op)
+  video_op.addDependency(cache_op)
+  
   let resize_op = ResizeImageOperation(requiredImageSize: requiredImageWidth)
   resize_op.addDependency(save_op)
+  resize_op.addDependency(video_op)
   resize_op.addDependency(cache_op)
-  
+ 
   let thumbnail_op = ThumbnailImageOperation(requiredImageSize: requiredImageWidth)
   thumbnail_op.addDependency(resize_op)
   thumbnail_op.addDependency(context_op)
@@ -49,7 +55,7 @@ extension PhotoItem
     completion(finalImage)
    }
   }
-  let operations = [cache_op, save_op, resize_op, thumbnail_op]
+  let operations = [cache_op, save_op, video_op, resize_op, thumbnail_op]
   
   PhotoItem.contextQ.addOperation(context_op)
   
@@ -59,36 +65,42 @@ extension PhotoItem
  
 }
 
-protocol CachedImageDataProvider
+fileprivate protocol CachedImageDataProvider
 {
  var cachedImageID: UUID? {get}
 }
 
-protocol SavedImageDataProvider
+fileprivate protocol SavedImageDataProvider
 {
- var savedImageID: UUID? {get}
  var savedImageURL: URL? {get}
  var imageSnippetType: SnippetType? {get}
 }
 
-protocol ResizeImageDataProvider
+fileprivate protocol VideoPreviewDataProvider
+{
+ var videoURL: URL? {get}
+ var imageSnippetType: SnippetType? {get}
+}
+
+fileprivate protocol ResizeImageDataProvider
 {
  var imageToResize: UIImage? {get}
 }
 
-protocol ThumbnailImageDataProvider
+fileprivate protocol ThumbnailImageDataProvider
 {
  var thumbnailImage: UIImage? {get}
 }
 
-protocol ImageSetDataProvider
+fileprivate protocol ImageSetDataProvider
 {
  var finalImage: UIImage? {get}
 }
 
-class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataProvider
+class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataProvider, VideoPreviewDataProvider
 {
- var savedImageID: UUID? {return photoID}
+
+ var videoURL: URL?      {return photoURL}
  var savedImageURL: URL? {return photoURL}
  var imageSnippetType: SnippetType? {return type}
  
@@ -96,11 +108,11 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
  
  var photoItem: PhotoItem? //Input PhotoItem
  
- var photoID: UUID?
- var photoURL: URL?
- var type: SnippetType?
+ private var photoID: UUID?
+ private var photoURL: URL?
+ private var type: SnippetType?
  
- var cnxObserver: NSKeyValueObservation?
+ private var cnxObserver: NSKeyValueObservation?
  
  override init()
  {
@@ -120,7 +132,7 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
   
   if isCancelled
   {
-   print ("\(self.description) CNXX!")
+   print ("\(self.description) IS CANCELLED HERE!!")
    return
   }
   guard let photoItem = self.photoItem else {return}
@@ -137,13 +149,13 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
 {
  var imageToResize: UIImage? {return outputImage}
  
- lazy var contextDepend = {dependencies.compactMap{$0 as? CachedImageDataProvider}.first}()
- var cachedImageID: UUID? {return contextDepend?.cachedImageID}
+ private lazy var contextDepend = {dependencies.compactMap{$0 as? CachedImageDataProvider}.first}()
+ private var cachedImageID: UUID? {return contextDepend?.cachedImageID}
  
- var cachedImage: UIImage?
- var outputImage: UIImage?
+ fileprivate var cachedImage: UIImage?
+ private var outputImage: UIImage?
  
- var width: Int
+ private var width: Int
  
  var cnxObserver: NSKeyValueObservation?
  
@@ -169,7 +181,7 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
   
   if isCancelled
   {
-   print ("\(self.description) CNXX 1!")
+   print ("\(self.description) IS CANCELLED HERE!")
    return
   }
   
@@ -178,7 +190,7 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
   
   if isCancelled
   {
-   print ("\(self.description) CNXX 2!")
+   print ("\(self.description) IS CANCELLED HERE!")
    return
   }
   
@@ -194,15 +206,16 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
 {
  var imageToResize: UIImage? {return savedImage}
  
- lazy var contextDepend = {dependencies.compactMap{$0 as? SavedImageDataProvider}.first}()
- lazy var cachedDepend =  {dependencies.compactMap{$0 as? CachedImageOperation  }.first}()
+ private lazy var contextDepend = {dependencies.compactMap{$0 as? SavedImageDataProvider}.first}()
+ private lazy var cachedDepend =  {dependencies.compactMap{$0 as? CachedImageOperation  }.first}()
  
- var savedImageURL: URL?   {return contextDepend?.savedImageURL}
- var cachedImage: UIImage? {return cachedDepend?.cachedImage}
- var type: SnippetType?    {return contextDepend?.imageSnippetType}
- var savedImage: UIImage?
+ private var savedImageURL: URL?   {return contextDepend?.savedImageURL}
+ private var cachedImage: UIImage? {return cachedDepend?.cachedImage}
+ private var type: SnippetType?    {return contextDepend?.imageSnippetType}
  
- var cnxObserver: NSKeyValueObservation?
+ private var savedImage: UIImage?
+ 
+ private var cnxObserver: NSKeyValueObservation?
  
  override init()
  {
@@ -222,7 +235,7 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
   
   if isCancelled
   {
-   print ("\(self.description) CNXX!")
+   print ("\(self.description) IS CANCELLED HERE!")
    return
   }
   
@@ -240,32 +253,79 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  }
 }
 
-class RenderVideoPreviewOperation: Operation
+class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
 {
+ var imageToResize: UIImage? {return previewImage}
+ 
+ private lazy var contextDepend = {dependencies.compactMap{$0 as? VideoPreviewDataProvider}.first}()
+ private lazy var cachedDepend =  {dependencies.compactMap{$0 as? CachedImageOperation  }.first}()
+ 
+ private var videoURL: URL?        {return contextDepend?.videoURL}
+ private var cachedImage: UIImage? {return cachedDepend?.cachedImage}
+ private var type: SnippetType?    {return contextDepend?.imageSnippetType}
+ 
+ private var previewImage: UIImage?
+ 
+ private var cnxObserver: NSKeyValueObservation?
+ 
+ override init()
+ {
+  super.init()
+  cnxObserver = observe(\.isCancelled)
+  {[unowned self] obs, val in
+   if obs.isCancelled
+   {
+    print ("\(self.description) is cancelled!")
+   }
+  }
+ }
+ 
  override func main()
  {
-  if isCancelled {return}
+  //  print ("\(self.description) in \(Thread.current)")
+  
+  if isCancelled
+  {
+   print ("\(self.description) IS CANCELLED HERE!")
+   return
+  }
+  
+  guard let url = videoURL, type == .video, cachedImage == nil, previewImage == nil else {return}
+  
+  do
+  {
+   let asset = AVURLAsset(url: url, options: nil)
+   let imgGenerator = AVAssetImageGenerator(asset: asset)
+   imgGenerator.appliesPreferredTrackTransform = true
+   let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
+   previewImage = UIImage(cgImage: cgImage)
+   
+  }
+  catch let error
+  {
+   print("ERROR, generating thumbnail from video at URL:\n \"\(url.path)\"\n\(error.localizedDescription)")
+  }
+  
  }
 }
-
 
 
 class ThumbnailImageOperation: Operation, ImageSetDataProvider
 {
  var finalImage: UIImage? {return thumbnailImage}
  
- var thumbnailImage: UIImage?
+ fileprivate var thumbnailImage: UIImage?
  
- lazy var thumbnailDepend = {dependencies.compactMap{$0 as? ThumbnailImageDataProvider}.first}()
- lazy var contextDepend =   {dependencies.compactMap{$0 as? CachedImageDataProvider   }.first}()
- lazy var cachedDepend =    {dependencies.compactMap{$0 as? CachedImageOperation      }.first}()
+ private lazy var thumbnailDepend = {dependencies.compactMap{$0 as? ThumbnailImageDataProvider}.first}()
+ private lazy var contextDepend =   {dependencies.compactMap{$0 as? CachedImageDataProvider   }.first}()
+ private lazy var cachedDepend =    {dependencies.compactMap{$0 as? CachedImageOperation      }.first}()
  
  var cachedImageID: UUID?   {return contextDepend?.cachedImageID}
  var cachedImage: UIImage?  {return cachedDepend?.cachedImage}
  
- var width: Int
+ private var width: Int
  
- var cnxObserver: NSKeyValueObservation?
+ private var cnxObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
  {
@@ -276,7 +336,7 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
   {[unowned self] obs, val in
    if obs.isCancelled
    {
-    print ("\(self.description) is canclled!")
+    print ("\(self.description) is cancelled!")
    }
   }
  }
@@ -318,13 +378,15 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
 class ResizeImageOperation: Operation, ThumbnailImageDataProvider
 {
  var thumbnailImage: UIImage? {return resizedImage}
- var imageToResize: UIImage? {return dependencies.compactMap{($0 as? ResizeImageDataProvider)?.imageToResize}.first}
  
- var resizedImage: UIImage?
+ private var imageToResize: UIImage?
+ {
+  return dependencies.compactMap{($0 as? ResizeImageDataProvider)?.imageToResize}.first
+ }
  
- var width: Int
- 
- var cnxObserver: NSKeyValueObservation?
+ private var resizedImage: UIImage?
+ private var width: Int
+ private var cnxObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
  {
@@ -358,7 +420,7 @@ class ImageSetOperation: Operation
 {
  var imageSet: [UIImage]?
  
- var cnxObserver: NSKeyValueObservation?
+ private var cnxObserver: NSKeyValueObservation?
  
  override init()
  {
