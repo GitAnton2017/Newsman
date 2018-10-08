@@ -3,10 +3,13 @@
    version = "1.0">
    <ContextStates>
       <ContextState
-         contextName = "closure #2 in SnippetImagesProvider.getLatestImage(requiredImageWidth:completion:):Photo Snippet Images Provider.swift">
+         contextName = "PhotoFolderCell.collectionView(_:didEndDisplaying:forItemAt:):Folder Nested CV Delegate.swift">
          <PersistentStrings>
             <PersistentString
-               value = "thumbnail_op.finalImage">
+               value = "photoItems.count">
+            </PersistentString>
+            <PersistentString
+               value = "indexPath.row">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -33,6 +36,14 @@
          contextName = "closure #1 in closure #2 in SnippetImagesProvider.getLatestImage(requiredImageWidth:completion:):Photo Snippet Images Provider.swift">
       </ContextState>
       <ContextState
+         contextName = "UIImage.resized(withPercentage:):UIImage Extensions.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "format.preferredRange">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "closure #2 in closure #3 in SnippetsViewDataSource.imagesAnimators.getter:SnippetsViewDataSource.swift">
          <PersistentStrings>
             <PersistentString
@@ -45,6 +56,14 @@
          <PersistentStrings>
             <PersistentString
                value = "collectionView.visibleCells.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in SnippetImagesProvider.getLatestImage(requiredImageWidth:completion:):Photo Snippet Images Provider.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "thumbnail_op.finalImage">
             </PersistentString>
          </PersistentStrings>
       </ContextState>
@@ -70,17 +89,6 @@
             </PersistentString>
             <PersistentString
                value = "scaledImage.size">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "PhotoFolderCell.collectionView(_:didEndDisplaying:forItemAt:):Folder Nested CV Delegate.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "photoItems.count">
-            </PersistentString>
-            <PersistentString
-               value = "indexPath.row">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

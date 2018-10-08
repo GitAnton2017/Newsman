@@ -184,18 +184,19 @@ class PhotoItem: NSObject, PhotoItemProtocol
      
     }
  
+    static let createNewItemQueue = DispatchQueue(label: "createNewItemQueue", qos: .utility, attributes: .concurrent)
+ 
     class func createNewPhoto (in photoSnippet: PhotoSnippet,
                                with image: UIImage,
                                ofRequiredSize cachedImageWidth: CGFloat,
                                completion: @escaping (_ newPhotoItem: PhotoItem?) -> Void)
     {
-     PhotoItem.MOC.persist
+     createNewItemQueue.async
      {
       do
       {
-       if let data = UIImagePNGRepresentation(image)
+       if let data = UIImageJPEGRepresentation(image, 0.95)
        {
-        
         let newPhotoID = UUID()
         let newPhotoURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
                                    .appendingPathComponent(newPhotoID.uuidString)
@@ -205,23 +206,40 @@ class PhotoItem: NSObject, PhotoItemProtocol
         
         cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
         
-        let newPhoto = Photo(context: PhotoItem.MOC)
-        newPhoto.date = Date() as NSDate
-        newPhoto.photoSnippet = photoSnippet
-        newPhoto.isSelected = false
-        newPhoto.id = newPhotoID
-        newPhoto.position = Int16(photoSnippet.unfolderedPhotos.count + photoSnippet.allFolders.count)
-        photoSnippet.addToPhotos(newPhoto)
-        
-        let newPhotoItem = PhotoItem(photo: newPhoto)
-        
-        DispatchQueue.main.async {completion(newPhotoItem)}
+        DispatchQueue.main.async
+        {
+         var newPhotoItem: PhotoItem? = nil
+         PhotoItem.MOC.persist(block:
+         {
+          let newPhoto = Photo(context: PhotoItem.MOC)
+          newPhoto.date = Date() as NSDate
+          newPhoto.photoSnippet = photoSnippet
+          newPhoto.isSelected = false
+          newPhoto.id = newPhotoID
+          newPhoto.position = Int16(photoSnippet.unfolderedPhotos.count + photoSnippet.allFolders.count)
+          photoSnippet.addToPhotos(newPhoto)
+          newPhotoItem = PhotoItem(photo: newPhoto)
+         }, completion:
+         {success in
+          if success
+          {
+           DispatchQueue.main.async {completion(newPhotoItem)}
+          }
+          else
+          {
+           deletePhotoItemFromDisk(at: newPhotoURL)
+           DispatchQueue.main.async {completion(nil)}
+          }
+         })
+        }
+       
         
        }
        else
        {
          print ("UNABLE TO CREATE JPEG/PNG DATA FROM PICKED IMAGE")
          DispatchQueue.main.async {completion(nil)}
+      
        }
       }
       catch

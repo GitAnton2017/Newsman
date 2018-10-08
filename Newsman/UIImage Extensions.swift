@@ -12,7 +12,7 @@ extension UIImage
         let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
         let format = UIGraphicsImageRendererFormat.default()
         //format.scale = 1
-        format.prefersExtendedRange = false
+        format.preferredRange = .extended
         let render = UIGraphicsImageRenderer(size: canvasSize, format: format)
         let image = render.image
         {_ in
@@ -52,7 +52,7 @@ extension UIImage
       let canvasSize = CGSize(width: self.size.width * percentage, height: self.size.height * percentage)
       let format = UIGraphicsImageRendererFormat.default()
       //format.scale = 1
-      format.prefersExtendedRange = false
+      //format.prefersExtendedRange = false
       let render = UIGraphicsImageRenderer(size: canvasSize, format: format)
       let image = render.image {_ in self.draw(in: CGRect(origin: .zero, size: canvasSize))}
       completion(image)
