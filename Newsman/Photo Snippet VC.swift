@@ -24,6 +24,9 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     
 //---------------------------------------------------------------------------
  var photoSnippet: PhotoSnippet!
+  
+ var photoSnippetTableViewCell: SnippetsViewCell!
+  
 //---------------------------------------------------------------------------
  {
   didSet
@@ -49,6 +52,10 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
  {
   didSet
   {
+     photoSnippet.nphoto = Int32(nphoto)
+   
+     photoCollectionView.visibleCells.forEach{($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
+   
 
      if isEditingPhotos
      {
@@ -58,8 +65,9 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
      {
       photoCollectionView.locateCellMenu()
      }
-     
-     photoSnippet.nphoto = Int32(nphoto)
+   
+
+   
      //let visibleCells = photoCollectionView.indexPathsForVisibleItems
      //photoCollectionView.reloadItems(at: visibleCells)
    
@@ -136,7 +144,6 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
    super.viewDidLoad()
    navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
  
-  
    photoCollectionView.dataSource = self
    photoCollectionView.delegate = self
    
@@ -232,23 +239,7 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
  {
    super.viewWillDisappear(animated)
-    
-   if photoSnippetTitle.isFirstResponder
-   {
-     photoSnippetTitle.resignFirstResponder()
-   }
-    
-   if isEditingMode
-   {
-     savePhotoSnippetData()
-   }
 
-  /*if !photoCollectionView.hasActiveDrag
-   {
-    deselectSelectedItems(in: photoCollectionView)
-   }*/
-    
-   //PhotoItem.imageCacheDict.values.forEach{$0.removeAllObjects()}
  }
 //---------------------------------------------------------------------------
 //MARK:-
@@ -289,7 +280,6 @@ func updateDateLabel()
  //---------------------------------------------------------------------------
  {
   if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
-  savePhotoSnippetData()
   moveToNextSnippet(in: -1)
  }
  //---------------------------------------------------------------------------
@@ -297,7 +287,6 @@ func updateDateLabel()
   //---------------------------------------------------------------------------
  {
   if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
-  savePhotoSnippetData()
   moveToNextSnippet(in: 1)
  }
  
@@ -378,7 +367,7 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
  {
   photoSnippet.tag = photoSnippetTitle.text
-  (UIApplication.shared.delegate as! AppDelegate).saveContext()
+//  (UIApplication.shared.delegate as! AppDelegate).saveContext()
  }
 //---------------------------------------------------------------------------
 //MARK: -
@@ -572,13 +561,18 @@ func updateDateLabel()
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
  {
-  if let segueID = segue.identifier, segueID == "PhotoSnippetDatePicker"
+  if let segueID = segue.identifier, segueID == "PhotoSnippetDatePicker",
+     let dest = segue.destination as?  DatePickerViewController
   {
-    (segue.destination as! DatePickerViewController).editedSnippet = photoSnippet
+    dest.editedSnippet = photoSnippet
+    dest.editedSnippetTableViewCell = photoSnippetTableViewCell
   }
-  if let segueID = segue.identifier, segueID == "PhotoSnippetPriorityPicker"
+  
+  if let segueID = segue.identifier, segueID == "PhotoSnippetPriorityPicker",
+     let dest = segue.destination as?  PriorityPickerViewController
   {
-    (segue.destination as! PriorityPickerViewController).editedSnippet = photoSnippet
+    dest.editedSnippet = photoSnippet
+    dest.editedSnippetTableViewCell = photoSnippetTableViewCell
   }
         
  }

@@ -14,8 +14,7 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
                        willDisplay cell: UICollectionViewCell,
                        forItemAt indexPath: IndexPath)
  {
-  
-  guard let photoItem = photoItems2D[indexPath.section][indexPath.row] as? PhotoItem else {return}
+  guard let photoItem = (cell as? PhotoSnippetCell)?.hostedPhotoItem else {return}
   
   photoItem.getImageOperation(requiredImageWidth:  imageSize)
   {[weak self] (image) in
@@ -65,16 +64,7 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
                        didEndDisplaying cell: UICollectionViewCell,
                        forItemAt indexPath: IndexPath)
  {
-  
-  let photoItem = photoItems2D[indexPath.section][indexPath.row]
-  
-  switch (photoItem)
-  {
-   case let item as PhotoItem: item.cancelImageOperation()
-   case _ as PhotoFolderItem: (cell as! PhotoFolderCell).photoItems.forEach{$0.cancelImageOperation()}
-   default: break
-  }
-  
+  (cell as? PhotoSnippetCellProtocol)?.cancelImageOperations()
  }
  
  

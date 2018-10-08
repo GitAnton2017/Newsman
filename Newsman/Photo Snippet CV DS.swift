@@ -86,12 +86,8 @@ extension PhotoSnippetViewController
 //MARK: -
     
     
-    
  
-//MARK: -- Creating Desectioned Photo Items with one (number - 0) section ---
-//---------------------------------------------------------------------------
  func desectionedPhotoItems() -> [[PhotoItemProtocol]]
-//---------------------------------------------------------------------------
  {
   var photoItems = [[PhotoItemProtocol]]()
   if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
@@ -104,16 +100,11 @@ extension PhotoSnippetViewController
   }
   sectionTitles = nil //no sectiones ...no sections titles....
   return photoItems
+  
  } //func desectionedPhotoItems()...
-//----------------------------------------------------------------------------
-//MARK: -
 
-    
-    
-//MARK: ------------ Searching for Index path by Photo Item ID ---------------
-//----------------------------------------------------------------------------
+ 
  func photoItemIndexPath(photoItem: PhotoItemProtocol) -> IndexPath?
-//----------------------------------------------------------------------------
  {
   
   if let photo = photoItem as? PhotoItem
@@ -133,83 +124,61 @@ extension PhotoSnippetViewController
   
   return path != nil ? IndexPath(row: path!.item!.offset, section: path!.section) : nil
     
- }//func photoItemIndexPath(photoItem: PhotoItemProtocol)...
-//----------------------------------------------------------------------------
-//MARK: -
-    
+ }
+ 
 
-//MARK: ----------------- Deselect Selected Photo Items ----------------------
-//----------------------------------------------------------------------------
 func deselectSelectedItems(in collectionView: UICollectionView)
-//----------------------------------------------------------------------------
 {
-    photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.forEach
-    {section in
-      section.element.enumerated().filter{$0.element.isSelected}.forEach
-      {row in
-        row.element.isSelected = false
-        let indexPath = IndexPath(row: row.offset, section: section.offset)
-        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
-        {
-          cell.isPhotoItemSelected = false
-          collectionView.deselectItem(at: indexPath, animated: false)
-        }
-       }
+ PhotoItem.MOC.persistAndWait //persist deselections in context...
+ {
+  self.photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.forEach
+  {section in
+   section.element.enumerated().filter{$0.element.isSelected}.forEach
+   {row in
+    row.element.isSelected = false
+    let indexPath = IndexPath(row: row.offset, section: section.offset)
+    if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+    {
+      cell.isPhotoItemSelected = false
+      collectionView.deselectItem(at: indexPath, animated: false)
     }
-   
-}// func deselectSelectedItems(in collectionView: UICollectionView)...
-//----------------------------------------------------------------------------
-//MARK: -
-    
+   }
+  }
+ }
+}
  
-    
-//MARK: -------------------- Select All Photo Items --------------------------
-//----------------------------------------------------------------------------
 func selectAllPhotoItems(in collectionView: UICollectionView)
-//----------------------------------------------------------------------------
 {
-    photoItems2D.enumerated().forEach
-    {section in
-      section.element.enumerated().forEach
-      {row in
-        row.element.isSelected = true
-        let indexPath = IndexPath(row: row.offset, section: section.offset)
-        if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
-        {
-          cell.isPhotoItemSelected = true
-          collectionView.selectItem(at: indexPath, animated: false, scrollPosition:[])
-        }
-      }
+ PhotoItem.MOC.persistAndWait //persist selections in context...
+ {
+  self.photoItems2D.enumerated().forEach
+  {section in
+   section.element.enumerated().forEach
+   {row in
+    row.element.isSelected = true
+    let indexPath = IndexPath(row: row.offset, section: section.offset)
+    if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+    {
+      cell.isPhotoItemSelected = true
+      collectionView.selectItem(at: indexPath, animated: false, scrollPosition:[])
     }
-   
-}// selectAllPhotoItems(in collectionView: UICollectionView)...
- //----------------------------------------------------------------------------
- //MARK: -
- 
- 
- 
- 
-//MARK: ----------------------- Deleting Empty Sections ----------------------
-//----------------------------------------------------------------------------
+   }
+  }
+ }
+}
+
 func deleteEmptySections()
-//----------------------------------------------------------------------------
 {
-     photoItems2D.enumerated().filter{$0.element.count == 0}.sorted{$0.offset > $1.offset}.forEach
-     {section in
-       photoItems2D.remove(at: section.offset)
-       sectionTitles?.remove(at: section.offset)
-       photoCollectionView.deleteSections([section.offset])
-     }
-    
-}// func deleteSelectedPhotos()...
-//--------------------------------------------------------------------------------
-//MARK: -
+ photoItems2D.enumerated().filter{$0.element.count == 0}.sorted{$0.offset > $1.offset}.forEach
+ {section in
+   photoItems2D.remove(at: section.offset)
+   sectionTitles?.remove(at: section.offset)
+   photoCollectionView.deleteSections([section.offset])
+ }
+}
+
  
- 
-//MARK: ------------------------- Insert New Photo Item -------------------------
-//-------------------------------------------------------------------------------
 func insertNewPhotoItem(_ newPhotoItem: PhotoItem)
-//-------------------------------------------------------------------------------
 {
  if (photoItems2D.isEmpty)
  {
@@ -255,36 +224,95 @@ func insertNewPhotoItem(_ newPhotoItem: PhotoItem)
 //----------------------------------------------------------------------------
 //MARK: -
 
-
-
-//MARK: ----------------- Deleting Selected Photo Items ----------------------
-//----------------------------------------------------------------------------
- func deleteSelectedPhotos()
-//----------------------------------------------------------------------------
+ 
+func deleteSelectedPhotos()
+{
+ var deletedIndexPaths: [IndexPath] = []
+ var deletedItems: [PhotoItemProtocol] = []
+ var deletedSections = IndexSet()
+ 
+ photoCollectionView.performBatchUpdates(
  {
-  photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.sorted{$0.offset > $1.offset}.forEach
+  let selected = photoItems2D.map
   {section in
-    section.element.enumerated().filter{$0.element.isSelected}.sorted{$0.offset > $1.offset}.forEach
-    {row in
-       let deletedItem = photoItems2D[section.offset].remove(at: row.offset)
-       deletedItem.deleteImages()
-       let indexPath = IndexPath(row: row.offset, section: section.offset)
-       photoCollectionView.deleteItems(at: [indexPath])
-    }
-    
-    if photoCollectionView.photoGroupType == .makeGroups
-    {
-       photoCollectionView.reloadSections([section.offset])
-    }
-  }
-  
-  deleteEmptySections()
+   (total: section.count, selected: section.enumerated().filter{$0.element.isSelected}.reversed())
+  }.enumerated().filter
+  {section in !section.element.selected.isEmpty}.reversed()
+ 
 
+  selected.forEach
+  {section in
+   if (section.element.total == section.element.selected.count)
+   {
+    let deletedSection = photoItems2D.remove(at: section.offset)
+    deletedItems.append(contentsOf: deletedSection)
+    sectionTitles?.remove(at: section.offset)
+    deletedSections.insert(section.offset)
+   }
+   else
+   {
+    section.element.selected.forEach
+    {row in
+     let deletedItem = photoItems2D[section.offset].remove(at: row.offset)
+     deletedItems.append(deletedItem)
+     let deletedIndexPath = IndexPath(row: row.offset, section: section.offset)
+     deletedIndexPaths.append(deletedIndexPath)
+    }
+   }
+  }
+  photoCollectionView.deleteItems(at: deletedIndexPaths)
+  photoCollectionView.deleteSections(deletedSections)
   
- }// func deleteSelectedPhotos()...
-//----------------------------------------------------------------------------
-//MARK: -
-    
+  
+ })
+ {_ in
+  PhotoItem.MOC.persist
+  {
+   deletedItems.forEach{$0.deleteImages()}
+  } //persist deletions in context after CV batch update...
+  
+  self.photoCollectionView.reloadData()
+ }
+ 
+}
+
+////MARK: ----------------- Deleting Selected Photo Items ----------------------
+////----------------------------------------------------------------------------
+// func deleteSelectedPhotos2()
+////----------------------------------------------------------------------------
+// {
+//
+//  var deletedItems: [PhotoItemProtocol] = []
+//  photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.sorted{$0.offset > $1.offset}.forEach
+//  {section in
+//    section.element.enumerated().filter{$0.element.isSelected}.sorted{$0.offset > $1.offset}.forEach
+//    {row in
+//       let deletedItem = photoItems2D[section.offset].remove(at: row.offset)
+//       deletedItems.append(deletedItem)
+//
+//       let indexPath = IndexPath(row: row.offset, section: section.offset)
+//       photoCollectionView.deleteItems(at: [indexPath])
+//
+//    }
+//
+//
+//    if photoCollectionView.photoGroupType == .makeGroups
+//    {
+//       photoCollectionView.reloadSections([section.offset])
+//    }
+//  }
+//
+//
+//
+//  PhotoItem.MOC.persist {deletedItems.forEach{$0.deleteImages()}}
+//
+//  deleteEmptySections()
+//
+//
+// }// func deleteSelectedPhotos()...
+////----------------------------------------------------------------------------
+////MARK: -
+ 
     
     
 //MARK: ----------------- Marking Selected Sectioned Photo Items -------------
@@ -292,12 +320,16 @@ func insertNewPhotoItem(_ newPhotoItem: PhotoItem)
  func flagGroupedSelectedPhotos(with flagStr: String?)
 //----------------------------------------------------------------------------
  {
-   photoItems2D.reduce([], {$0 + $1.filter({$0.isSelected})}).forEach
-   {item in
-    item.isSelected = false
-    let itemIndexPath = photoItemIndexPath(photoItem: item)
-    photoCollectionView.movePhoto(at: itemIndexPath!, with: flagStr)
+  PhotoItem.MOC.persistAndWait //persist selected Photo status color flags in context...
+  {
+    self.photoItems2D.reduce(into: []){$0.append(contentsOf: $1.filter{$0.isSelected})}.forEach
+    {item in
+     item.isSelected = false
+     let itemIndexPath = self.photoItemIndexPath(photoItem: item)
+     self.photoCollectionView.movePhoto(at: itemIndexPath!, with: flagStr)
    }
+  }
+  
  }//func flagGroupedSelectedPhotos(with flagStr: String?)...
 //----------------------------------------------------------------------------
     
@@ -468,6 +500,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
 //--------------------------------------------------------------------------------------------------------------------
  {
   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSnippetCell", for: indexPath) as! PhotoSnippetCell
+  
+  cell.hostedPhotoItem = photoItem //holding weak reference to PhotoItem shown by cell...
     
   let photoCV = collectionView as! PhotoSnippetCollectionView
     
@@ -488,50 +522,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   
   cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
  
-//  photoItem.getImageOperation(requiredImageWidth:  imageSize)
-//  {(image) in
-//
-////    guard /*let ds = self, let ip = ds.photoItemIndexPath(photoItem: photoItem),*/
-////     let _cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCell else {return}
-//
-//    cell.spinner.stopAnimating()
-//
-//    UIView.transition(with: cell.photoIconView,
-//                      duration: 0.5,
-//                      options: .transitionCrossDissolve,
-//                      animations: {cell.photoIconView.image = image},
-//                      completion:
-//                      {_ in
-//
-//                       if let flag = photoItem.priorityFlag, let color = PhotoPriorityFlags(rawValue: flag)?.color
-//                       {
-//                        cell.drawFlagMarker(flagColor: color)
-//                       }
-//                       else
-//                       {
-//                        cell.clearFlagMarker()
-//                       }
-//
-//                       if (photoItem.type == .video)
-//                       {
-//                        cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
-//                        cell.showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: photoItem.url).duration)
-//                       }
-//
-//                       cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-//
-//                       UIView.animate(withDuration: 0.15,
-//                                      delay: 0,
-//                                      usingSpringWithDamping: 2500,
-//                                      initialSpringVelocity: 0,
-//                                      options: .curveEaseInOut,
-//                                      animations: {cell.photoItemView.transform = .identity},
-//                                      completion: nil)
-//
-//                      })
-//
-//   }
-  
+
    return cell
     
  }//func getPhotoCell (_ collectionView: UICollectionView...
@@ -594,14 +585,14 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  {
    var cell = UICollectionViewCell()
    let photoItem = photoItems2D[indexPath.section][indexPath.row]
+  
    switch (photoItem)
    {
-    case let item as PhotoItem:
-     cell = getPhotoCell (collectionView, at: indexPath, with: item)
-    case let item as PhotoFolderItem:
-     cell = getFolderCell(collectionView, at: indexPath, with: item)
+    case let item as PhotoItem:       cell = getPhotoCell  (collectionView, at: indexPath, with: item)
+    case let item as PhotoFolderItem: cell = getFolderCell (collectionView, at: indexPath, with: item)
     default: break
    }
+  
    let cellInter = UISpringLoadedInteraction
    {inter, context in
     let photoCV = collectionView as! PhotoSnippetCollectionView

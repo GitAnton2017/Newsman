@@ -38,7 +38,7 @@ extension NCSnippetsScrollProtocol
      return
     }
     nextVC = toVC
-    toVC.textSnippet = nextSnippet as! TextSnippet
+    toVC.textSnippet = nextSnippet as? TextSnippet
     
    case .photo: fallthrough
     
@@ -49,7 +49,7 @@ extension NCSnippetsScrollProtocol
      return
     }
     nextVC = toVC
-    toVC.photoSnippet = nextSnippet as! PhotoSnippet
+    toVC.photoSnippet = nextSnippet as? PhotoSnippet
     
    case .audio: break
    case .sketch: break

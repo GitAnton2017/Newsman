@@ -5,23 +5,78 @@ import AVKit
 
 extension PhotoItem
 {
+ static var maxResizeTask = 5
  
-// static let contextQ = DispatchQueue(label: "Context Queue")
+ static func clearChainedOperations()
+ {
+  prevSavedOperations.removeAll()
+  prevResizeOperations.removeAll()
+  currResizeOperations.removeAll()
+  currSavedOperations.removeAll()
+ }
  
- static let contextQ =
- { () -> OperationQueue in
-  let queue = OperationQueue()
-  queue.qualityOfService = .userInitiated
-  queue.maxConcurrentOperationCount = 1
-  return queue
- }()
+ fileprivate static var prevResizeOperations: [ResizeImageOperation] = []
+ fileprivate static var currResizeOperations: [ResizeImageOperation] = []
+ fileprivate static var prevSavedOperations:  [SavedImageOperation ] = []
+ fileprivate static var currSavedOperations:  [SavedImageOperation ] = []
+
+ private static func chainOperations (_ saved_op: SavedImageOperation, _ resize_op: ResizeImageOperation)
+ {
+  if (prevSavedOperations.count == maxResizeTask)
+  {
+   if (currSavedOperations.count < maxResizeTask)
+   {
+    prevResizeOperations.forEach{saved_op.addDependency($0)}
+    currSavedOperations.append(saved_op)
+    currResizeOperations.append(resize_op)
+    
+//    print ("FORM CURRENT BLOCK")
+//    print ("-----------------------------------------------------------")
+//    print ("SAVED:");  currSavedOperations.forEach{print("\($0.debugDescription) Dependencies: \($0.dependencies.count)")}
+//    print ("RESIZE:"); currResizeOperations.forEach{print("\($0.debugDescription) Dependencies: \($0.dependencies.count)")}
+//    print ("-----------------------------------------------------------")
+//
+   }
+   
+   if (currSavedOperations.count == maxResizeTask)
+   {
+   
+    prevResizeOperations = currResizeOperations
+    currResizeOperations.removeAll()
+    
+    prevSavedOperations = currSavedOperations
+    currSavedOperations.removeAll()
+   }
+  }
+  else
+  {
+   prevSavedOperations.append(saved_op)
+   prevResizeOperations.append(resize_op)
+   
+//   print ("FORM PREV BLOCK")
+//   print ("-----------------------------------------------------------")
+//   print ("SAVED:");  prevSavedOperations.forEach{print("\($0.debugDescription) Dependencies: \($0.dependencies.count)")}
+//   print ("RESIZE:"); prevResizeOperations.forEach{print("\($0.debugDescription) Dependencies: \($0.dependencies.count)")}
+//   print ("-----------------------------------------------------------")
+  }
+ }
+ 
+ static let contextQ = DispatchQueue(label: "Context.isolation.access", qos: .userInitiated)
+ 
+// static let contextQ =
+// { () -> OperationQueue in
+//  let queue = OperationQueue()
+//  queue.qualityOfService = .userInitiated
+//  queue.maxConcurrentOperationCount = 1
+//  return queue
+// }()
  
  func cancelImageOperation()
  {
   cQ.cancelAllOperations()
 //  PhotoItem.contextQ.operations.filter{($0 as? ContextDataOperation)?.photoItem === self}.forEach{$0.cancel()}
  }
-
+ 
  func getImageOperation(requiredImageWidth: CGFloat, completion: @escaping (UIImage?) -> Void)
  {
   let context_op = ContextDataOperation()
@@ -30,23 +85,26 @@ extension PhotoItem
   let cache_op = CachedImageOperation(requiredImageSize: requiredImageWidth)
   cache_op.addDependency(context_op)
   
-  let save_op = SavedImageOperation()
-  save_op.addDependency(context_op)
-  save_op.addDependency(cache_op)
+  let saved_op = SavedImageOperation()
+  saved_op.addDependency(context_op)
+  saved_op.addDependency(cache_op)
   
   let video_op = RenderVideoPreviewOperation()
   video_op.addDependency(context_op)
   video_op.addDependency(cache_op)
   
   let resize_op = ResizeImageOperation(requiredImageSize: requiredImageWidth)
-  resize_op.addDependency(save_op)
+  resize_op.addDependency(saved_op)
   resize_op.addDependency(video_op)
   resize_op.addDependency(cache_op)
+  
+  PhotoItem.chainOperations(saved_op, resize_op)
  
   let thumbnail_op = ThumbnailImageOperation(requiredImageSize: requiredImageWidth)
   thumbnail_op.addDependency(resize_op)
   thumbnail_op.addDependency(context_op)
   thumbnail_op.addDependency(cache_op)
+  
   thumbnail_op.completionBlock =
   {
    guard let finalImage = thumbnail_op.thumbnailImage else {return}
@@ -55,11 +113,13 @@ extension PhotoItem
     completion(finalImage)
    }
   }
-  let operations = [cache_op, save_op, video_op, resize_op, thumbnail_op]
   
-  PhotoItem.contextQ.addOperation(context_op)
+  let operations = [context_op, cache_op, saved_op, video_op, resize_op, thumbnail_op]
+  
+//  PhotoItem.contextQ.addOperation(context_op)
   
   cQ.addOperations(operations, waitUntilFinished: false)
+  //print (cQ.operationCount)
   
  }
  
@@ -118,10 +178,11 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
  {
   super.init()
   cnxObserver = observe(\.isCancelled)
-  {obs, val in
-    if obs.isCancelled
+  {op, val in
+    if op.isCancelled
     {
-     print ("\(self.description) is cancelled!")
+     op.dependencies.forEach{op.removeDependency($0)}
+     print ("\(op.description) is cancelled!")
     }
   }
  }
@@ -137,9 +198,12 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
   }
   guard let photoItem = self.photoItem else {return}
   
-  photoID = photoItem.id
-  photoURL = photoItem.url
-  type = photoItem.type
+  PhotoItem.contextQ.sync //This is fucking strong guaranty that MO Context is accessed serially!!!!
+  {
+   photoID = photoItem.id
+   photoURL = photoItem.url
+   type = photoItem.type
+  }
   
  }
 }
@@ -157,7 +221,7 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
  
  private var width: Int
  
- var cnxObserver: NSKeyValueObservation?
+ private var cnxObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
  {
@@ -166,10 +230,11 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
   super.init()
   
   cnxObserver = observe(\.isCancelled)
-  {[unowned self] obs, val in
-   if obs.isCancelled
+  {op, val in
+   if op.isCancelled
    {
-    print ("\(self.description) is cancelled!")
+    op.dependencies.forEach{op.removeDependency($0)}
+    print ("\(op.description) is cancelled!")
    }
   }
   
@@ -204,7 +269,11 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
 
 class SavedImageOperation: Operation, ResizeImageDataProvider
 {
- var imageToResize: UIImage? {return savedImage}
+ var imageToResize: UIImage?
+ {
+  get {return savedImage}
+  set {savedImage = newValue}
+ }
  
  private lazy var contextDepend = {dependencies.compactMap{$0 as? SavedImageDataProvider}.first}()
  private lazy var cachedDepend =  {dependencies.compactMap{$0 as? CachedImageOperation  }.first}()
@@ -216,19 +285,41 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  private var savedImage: UIImage?
  
  private var cnxObserver: NSKeyValueObservation?
+ private var finishObserver: NSKeyValueObservation?
  
  override init()
  {
   super.init()
+  
   cnxObserver = observe(\.isCancelled)
-  {[unowned self] obs, val in
-   if obs.isCancelled
+  {op, val in
+   if op.isCancelled
    {
-    print ("\(self.description) is cancelled!")
+    print ("\(op.description) is cancelled!")
+    op.dependencies.forEach{op.removeDependency($0)}
+
    }
   }
- }
+  
+  finishObserver = observe(\.isFinished)
+  {op, _ in
+   guard op.isFinished else {return}
+   
+   op.dependencies.forEach{op.removeDependency($0)}
+   
+   DispatchQueue.main.async
+   {
  
+    guard let curr_ind = PhotoItem.currSavedOperations.index(of: op) else {return}
+    PhotoItem.currSavedOperations.remove(at: curr_ind)
+    
+    guard let prev_ind = PhotoItem.prevSavedOperations.index(of: op) else {return}
+    PhotoItem.prevSavedOperations.remove(at: prev_ind)
+   }
+  }
+  
+ }
+
  override func main()
  {
 //  print ("\(self.description) in \(Thread.current)")
@@ -272,10 +363,12 @@ class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
  {
   super.init()
   cnxObserver = observe(\.isCancelled)
-  {[unowned self] obs, val in
-   if obs.isCancelled
+  {op, val in
+   if op.isCancelled
    {
-    print ("\(self.description) is cancelled!")
+    op.dependencies.forEach{op.removeDependency($0)}
+    
+    print ("\(op.description) is cancelled!")
    }
   }
  }
@@ -333,10 +426,11 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
   super.init()
   
   cnxObserver = observe(\.isCancelled)
-  {[unowned self] obs, val in
-   if obs.isCancelled
+  {op, val in
+   if op.isCancelled
    {
-    print ("\(self.description) is cancelled!")
+    op.dependencies.forEach{op.removeDependency($0)}
+    print ("\(op.description) is cancelled!")
    }
   }
  }
@@ -381,12 +475,13 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  
  private var imageToResize: UIImage?
  {
-  return dependencies.compactMap{($0 as? ResizeImageDataProvider)?.imageToResize}.first
+   return dependencies.compactMap{($0 as? ResizeImageDataProvider)?.imageToResize}.first
  }
  
  private var resizedImage: UIImage?
  private var width: Int
  private var cnxObserver: NSKeyValueObservation?
+ fileprivate var finishObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
  {
@@ -394,12 +489,33 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   super.init()
   
   cnxObserver = observe(\.isCancelled)
-  {[unowned self] obs, val in
-   if obs.isCancelled
+  {op, val in
+   if op.isCancelled
    {
-    print ("\(self.description) is cancelled!")
+    op.dependencies.forEach{op.removeDependency($0)}
+    print ("\(op.description) is cancelled!")
    }
   }
+  
+  finishObserver = observe(\.isFinished)
+  {op, _ in
+   guard op.isFinished else {return}
+   op.dependencies.forEach{op.removeDependency($0)}
+   
+   DispatchQueue.main.async
+   {
+   
+     guard let curr_ind = PhotoItem.currResizeOperations.index(of: op) else {return}
+     PhotoItem.currResizeOperations.remove(at: curr_ind)
+//     print ("\(op) is removed from currResizeOperations as FINISHED")
+    
+     guard let prev_ind = PhotoItem.prevResizeOperations.index(of: op) else {return}
+     PhotoItem.prevResizeOperations.remove(at: prev_ind)
+//     print ("\(op) is removed from prevResizeOperations as FINISHED")
+    
+   }
+  }
+  
  }
  
  override func main()
@@ -413,6 +529,8 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   }
   guard let image = imageToResize else {return}
   resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
+  
+  dependencies.compactMap({$0 as? SavedImageOperation}).first?.imageToResize = nil
  }
 }
 
@@ -426,10 +544,11 @@ class ImageSetOperation: Operation
  {
   super.init()
   cnxObserver = observe(\.isCancelled)
-  {[unowned self] obs, val in
-   if obs.isCancelled
+  {op, val in
+   if op.isCancelled
    {
-    print ("\(self.description) is cancelled!")
+    op.dependencies.forEach{op.removeDependency($0)}
+    print ("\(op.description) is cancelled!")
    }
   }
  }

@@ -12,14 +12,15 @@ import CoreData
 import UIKit
 
 
-protocol SnippetImagesPreviewProvidable
+protocol SnippetImagesPreviewProvidable: class
 {
- var imageProvider: SnippetPreviewImagesProvider {get set}
+ var imageProvider: SnippetPreviewImagesProvider {get}
 }
 
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
  var snippetType: SnippetType {return SnippetType(rawValue: type!)!}
+ @objc var priorityIndex: Int {return SnippetPriority(rawValue: priority!)!.section}
 }
 
 struct SnippetDates

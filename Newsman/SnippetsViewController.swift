@@ -79,8 +79,9 @@ class SnippetsViewController: UIViewController
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             currentGrouping = newValue
             snippetsDataSource.groupType = newValue
-            snippetsDataSource.rebuildData()
+            //snippetsDataSource.rebuildData()
             snippetsTableView.reloadData()
+          
             if (!appSettings.isEmpty)
             {
              appSettings.first!.grouping = currentGrouping.rawValue
@@ -92,6 +93,7 @@ class SnippetsViewController: UIViewController
              newSettings.grouping = currentGrouping.rawValue
              appSettings.append(newSettings)
             }
+          
             appDelegate.saveContext()
          }
         }
@@ -112,6 +114,7 @@ class SnippetsViewController: UIViewController
      super.viewDidLoad()   
      navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
      snippetsTableView.delegate = self
+     snippetsTableView.dragDelegate = self
      snippetsTableView.dropDelegate = self
      snippetsTableView.dragInteractionEnabled = true
      
@@ -130,14 +133,19 @@ class SnippetsViewController: UIViewController
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
      
-     snippetsDataSource.groupType = groupType
+     
      snippetsTableView.dataSource = snippetsDataSource
+     snippetsDataSource.snippetsTableView = self.snippetsTableView
+     
      currentToolBarItems = snippetsToolBar.items
      snippetsTableView.allowsMultipleSelectionDuringEditing = true
+     
+     
      
      //snippetsTableView.translatesAutoresizingMaskIntoConstraints = false
         
      setLocationPermissions()
+     updateSnippets()
 
     }
  
@@ -150,19 +158,30 @@ class SnippetsViewController: UIViewController
      createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
      
      snippetsDataSource.itemsType = snippetType
-     snippetsDataSource.rebuildData()
+     
+//     snippetsDataSource.rebuildData()
+     
+     snippetsDataSource.groupType = groupType // fetch with FRC...
+     
      snippetsTableView.reloadData()
+     
     }
  
  
     override func viewWillAppear(_ animated: Bool)
     {
      super.viewWillAppear(animated)
-     updateSnippets()
+     
+//     updateSnippets()
      
      print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
     }
  
+    override func viewDidAppear(_ animated: Bool)
+    {
+     super.viewDidAppear(animated)
+     
+    }
     override func viewWillDisappear(_ animated: Bool)
     {
      super.viewWillDisappear(animated)
@@ -193,7 +212,9 @@ class SnippetsViewController: UIViewController
     
     @IBAction func createNewSnippetPress(_ sender: UIBarButtonItem)
     {
-      switch (snippetType)
+      guard let type = snippetType else {return}
+     
+      switch type
       {
         case .text:    createNewTextSnippet()
         case .photo:   createNewPhotoSnippet()
@@ -201,7 +222,7 @@ class SnippetsViewController: UIViewController
         case .audio:   createNewAudioSnippet()
         case .sketch:  createNewSketchSnippet()
         case .report:  createNewReport()
-        default: break
+      
       }
     }
     
@@ -231,7 +252,7 @@ class SnippetsViewController: UIViewController
       let loc_pr_title = NSLocalizedString(priority.rawValue, comment: priority.rawValue)
       let action = UIAlertAction(title: loc_pr_title, style: .default)
       { _ in
-        self.changeSnippetPriority(self.snippetsTableView, selectedSnippets, priority)
+        self.changeSnippetsPriority(self.snippetsTableView, selectedSnippets, priority)
         self.toggleEditMode()
       }
       prioritySelect.addAction(action)
@@ -249,11 +270,14 @@ class SnippetsViewController: UIViewController
     {
       if snippetsTableView.isEditing
       {
+       
         snippetsTableView.setEditing(false, animated: true)
         snippetsToolBar.setItems(currentToolBarItems, animated: true)
       }
       else
       {
+       
+   
         snippetsTableView.setEditing(true, animated: true)
 
         let doneItem = UIBarButtonItem(title: "⏎", style: .plain, target: self, action: #selector(editSnippetsPress))

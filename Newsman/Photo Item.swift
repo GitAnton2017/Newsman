@@ -77,6 +77,10 @@ class PhotoItem: NSObject, PhotoItemProtocol
     static let MaxTask = 40
     //static let cvTimeOut = 1.0
  
+    
+ 
+    
+ 
     static let cv = NSCondition()
     static let dsQueue = DispatchQueue(label: "Images i/o", qos: .userInitiated)
     static let dsGroup = DispatchGroup()
@@ -122,13 +126,12 @@ class PhotoItem: NSObject, PhotoItemProtocol
 
     var priorityFlag: String?
     {
-      get {return photo.priorityFlag}
-      set {photo.priorityFlag = newValue}
+       get {return photo.priorityFlag}
+       set {photo.priorityFlag = newValue}
     }
     
     var priority: Int {return PhotoPriorityFlags(rawValue: photo.priorityFlag ?? "")?.rateIndex ?? -1}
  
-    
     var position: Int16
     {
        get {return photo.position}
@@ -181,12 +184,73 @@ class PhotoItem: NSObject, PhotoItemProtocol
      
     }
  
+    class func createNewPhoto (in photoSnippet: PhotoSnippet,
+                               with image: UIImage,
+                               ofRequiredSize cachedImageWidth: CGFloat,
+                               completion: @escaping (_ newPhotoItem: PhotoItem?) -> Void)
+    {
+     PhotoItem.MOC.persist
+     {
+      do
+      {
+       if let data = UIImagePNGRepresentation(image)
+       {
+        
+        let newPhotoID = UUID()
+        let newPhotoURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
+                                   .appendingPathComponent(newPhotoID.uuidString)
+        
+        try data.write(to: newPhotoURL, options: [.atomic])
+        print ("JPEG IMAGE OF SIZE \(data.count) bytes SAVED SUCCESSFULLY AT PATH:\n\(newPhotoURL.path)")
+        
+        cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
+        
+        let newPhoto = Photo(context: PhotoItem.MOC)
+        newPhoto.date = Date() as NSDate
+        newPhoto.photoSnippet = photoSnippet
+        newPhoto.isSelected = false
+        newPhoto.id = newPhotoID
+        newPhoto.position = Int16(photoSnippet.unfolderedPhotos.count + photoSnippet.allFolders.count)
+        photoSnippet.addToPhotos(newPhoto)
+        
+        let newPhotoItem = PhotoItem(photo: newPhoto)
+        
+        DispatchQueue.main.async {completion(newPhotoItem)}
+        
+       }
+       else
+       {
+         print ("UNABLE TO CREATE JPEG/PNG DATA FROM PICKED IMAGE")
+         DispatchQueue.main.async {completion(nil)}
+       }
+      }
+      catch
+      {
+       print ("JPEG/PNG DATA FILE WRITE ERROR: \(error.localizedDescription)")
+       DispatchQueue.main.async {completion(nil)}
+      }
+      
+     }
+     
+    }
+ 
+    class func createNewVideo (in photoSnippet: PhotoSnippet,
+                               from videoURL: URL,
+                               withPreviewSize previewImageWidth: CGFloat,
+                               using newVideoID: UUID,
+                               completion: @escaping (_ newVideoItem: PhotoItem?) -> Void)
+    {
+     
+    }
+ 
     convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat, newVideoID: UUID? = nil)
     {
       var newPhoto: Photo!
       let newPhotoID = newVideoID ?? UUID()
+     
+      PhotoItem.cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
         
-      PhotoItem.MOC.performAndWait
+      PhotoItem.MOC.persistAndWait
       {
        newPhoto = Photo(context: PhotoItem.MOC)
        newPhoto.date = Date() as NSDate
@@ -200,7 +264,6 @@ class PhotoItem: NSObject, PhotoItemProtocol
         
       self.init(photo: newPhoto)
      
-      PhotoItem.cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
 
       if (newVideoID == nil && SnippetType(rawValue: photoSnippet.type!)! == .photo)
       {
@@ -576,7 +639,9 @@ func deleteImages()
   PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: self.id.uuidString as NSString)}
   PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: self)
   PhotoItem.deletePhotoItemFromDisk(at: url)
-  PhotoItem.MOC.persistAndWait {[weak self] in PhotoItem.MOC.delete(self!.photo)}
+  PhotoItem.MOC.delete(self.photo)
+ 
+//  PhotoItem.MOC.persistAndWait {[weak self] in PhotoItem.MOC.delete(self!.photo)}
 }
 /***************************************************************************************************************/
  class func deletePhotoItemFromDisk (at url: URL)
@@ -976,7 +1041,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
                 photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
             }
          
-            if var ctx = loadContext {ctx.photoItems = photoItems}
+//            if var ctx = loadContext {ctx.photoItems = photoItems}
          
             var imageSet = [UIImage]()
          

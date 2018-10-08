@@ -3,6 +3,13 @@ import Foundation
 
 class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    func cancelImageOperations()
+    {
+     hostedPhotoItem?.cancelImageOperation()
+    }
+ 
+    weak var hostedPhotoItem: PhotoItem?
+ 
     var isPhotoItemSelected: Bool
     {
       set {photoIconView.alpha = newValue ? 0.5 : 1}
@@ -19,6 +26,8 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
     override func awakeFromNib()
     {
         super.awakeFromNib()
+        hostedPhotoItem = nil
+     
         spinner.startAnimating()
         photoIconView.image = nil
         clearFlagMarker()
@@ -32,6 +41,8 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
     override func prepareForReuse()
     {
         super.prepareForReuse()
+       
+        hostedPhotoItem = nil
         spinner.startAnimating()
         photoIconView.image = nil
         clearFlagMarker()

@@ -3,6 +3,13 @@ import Foundation
 
 class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    func cancelImageOperations()
+    {
+     photoItems.forEach{$0.cancelImageOperation()}
+    }
+ 
+    var isDeleted: Bool = false
+ 
     let dsGroup = DispatchGroup()
  
     var groupBusy = false
@@ -40,6 +47,8 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
     {
     
         super.awakeFromNib()
+     
+        isDeleted = false
         clearFlagMarker()
         imageRoundClip(cornerRadius: 10)
         photoCollectionView.dataSource = self
@@ -53,6 +62,8 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol
     {
        
        super.prepareForReuse()
+     
+       isDeleted = false
        groupTaskCount = 0
        clearFlagMarker()
        imageRoundClip(cornerRadius: 10)

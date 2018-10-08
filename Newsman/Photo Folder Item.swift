@@ -8,7 +8,8 @@ import CoreData
 //MARK: ----------------- Photo Folder Item Class ----------------
  class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
-{
+ {
+ 
     let  group =  DispatchGroup()
   
     weak var dragSession: UIDragSession?
@@ -39,7 +40,7 @@ import CoreData
     func deleteFolder ()
     {
      PhotoItem.deletePhotoItemFromDisk(at: url)
-     PhotoItem.MOC.persistAndWait {[weak self] in PhotoItem.MOC.delete(self!.folder)}
+     PhotoItem.MOC.delete(self.folder)
     }
   
     func deleteImages()
@@ -140,8 +141,11 @@ import CoreData
  
     convenience init?(photoSnippet: PhotoSnippet)
     {
-      if let selectedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
-      {
+       let selected = photoSnippet.selectedPhotos
+      //make copy of selected Photos array to prevent deselection side effect in selected.forEach afterwards...
+     
+       if selected.isEmpty {return nil}
+     
        var newFolder: PhotoFolder!
        let newFolderID = UUID()
        
@@ -153,8 +157,7 @@ import CoreData
          newFolder.date = Date() as NSDate
          newFolder.isSelected = false
         
-         let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
-         newFolder.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
+         newFolder.position = Int16(photoSnippet.unfolderedPhotos.count) + Int16(photoSnippet.allFolders.count)
        
          let sourceSnippetURL = PhotoItem.docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
          let destFolderURL    = sourceSnippetURL.appendingPathComponent(newFolderID.uuidString)
@@ -162,7 +165,7 @@ import CoreData
          PhotoFolderItem.createNewPhotoFolderOnDisk(at: destFolderURL)
          let type = SnippetType(rawValue: photoSnippet.type!)!
         
-         selectedPhotos.forEach
+         selected.forEach
          {photo in
           photo.isSelected = false
           var sourcePhotoURL: URL
@@ -180,34 +183,30 @@ import CoreData
           PhotoItem.movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
          }
         
-         newFolder.addToPhotos(NSSet(array: selectedPhotos))
+         newFolder.addToPhotos(NSSet(array: selected))
        }
        
        self.init(folder: newFolder)
-      }
-      else
-      {
-       return nil
-      }
+     
     }
     
     class func removeEmptyFolders(from photoSnippet: PhotoSnippet)
     {
-      let emptyFolders = (photoSnippet.folders?.allObjects as? [PhotoFolder])?.filter{($0.photos?.count ?? 0) == 0}
-      print ("DELETING \(emptyFolders!.count) EMPTY FOLDERS FROM PHOTO SNIPPET ID: \(photoSnippet.id!)")
-      PhotoItem.MOC.persistAndWait
-      {
-       emptyFolders?.forEach
-       {folder in
-        print ("DELETING EMPTY FOLDER WITH ID: \(folder.id!)")
-       
-        let emptyFolderURL = PhotoItem.docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
-                                                .appendingPathComponent(      folder.id!.uuidString)
-       
-        PhotoItem.deletePhotoItemFromDisk(at: emptyFolderURL)
-        PhotoItem.MOC.delete(folder)
-       }
-      }
+     let empty = photoSnippet.emptyFolders
+    
+     if empty.isEmpty {return}
+   
+     empty.forEach
+     {folder in
+      print ("DELETING EMPTY FOLDER WITH ID: \(folder.id!)")
+     
+      let emptyFolderURL = PhotoItem.docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
+                                              .appendingPathComponent(      folder.id!.uuidString)
+     
+      PhotoItem.deletePhotoItemFromDisk(at: emptyFolderURL)
+      PhotoItem.MOC.delete(folder)
+     }
+     
     }
     
 }

@@ -8,13 +8,21 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
   {
     let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
     
-    let ratio: CGFloat = 1.0/9.0
-
-    if let image = pickedImage.resized(withPercentage: ratio)
+    let ratio: CGFloat = 1.0/3.0
+   
+    DispatchQueue.main.async
     {
-     let newPhotoItem  = PhotoItem(photoSnippet: photoSnippet, image: image, cachedImageWidth: imageSize)
-     self.insertNewPhotoItem(newPhotoItem)
-    }
+     if let image = pickedImage.resized(withPercentage: ratio)
+     {
+//     let newPhotoItem  = PhotoItem(photoSnippet: photoSnippet, image: image, cachedImageWidth: imageSize)
+     
+      PhotoItem.createNewPhoto(in: self.photoSnippet, with: image, ofRequiredSize: self.imageSize)
+      {
+       guard let newPhotoItem = $0 else {return}
+       self.insertNewPhotoItem(newPhotoItem)
+      }
+     }
+   }
   
     if UIImagePickerController.isSourceTypeAvailable(.camera)
     {

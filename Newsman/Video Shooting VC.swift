@@ -32,7 +32,8 @@ extension PhotoSnippetViewController: AVCaptureFileOutputRecordingDelegate
  
  func showVideoShootingController ()
  {
-  guard let videoVC = storyboard?.instantiateViewController(withIdentifier: "VideoShootingVC") as? VideoShootingViewController
+  let storyboard = UIStoryboard(name: "MediaViewControllers", bundle: nil)
+  guard let videoVC = storyboard.instantiateViewController(withIdentifier: "VideoShootingVC") as? VideoShootingViewController
    else
   {
    return

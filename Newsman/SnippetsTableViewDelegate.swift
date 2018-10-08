@@ -7,10 +7,17 @@ extension SnippetsViewController: UITableViewDelegate
 {
  func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath)
  {
+  
+  
+  if !tableView.hasActiveDrag
+  {
+   if tableView.hasActiveDrop {return}
+  }
+  
   let snippetCell = cell as! SnippetsViewCell
-  snippetCell.snippetImage.layer.removeAllAnimations()
-  snippetCell.animating = [:]
   snippetCell.stopImageProvider()
+  
+//  print ("didEndDisplaying - \(cell.isHidden)", indexPath, (snippetCell.hostedSnippet as! BaseSnippet).tag ?? "")
 
  }
 
@@ -18,20 +25,26 @@ extension SnippetsViewController: UITableViewDelegate
  {
   
   let dataSource = tableView.dataSource as! SnippetsViewDataSource
-  let snippet = dataSource.snippetsData[indexPath.section][indexPath.row] as! SnippetImagesPreviewProvidable
-  cell.snippet =  snippet
-  let iconWidth = cell.snippetImage.frame.width
-  let provider = snippet.imageProvider
+//  let snippet = dataSource.snippetsData[indexPath.section][indexPath.row] as! SnippetImagesPreviewProvidable
   
+  guard let snippet = cell.hostedSnippet else {return}
+  
+  let provider = snippet.imageProvider
+
+  let iconWidth = cell.snippetImage.frame.width
+ 
   provider.getLatestImage(requiredImageWidth: iconWidth)
   {[weak wds = dataSource, weak wtv = tableView] (image) in
-   
+ 
    guard let ds = wds, let tv = wtv else {return}
-   let ip = (ds.groupType == .byPriority) ? ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
-   guard let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
+//   let ip = (ds.groupType == .byPriority) ? ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
+   
+   guard let ip = ds.currentFRC[snippet as! BaseSnippet],
+         let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
   
    guard let firstImage = image else
    {
+    print ("NIL IMAGE", indexPath, (snippet as! BaseSnippet).tag ?? "")
     cell.imageSpinner.stopAnimating()
     return
    }
@@ -40,8 +53,10 @@ extension SnippetsViewController: UITableViewDelegate
    {[weak wds = dataSource, weak wtv = tableView] in
     
     guard let ds = wds, let tv = wtv else {return}
-    let ip = (ds.groupType == .byPriority) ? ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
-    guard let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
+//    let ip = (ds.groupType == .byPriority) ? ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
+    
+    guard let ip = ds.currentFRC[snippet as! BaseSnippet],
+          let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
     
     cell.imageSpinner.stopAnimating()
    
@@ -65,10 +80,12 @@ extension SnippetsViewController: UITableViewDelegate
                                         
                                         guard let ds = wds, let tv = wtv else {return}
                                         
-                                        let ip = (ds.groupType == .byPriority) ?
-                                         ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
+//                                        let ip = (ds.groupType == .byPriority) ?
+//                                         ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
         
-                                        guard let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
+                                        guard let ip = ds.currentFRC[snippet as! BaseSnippet],
+                                              let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
+                                        
         
                                         cell.snippetImage.layer.removeAllAnimations()
                                         cell.animating = [:]
@@ -95,6 +112,8 @@ extension SnippetsViewController: UITableViewDelegate
  {
   
   let cell = cell as! SnippetsViewCell
+  
+//  print ("willDisplay", indexPath, (cell.hostedSnippet as! BaseSnippet).tag ?? "")
   
   loadSnippetAnimatedImages(tableView, for: cell, at: indexPath)
   
@@ -144,18 +163,31 @@ extension SnippetsViewController: UITableViewDelegate
                  })
  }
 
+ func changeSnippetPriority (_ tableView: UITableView, in sectionIndex: Int, snippet: BaseSnippet, newPriority: SnippetPriority)
+ {
+  let dataSource = (tableView.dataSource as! SnippetsViewDataSource)
+  if let rowIndex = dataSource.snippetsData[sectionIndex].index(of: snippet)
+  {
+   let moved = dataSource.snippetsData[sectionIndex].remove(at: rowIndex)
+   dataSource.snippetsData[newPriority.section].insert(moved, at: 0)
+   let sourcePath = IndexPath(row: rowIndex, section: sectionIndex)
+   let destinPath = IndexPath(row: 0, section: newPriority.section)
+   tableView.moveRow(at: sourcePath, to: destinPath)
+   let cell = tableView.cellForRow(at: destinPath)
+   cell?.backgroundColor = newPriority.color
+  }
+ }
  //*************************************************************************************************
- func changeSnippetPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
+ func changeSnippetsPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
  //*************************************************************************************************
  {
    var snippets: [BaseSnippet] = []
    var snippetTags = ""
    var cnt = 1
-   let dataSource = (tableView.dataSource as! SnippetsViewDataSource)
   
-   for path in indexPaths
+   for indexPath in indexPaths
    {
-     let snippet = dataSource.snippetsData[path.section][path.row]
+     let snippet = snippetsDataSource.currentFRC[indexPath]
      let oldPriority = snippet.priority
      if newPriority.rawValue != oldPriority
      {
@@ -182,39 +214,27 @@ extension SnippetsViewController: UITableViewDelegate
   
    let changeAction = UIAlertAction(title: "CHANGE", style: .default)
    { _ in
-     if (dataSource.groupType == .byPriority)
-     {
-      for sectionIndex in 0..<dataSource.snippetsData.count
-      {
-       for x in snippets
-       {
-         if let rowIndex = dataSource.snippetsData[sectionIndex].index(of: x)
-         {
-          let moved = dataSource.snippetsData[sectionIndex].remove(at: rowIndex)
-          dataSource.snippetsData[newPriority.section].insert(moved, at: 0)
-          let sourcePath = IndexPath(row: rowIndex, section: sectionIndex)
-          let destinPath = IndexPath(row:        0, section: newPriority.section)
-          tableView.moveRow(at: sourcePath, to: destinPath)
-          let cell = tableView.cellForRow(at: destinPath)
-          cell?.backgroundColor = newPriority.color
-         }
-        }
-      }
-     }
-     else
-     {
-      for sectionIndex in 0..<dataSource.snippetsData.count
-      {
-       for x in snippets
-       {
-        if let rowIndex = dataSource.snippetsData[sectionIndex].index(of: x)
-        {
-         let cell = tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
-         cell?.backgroundColor = newPriority.color
-        }
-       }
-      }
-     }
+//     if (dataSource.groupType == .byPriority)
+//     {
+//      for sectionIndex in 0..<dataSource.snippetsData.count
+//      {
+//       for x in snippets {self.changeSnippetPriority(tableView, in: sectionIndex, snippet: x, newPriority: newPriority)}
+//      }
+//     }
+//     else
+//     {
+//      for sectionIndex in 0..<dataSource.snippetsData.count
+//      {
+//       for x in snippets
+//       {
+//        if let rowIndex = dataSource.snippetsData[sectionIndex].index(of: x)
+//        {
+//         let cell = tableView.cellForRow(at: IndexPath(row: rowIndex, section: sectionIndex))
+//         cell?.backgroundColor = newPriority.color
+//        }
+//       }
+//      }
+//     }
     
      for x in snippets {x.priority = newPriority.rawValue}
     
@@ -228,13 +248,9 @@ extension SnippetsViewController: UITableViewDelegate
   
    self.present(priorityAC, animated: true, completion: nil)
   
-   /*let cell = tableView.cellForRow(at: indexPath)
-   cell?.backgroundColor = newPriority.color
-   snippet.priority = newPriority.rawValue
-   snippetsDataSource.rebuildData()
-   tableView.reloadData()
-   (UIApplication.shared.delegate as! AppDelegate).saveContext()*/
  }
+ 
+ 
  //*************************************************************************************************
  func deletePhotoSnippet(photoSnippet: PhotoSnippet)
  //*************************************************************************************************
@@ -248,13 +264,9 @@ extension SnippetsViewController: UITableViewDelegate
              {
                $0.value.removeObject(forKey: photoID as NSString)
              }
-          
-             /*for item in PhotoItem.imageCacheDict
-             {
-               item.value.removeObject(forKey: photoID as NSString)
-             }*/
          }
      }
+  
      let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
      let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
      do
@@ -277,9 +289,12 @@ extension SnippetsViewController: UITableViewDelegate
      var snippets = [BaseSnippet]()
      var snippetTags = ""
      var cnt = 1
+  
      for indexPath in indexPaths
      {
-      let snippet = self.snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
+      
+      let snippet = snippetsDataSource.currentFRC[indexPath]
+      
       snippets.append(snippet)
       if let tag = snippet.tag, !tag.isEmpty
       {
@@ -313,10 +328,8 @@ extension SnippetsViewController: UITableViewDelegate
           switch (deletedSnippetType)
           {
            case .text:   break
-           case .photo:
-             self.deletePhotoSnippet(photoSnippet: snippet as! PhotoSnippet)
-           
-           case .video:  break
+           case .photo:  fallthrough
+           case .video:  self.deletePhotoSnippet(photoSnippet: snippet as! PhotoSnippet)
            case .audio:  break
            case .sketch: break
            case .report: break
@@ -326,26 +339,19 @@ extension SnippetsViewController: UITableViewDelegate
           
          }
       
-         for sectionIndex in 0..<self.snippetsDataSource.snippetsData.count
-         {
-           for x in snippets
-           {
-             if let rowIndex = self.snippetsDataSource.snippetsData[sectionIndex].index(of: x)
-             {
-              self.snippetsDataSource.snippetsData[sectionIndex].remove(at: rowIndex)
-              tableView.deleteRows(at: [IndexPath(row: rowIndex, section: sectionIndex)], with: .fade)
-             }
-           }
-         }
+//         for sectionIndex in 0..<self.snippetsDataSource.snippetsData.count
+//         {
+//           for x in snippets
+//           {
+//             if let rowIndex = self.snippetsDataSource.snippetsData[sectionIndex].index(of: x)
+//             {
+//              self.snippetsDataSource.snippetsData[sectionIndex].remove(at: rowIndex)
+//              tableView.deleteRows(at: [IndexPath(row: rowIndex, section: sectionIndex)], with: .fade)
+//             }
+//           }
+//         }
       
-         /*for indexPath in indexPaths
-         {
-           self.snippetsDataSource.spippetsData[indexPath.section].remove(at: indexPath.row)
-         }*/
-
-      
-      
-      
+   
          appDelegate.saveContext()
      }
      deleteAC.addAction(deleteAction)
@@ -369,7 +375,7 @@ extension SnippetsViewController: UITableViewDelegate
      {
          let action = UIAlertAction(title: priority.rawValue, style: .default)
          { _ in
-             self.changeSnippetPriority(tableView, [indexPath], priority)
+             self.changeSnippetsPriority(tableView, [indexPath], priority)
          }
          prioritySelect.addAction(action)
      }
@@ -403,8 +409,10 @@ extension SnippetsViewController: UITableViewDelegate
  //*************************************************************************************************
  {
      if tableView.isEditing {return}
+  
+     guard let type = snippetType else {return}
 
-     switch (snippetType)
+     switch type
      {
       case .text:    editTextSnippet(indexPath: indexPath)
       case .video:   fallthrough
@@ -412,7 +420,7 @@ extension SnippetsViewController: UITableViewDelegate
       case .audio:   editAudioSnippet(indexPath: indexPath)
       case .sketch:  editSketchSnippet(indexPath: indexPath)
       case .report:  editReport(indexPath: indexPath)
-      default: break
+      
      }
   
  }
@@ -427,9 +435,13 @@ extension SnippetsViewController: UITableViewDelegate
          return
      }
   
-     editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
-     textSnippetVC.textSnippet = editedSnippet as! TextSnippet
-     (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = editedSnippet
+     let textSnippet = snippetsDataSource.currentFRC[indexPath] as! TextSnippet
+  
+//     editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
+  
+     editedSnippet = textSnippet
+     textSnippetVC.textSnippet = textSnippet
+     (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = textSnippet
      textSnippetVC.textSnippet.status = SnippetStatus.old.rawValue
      self.navigationController?.pushViewController(textSnippetVC, animated: true)
   
@@ -444,9 +456,15 @@ extension SnippetsViewController: UITableViewDelegate
         return
      }
   
-     editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
-     let photoSnippet = editedSnippet as! PhotoSnippet
+//     editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
+  
+     let photoSnippet = snippetsDataSource.currentFRC[indexPath] as! PhotoSnippet
+  
+//     let photoSnippet = editedSnippet as! PhotoSnippet
+  
+     editedSnippet = photoSnippet
      photoSnippetVC.photoSnippet = photoSnippet
+     photoSnippetVC.photoSnippetTableViewCell = snippetsTableView.cellForRow(at: indexPath) as? SnippetsViewCell
      (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
      photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
      self.navigationController?.pushViewController(photoSnippetVC, animated: true)

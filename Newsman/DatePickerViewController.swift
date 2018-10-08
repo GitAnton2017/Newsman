@@ -4,7 +4,8 @@ import UIKit
 
 class DatePickerViewController: UIViewController
 {
-  
+  var editedSnippetTableViewCell: SnippetsViewCell!
+ 
   var editedSnippet: BaseSnippet!
   {
     didSet
@@ -19,7 +20,7 @@ class DatePickerViewController: UIViewController
   {
     super.viewDidLoad()
     snippetDatePicker.maximumDate = Date()
-    snippetDatePicker.minimumDate = Date() - 24*60*60*10
+    snippetDatePicker.minimumDate = Date() - 24 * 60 * 60 * 10
   }
     
   override func viewWillAppear(_ animated: Bool)
@@ -32,5 +33,10 @@ class DatePickerViewController: UIViewController
   {
     super.viewWillDisappear(animated)
     editedSnippet.date = snippetDatePicker.date as NSDate
+   
+    if editedSnippetTableViewCell != nil
+    {
+     editedSnippetTableViewCell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: snippetDatePicker.date)
+    }
   }
 }

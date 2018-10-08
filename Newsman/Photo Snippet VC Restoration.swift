@@ -24,7 +24,7 @@ extension PhotoSnippetViewController
    let ID = self.photoSnippetRestorationID
   {
    
-   self.photoSnippet = snippetsVC.snippetsDataSource.items.first{$0.id!.uuidString == ID} as! PhotoSnippet
+   self.photoSnippet = snippetsVC.snippetsDataSource.items.first{$0.id!.uuidString == ID} as? PhotoSnippet
    (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = self.photoSnippet
    
    updatePhotoSnippet()

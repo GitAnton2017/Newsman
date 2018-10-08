@@ -13,9 +13,13 @@ import AVFoundation
 
 protocol PhotoSnippetCellProtocol: AnyObject
 {
- var photoItemView: UIView     {get    }
- var cellFrame: CGRect         {get    }
- var isPhotoItemSelected: Bool {get set}
+ 
+ var photoItemView: UIView                  {get    }
+ var cellFrame: CGRect                      {get    }
+ var isPhotoItemSelected: Bool              {get set}
+ 
+ func cancelImageOperations()
+
 }
 
 extension PhotoSnippetCellProtocol

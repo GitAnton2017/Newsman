@@ -2,7 +2,7 @@
 import Foundation
 import UIKit
 
-protocol SnippetPreviewImagesProvider
+protocol SnippetPreviewImagesProvider: class
 {
  func getLatestImage  (requiredImageWidth: CGFloat, completion: @escaping (UIImage?  ) -> Void)
  func getRandomImages (requiredImageWidth: CGFloat, completion: @escaping ([UIImage]?) -> Void)

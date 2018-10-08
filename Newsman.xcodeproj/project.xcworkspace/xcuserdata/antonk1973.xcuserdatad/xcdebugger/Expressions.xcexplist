@@ -3,6 +3,14 @@
    version = "1.0">
    <ContextStates>
       <ContextState
+         contextName = "closure #2 in SnippetImagesProvider.getLatestImage(requiredImageWidth:completion:):Photo Snippet Images Provider.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "thumbnail_op.finalImage">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotoSnippetViewController.savePhotoSnippetData():PhotoSnippetViewController.swift">
          <PersistentStrings>
             <PersistentString
@@ -22,6 +30,17 @@
          contextName = "TimeStampView.duration.didset:Duration Stamp View.swift">
       </ContextState>
       <ContextState
+         contextName = "closure #1 in closure #2 in SnippetImagesProvider.getLatestImage(requiredImageWidth:completion:):Photo Snippet Images Provider.swift">
+      </ContextState>
+      <ContextState
+         contextName = "closure #2 in closure #3 in SnippetsViewDataSource.imagesAnimators.getter:SnippetsViewDataSource.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.imgs.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
          contextName = "PhotoFolderCell.collectionView(_:cellForItemAt:):Folder Nested CV DS.swift">
          <PersistentStrings>
             <PersistentString
@@ -37,14 +56,6 @@
             </PersistentString>
             <PersistentString
                value = "duration.seconds">
-            </PersistentString>
-         </PersistentStrings>
-      </ContextState>
-      <ContextState
-         contextName = "closure #2 in closure #3 in SnippetsViewDataSource.imagesAnimators.getter:SnippetsViewDataSource.swift">
-         <PersistentStrings>
-            <PersistentString
-               value = "self.imgs.count">
             </PersistentString>
          </PersistentStrings>
       </ContextState>

@@ -32,15 +32,13 @@ extension PhotoFolderCell:  UICollectionViewDataSource
  
  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
  {
-  // print ("LOADING FOLDER CELL WITH IP - \(indexPath)")
-  // print ("VISIBLE CELLS: \(collectionView.visibleCells.count)")
   
   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCollectionViewCell",
                                                 for: indexPath) as! PhotoFolderCollectionViewCell
-
-  //  if isHidden || photoItems.isEmpty {return cell}
   
   let photoItem = photoItems[indexPath.row]
+  
+  cell.hostedPhotoItem = photoItem
   
   cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
   

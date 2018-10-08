@@ -28,9 +28,9 @@ extension PriorityPickerViewController
    switch nc.childViewControllers[nc.childViewControllers.count - 2]
    {
     case let editedSnippetVC as PhotoSnippetViewController:
-     editedSnippetVC.photoSnippet = self.editedSnippet as! PhotoSnippet
+     editedSnippetVC.photoSnippet = self.editedSnippet as? PhotoSnippet
     case let editedSnippetVC as TextSnippetViewController:
-     editedSnippetVC.textSnippet = self.editedSnippet as! TextSnippet
+     editedSnippetVC.textSnippet = self.editedSnippet as? TextSnippet
     default: break
     
    }

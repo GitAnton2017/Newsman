@@ -24,7 +24,7 @@ extension TextSnippetViewController
    let ID = self.textSnippetRestorationID
   {
    
-   self.textSnippet = snippetsVC.snippetsDataSource.items.first{$0.id!.uuidString == ID} as! TextSnippet
+   self.textSnippet = snippetsVC.snippetsDataSource.items.first{$0.id!.uuidString == ID} as? TextSnippet
    
    (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = self.textSnippet
    

@@ -18,9 +18,7 @@ extension PhotoFolderCell: UICollectionViewDelegate, UICollectionViewDelegateFlo
                        forItemAt indexPath: IndexPath)
  {
   
-//  if isHidden || photoItems.isEmpty {return}
-  
-  let photoItem = photoItems[indexPath.row]
+  guard let photoItem = (cell as? PhotoFolderCollectionViewCell)?.hostedPhotoItem else {return}
   
   photoItem.getImageOperation(requiredImageWidth:  imageSize)
   {[weak self] (image) in
@@ -76,9 +74,7 @@ extension PhotoFolderCell: UICollectionViewDelegate, UICollectionViewDelegateFlo
                        didEndDisplaying cell: UICollectionViewCell,
                        forItemAt indexPath: IndexPath)
  {
-  if isHidden {return}
-  let photoItem = photoItems[indexPath.row]
-  photoItem.cancelImageOperation()
+  (cell as? PhotoSnippetCellProtocol)?.cancelImageOperations()
  }
  
 }

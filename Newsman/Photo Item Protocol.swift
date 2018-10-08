@@ -19,6 +19,7 @@ protocol PhotoItemProtocol: NSItemProviderWriting, NSItemProviderReading, Codabl
     var dragSession: UIDragSession?    { get set }
     
     func deleteImages()
+ 
     
 }//protocol PhotoItemProtocol...
 //-------------------------------------------------------------

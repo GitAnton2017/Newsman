@@ -3,6 +3,11 @@ import UIKit
 
 class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
+ 
+    @IBOutlet var snippetPriorityPicker: UIPickerView!
+ 
+    var editedSnippetTableViewCell: SnippetsViewCell!
+ 
     var editedSnippet: BaseSnippet!
     {
      didSet
@@ -15,38 +20,41 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
  
     override func viewDidLoad()
     {
-        super.viewDidLoad()
-        
-        snippetPriorityPicker.dataSource = self
-        snippetPriorityPicker.delegate = self
+      super.viewDidLoad()
+     
+      snippetPriorityPicker.dataSource = self
+      snippetPriorityPicker.delegate = self
         
     }
  
     func updateEditedSnippet()
     {
-        guard self.editedSnippet != nil else {return}
-     
-        let priority = SnippetPriority(rawValue: editedSnippet.priority!)!
-        snippetPriorityPicker.selectRow(priority.section, inComponent: 0, animated: true)
+      guard self.editedSnippet != nil else {return}
+
+      let currentPriority = SnippetPriority(rawValue: editedSnippet.priority!)!
+      snippetPriorityPicker.selectRow(currentPriority.section, inComponent: 0, animated: true)
      
     }
     override func viewWillAppear(_ animated: Bool)
     {
-        super.viewWillAppear(animated)
-        updateEditedSnippet()
+      super.viewWillAppear(animated)
+      updateEditedSnippet()
     }
     
     override func viewWillDisappear(_ animated: Bool)
     {
-        super.viewWillDisappear(animated)
-        let index = snippetPriorityPicker.selectedRow(inComponent: 0)
-        editedSnippet.priority = SnippetPriority.priorities[index].rawValue
+      super.viewWillDisappear(animated)
     }
  
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-        editedSnippet.priority = SnippetPriority.priorities[row].rawValue
-    }
+     
+     let selectedPriority = SnippetPriority.priorities[row]
+     guard editedSnippet.priority != selectedPriority.rawValue else {return}
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     editedSnippet.priority = selectedPriority.rawValue
+     appDelegate.saveContext()
+ }
  
     func numberOfComponents(in pickerView: UIPickerView) -> Int
     {
@@ -57,11 +65,7 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
     {
         return SnippetPriority.priorities.count
     }
-    
-    /*func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?
-    {
-      return SnippetPriority.priorities[row].rawValue
-    }*/
+ 
  
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat
     {
@@ -74,17 +78,10 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
       let titleColor = SnippetPriority.priorityColorMap[priority]!
       let fontSize: CGFloat = 50
       let font = UIFont.italicSystemFont(ofSize: fontSize)
-      let titleAttr =
-        [
-            NSAttributedStringKey.font : font,
-            NSAttributedStringKey.foregroundColor: titleColor
-            
-           
-        ]
+      let titleAttr = [NSAttributedStringKey.font : font,  NSAttributedStringKey.foregroundColor : titleColor]
       return NSAttributedString(string: priority.rawValue, attributes: titleAttr)
     }
- 
-    @IBOutlet var snippetPriorityPicker: UIPickerView!
+
     
 }
 

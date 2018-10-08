@@ -6,6 +6,7 @@
 //  Copyright © 2017 Anton2016. All rights reserved.
 //
 
+
 import UIKit
 import CoreData
 import AVKit
@@ -19,8 +20,7 @@ import AVKit
     }
 }*/
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate
+@UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate
 {
 
     var window: UIWindow?
@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      
      
-        self.saveContext()
+         self.saveContext()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -107,6 +107,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+     
+     let nc = window!.rootViewController as! UINavigationController
+     
+     if let snippetsVC = nc.topViewController as? SnippetsViewController
+     {
+      snippetsVC.snippetsTableView.reloadData()
+     }
+     else if let snippetVC = nc.topViewController as? PhotoSnippetViewController
+     {
+      (nc.viewControllers[1] as? SnippetsViewController)?.snippetsTableView.reloadData()
+      snippetVC.photoCollectionView.reloadData()
+     }
+     
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -151,9 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
     {
 
        let context = persistentContainer.viewContext
-       context.performAndWait
-       {
-        
+     
         if context.hasChanges
         {
             do
@@ -166,7 +177,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate
                 print ("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
-      }
+    
     }
 
 }

@@ -313,7 +313,7 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
   }
   else
   {
-   print ("\(#function): Unable to merge into Photo Folder Item at Index Path \(zoomedCellIndexPath)")
+   print ("\(#function): Unable to merge into Photo Folder Item at Index Path \(zoomedCellIndexPath.description)")
   }
   
  }//func movePhotoItemsInsideApp ...

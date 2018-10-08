@@ -7,6 +7,8 @@ import GameplayKit
 class SnippetsViewDataSource: NSObject, UITableViewDataSource
 {
  
+     var snippetsTableView: UITableView!
+ 
     //var images: [UIImage] = []
  
  
@@ -119,17 +121,46 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     var snippetsData: [[BaseSnippet]] = []
     
     var aniImageSetDict: [BaseSnippet : [UIImage]] = [:]
+ 
+ 
+    var sectionNameKeyPath: String?
+ 
+ 
+    func configueCurrentFRC() -> SnippetsFetchController
+    {
     
-    
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     let moc = appDelegate.persistentContainer.viewContext
+     let predicate = NSPredicate(format: "%K = %@", #keyPath(BaseSnippet.type), itemsType.rawValue)
+     return SnippetsFetchController(with: snippetsTableView, groupType: groupType, using: predicate, in: moc)
+
+    }
+ 
+    lazy var currentFRC: SnippetsFetchController = configueCurrentFRC()
+ 
     var groupType: GroupSnippets!
     {
-        didSet
-        {
-         //rebuildData()
-        }
+      didSet
+      {
+       
+       if oldValue == nil
+       {
+        currentFRC.fetch()
+       }
+       else if let groupType = self.groupType, groupType != oldValue
+       {
+        currentFRC = configueCurrentFRC()
+        currentFRC.fetch()
+       }
+     
+       
+      }
     }
-    
-    let dateFormatter =
+ 
+    var fetchSortDescriptors: [NSSortDescriptor] = []
+ 
+
+    static let dateFormatter =
     { () -> DateFormatter in
        let df = DateFormatter()
        df.dateStyle = .medium
@@ -137,13 +168,21 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
        return df
        
     }()
-    
+ 
+ 
+ 
     lazy var items: [BaseSnippet] =
     {
             
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let moc = appDelegate.persistentContainer.viewContext
+//        let mom = moc.persistentStoreCoordinator?.managedObjectModel
         let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
+//        guard let  request = mom?.fetchRequestFromTemplate(withName: "Snippets", substitutionVariables: ["p1" : itemsType.rawValue])?.copy() as? NSFetchRequest<BaseSnippet>
+//        else
+//        {
+//         return []
+//        }
         let sort = NSSortDescriptor(key: #keyPath(BaseSnippet.date), ascending: false)
         let pred = NSPredicate(format: "%K = %@", #keyPath(BaseSnippet.type), itemsType.rawValue)
         request.predicate = pred
@@ -158,15 +197,19 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         {
             let e = error as NSError
             print ("Unresolved error \(e) \(e.userInfo)")
-            return [BaseSnippet]()
+            return []
         }
     }()
     
     func rebuildData ()
     {
-        snippetsData = []; groupTitles = []
-        
-        switch (groupType)
+     
+        guard let gtype = groupType else {return}
+        snippetsData = []
+        groupTitles = []
+     
+     
+        switch gtype
         {
          case .byPriority:
             for filter in SnippetPriority.priorityFilters
@@ -246,52 +289,64 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        if (groupType == .plainList)
-        {
-         return nil
-        }
-        else
-        {
-          if (snippetsData[section].isEmpty)
-          {
-           return nil
-          }
-          else
-          {
-           return groupTitles[section]
-          }
-        }
+//        if (groupType == .plainList)
+//        {
+//         return nil
+//        }
+//        else
+//        {
+//          if (snippetsData[section].isEmpty)
+//          {
+//           return nil
+//          }
+//          else
+//          {
+//           return groupTitles[section]
+//          }
+//        }
+     
+        return currentFRC.sectionName(for: section)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
-        return snippetsData.count
+//        return snippetsData.count
+     
+        guard itemsType != nil else {return 0}
+        return currentFRC.numberOfSections()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return snippetsData[section].count
+//        return snippetsData[section].count
+     
+     return currentFRC.numberOfRowsInSection(index: section)
+     
+     
     }
  
  
     func cancelAllImageLoadTasks()
     {
      snippetsData.joined().compactMap{$0 as? SnippetImagesPreviewProvidable}.forEach{$0.imageProvider.cancelLocal()}
-     SnippetImagesProvider.cancelGlobal()
+//     SnippetImagesProvider.cancelGlobal()
     }
  
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetsViewCell
      
-      let item = snippetsData[indexPath.section][indexPath.row]
+//      let item = snippetsData[indexPath.section][indexPath.row]
+     
+     
+      let item = currentFRC[indexPath]
+     
+      cell.hostedSnippet = item as? SnippetImagesPreviewProvidable
     
-      cell.clear()
-      cell.snippetDateTag.text = dateFormatter.string(from: item.date! as Date)
+      cell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: item.date! as Date)
       cell.snippetTextTag.text = item.tag
      
-      if let snippetPriority = item.priority,
-         let priority = SnippetPriority(rawValue: snippetPriority)
+      if let snippetPriority = item.priority, let priority = SnippetPriority(rawValue: snippetPriority)
       {
        cell.backgroundColor = priority.color
       }
@@ -308,41 +363,45 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
     {
-     return (groupType == .byPriority || groupType == .plainList)
+     return groupType == .byPriority
+ 
     }
+
  
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     {
-     
-     let from = sourceIndexPath
-     let to = destinationIndexPath
-      
-     if (from.section == to.section)
-     {
-        let moved = snippetsData[from.section].remove(at: from.row)
-        snippetsData[to.section].insert(moved, at: to.row)
-     }
-     else
-     {
-       if (groupType == .byPriority)
-       {
-        let moved = snippetsData[from.section].remove(at: from.row)
-        snippetsData[to.section].insert(moved, at: to.row)
-        let cell = tableView.cellForRow(at: to)
-        let priority = SnippetPriority.priorities[to.section]
-        moved.priority = priority.rawValue
-        cell?.backgroundColor = SnippetPriority.priorityColorMap[priority]
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-       }
-     }
-     
-     
-     tableView.reloadData()
     
+     if groupType == .byPriority, sourceIndexPath.section != destinationIndexPath.section
+     {
+//      currentFRC.deactivateDelegate() //prevent to process edit actions from FRC delegate...
+//
+//      let cnt = currentFRC.numberOfSections()
+//
+//      let movedSnippet = currentFRC[sourceIndexPath]
+//
+//      movedSnippet.priority = currentFRC.sectionName(for: destinationIndexPath.section)
+//
+//      (UIApplication.shared.delegate as! AppDelegate).saveContext()
+//
+//      currentFRC.fetch() //refetch data after snippet priority change...
+//
+//      if cnt == 1
+//      {
+//       tableView.deleteSections([sourceIndexPath.section], with: .fade)
+//      }
+     
+  
+        currentFRC.move(from: sourceIndexPath, to: destinationIndexPath)
+
+      
+    
+
+     }
     }
  
     func snippetIndexPath(snippet: BaseSnippet) -> IndexPath
     {
+     
      let path = snippetsData.enumerated().lazy.map{($0.offset, $0.element.index(of: snippet))}.first{$0.1 != nil}
      return IndexPath(row: path!.1!, section: path!.0)
     }

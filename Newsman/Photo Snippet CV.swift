@@ -266,7 +266,7 @@ class PhotoSnippetCollectionView: UICollectionView
          let zoomView = ZoomView()
          zoomView.center = centerAt
          zoomView.zoomedCellIndexPath = indexPath
-         zoomView.photoSnippetVC = dataSource as! PhotoSnippetViewController
+         zoomView.photoSnippetVC = dataSource as? PhotoSnippetViewController
         
          let tappedItem = photoItems2D[indexPath.section][indexPath.row]
          zoomView.zoomedPhotoItem = tappedItem
@@ -619,8 +619,7 @@ class PhotoSnippetCollectionView: UICollectionView
     {
      let ds = dataSource as! PhotoSnippetViewController
      let deleted = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
-     deleted.deleteImages()
-    
+
      deleteItems(at: [indexPath])
      if (ds.photoItems2D[indexPath.section].count == 0)
      {
@@ -632,6 +631,8 @@ class PhotoSnippetCollectionView: UICollectionView
      {
       reloadSections([indexPath.section])
      }
+     
+     PhotoItem.MOC.persist{deleted.deleteImages()} //persist deletion async...
     }
     
     @objc func tapCellMenuItem (gr: UITapGestureRecognizer)
@@ -663,17 +664,20 @@ class PhotoSnippetCollectionView: UICollectionView
              let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
              if let indexPath = indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              let cell = cellForItem(at: indexPath) as! PhotoSnippetCellProtocol
-              ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
-              cell.drawFlagMarker(flagColor: flagColor!)
-              
-              if photoGroupType != .makeGroups
+              PhotoItem.MOC.persistAndWait //persist flagged Photo in context...
               {
-               ds.photoItems2D[indexPath.section][indexPath.row].priorityFlag = flagStr
-              }
-              else
-              {
-                movePhoto(at: indexPath, with: flagStr)
+               let cell = self.cellForItem(at: indexPath) as! PhotoSnippetCellProtocol
+               ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
+               cell.drawFlagMarker(flagColor: flagColor!)
+               
+               if (self.photoGroupType != .makeGroups)
+               {
+                ds.photoItems2D[indexPath.section][indexPath.row].priorityFlag = flagStr
+               }
+               else
+               {
+                 self.movePhoto(at: indexPath, with: flagStr)
+               }
               }
               
              }
@@ -682,16 +686,19 @@ class PhotoSnippetCollectionView: UICollectionView
             case "unflagLayer"?:
              if let indexPath = self.indexPathForItem(at: menuLayer.menuTouchPoint)
              {
-              let cell = cellForItem(at: indexPath) as!  PhotoSnippetCellProtocol
-              ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
-              cell.unsetFlagMarker()
-              if photoGroupType != .makeGroups
+              PhotoItem.MOC.persistAndWait //persist unflagged Photo in context...
               {
-                ds.photoItems2D[indexPath.section][indexPath.row].priorityFlag = nil
-              }
-              else
-              {
-               movePhoto(at: indexPath, with: nil)
+               let cell = self.cellForItem(at: indexPath) as!  PhotoSnippetCellProtocol
+               ds.photoItems2D[indexPath.section][indexPath.row].isSelected = false
+               cell.unsetFlagMarker()
+               if (self.photoGroupType != .makeGroups)
+               {
+                 ds.photoItems2D[indexPath.section][indexPath.row].priorityFlag = nil
+               }
+               else
+               {
+                self.movePhoto(at: indexPath, with: nil)
+               }
               }
              }
              closeLayerAnimated(layer: menuLayer)

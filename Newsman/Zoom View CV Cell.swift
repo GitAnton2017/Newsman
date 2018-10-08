@@ -4,6 +4,11 @@ import UIKit
 
 class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+    func cancelImageOperations()
+    {
+     
+    }
+ 
  
     var photoItemView: UIView {return self.contentView}
  
@@ -17,6 +22,7 @@ class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
     override func awakeFromNib()
     {
         super.awakeFromNib()
+     
         spinner.startAnimating()
         photoIconView.image = nil
         imageRoundClip(cornerRadius: 10)
@@ -26,6 +32,7 @@ class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
     override func prepareForReuse()
     {
         super.prepareForReuse()
+     
         spinner.startAnimating()
         photoIconView.image = nil
         imageRoundClip(cornerRadius: 10)

@@ -61,6 +61,7 @@
 		A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A748D8B420F4CD5500DA190A /* Play Icon View.swift */; };
 		A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */; };
 		A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F41FF656590009F03C /* Photo Snippet CV.swift */; };
+		A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */; };
 		A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489881FBC4F2900359C0C /* AppDelegate.swift */; };
 		A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A754898A1FBC4F2900359C0C /* MainViewController.swift */; };
 		A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */; };
@@ -85,6 +86,7 @@
 		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */; };
+		A7A97230216B6BCB0061AA07 /* Accesorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A9722E216B6BCB0061AA07 /* Accesorial.storyboard */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
@@ -98,6 +100,8 @@
 		A7D93C6A206D3743007891ED /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D93C69206D3743007891ED /* Helpers.swift */; };
 		A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */; };
 		A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */; };
+		A7DC0816214535BF00DD94E8 /* Snippets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7DC0814214535BF00DD94E8 /* Snippets.storyboard */; };
+		A7DC0819214538CC00DD94E8 /* MediaViewControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7DC0817214538CC00DD94E8 /* MediaViewControllers.storyboard */; };
 		A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7DD7D8D20A4517E00572A25 /* CloudKit.framework */; };
 		A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */; };
 		A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */; };
@@ -181,6 +185,7 @@
 		A748D8B420F4CD5500DA190A /* Play Icon View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Play Icon View.swift"; sourceTree = "<group>"; };
 		A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A75117F41FF656590009F03C /* Photo Snippet CV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV.swift"; sourceTree = "<group>"; };
+		A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Table View FRC.swift"; sourceTree = "<group>"; };
 		A75489851FBC4F2900359C0C /* Newsman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Newsman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489881FBC4F2900359C0C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A754898A1FBC4F2900359C0C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -211,6 +216,7 @@
 		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
 		A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Images Provider.swift"; sourceTree = "<group>"; };
+		A7A9722F216B6BCB0061AA07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Newsman/Base.lproj/Accesorial.storyboard; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -228,6 +234,8 @@
 		A7D93C69206D3743007891ED /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Drop Item Provider.swift"; sourceTree = "<group>"; };
 		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Protocol.swift"; sourceTree = "<group>"; };
+		A7DC0815214535BF00DD94E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Newsman/Base.lproj/Snippets.storyboard; sourceTree = "<group>"; };
+		A7DC0818214538CC00DD94E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Newsman/Base.lproj/MediaViewControllers.storyboard; sourceTree = "<group>"; };
 		A7DD7D8D20A4517E00572A25 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC Restoration.swift"; sourceTree = "<group>"; };
 		A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -426,8 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				A7317B072015EA4100C8836A /* Newsman.entitlements */,
-				A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */,
-				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
+				A7DC081A214538EE00DD94E8 /* StoryBoards */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
 				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
 				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
@@ -517,10 +524,11 @@
 		A7CB136B1FD2D2D900AA7294 /* Snippets Menu */ = {
 			isa = PBXGroup;
 			children = (
+				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
 				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
-				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
+				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
 				A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */,
 				A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
@@ -593,6 +601,18 @@
 				A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */,
 			);
 			name = Delegates;
+			sourceTree = "<group>";
+		};
+		A7DC081A214538EE00DD94E8 /* StoryBoards */ = {
+			isa = PBXGroup;
+			children = (
+				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
+				A7A9722E216B6BCB0061AA07 /* Accesorial.storyboard */,
+				A7DC0817214538CC00DD94E8 /* MediaViewControllers.storyboard */,
+				A7DC0814214535BF00DD94E8 /* Snippets.storyboard */,
+				A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */,
+			);
+			name = StoryBoards;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -711,9 +731,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7DC0819214538CC00DD94E8 /* MediaViewControllers.storyboard in Resources */,
 				A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */,
 				A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */,
 				A75489961FBC4F2900359C0C /* LaunchScreen.storyboard in Resources */,
+				A7A97230216B6BCB0061AA07 /* Accesorial.storyboard in Resources */,
+				A7DC0816214535BF00DD94E8 /* Snippets.storyboard in Resources */,
 				A72B3EAA2057FE5500C02B52 /* ZoomCollectionViewCell.xib in Resources */,
 				A75489931FBC4F2900359C0C /* Assets.xcassets in Resources */,
 			);
@@ -796,6 +819,7 @@
 				A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */,
 				A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */,
 				A7D39CFA2100E3A000F80CAA /* Folder Nested CV Delegate.swift in Sources */,
+				A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */,
 				A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */,
 				A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
@@ -883,6 +907,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		A7A9722E216B6BCB0061AA07 /* Accesorial.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7A9722F216B6BCB0061AA07 /* Base */,
+			);
+			name = Accesorial.storyboard;
+			sourceTree = "<group>";
+		};
 		A7CB13731FD2D5EB00AA7294 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -892,6 +924,22 @@
 			);
 			name = Localizable.strings;
 			path = "Newsman/Text Snippets";
+			sourceTree = "<group>";
+		};
+		A7DC0814214535BF00DD94E8 /* Snippets.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7DC0815214535BF00DD94E8 /* Base */,
+			);
+			name = Snippets.storyboard;
+			sourceTree = "<group>";
+		};
+		A7DC0817214538CC00DD94E8 /* MediaViewControllers.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7DC0818214538CC00DD94E8 /* Base */,
+			);
+			name = MediaViewControllers.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1019,6 +1067,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
 				INFOPLIST_FILE = Newsman/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = exp.Newsman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1037,6 +1086,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
 				INFOPLIST_FILE = Newsman/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = exp.Newsman;
 				PRODUCT_NAME = "$(TARGET_NAME)";

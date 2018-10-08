@@ -82,93 +82,99 @@ extension PhotoSnippetViewController
  
  func openMenuAni()
  {
-     menuView!.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-     menuView!.alpha = 0
-     UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
-                    animations:
-         {
-             self.menuView!.transform = CGAffineTransform.identity
-             self.menuView!.alpha = 1
-     },
-                    completion: nil)
+  menuView?.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+  menuView?.alpha = 0
+  UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
+                 animations:
+                 {[weak self] in
+                  self?.menuView?.transform = CGAffineTransform.identity
+                  self?.menuView?.alpha = 1
+                 },completion: nil)
     
  }
  
  func closeMenuAni()
  {
-     UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
-                    animations:
-         {
-             self.menuView!.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-             self.menuView!.alpha = 0
-     },
-                    completion:
-         {_ in
-             self.menuView!.removeFromSuperview()
-             self.menuView = nil
-     })
+  UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseIn],
+                 animations:
+                 {[weak self] in
+                  self?.menuView?.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                  self?.menuView?.alpha = 0
+                 }, completion:
+                 {[weak self] _ in
+                  self?.menuView?.removeFromSuperview()
+                  self?.menuView = nil
+                 })
     
  }
  
  
  @objc func tapPhotoEditMenu (gr: UITapGestureRecognizer)
  {
-     let touchPoint = gr.location(in: menuView)
-     if let menuLayer = menuView!.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
-         let buttonLayer = menuLayer.hitTest(touchPoint)
+  let touchPoint = gr.location(in: menuView)
+  if let menuLayer = menuView!.layer.sublayers?.first(where: {$0.name == "MenuLayer"}) as? PhotoMenuLayer,
+     let buttonLayer = menuLayer.hitTest(touchPoint)
+  {
+   switch (buttonLayer.name)
+   {
+    case "flagLayer"?:
+     let flagColor = (buttonLayer as! FlagItemLayer).flagColor
+     let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
+     if (photoCollectionView.photoGroupType != .makeGroups)
      {
-         switch (buttonLayer.name)
-         {
-          case "flagLayer"?:
-             let flagColor = (buttonLayer as! FlagItemLayer).flagColor
-             let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
-             if photoCollectionView.photoGroupType != .makeGroups
-             {
-               photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
-               {item in
-                  item.element.priorityFlag = flagStr
-                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCellProtocol
-                  {
-                   cell.drawFlagMarker(flagColor: flagColor!)
-                  }
-               }
-             }
-             else
-             {
-                flagGroupedSelectedPhotos(with: flagStr)
-             }
-             
-             togglePhotoEditingMode()
-             closeMenuAni()
-            
-            
-          case "unflagLayer"?:
-             if photoCollectionView.photoGroupType != .makeGroups
-             {
-               photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
-               {item in
-                  item.element.priorityFlag = nil
-                  if let cell = photoCollectionView.cellForItem(at: IndexPath(row: item.offset, section: 0)) as? PhotoSnippetCellProtocol
-                  {
-                    cell.unsetFlagMarker()
-                  }
-              }
-             }
-             else
-             {
-                 flagGroupedSelectedPhotos(with: nil)
-             }
-             
-             togglePhotoEditingMode()
-             closeMenuAni()
-            
-            
-          case "cnxLayer"?: closeMenuAni()
-            
-          default: break
-            
-         }
+      PhotoItem.MOC.persistAndWait
+      {
+       self.photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
+       {item in
+        item.element.priorityFlag = flagStr //Photo MO change operation to be persisted here!!
+        let indexPath = IndexPath(row: item.offset, section: 0)
+        if let cell = self.photoCollectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+        {
+         cell.drawFlagMarker(flagColor: flagColor!)
+        }
+       }
+      }
      }
+     else
+     {
+       flagGroupedSelectedPhotos(with: flagStr)
+     }
+     
+     togglePhotoEditingMode()
+     closeMenuAni()
+    
+    
+    case "unflagLayer"?:
+     if (photoCollectionView.photoGroupType != .makeGroups)
+     {
+      PhotoItem.MOC.persistAndWait
+      {
+       self.photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
+       {item in
+        item.element.priorityFlag = nil //Photo MO change operation to be persisted here!!
+        let indexPath = IndexPath(row: item.offset, section: 0)
+        if let cell = self.photoCollectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+        {
+          cell.unsetFlagMarker()
+        }
+       }
+      }
+     }
+     else
+     {
+       flagGroupedSelectedPhotos(with: nil)
+     }
+     
+     togglePhotoEditingMode()
+     closeMenuAni()
+    
+    
+    case "cnxLayer"?: closeMenuAni()
+    
+    default: break
+    
+   }
+  }
  }
 }
 
