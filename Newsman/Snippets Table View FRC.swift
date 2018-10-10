@@ -43,8 +43,8 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  private lazy var frc: NSFetchedResultsController<BaseSnippet> =
  {
   let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
-//  request.fetchBatchSize = 20
-//  request.returnsObjectsAsFaults = false
+  request.fetchBatchSize = 20
+  request.returnsObjectsAsFaults = false
   request.predicate = predicate
   request.sortDescriptors = descriptors
   
@@ -200,14 +200,30 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
   }
  }
  
+ var items: [BaseSnippet]? {return frc.fetchedObjects}
+ 
+ subscript (snippetID: String) -> BaseSnippet?
+ {
+  get
+  {
+   return items?.first{$0.id?.uuidString == snippetID}
+  }
+ }
+ 
  func activateDelegate()
  {
-  frc.delegate = self
+  if frc.delegate == nil
+  {
+   frc.delegate = self
+  }
  }
  
  func deactivateDelegate()
  {
-  frc.delegate = nil
+  if frc.delegate != nil
+  {
+   frc.delegate = nil
+  }
  }
  
  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)

@@ -27,13 +27,14 @@ class SnippetsViewController: UIViewController
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
     var createBarButtonTitle: String!
-    
-    var editedSnippet: BaseSnippet!
+ 
+    var editedSnippetIndexPath: IndexPath?
+    var editedSnippet: BaseSnippet?
     {
        didSet {sourceSnippet = oldValue}
     }
  
-    var sourceSnippet: BaseSnippet!
+    var sourceSnippet: BaseSnippet?
     
     var snippetLocation: CLLocation?
     
@@ -167,30 +168,28 @@ class SnippetsViewController: UIViewController
      
     }
  
- 
     override func viewWillAppear(_ animated: Bool)
     {
      super.viewWillAppear(animated)
      
-//     updateSnippets()
+     if let indexPaths = snippetsTableView.indexPathsForVisibleRows
+     {
+      snippetsTableView.reloadRows(at: indexPaths, with: .automatic)
+     }
      
-     print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
+    
     }
  
     override func viewDidAppear(_ animated: Bool)
     {
      super.viewDidAppear(animated)
-     
     }
+ 
+ 
     override func viewWillDisappear(_ animated: Bool)
     {
      super.viewWillDisappear(animated)
-     snippetsDataSource.cancelAllImageLoadTasks()
-  
-//     snippetsTableView.visibleCells.map{$0 as! SnippetsViewCell}.forEach
-//     {
-//       $0.isLoadTaskCancelled = true
-//     }
+     snippetsTableView.visibleCells.forEach{($0 as? SnippetsViewCell)?.stopImageProvider()}
     }
  
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
@@ -213,6 +212,8 @@ class SnippetsViewController: UIViewController
     @IBAction func createNewSnippetPress(_ sender: UIBarButtonItem)
     {
       guard let type = snippetType else {return}
+     
+      editedSnippet = nil
      
       switch type
       {
@@ -326,14 +327,7 @@ class SnippetsViewController: UIViewController
     
     func createNewTextSnippet()
     {
-     guard let textSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
-     else
-     {
-      return
-     }
      
-     textSnippetVC.modalTransitionStyle = .crossDissolve
-      
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
      let newTextSnippet = TextSnippet(context: moc)
@@ -351,24 +345,19 @@ class SnippetsViewController: UIViewController
      }
      
      getLocationString {location in newTextSnippet.location = location}
-        
-     textSnippetVC.textSnippet = newTextSnippet
-     snippetsDataSource.items.insert(newTextSnippet, at: 0)
-     self.navigationController?.pushViewController(textSnippetVC, animated: true)
+     
+     appDelegate.saveContext()
+     
+     editTextSnippet(snippetToEdit: newTextSnippet)
      
     }
     
     func createNewPhotoSnippet()
     {
-     guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
-     else
-     {
-      return
-     }
-     photoSnippetVC.modalTransitionStyle = .partialCurl
-        
+     
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
+     
      let newPhotoSnippet = PhotoSnippet(context: moc)
 
      newPhotoSnippet.date = Date() as NSDate
@@ -398,23 +387,18 @@ class SnippetsViewController: UIViewController
      }
         
      getLocationString {location in newPhotoSnippet.location = location}
-        
-     photoSnippetVC.photoSnippet = newPhotoSnippet
-     snippetsDataSource.items.insert(newPhotoSnippet, at: 0)
-     self.navigationController?.pushViewController(photoSnippetVC, animated: true)
+     
+     appDelegate.saveContext()
+     
+     editVisualSnippet(snippetToEdit: newPhotoSnippet)
      
     }
     
     func createNewVideoSnippet()
     {
-     guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
-      else
-     {
-      return
-     }
-    
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
      let moc = appDelegate.persistentContainer.viewContext
+     
      let newVideoSnippet = PhotoSnippet(context: moc)
      
      newVideoSnippet.date = Date() as NSDate
@@ -427,6 +411,7 @@ class SnippetsViewController: UIViewController
      let fileManager = FileManager.default
      let docFolder = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
      let newVideoSnippetURL = docFolder.appendingPathComponent(newVideoSnippetID.uuidString)
+     
      do
      {
       try fileManager.createDirectory(at: newVideoSnippetURL, withIntermediateDirectories: false, attributes: nil)
@@ -444,10 +429,10 @@ class SnippetsViewController: UIViewController
      }
      
      getLocationString {location in newVideoSnippet.location = location}
+   
+     appDelegate.saveContext()
      
-     photoSnippetVC.photoSnippet = newVideoSnippet
-     snippetsDataSource.items.insert(newVideoSnippet, at: 0)
-     self.navigationController?.pushViewController(photoSnippetVC, animated: true)
+     editVisualSnippet(snippetToEdit: newVideoSnippet)
     }
     
     func createNewAudioSnippet()

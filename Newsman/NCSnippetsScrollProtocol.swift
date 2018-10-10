@@ -17,14 +17,15 @@ extension NCSnippetsScrollProtocol
  func moveToNextSnippet (in direction: Int)
  {
   if let nc = currentViewController.navigationController,
-   let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
-   let thisIndex = snippetsVC.snippetsDataSource.items.index(where: {$0.id == currentSnippet.id})
+     let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
+     let items = snippetsVC.snippetsDataSource.items,
+     let thisIndex = items.index(where: {$0.id == currentSnippet.id})
   {
    var index = thisIndex + direction
-   if (index > snippetsVC.snippetsDataSource.items.count - 1) {index = 0}
-   if (index < 0) {index = snippetsVC.snippetsDataSource.items.count - 1}
+   if (index > items.count - 1) {index = 0}
+   if (index < 0) {index = items.count - 1}
    
-   let nextSnippet = snippetsVC.snippetsDataSource.items[index]
+   let nextSnippet = items[index]
    let snippetType = SnippetType(rawValue: nextSnippet.type!)!
    
    var nextVC: UIViewController?

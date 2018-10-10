@@ -66,8 +66,9 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
     isPageMode = true
     
     if let snippetsVC = navigationController.viewControllers[count - 2] as? SnippetsViewController,
-     let thisIndex = snippetsVC.snippetsDataSource.items.index(where: {$0.id == currentSnippet.id}),
-     let nextVC = configueNextVC(for: thisIndex , in: snippetsVC)
+       let items = snippetsVC.snippetsDataSource.items,
+       let thisIndex = items.index(where: {$0.id == currentSnippet.id}),
+       let nextVC = configueNextVC(for: thisIndex , in: snippetsVC)
     {
      interactiveController = UIPercentDrivenInteractiveTransition()
      navigationController.pushViewController(nextVC, animated: true)
@@ -114,11 +115,13 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
  }
  func configueNextVC(for thisIndex: Int, in snippetsVC: SnippetsViewController) -> UIViewController?
  {
-  var index = thisIndex + self.scrollDirection
-  if (index > snippetsVC.snippetsDataSource.items.count - 1) {index = 0}
-  if (index < 0) {index = snippetsVC.snippetsDataSource.items.count - 1}
+  guard let items = snippetsVC.snippetsDataSource.items else {return nil}
   
-  let nextSnippet = snippetsVC.snippetsDataSource.items[index]
+  var index = thisIndex + self.scrollDirection
+  if (index > items.count - 1) {index = 0}
+  if (index < 0) {index = items.count - 1}
+  
+  let nextSnippet = items[index]
   let snippetType = SnippetType(rawValue: nextSnippet.type!)!
   
   var nextVC: UIViewController?
@@ -131,7 +134,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
    {
     return nil
    }
-   let textSnippet = snippetsVC.snippetsDataSource.items[index] as! TextSnippet
+   let textSnippet = items[index] as! TextSnippet
    toVC.textSnippet = textSnippet
    currentSnippet = textSnippet
    nextVC = toVC
@@ -146,7 +149,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
     return nil
    }
    
-   let photoSnippet = snippetsVC.snippetsDataSource.items[index] as! PhotoSnippet
+   let photoSnippet = items[index] as! PhotoSnippet
    toVC.photoSnippet = photoSnippet
    currentSnippet = photoSnippet
    nextVC = toVC

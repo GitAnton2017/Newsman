@@ -116,11 +116,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "560517267.935604"
+            timestampString = "560800290.868193"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "215"
-            endingLineNumber = "215"
+            startingLineNumber = "214"
+            endingLineNumber = "214"
             landmarkName = "changeSnippetsPriority(_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -132,11 +132,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "560517267.935921"
+            timestampString = "560800290.868258"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "213"
-            endingLineNumber = "213"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
             landmarkName = "changeSnippetsPriority(_:_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -177,11 +177,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.936031"
+            timestampString = "560800290.8683079"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "402"
-            endingLineNumber = "402"
+            startingLineNumber = "396"
+            endingLineNumber = "396"
             landmarkName = "snippetIndexPath(snippet:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -193,7 +193,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.936254"
+            timestampString = "560800290.868358"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "323"
@@ -209,7 +209,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.936393"
+            timestampString = "560800290.868405"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "176"
@@ -225,7 +225,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.936666"
+            timestampString = "560800290.868456"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "171"
@@ -241,11 +241,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.936772"
+            timestampString = "560800290.868502"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "groupType"
             landmarkType = "24">
          </BreakpointContent>
@@ -277,11 +277,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewController.swift"
-            timestampString = "560517267.936878"
+            timestampString = "560800290.8685499"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "199"
-            endingLineNumber = "199"
+            startingLineNumber = "198"
+            endingLineNumber = "198"
             landmarkName = "viewWillTransition(to:with:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -293,11 +293,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.937091"
+            timestampString = "560800290.868601"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "SnippetsViewDataSource"
             landmarkType = "3">
             <Locations>
@@ -356,7 +356,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.9371459"
+            timestampString = "560800290.868646"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "102"
@@ -372,7 +372,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.9372391"
+            timestampString = "560800290.868691"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "170"
@@ -388,11 +388,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.937332"
+            timestampString = "560800290.868742"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
             landmarkName = "controller(_:didChange:atSectionIndex:for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -404,11 +404,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.9374239"
+            timestampString = "560800290.868783"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
             landmarkName = "tableView(_:canMoveRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -420,11 +420,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.937497"
+            timestampString = "560800290.868825"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "374"
-            endingLineNumber = "374"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
             landmarkName = "tableView(_:moveRowAt:to:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -436,7 +436,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.937567"
+            timestampString = "560800290.868866"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "183"
@@ -452,11 +452,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.937669"
+            timestampString = "560800290.868908"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "342"
-            endingLineNumber = "342"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -468,11 +468,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.9377199"
+            timestampString = "560800290.868948"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "controllerWillChangeContent(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -513,11 +513,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.937806"
+            timestampString = "560800290.8689899"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "145"
+            endingLineNumber = "145"
             landmarkName = "groupType"
             landmarkType = "24">
          </BreakpointContent>
@@ -529,7 +529,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet Images Provider.swift"
-            timestampString = "560517267.93786"
+            timestampString = "560789080.2358609"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
@@ -544,28 +544,12 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.938151"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "45"
-            endingLineNumber = "45"
-            landmarkName = "frc"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.9382401"
+            timestampString = "560800290.869048"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
             landmarkName = "groupType"
             landmarkType = "24">
          </BreakpointContent>
@@ -577,7 +561,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.938292"
+            timestampString = "560800290.86909"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "132"
@@ -593,7 +577,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.9383759"
+            timestampString = "560800290.869132"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "143"
@@ -609,11 +593,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.9384741"
+            timestampString = "560800290.869173"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
             <Actions>
@@ -633,11 +617,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/SnippetsViewDataSource.swift"
-            timestampString = "560517267.9385951"
+            timestampString = "560800290.8692141"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
+            startingLineNumber = "331"
+            endingLineNumber = "331"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -698,7 +682,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet Images Provider.swift"
-            timestampString = "560517267.939225"
+            timestampString = "560789080.23619"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "201"
@@ -714,7 +698,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet Images Provider.swift"
-            timestampString = "560517267.9393981"
+            timestampString = "560789080.236238"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "203"
@@ -762,7 +746,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet Images Provider.swift"
-            timestampString = "560517267.939499"
+            timestampString = "560789080.2362829"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "101"
@@ -779,7 +763,7 @@
             condition = "photoSnippet.tag == &quot;Rat&quot;"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet Images Provider.swift"
-            timestampString = "560517267.939611"
+            timestampString = "560789080.2363271"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
@@ -795,11 +779,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "560517267.9397711"
+            timestampString = "560800290.869336"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "tableView(_:willDisplay:forRowAt:)"
             landmarkType = "7">
             <Actions>
@@ -986,38 +970,14 @@
          <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "Newsman/SnippetsTableViewDelegate.swift"
-            timestampString = "560517267.941208"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "tableView(_:didEndDisplaying:forRowAt:)"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.DebuggerCommand">
-                  <ActionContent
-                     consoleCommand = "po print (&quot;didEndDisplay&quot;, indexPath)">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
             condition = "po print(&quot;DELETE&quot;, indexPath (anObject as! BaseSnippet).tag)"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941283"
+            timestampString = "560800290.869491"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "247"
-            endingLineNumber = "247"
+            startingLineNumber = "263"
+            endingLineNumber = "263"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1029,11 +989,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941377"
+            timestampString = "560800290.869535"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "253"
-            endingLineNumber = "253"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
             <Actions>
@@ -1054,11 +1014,11 @@
             condition = "po print(&quot;INSERT&quot;, indexPath (anObject as! BaseSnippet).tag)"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941448"
+            timestampString = "560800290.869575"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "247"
+            endingLineNumber = "247"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1086,7 +1046,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941722"
+            timestampString = "560800290.8696311"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "125"
@@ -1102,11 +1062,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941798"
+            timestampString = "560800290.869675"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "243"
+            endingLineNumber = "243"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1118,39 +1078,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941861"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
-            landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.941933"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "236"
-            endingLineNumber = "236"
-            landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.942029"
+            timestampString = "560800290.869717"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "246"
@@ -1166,7 +1094,39 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.9420871"
+            timestampString = "560800290.869758"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "252"
+            endingLineNumber = "252"
+            landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/Snippets Table View FRC.swift"
+            timestampString = "560800290.869799"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "262"
+            endingLineNumber = "262"
+            landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/Snippets Table View FRC.swift"
+            timestampString = "560800290.86984"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "80"
@@ -1244,7 +1204,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.942154"
+            timestampString = "560800290.869881"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "81"
@@ -1260,7 +1220,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets D&amp;D Delegate.swift"
-            timestampString = "560517267.942234"
+            timestampString = "560800290.869922"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "21"
@@ -1276,7 +1236,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets D&amp;D Delegate.swift"
-            timestampString = "560517267.9424289"
+            timestampString = "560800290.869958"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "16"
@@ -1292,7 +1252,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "560517267.942474"
+            timestampString = "560800290.869994"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "135"
@@ -1324,7 +1284,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Item.swift"
-            timestampString = "560700672.911254"
+            timestampString = "560800290.870054"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "269"
@@ -1356,11 +1316,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet VC.swift"
-            timestampString = "560517267.942929"
+            timestampString = "560800290.870121"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
             landmarkName = "nphoto"
             landmarkType = "24">
          </BreakpointContent>
@@ -1420,23 +1380,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Photo Snippet VC.swift"
-            timestampString = "560517267.943728"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "55"
-            endingLineNumber = "55"
-            landmarkName = "nphoto"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Photo Snippet VC.swift"
-            timestampString = "560517281.9329081"
+            timestampString = "560800290.870484"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "53"
@@ -1451,13 +1395,45 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
+            filePath = "Newsman/Photo Snippet VC.swift"
+            timestampString = "560800290.870724"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "nphoto"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
             filePath = "Newsman/UIImage Extensions.swift"
-            timestampString = "560700672.91172"
+            timestampString = "560800290.870962"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "16"
             endingLineNumber = "16"
             landmarkName = "resized(withPercentage:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Newsman/SnippetsViewController.swift"
+            timestampString = "560800290.8710051"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

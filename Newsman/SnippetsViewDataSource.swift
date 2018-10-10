@@ -136,13 +136,14 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
 
     }
  
+    var items: [BaseSnippet]? {return currentFRC.items}
+ 
     lazy var currentFRC: SnippetsFetchController = configueCurrentFRC()
  
     var groupType: GroupSnippets!
     {
       didSet
       {
-       
        if oldValue == nil
        {
         currentFRC.fetch()
@@ -152,8 +153,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
         currentFRC = configueCurrentFRC()
         currentFRC.fetch()
        }
-     
-       
+
       }
     }
  
@@ -171,121 +171,121 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  
  
  
-    lazy var items: [BaseSnippet] =
-    {
-            
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let moc = appDelegate.persistentContainer.viewContext
-//        let mom = moc.persistentStoreCoordinator?.managedObjectModel
-        let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
-//        guard let  request = mom?.fetchRequestFromTemplate(withName: "Snippets", substitutionVariables: ["p1" : itemsType.rawValue])?.copy() as? NSFetchRequest<BaseSnippet>
-//        else
+//    lazy var items: [BaseSnippet] =
+//    {
+//            
+//        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//        let moc = appDelegate.persistentContainer.viewContext
+////        let mom = moc.persistentStoreCoordinator?.managedObjectModel
+//        let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
+////        guard let  request = mom?.fetchRequestFromTemplate(withName: "Snippets", substitutionVariables: ["p1" : itemsType.rawValue])?.copy() as? NSFetchRequest<BaseSnippet>
+////        else
+////        {
+////         return []
+////        }
+//        let sort = NSSortDescriptor(key: #keyPath(BaseSnippet.date), ascending: false)
+//        let pred = NSPredicate(format: "%K = %@", #keyPath(BaseSnippet.type), itemsType.rawValue)
+//        request.predicate = pred
+//        request.sortDescriptors = [sort]
+//        
+//        do
 //        {
-//         return []
+//            let items = try moc.fetch(request)
+//            return items
 //        }
-        let sort = NSSortDescriptor(key: #keyPath(BaseSnippet.date), ascending: false)
-        let pred = NSPredicate(format: "%K = %@", #keyPath(BaseSnippet.type), itemsType.rawValue)
-        request.predicate = pred
-        request.sortDescriptors = [sort]
-        
-        do
-        {
-            let items = try moc.fetch(request)
-            return items
-        }
-        catch
-        {
-            let e = error as NSError
-            print ("Unresolved error \(e) \(e.userInfo)")
-            return []
-        }
-    }()
-    
-    func rebuildData ()
-    {
-     
-        guard let gtype = groupType else {return}
-        snippetsData = []
-        groupTitles = []
-     
-     
-        switch gtype
-        {
-         case .byPriority:
-            for filter in SnippetPriority.priorityFilters
-            {
-                let group = items.filter(filter.predicate)
-                snippetsData.append(group)
-                groupTitles.append(NSLocalizedString(filter.title, comment: filter.title))
-
-            }
-            
-         case .byDateCreated:
-            for filter in SnippetDates.dateFilter
-            {
-               let group = items.filter(filter.predicate)
-               snippetsData.append(group)
-               groupTitles.append(NSLocalizedString(filter.title, comment: filter.title))
-            }
-         case .alphabetically:
-            var letterSet = Set<Character>()
-            for item in items
-            {
-             if let firstLetter = item.tag?.first
-             {
-              letterSet.insert(firstLetter)
-             }
-            }
-            
-            snippetsData.append(items.filter
-                {
-                    ($0.tag?.isEmpty) ?? true
-                    
-            })
-            groupTitles.append("Untitled")
-            
-            for letter in letterSet.sorted()
-            {
-              let group = items.filter
-              {item in
-                if let firstLetter = item.tag?.first, firstLetter == letter
-                {
-                  return true
-                }
-                else
-                {
-                  return false
-                }
-              }
-              snippetsData.append(group.sorted{$0.tag! < $1.tag!})
-              groupTitles.append(String(letter))
-             }
-            
-         case .byLocation:
-            var locationSet = Set<String>()
-            for item in items
-            {
-              if let location = item.location
-              {
-               locationSet.insert(location)
-              }
-            }
-            
-            snippetsData.append(items.filter{$0.location == nil})
-            groupTitles.append("Undefined Location")
-            
-            for location in locationSet
-            {
-              let group = items.filter{$0.location == location}
-              snippetsData.append(group)
-              groupTitles.append(location)
-            }
-            
-         case .bySnippetType: break
-         case .plainList: snippetsData.append(items)
-         default: break
-        }
-    }
+//        catch
+//        {
+//            let e = error as NSError
+//            print ("Unresolved error \(e) \(e.userInfo)")
+//            return []
+//        }
+//    }()
+//    
+//    func rebuildData ()
+//    {
+//     
+//        guard let gtype = groupType else {return}
+//        snippetsData = []
+//        groupTitles = []
+//     
+//     
+//        switch gtype
+//        {
+//         case .byPriority:
+//            for filter in SnippetPriority.priorityFilters
+//            {
+//                let group = items.filter(filter.predicate)
+//                snippetsData.append(group)
+//                groupTitles.append(NSLocalizedString(filter.title, comment: filter.title))
+//
+//            }
+//            
+//         case .byDateCreated:
+//            for filter in SnippetDates.dateFilter
+//            {
+//               let group = items.filter(filter.predicate)
+//               snippetsData.append(group)
+//               groupTitles.append(NSLocalizedString(filter.title, comment: filter.title))
+//            }
+//         case .alphabetically:
+//            var letterSet = Set<Character>()
+//            for item in items
+//            {
+//             if let firstLetter = item.tag?.first
+//             {
+//              letterSet.insert(firstLetter)
+//             }
+//            }
+//            
+//            snippetsData.append(items.filter
+//                {
+//                    ($0.tag?.isEmpty) ?? true
+//                    
+//            })
+//            groupTitles.append("Untitled")
+//            
+//            for letter in letterSet.sorted()
+//            {
+//              let group = items.filter
+//              {item in
+//                if let firstLetter = item.tag?.first, firstLetter == letter
+//                {
+//                  return true
+//                }
+//                else
+//                {
+//                  return false
+//                }
+//              }
+//              snippetsData.append(group.sorted{$0.tag! < $1.tag!})
+//              groupTitles.append(String(letter))
+//             }
+//            
+//         case .byLocation:
+//            var locationSet = Set<String>()
+//            for item in items
+//            {
+//              if let location = item.location
+//              {
+//               locationSet.insert(location)
+//              }
+//            }
+//            
+//            snippetsData.append(items.filter{$0.location == nil})
+//            groupTitles.append("Undefined Location")
+//            
+//            for location in locationSet
+//            {
+//              let group = items.filter{$0.location == location}
+//              snippetsData.append(group)
+//              groupTitles.append(location)
+//            }
+//            
+//         case .bySnippetType: break
+//         case .plainList: snippetsData.append(items)
+//         default: break
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
@@ -324,13 +324,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
      
      
     }
- 
- 
-    func cancelAllImageLoadTasks()
-    {
-     snippetsData.joined().compactMap{$0 as? SnippetImagesPreviewProvidable}.forEach{$0.imageProvider.cancelLocal()}
-//     SnippetImagesProvider.cancelGlobal()
-    }
+
  
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {

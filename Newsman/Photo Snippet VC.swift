@@ -24,9 +24,7 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     
 //---------------------------------------------------------------------------
  var photoSnippet: PhotoSnippet!
-  
- var photoSnippetTableViewCell: SnippetsViewCell!
-  
+ 
 //---------------------------------------------------------------------------
  {
   didSet
@@ -298,6 +296,12 @@ func updateDateLabel()
  {
     isEditingMode = false
   
+    if let nc = self.navigationController,
+       let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController
+    {
+     snippetsVC.snippetsDataSource.currentFRC.deactivateDelegate()
+    }
+  
     if SnippetType(rawValue: photoSnippet.type!)! == .video
     {
      showVideoShootingController ()
@@ -519,14 +523,12 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
 //MARK: -
  
-   
- 
-     
 //MARK: ---------------- IMAGE PICKER CONTROLLER PREPARE --------------------
 //---------------------------------------------------------------------------
  @objc func pickImageButtonPress()
 //---------------------------------------------------------------------------
  {
+ 
   imagePickerTakeButton.isEnabled = false
   imagePickerCnxxButton.isEnabled = false
   imagePicker.takePicture()
@@ -536,6 +538,11 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
  {
   dismiss(animated: true, completion: nil)
+  if let nc = self.navigationController,
+     let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController
+  {
+   snippetsVC.snippetsDataSource.currentFRC.activateDelegate()
+  }
  }
 //---------------------------------------------------------------------------
 
@@ -565,14 +572,12 @@ func updateDateLabel()
      let dest = segue.destination as?  DatePickerViewController
   {
     dest.editedSnippet = photoSnippet
-    dest.editedSnippetTableViewCell = photoSnippetTableViewCell
   }
   
   if let segueID = segue.identifier, segueID == "PhotoSnippetPriorityPicker",
      let dest = segue.destination as?  PriorityPickerViewController
   {
     dest.editedSnippet = photoSnippet
-    dest.editedSnippetTableViewCell = photoSnippetTableViewCell
   }
         
  }

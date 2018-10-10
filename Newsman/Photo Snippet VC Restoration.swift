@@ -20,13 +20,14 @@ extension PhotoSnippetViewController
  {
   
   if let nc = self.navigationController,
-   let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
-   let ID = self.photoSnippetRestorationID
+     let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
+     let ID = self.photoSnippetRestorationID,
+     let photoSnippet = snippetsVC.snippetsDataSource.currentFRC[ID] as? PhotoSnippet
   {
    
-   self.photoSnippet = snippetsVC.snippetsDataSource.items.first{$0.id!.uuidString == ID} as? PhotoSnippet
-   (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = self.photoSnippet
-   
+   self.photoSnippet = photoSnippet
+   (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
+ 
    updatePhotoSnippet()
   }
   

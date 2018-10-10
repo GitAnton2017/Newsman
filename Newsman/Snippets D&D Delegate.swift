@@ -24,7 +24,7 @@ extension SnippetsViewController: UITableViewDropDelegate, UITableViewDragDelega
  func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator)
  {
   
-  guard editedSnippet != nil else {return}
+  guard let editedSnippet = self.editedSnippet else {return}
   
   guard let sourceIndexPath = snippetsDataSource.currentFRC[editedSnippet] else {return}
   
@@ -42,7 +42,7 @@ extension SnippetsViewController: UITableViewDropDelegate, UITableViewDragDelega
        PhotoItem.moveFolders(from: sourcePhotoSnippet, to: destPhotoSnippet)
        coordinator.session.localDragSession?.localContext = nil
        PhotoItem.deselectSelectedItems(at: destPhotoSnippet)
-       editPhotoSnippet(indexPath: destIndexPath)
+       editVisualSnippet(snippetToEdit: destPhotoSnippet)
      }
      else
      {

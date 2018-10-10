@@ -21,12 +21,13 @@ extension TextSnippetViewController
   
   if let nc = self.navigationController,
    let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
-   let ID = self.textSnippetRestorationID
+   let ID = self.textSnippetRestorationID,
+   let textSnippet = snippetsVC.snippetsDataSource.currentFRC[ID] as? TextSnippet
   {
    
-   self.textSnippet = snippetsVC.snippetsDataSource.items.first{$0.id!.uuidString == ID} as? TextSnippet
+   self.textSnippet = textSnippet
    
-   (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = self.textSnippet
+   (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = textSnippet
    
    updateTextSnippet()
    

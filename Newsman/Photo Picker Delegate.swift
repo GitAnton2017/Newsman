@@ -6,33 +6,17 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
 {
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
   {
-    let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-    
-    let ratio: CGFloat = 1.0/3.0
-   
-    DispatchQueue.main.async
-    {
-     if let image = pickedImage.resized(withPercentage: ratio)
-     {
-//     let newPhotoItem  = PhotoItem(photoSnippet: photoSnippet, image: image, cachedImageWidth: imageSize)
-     
-      PhotoItem.createNewPhoto(in: self.photoSnippet, with: image, ofRequiredSize: self.imageSize)
-      {
-       guard let newPhotoItem = $0 else {return}
-       self.insertNewPhotoItem(newPhotoItem)
-      }
-     }
+   guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {return}
+ 
+   PhotoItem.createNewPhoto(in: self.photoSnippet, with: pickedImage, ofRequiredSize: self.imageSize)
+   {photoItem in
+    guard let newPhotoItem = photoItem else {return}
+    self.insertNewPhotoItem(newPhotoItem)
    }
-  
-    if UIImagePickerController.isSourceTypeAvailable(.camera)
-    {
-     imagePickerTakeButton.isEnabled = true
-     imagePickerCnxxButton.isEnabled = true
-    }
-    else
-    {
-     dismiss(animated: true, completion: nil)
-    }
+   
+   self.imagePickerTakeButton.isEnabled = true
+   self.imagePickerCnxxButton.isEnabled = true
+   
   }
     
 //MARK:------------------------------- CREATING PHOTO PICKER CUSTOM MENU -----------------------------------------------

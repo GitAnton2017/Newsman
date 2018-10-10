@@ -4,7 +4,7 @@ import CoreData
 
 extension NSManagedObjectContext
 {
- private func executeBlockAndSaveContext (block: @escaping () -> Void, completion: ((Bool) -> Void)? = nil)
+ private func executeBlockAndSaveContext (block: () -> Void, completion: ((Bool) -> Void)? = nil)
  {
   block()
   do
@@ -23,7 +23,7 @@ extension NSManagedObjectContext
  }
  
  
- func persist( block: @escaping () -> Void)
+ func persist( block:  @escaping () -> Void)
  {
   perform
   {
@@ -39,7 +39,7 @@ extension NSManagedObjectContext
   }
  }
  
- func persistAndWait( block: @escaping () -> Void)
+ func persistAndWait( block: () -> Void)
  {
   performAndWait
   {
@@ -47,7 +47,7 @@ extension NSManagedObjectContext
   }
  }
  
- func persistAndWait( block: @escaping () -> Void, completion: ((Bool) -> Void)? = nil)
+ func persistAndWait( block:  () -> Void, completion: ((Bool) -> Void)? = nil)
  {
   performAndWait
   {

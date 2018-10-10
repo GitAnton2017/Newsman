@@ -7,8 +7,7 @@ extension SnippetsViewController: UITableViewDelegate
 {
  func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath)
  {
-  
-  
+
   if !tableView.hasActiveDrag
   {
    if tableView.hasActiveDrop {return}
@@ -321,8 +320,8 @@ extension SnippetsViewController: UITableViewDelegate
       
          for snippet in snippets
          {
-          let snippetIndex = self.snippetsDataSource.items.index(of: snippet)
-          self.snippetsDataSource.items.remove(at: snippetIndex!)
+//          let snippetIndex = self.snippetsDataSource.items.index(of: snippet)
+//          self.snippetsDataSource.items.remove(at: snippetIndex!)
           
           let deletedSnippetType = SnippetType(rawValue: snippet.type!)!
           switch (deletedSnippetType)
@@ -411,87 +410,52 @@ extension SnippetsViewController: UITableViewDelegate
      if tableView.isEditing {return}
   
      guard let type = snippetType else {return}
+  
+     let selectedSnippet = snippetsDataSource.currentFRC[indexPath]
 
      switch type
      {
-      case .text:    editTextSnippet(indexPath: indexPath)
+      case .text:    editTextSnippet(snippetToEdit: selectedSnippet as! TextSnippet)
       case .video:   fallthrough
-      case .photo:   editPhotoSnippet(indexPath: indexPath)
-      case .audio:   editAudioSnippet(indexPath: indexPath)
-      case .sketch:  editSketchSnippet(indexPath: indexPath)
-      case .report:  editReport(indexPath: indexPath)
+      case .photo:   editVisualSnippet(snippetToEdit: selectedSnippet as! PhotoSnippet)
+      
+      case .audio:   break
+      case .sketch:  break
+      case .report:  break
       
      }
   
  }
 
- //*************************************************************************************************
- func editTextSnippet(indexPath: IndexPath)
- //*************************************************************************************************
+ 
+ func editTextSnippet(snippetToEdit: TextSnippet)
  {
-     guard let textSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
-     else
-     {
-         return
-     }
-  
-     let textSnippet = snippetsDataSource.currentFRC[indexPath] as! TextSnippet
-  
-//     editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
-  
-     editedSnippet = textSnippet
-     textSnippetVC.textSnippet = textSnippet
-     (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = textSnippet
-     textSnippetVC.textSnippet.status = SnippetStatus.old.rawValue
-     self.navigationController?.pushViewController(textSnippetVC, animated: true)
+  guard let textSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController else {return}
+
+  editedSnippet = snippetToEdit
+
+  textSnippetVC.textSnippet = snippetToEdit
+  (self.navigationController?.delegate as? NCTransitionsDelegate)?.currentSnippet = snippetToEdit
+  textSnippetVC.textSnippet.status = SnippetStatus.old.rawValue
+  self.navigationController?.pushViewController(textSnippetVC, animated: true)
   
  }
- //*************************************************************************************************
- func editPhotoSnippet(indexPath: IndexPath)
- //*************************************************************************************************
+ 
+ 
+ 
+ func editVisualSnippet(snippetToEdit: PhotoSnippet)
  {
-     guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
-         else
-     {
-        return
-     }
-  
-//     editedSnippet = snippetsDataSource.snippetsData[indexPath.section][indexPath.row]
-  
-     let photoSnippet = snippetsDataSource.currentFRC[indexPath] as! PhotoSnippet
-  
-//     let photoSnippet = editedSnippet as! PhotoSnippet
-  
-     editedSnippet = photoSnippet
-     photoSnippetVC.photoSnippet = photoSnippet
-     photoSnippetVC.photoSnippetTableViewCell = snippetsTableView.cellForRow(at: indexPath) as? SnippetsViewCell
-     (self.navigationController!.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
-     photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
-     self.navigationController?.pushViewController(photoSnippetVC, animated: true)
-  
-     print("NAVIGATION STACK COUNT: \(navigationController!.viewControllers.count)")
+  guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController else {return}
+
+  editedSnippet = snippetToEdit
+
+  photoSnippetVC.photoSnippet = snippetToEdit
+  (self.navigationController?.delegate as? NCTransitionsDelegate)?.currentSnippet = snippetToEdit
+  photoSnippetVC.photoSnippet.status = SnippetStatus.old.rawValue
+  self.navigationController?.pushViewController(photoSnippetVC, animated: true)
 
  }
- //*************************************************************************************************
- func editVideoSnippet(indexPath: IndexPath)
- //*************************************************************************************************
- {
- }
- //*************************************************************************************************
- func editAudioSnippet(indexPath: IndexPath)
- //*************************************************************************************************
- {
- }
- //*************************************************************************************************
- func editSketchSnippet(indexPath: IndexPath)
- //*************************************************************************************************
- {
- }
- //*************************************************************************************************
- func editReport(indexPath: IndexPath)
- //*************************************************************************************************
- {
- }
- //*************************************************************************************************
-
+ 
+ 
+ 
 }
