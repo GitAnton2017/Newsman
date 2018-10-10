@@ -32,7 +32,15 @@ extension PhotoItemProtocol
 {
     static var appDelegate: AppDelegate
     {
+      if Thread.current == Thread.main
+      {
+       return UIApplication.shared.delegate as! AppDelegate
+      }
+     
+      return DispatchQueue.main.sync
+      {
         return UIApplication.shared.delegate as! AppDelegate
+      }
     }
     
     static func saveContext()

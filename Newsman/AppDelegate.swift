@@ -30,7 +30,7 @@ import AVKit
     var anim: UIViewImplicitlyAnimating?
  
     var ncDelegate: UINavigationControllerDelegate?
- 
+
  
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask
     {

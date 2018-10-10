@@ -204,33 +204,22 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  
  subscript (snippetID: String) -> BaseSnippet?
  {
-  get
-  {
-   return items?.first{$0.id?.uuidString == snippetID}
-  }
+  get {return items?.first{$0.id?.uuidString == snippetID}}
  }
  
  func activateDelegate()
  {
-  if frc.delegate == nil
-  {
-   frc.delegate = self
-  }
+  if (frc.delegate == nil) {frc.delegate = self}
  }
  
  func deactivateDelegate()
  {
-  if frc.delegate != nil
-  {
-   frc.delegate = nil
-  }
+  if (frc.delegate != nil) {frc.delegate = nil}
  }
  
  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
  {
-
   tableView.beginUpdates()
-  
  }
  
  

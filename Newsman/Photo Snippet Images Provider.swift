@@ -88,7 +88,18 @@ class SnippetImagesProvider: SnippetPreviewImagesProvider, Equatable
  private static var currPayload: UInt64 = 0
 
  
- private  var snippetPhotos: [Photo]?  {return photoSnippet.photos?.allObjects as? [Photo]}
+ private var snippetPhotos: [Photo]?
+ {
+  var photos: [Photo]?
+ 
+  PhotoItem.MOC.performAndWait
+  {
+   photos = photoSnippet.photos?.allObjects as? [Photo]
+  }
+ 
+  return photos
+  
+ }
  
  private var latestPhotoItem: PhotoItem?
  {
@@ -356,12 +367,7 @@ class SnippetImagesProvider: SnippetPreviewImagesProvider, Equatable
   {
    return provider.photoItems.filter
    {item in
-    var ID = ""
-    PhotoItem.MOC.performAndWait
-    {
-     ID = item.id.uuidString
-    }
- 
+    let ID = item.id.uuidString
     let cashedImage = PhotoItem.imageCacheDict[Int(requiredImageWidth)]?.object(forKey: ID as NSString)
     return cashedImage == nil
    }.compactMap

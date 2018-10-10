@@ -3,8 +3,12 @@ import Foundation
 import UIKit
 import AVKit
 
+
+
 extension PhotoItem
 {
+
+ 
  static var maxResizeTask = 5
  
  static func clearChainedOperations()
@@ -198,7 +202,8 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
   }
   guard let photoItem = self.photoItem else {return}
   
-  PhotoItem.contextQ.sync //This is fucking strong guaranty that MO Context is accessed serially!!!!
+  //PhotoItem.contextQ.sync //This is fucking strong guaranty that MO Context is accessed serially!!!!
+  PhotoItem.MOC.performAndWait
   {
    photoID = photoItem.id
    photoURL = photoItem.url
