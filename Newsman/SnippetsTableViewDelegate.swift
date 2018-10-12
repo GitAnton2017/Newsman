@@ -8,6 +8,8 @@ extension SnippetsViewController: UITableViewDelegate
  func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath)
  {
 
+  if let vr = tableView.indexPathsForVisibleRows, vr.contains(indexPath) {return}
+  
   if !tableView.hasActiveDrag
   {
    if tableView.hasActiveDrop {return}

@@ -87,6 +87,7 @@
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */; };
 		A7A97230216B6BCB0061AA07 /* Accesorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7A9722E216B6BCB0061AA07 /* Accesorial.storyboard */; };
+		A7A97232217074100061AA07 /* Global Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A97231217074100061AA07 /* Global Formatters.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
@@ -217,6 +218,7 @@
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
 		A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Images Provider.swift"; sourceTree = "<group>"; };
 		A7A9722F216B6BCB0061AA07 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Newsman/Base.lproj/Accesorial.storyboard; sourceTree = "<group>"; };
+		A7A97231217074100061AA07 /* Global Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Formatters.swift"; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -436,6 +438,7 @@
 				A7317B072015EA4100C8836A /* Newsman.entitlements */,
 				A7DC081A214538EE00DD94E8 /* StoryBoards */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
+				A7A97231217074100061AA07 /* Global Formatters.swift */,
 				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
 				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
 				A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */,
@@ -775,6 +778,7 @@
 				A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */,
 				A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */,
 				A71C85BC1FBE192D000F2DD9 /* TextSnippet+CoreDataProperties.swift in Sources */,
+				A7A97232217074100061AA07 /* Global Formatters.swift in Sources */,
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
 				A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */,
 				A70B2AA520DA9FED003AD4B5 /* SnippetsVCRestoration.swift in Sources */,

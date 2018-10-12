@@ -5,20 +5,10 @@ import CoreData
 
 class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
 {
- 
- 
  var currentViewController: UIViewController {return self}
+ 
  var currentSnippet: BaseSnippet             {return photoSnippet}
- 
- 
- let dateFormatter =
- { () -> DateFormatter in
-  let df = DateFormatter()
-  df.dateStyle = .short
-  df.timeStyle = .none
-  return df
-  
- }()
+
     
 //MARK: ===================== CALCULATED PROPERTIES =========================
     
@@ -52,31 +42,20 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
   {
      photoSnippet.nphoto = Int32(nphoto)
    
-     photoCollectionView.visibleCells.forEach{($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
+     photoCollectionView.visibleCells.forEach
+     {
+      ($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()
+     }
    
 
-     if isEditingPhotos
-     {
-      //photoCollectionView.cancellUnfinishedMove()
-     }
-     else
+     if (!isEditingPhotos)
      {
       photoCollectionView.locateCellMenu()
      }
-   
-
-   
-     //let visibleCells = photoCollectionView.indexPathsForVisibleItems
-     //photoCollectionView.reloadItems(at: visibleCells)
+  
    
      photoCollectionView.reloadData()
-    
-    /*photoCollectionView.visibleCells.filter{$0 is PhotoFolderCell}.forEach
-    {
-        ($0 as! PhotoFolderCell).photoCollectionView.reloadData()
-    }*/
-     
-    
+   
    }
  }
     
@@ -187,8 +166,9 @@ func updateDateLabel()
  let dateLabel  = UILabel()
  dateLabel.textColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
  dateLabel.font = UIFont(name: "Avenir", size: 20)
- dateLabel.text = dateFormatter.string(from: photoSnippet.date! as Date)
+ dateLabel.text = DateFormatters.shortDate.string(from: photoSnippet.date! as Date)
  navigationItem.titleView = dateLabel
+ 
 }
  
  func updatePhotoSnippet()
@@ -215,9 +195,6 @@ func updateDateLabel()
   {
    isEditingMode = true
   }
- 
-  
- 
 
  }
 
@@ -231,40 +208,44 @@ func updateDateLabel()
  }
  
  
-//MARK: ------------------------- VIEW WILL DISAPPEAR -----------------------
-//---------------------------------------------------------------------------
  override func viewWillDisappear(_ animated: Bool)
-//---------------------------------------------------------------------------
  {
    super.viewWillDisappear(animated)
-
+  
+   photoCollectionView.visibleCells.forEach
+   {
+     ($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()
+   }
+  
+   savePhotoSnippetData()
  }
-//---------------------------------------------------------------------------
-//MARK:-
+
     
 //MARK:======================== ACTIONS OUTLETS =============================
-//---------------------------------------------------------------------------
+ 
+ @IBAction func photoScaleStepperUpIn(_ sender: UIStepper)
+ {
+  //savePhotoSnippetData()
+ }
+
  @IBAction func photoScaleStepperChanged(_ sender: UIStepper)
-//---------------------------------------------------------------------------
  {
   nphoto = Int(sender.value)
  }
-//---------------------------------------------------------------------------
+
  @IBAction func editPhotosPress(_ sender: UIBarButtonItem)
-//---------------------------------------------------------------------------
-{
- togglePhotoEditingMode()
-}
-//---------------------------------------------------------------------------
+ {
+  togglePhotoEditingMode()
+ }
+
  @IBAction func pinchAction(_ sender: UIPinchGestureRecognizer)
-//---------------------------------------------------------------------------
-{
- if (sender.scale > 1 && nphoto < maxPhotosInRow) {nphoto += 1}
- if (sender.scale < 1 && nphoto > minPhotosInRow) {nphoto -= 1}
-}
-//---------------------------------------------------------------------------
+ {
+  if (sender.scale > 1 && nphoto < maxPhotosInRow) {nphoto += 1}
+  if (sender.scale < 1 && nphoto > minPhotosInRow) {nphoto -= 1}
+ }
+ 
+
  @IBAction func saveBarButtonPress(_ sender: UIBarButtonItem)
-//---------------------------------------------------------------------------
  {
     if photoSnippetTitle.isFirstResponder
     {
@@ -273,16 +254,16 @@ func updateDateLabel()
     
     savePhotoSnippetData()
  }
- //---------------------------------------------------------------------------
+ 
  @IBAction func itemUpBarButtonPress(_ sender: UIBarButtonItem)
- //---------------------------------------------------------------------------
+ 
  {
   if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
   moveToNextSnippet(in: -1)
  }
- //---------------------------------------------------------------------------
+ 
  @IBAction func itemDownBarButtonPress(_ sender: UIBarButtonItem)
-  //---------------------------------------------------------------------------
+
  {
   if photoSnippetTitle.isFirstResponder {photoSnippetTitle.resignFirstResponder()}
   moveToNextSnippet(in: 1)
@@ -295,12 +276,7 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
  {
     isEditingMode = false
-  
-    if let nc = self.navigationController,
-       let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController
-    {
-     snippetsVC.snippetsDataSource.currentFRC.deactivateDelegate()
-    }
+ 
   
     if SnippetType(rawValue: photoSnippet.type!)! == .video
     {
@@ -371,7 +347,7 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
  {
   photoSnippet.tag = photoSnippetTitle.text
-//  (UIApplication.shared.delegate as! AppDelegate).saveContext()
+  (UIApplication.shared.delegate as! AppDelegate).saveContext()
  }
 //---------------------------------------------------------------------------
 //MARK: -
@@ -473,9 +449,8 @@ func updateDateLabel()
  
     
 //MARK: --------------------------- GROUP PHOTO  ----------------------------
-//---------------------------------------------------------------------------
+
  @objc func groupPhoto()
-//---------------------------------------------------------------------------
  {
     let loc_title = NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
     let loc_message = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")
@@ -523,37 +498,24 @@ func updateDateLabel()
 //---------------------------------------------------------------------------
 //MARK: -
  
+ 
+ 
 //MARK: ---------------- IMAGE PICKER CONTROLLER PREPARE --------------------
-//---------------------------------------------------------------------------
+ 
+ 
  @objc func pickImageButtonPress()
-//---------------------------------------------------------------------------
  {
  
   imagePickerTakeButton.isEnabled = false
   imagePickerCnxxButton.isEnabled = false
   imagePicker.takePicture()
  }
-//---------------------------------------------------------------------------
+
  @objc func cancelImageButtonPress()
-//---------------------------------------------------------------------------
  {
   dismiss(animated: true, completion: nil)
-  if let nc = self.navigationController,
-     let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController
-  {
-   snippetsVC.snippetsDataSource.currentFRC.activateDelegate()
-  }
  }
-//---------------------------------------------------------------------------
 
-    
- /*func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath
- {
-  let path = photoItems2D.enumerated().lazy.map{($0.offset, $0.element.index(of: photoItem))}.first {$0.1 != nil}
-  return IndexPath(row: path!.1!, section: path!.0)
- }*/
-
- 
  
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
  {

@@ -324,6 +324,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
    {
      if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
      {
+     
       if let cache = imageCacheDict[width]
       {
        cache.setObject(resizedImage, forKey: imageID as NSString)

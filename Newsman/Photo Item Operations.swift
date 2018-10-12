@@ -161,7 +161,18 @@ fileprivate protocol ImageSetDataProvider
  var finalImage: UIImage? {get}
 }
 
-class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataProvider, VideoPreviewDataProvider
+fileprivate protocol CancelObservable
+{
+  var cnxObserver: NSKeyValueObservation? {get set}
+}
+
+fileprivate protocol FinishObservable
+{
+ var finishObserver: NSKeyValueObservation? {get set}
+}
+
+class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataProvider,
+                                       VideoPreviewDataProvider, CancelObservable
 {
 
  var videoURL: URL?      {return photoURL}
@@ -176,7 +187,7 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
  private var photoURL: URL?
  private var type: SnippetType?
  
- private var cnxObserver: NSKeyValueObservation?
+ fileprivate var cnxObserver: NSKeyValueObservation?
  
  override init()
  {
@@ -185,9 +196,11 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
   {op, val in
     if op.isCancelled
     {
-     op.dependencies.forEach{op.removeDependency($0)}
+     op.dependencies.forEach {op.removeDependency($0)}
      print ("\(op.description) is cancelled!")
     }
+   
+   op.cnxObserver = nil
   }
  }
  
@@ -214,7 +227,7 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
 }
 
 
-class CachedImageOperation: Operation, ResizeImageDataProvider
+class CachedImageOperation: Operation, ResizeImageDataProvider, CancelObservable
 {
  var imageToResize: UIImage? {return outputImage}
  
@@ -226,7 +239,7 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
  
  private var width: Int
  
- private var cnxObserver: NSKeyValueObservation?
+ fileprivate var cnxObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
  {
@@ -238,8 +251,12 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
   {op, val in
    if op.isCancelled
    {
-    op.dependencies.forEach{op.removeDependency($0)}
+    op.dependencies.forEach
+    {
+     op.removeDependency($0)
+    }
     print ("\(op.description) is cancelled!")
+    //op.cnxObserver = nil
    }
   }
   
@@ -272,7 +289,7 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
  }
 }
 
-class SavedImageOperation: Operation, ResizeImageDataProvider
+class SavedImageOperation: Operation, ResizeImageDataProvider, CancelObservable, FinishObservable
 {
  var imageToResize: UIImage?
  {
@@ -289,8 +306,8 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  
  private var savedImage: UIImage?
  
- private var cnxObserver: NSKeyValueObservation?
- private var finishObserver: NSKeyValueObservation?
+ fileprivate var cnxObserver: NSKeyValueObservation?
+ fileprivate var finishObserver: NSKeyValueObservation?
  
  override init()
  {
@@ -301,16 +318,20 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
    if op.isCancelled
    {
     print ("\(op.description) is cancelled!")
-    op.dependencies.forEach{op.removeDependency($0)}
+    op.dependencies.forEach
+    {
+     op.removeDependency($0)
+    }
 
    }
+   //op.cnxObserver = nil
   }
   
   finishObserver = observe(\.isFinished)
   {op, _ in
    guard op.isFinished else {return}
    
-   op.dependencies.forEach{op.removeDependency($0)}
+   op.dependencies.forEach {op.removeDependency($0)}
    
    DispatchQueue.main.async
    {
@@ -321,6 +342,8 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
     guard let prev_ind = PhotoItem.prevSavedOperations.index(of: op) else {return}
     PhotoItem.prevSavedOperations.remove(at: prev_ind)
    }
+   
+   //op.finishObserver = nil
   }
   
  }
@@ -349,7 +372,7 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  }
 }
 
-class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
+class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider, CancelObservable
 {
  var imageToResize: UIImage? {return previewImage}
  
@@ -362,7 +385,7 @@ class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
  
  private var previewImage: UIImage?
  
- private var cnxObserver: NSKeyValueObservation?
+ fileprivate var cnxObserver: NSKeyValueObservation?
  
  override init()
  {
@@ -375,6 +398,7 @@ class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
     
     print ("\(op.description) is cancelled!")
    }
+   //op.cnxObserver = nil
   }
  }
  
@@ -408,7 +432,7 @@ class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
 }
 
 
-class ThumbnailImageOperation: Operation, ImageSetDataProvider
+class ThumbnailImageOperation: Operation, ImageSetDataProvider, CancelObservable
 {
  var finalImage: UIImage? {return thumbnailImage}
  
@@ -423,7 +447,7 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
  
  private var width: Int
  
- private var cnxObserver: NSKeyValueObservation?
+ fileprivate var cnxObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
  {
@@ -434,8 +458,13 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
   {op, val in
    if op.isCancelled
    {
-    op.dependencies.forEach{op.removeDependency($0)}
+    op.dependencies.forEach
+    {
+     op.removeDependency($0)
+    }
     print ("\(op.description) is cancelled!")
+    
+    //op.cnxObserver = nil
    }
   }
  }
@@ -457,6 +486,7 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
   }
   
   thumbnailImage = image
+ 
   if let cache = PhotoItem.imageCacheDict[width]
   {
    cache.setObject(image, forKey: ID as NSString)
@@ -474,7 +504,7 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
  }
 }
 
-class ResizeImageOperation: Operation, ThumbnailImageDataProvider
+class ResizeImageOperation: Operation, ThumbnailImageDataProvider, CancelObservable, FinishObservable
 {
  var thumbnailImage: UIImage? {return resizedImage}
  
@@ -485,7 +515,8 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  
  private var resizedImage: UIImage?
  private var width: Int
- private var cnxObserver: NSKeyValueObservation?
+ 
+ fileprivate var cnxObserver: NSKeyValueObservation?
  fileprivate var finishObserver: NSKeyValueObservation?
  
  init (requiredImageSize: CGFloat)
@@ -497,15 +528,22 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   {op, val in
    if op.isCancelled
    {
-    op.dependencies.forEach{op.removeDependency($0)}
+    op.dependencies.forEach
+    {
+     op.removeDependency($0)
+    }
     print ("\(op.description) is cancelled!")
+    //op.cnxObserver = nil
    }
   }
   
   finishObserver = observe(\.isFinished)
   {op, _ in
    guard op.isFinished else {return}
-   op.dependencies.forEach{op.removeDependency($0)}
+   op.dependencies.forEach
+   {
+    op.removeDependency($0)
+   }
    
    DispatchQueue.main.async
    {
@@ -519,6 +557,8 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
 //     print ("\(op) is removed from prevResizeOperations as FINISHED")
     
    }
+   
+   //op.finishObserver = nil
   }
   
  }
@@ -539,11 +579,11 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  }
 }
 
-class ImageSetOperation: Operation
+class ImageSetOperation: Operation, CancelObservable
 {
  var imageSet: [UIImage]?
  
- private var cnxObserver: NSKeyValueObservation?
+ fileprivate var cnxObserver: NSKeyValueObservation?
  
  override init()
  {
@@ -552,9 +592,13 @@ class ImageSetOperation: Operation
   {op, val in
    if op.isCancelled
    {
-    op.dependencies.forEach{op.removeDependency($0)}
+    op.dependencies.forEach
+    {
+     op.removeDependency($0)
+    }
     print ("\(op.description) is cancelled!")
    }
+   //op.cnxObserver = nil
   }
  }
  

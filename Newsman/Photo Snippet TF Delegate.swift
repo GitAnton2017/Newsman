@@ -15,7 +15,7 @@ extension PhotoSnippetViewController: UITextFieldDelegate
  {
   guard reason == .committed else {return}
   
-  PhotoItem.MOC.persistAndWait {[weak self] in self?.photoSnippet.tag = textField.text}
+  PhotoItem.MOC.persistAndWait {photoSnippet.tag = textField.text}
   
  }
  

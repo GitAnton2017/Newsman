@@ -172,10 +172,10 @@ class SnippetsViewController: UIViewController
     {
      super.viewWillAppear(animated)
      
-     if let indexPaths = snippetsTableView.indexPathsForVisibleRows
-     {
-      snippetsTableView.reloadRows(at: indexPaths, with: .automatic)
-     }
+//     if let indexPaths = snippetsTableView.indexPathsForVisibleRows
+//     {
+//      snippetsTableView.reloadRows(at: indexPaths, with: .automatic)
+//     }
      
     
     }
