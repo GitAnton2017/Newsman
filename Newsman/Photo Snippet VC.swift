@@ -42,9 +42,12 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
   {
      photoSnippet.nphoto = Int32(nphoto)
    
-     photoCollectionView.visibleCells.forEach
+     autoreleasepool
      {
-      ($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()
+      photoCollectionView.visibleCells.forEach
+      {
+       ($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()
+      }
      }
    
 
