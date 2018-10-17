@@ -545,13 +545,14 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   {op, val in
    if op.isCancelled
    {
+    
+    op.dependencies.compactMap({$0 as? SavedImageOperation}).first?.imageToResize = nil
+     
     op.dependencies.forEach {op.removeDependency($0)}
     //print ("\(op.description) is cancelled!")
     
-    DispatchQueue.main.async
-    {
-      op.dependencies.compactMap({$0 as? SavedImageOperation}).first?.imageToResize = nil
-    }
+    
+   
     //op.cnxObserver = nil
    }
   }
@@ -565,8 +566,7 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
    
    DispatchQueue.main.async
    {
-     op.dependencies.compactMap({$0 as? SavedImageOperation}).first?.imageToResize = nil
-    
+
      guard let curr_ind = PhotoItem.currResizeOperations.index(of: op) else {return}
      PhotoItem.currResizeOperations.remove(at: curr_ind)
 //     print ("\(op) is removed from currResizeOperations as FINISHED")
@@ -595,6 +595,8 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   }
   guard let image = imageToResize else {return}
   resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
+  
+  dependencies.compactMap({$0 as? SavedImageOperation}).first?.imageToResize = nil
   
  }
  
