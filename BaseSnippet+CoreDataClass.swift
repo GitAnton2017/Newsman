@@ -21,6 +21,16 @@ protocol SnippetImagesPreviewProvidable: class
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
 
+ var snippetName: String
+ {
+  get {return self.tag ?? ""}
+  set
+  {
+   self.tag = newValue
+   self.alphaIndex = newValue.isEmpty ? newValue : String(newValue.first!)
+  }
+ }
+ 
  var snippetStatus: SnippetStatus
  {
   get
@@ -175,13 +185,14 @@ struct SnippetDates
     
  static let dateFilter : [(title: String, predicate: (BaseSnippet) -> Bool)] =
  [
-    ("Today",         {($0.date! as Date) >= boftd! && ($0.date! as Date) < bofnd!}),
-    ("Yesterday",     {($0.date! as Date) >= bofld! && ($0.date! as Date) < boftd!}),
-    ("This Week",     {($0.date! as Date) >= boftw! && ($0.date! as Date) < bofnd!}),
-    ("Last Week",     {($0.date! as Date) >= boflw! && ($0.date! as Date) < boftw!}),
-    ("This Month",    {($0.date! as Date) >= boftm! && ($0.date! as Date) < bofnd!}),
-    ("Last Month",    {($0.date! as Date) >= boflm! && ($0.date! as Date) < boftm!}),
-    ("This Year",     {($0.date! as Date) >= bofty! && ($0.date! as Date) < bofnd!})
+    ("0_For Today",         {($0.date! as Date) >= boftd! && ($0.date! as Date) < bofnd!}),
+    ("1_For Yesterday",     {($0.date! as Date) >= bofld! && ($0.date! as Date) < boftd!}),
+    ("2_For This Week",     {($0.date! as Date) >= boftw! && ($0.date! as Date) < bofnd!}),
+    ("3_For Last Week",     {($0.date! as Date) >= boflw! && ($0.date! as Date) < boftw!}),
+    ("4_For This Month",    {($0.date! as Date) >= boftm! && ($0.date! as Date) < bofnd!}),
+    ("5_For Last Month",    {($0.date! as Date) >= boflm! && ($0.date! as Date) < boftm!}),
+    ("7_For This Year",     {($0.date! as Date) >= bofty! && ($0.date! as Date) < bofnd!}),
+    ("8_For Last Year and earlier on",                    {($0.date! as Date) <  bofty! })
  ]
 }
 

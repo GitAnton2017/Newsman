@@ -289,7 +289,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-      return currentFRC.localizedSectionName(for: section)
+      return currentFRC.sectionTitle(for: section)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int

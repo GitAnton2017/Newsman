@@ -5,22 +5,24 @@ import CoreData
 
 class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
 {
- private let byDate =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),     ascending: false)
- private let byTag =         NSSortDescriptor(key: #keyPath(BaseSnippet.tag),      ascending: true)
- private let byLocation =    NSSortDescriptor(key: #keyPath(BaseSnippet.location), ascending: true)
+ private let byDate =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),          ascending: false)
+ private let byTag =         NSSortDescriptor(key: #keyPath(BaseSnippet.tag),           ascending: true)
+ private let byLocation =    NSSortDescriptor(key: #keyPath(BaseSnippet.location),      ascending: true)
  private let byPriority =    NSSortDescriptor(key: #keyPath(BaseSnippet.priorityIndex), ascending: true)
- private let bySnippetType = NSSortDescriptor(key: #keyPath(BaseSnippet.type),     ascending: true)
+ private let bySnippetType = NSSortDescriptor(key: #keyPath(BaseSnippet.type),          ascending: true)
+ private let byAlphabet =    NSSortDescriptor(key: #keyPath(BaseSnippet.alphaIndex),    ascending: true)
+ private let byDateIndex =   NSSortDescriptor(key: #keyPath(BaseSnippet.dateIndex),     ascending: true)
  
  private var descriptors: [NSSortDescriptor]
  {
   switch groupType
   {
-   case .plainList:      return [bySnippetType, byPriority, byDate, byTag]
-   case .byLocation:     return [byLocation, byPriority, byDate, byTag   ]
-   case .byPriority:     return [byPriority, byDate, byTag               ]
-   case .bySnippetType:  return [bySnippetType, byPriority, byDate, byTag]
-   case .byDateCreated:  return []
-   case .alphabetically: return []
+   case .plainList:      return [bySnippetType, byPriority, byDate, byTag ]
+   case .byLocation:     return [byLocation, byPriority, byDate, byTag    ]
+   case .byPriority:     return [byPriority, byDate, byTag                ]
+   case .bySnippetType:  return [bySnippetType, byPriority, byDate, byTag ]
+   case .byDateCreated:  return [byDateIndex, byPriority, byDate, byTag   ]
+   case .alphabetically: return [byAlphabet, byPriority, byDate, byTag    ]
    case .nope:           return []
    
   }
@@ -34,8 +36,8 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
    case .byLocation:     return #keyPath(BaseSnippet.location)
    case .byPriority:     return #keyPath(BaseSnippet.priorityIndex)
    case .bySnippetType:  return #keyPath(BaseSnippet.type)
-   case .byDateCreated:  return nil
-   case .alphabetically: return nil
+   case .byDateCreated:  return #keyPath(BaseSnippet.dateIndex)
+   case .alphabetically: return #keyPath(BaseSnippet.alphaIndex)
    case .nope:           return nil
    
   }
@@ -187,29 +189,52 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
   request.predicate = predicate
   do
   {
-      let items = try moc.fetch(request)
-      moc.persistAndWait
-      {
-       items.forEach
-       {snippet in
-        snippet.priorityIndex = String(snippet.snippetPriorityIndex) + "_" + (snippet.priority ?? "Normal")
-       }
-       
-       print ("\(items.count) RECORDS UPDATED SUCCESSFULLY")
-      }
+   let items = try moc.fetch(request)
+   moc.persistAndWait
+   {
+    items.forEach
+    {snippet in
+     snippet.priorityIndex = String(snippet.snippetPriorityIndex) + "_" + (snippet.priority ?? "Normal")
+     if let first_ch = snippet.tag?.first
+     {
+      snippet.alphaIndex = String(first_ch)
+     }
+     else
+     {
+      snippet.alphaIndex = ""
+     }
+     snippet.dateIndex = SnippetDates.dateFilter.first{$0.predicate(snippet)}?.title
+    }
+    
+    print ("\(items.count) RECORDS UPDATED SUCCESSFULLY")
+   }
   
   }
   catch
   {
-      let e = error as NSError
-      print ("Unresolved error \(e) \(e.userInfo)")
+    let e = error as NSError
+    print ("Unresolved error \(e) \(e.userInfo)")
  
   }
   
  }
  
- func localizedSectionName (for index: Int) -> String?
+ func sectionTitle (for index: Int) -> String?
  {
+  switch groupType
+  {
+   case .byDateCreated:  fallthrough
+   case .byPriority:     return localizedSectionName(for: index)
+   case .alphabetically: fallthrough
+   case .byLocation:     fallthrough
+   case .bySnippetType:  return sectionName(for: index)
+   default :             return nil
+  }
+ }
+ 
+ private func localizedSectionName (for index: Int) -> String?
+ {
+ 
   guard let name = sectionName(for: index),
         let pos = name.firstIndex(of: "_") else {return nil}
   
@@ -306,7 +331,7 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
     guard let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {break}
     let snippet = frc.object(at: indexPath)
     cell.backgroundColor = snippet.snippetPriority.color
-    cell.snippetTextTag.text = snippet.tag
+    cell.snippetTextTag.text = snippet.snippetName
     cell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: snippet.date! as Date)
   
    case .delete:

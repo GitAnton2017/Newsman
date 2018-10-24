@@ -14,9 +14,7 @@ extension PhotoSnippetViewController: UITextFieldDelegate
  func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
  {
   guard reason == .committed else {return}
-  
-  PhotoItem.MOC.persistAndWait {photoSnippet.tag = textField.text}
-  
+  moc.persistAndWait {photoSnippet.snippetName = textField.text ?? ""}
  }
  
  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool

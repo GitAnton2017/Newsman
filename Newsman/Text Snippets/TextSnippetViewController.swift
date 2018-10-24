@@ -1,6 +1,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
 {
@@ -11,6 +12,13 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
       df.timeStyle = .none
       return df
   
+   }()
+ 
+   lazy var moc: NSManagedObjectContext =
+    {
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     let moc = appDelegate.persistentContainer.viewContext
+     return moc
    }()
  
    var textSnippetRestorationID: String?
@@ -43,17 +51,17 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     {
         didSet
         {
-            navigationItem.title = textSnippet.tag
+           navigationItem.title = textSnippet.snippetName
         }
     }
     
     func saveTextSnippetData()
     {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        textSnippet.text = textView.text
-        textSnippet.tag = textSnippetTitle.text
-        appDelegate.saveContext()
-
+     moc.persistAndWait
+     {
+       textSnippet.text = textView.text
+       textSnippet.snippetName = textSnippetTitle.text ?? ""
+     }
     }
     
     @IBAction func saveTextButtonPress(_ sender: UIBarButtonItem)
