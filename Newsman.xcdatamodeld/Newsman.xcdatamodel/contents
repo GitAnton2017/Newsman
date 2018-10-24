@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14135" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AudioSnippet" representedClassName="AudioSnippet" parentEntity="BaseSnippet" syncable="YES">
-        <attribute name="record" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
+        <attribute name="audio" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="audios" inverseEntity="Report" syncable="YES"/>
     </entity>
     <entity name="BaseSnippet" representedClassName="BaseSnippet" isAbstract="YES" syncable="YES">
+        <attribute name="alphaIndex" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="dateIndex" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="logitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="priority" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="priorityIndex" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tag" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" attributeType="String" customClassName=".SnippetType" syncable="YES"/>
@@ -68,7 +71,7 @@
     <fetchRequest name="Snippets" entity="BaseSnippet" predicateString="type == $p1"/>
     <elements>
         <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
-        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="178"/>
+        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="225"/>
         <element name="Photo" positionX="-855" positionY="-558" width="128" height="148"/>
         <element name="PhotoFolder" positionX="-848" positionY="-355" width="137" height="148"/>
         <element name="PhotoSnippet" positionX="-650" positionY="-448" width="128" height="133"/>

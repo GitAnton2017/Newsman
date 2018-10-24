@@ -23,7 +23,14 @@ enum GroupSnippets: String
 
 class SnippetsViewController: UIViewController
 {
-    
+ 
+    lazy var moc: NSManagedObjectContext =
+    {
+     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     let moc = appDelegate.persistentContainer.viewContext
+     return moc
+    }()
+ 
     var snippetType: SnippetType!
     var createBarButtonIcon: UIImage!
     var createBarButtonTitle: String!
@@ -223,6 +230,7 @@ class SnippetsViewController: UIViewController
         case .audio:   createNewAudioSnippet()
         case .sketch:  createNewSketchSnippet()
         case .report:  createNewReport()
+        case .undefined: break
       
       }
     }
@@ -325,128 +333,7 @@ class SnippetsViewController: UIViewController
      self.present(groupAC, animated: true, completion: nil)
     }
     
-    func createNewTextSnippet()
-    {
-     
-     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-     let moc = appDelegate.persistentContainer.viewContext
-     let newTextSnippet = TextSnippet(context: moc)
-
-     newTextSnippet.date = Date() as NSDate
-     newTextSnippet.id = UUID()
-     newTextSnippet.priority = SnippetPriority.normal.rawValue
-     newTextSnippet.type = SnippetType.text.rawValue
-     newTextSnippet.status = SnippetStatus.new.rawValue
-        
-     if let location = snippetLocation
-     {
-       newTextSnippet.logitude = location.coordinate.longitude
-       newTextSnippet.latitude = location.coordinate.latitude
-     }
-     
-     getLocationString {location in newTextSnippet.location = location}
-     
-     appDelegate.saveContext()
-     
-     editTextSnippet(snippetToEdit: newTextSnippet)
-     
-    }
-    
-    func createNewPhotoSnippet()
-    {
-     
-     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-     let moc = appDelegate.persistentContainer.viewContext
-     
-     let newPhotoSnippet = PhotoSnippet(context: moc)
-
-     newPhotoSnippet.date = Date() as NSDate
-     let newPhotoSnippetID = UUID()
-     newPhotoSnippet.id = newPhotoSnippetID
-     newPhotoSnippet.priority = SnippetPriority.normal.rawValue
-     newPhotoSnippet.type = SnippetType.photo.rawValue
-     newPhotoSnippet.status = SnippetStatus.new.rawValue
-    
-     let fileManager = FileManager.default
-     let docFolder = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-     let newPhotoSnippetURL = docFolder.appendingPathComponent(newPhotoSnippetID.uuidString)
-     do
-     {
-      try fileManager.createDirectory(at: newPhotoSnippetURL, withIntermediateDirectories: false, attributes: nil)
-      print ("PHOTO SNIPPET PHOTOS DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newPhotoSnippetURL.path)")
-     }
-     catch
-     {
-      print ("ERROR OCCURED WHEN CREATING PHOTO SNIPPET PHOTOS DIRECTORY: \(error.localizedDescription)")
-     }
-        
-     if let location = snippetLocation
-     {
-      newPhotoSnippet.logitude = location.coordinate.longitude
-      newPhotoSnippet.latitude = location.coordinate.latitude
-     }
-        
-     getLocationString {location in newPhotoSnippet.location = location}
-     
-     appDelegate.saveContext()
-     
-     editVisualSnippet(snippetToEdit: newPhotoSnippet)
-     
-    }
-    
-    func createNewVideoSnippet()
-    {
-     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-     let moc = appDelegate.persistentContainer.viewContext
-     
-     let newVideoSnippet = PhotoSnippet(context: moc)
-     
-     newVideoSnippet.date = Date() as NSDate
-     let newVideoSnippetID = UUID()
-     newVideoSnippet.id = newVideoSnippetID
-     newVideoSnippet.priority = SnippetPriority.normal.rawValue
-     newVideoSnippet.type = SnippetType.video.rawValue
-     newVideoSnippet.status = SnippetStatus.new.rawValue
-     
-     let fileManager = FileManager.default
-     let docFolder = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-     let newVideoSnippetURL = docFolder.appendingPathComponent(newVideoSnippetID.uuidString)
-     
-     do
-     {
-      try fileManager.createDirectory(at: newVideoSnippetURL, withIntermediateDirectories: false, attributes: nil)
-      print ("VIDEO SNIPPET VIDEO FILES DIRECTORY IS SUCCESSFULLY CREATED AT PATH:\(newVideoSnippetURL.path)")
-     }
-     catch
-     {
-      print ("ERROR OCCURED WHEN CREATING VIDEO SNIPPET VIDEO FILES DIRECTORY: \(error.localizedDescription)")
-     }
-     
-     if let location = snippetLocation
-     {
-      newVideoSnippet.logitude = location.coordinate.longitude
-      newVideoSnippet.latitude = location.coordinate.latitude
-     }
-     
-     getLocationString {location in newVideoSnippet.location = location}
-   
-     appDelegate.saveContext()
-     
-     editVisualSnippet(snippetToEdit: newVideoSnippet)
-    }
-    
-    func createNewAudioSnippet()
-    {
-    }
-    
-    func createNewSketchSnippet()
-    {
-    }
-    
-    func createNewReport()
-    {
-    }
-    
+ 
     
 }
 

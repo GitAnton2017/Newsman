@@ -7,15 +7,23 @@ extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePic
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
   {
    guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {return}
+   
+   
+   if let NC = navigationController,
+      let snippetsVC = NC.viewControllers[NC.viewControllers.count - 2] as? SnippetsViewController
+   {
+    snippetsVC.snippetsTableView.visibleCells.forEach{($0 as? SnippetsViewCell)?.stopImageProvider()}
+   }
  
-   PhotoItem.createNewPhoto(in: self.photoSnippet, with: pickedImage, ofRequiredSize: self.imageSize)
+   
+   PhotoItem.createNewPhoto(in: photoSnippet, with: pickedImage, ofRequiredSize: imageSize)
    {photoItem in
     guard let newPhotoItem = photoItem else {return}
     self.insertNewPhotoItem(newPhotoItem)
    }
    
-   self.imagePickerTakeButton.isEnabled = true
-   self.imagePickerCnxxButton.isEnabled = true
+   imagePickerTakeButton.isEnabled = true
+   imagePickerCnxxButton.isEnabled = true
    
   }
     

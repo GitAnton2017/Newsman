@@ -550,10 +550,7 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
      
     op.dependencies.forEach {op.removeDependency($0)}
     //print ("\(op.description) is cancelled!")
-    
-    
    
-    //op.cnxObserver = nil
    }
   }
   

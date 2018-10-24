@@ -1,8 +1,17 @@
 import Foundation
 import UIKit
+import CoreData
 
 class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
+    
+    lazy var moc: NSManagedObjectContext =
+    {
+      let appDelegate = UIApplication.shared.delegate as! AppDelegate
+      let moc = appDelegate.persistentContainer.viewContext
+      return moc
+    }()
+ 
  
     @IBOutlet var snippetPriorityPicker: UIPickerView!
  
@@ -21,7 +30,7 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
     override func viewDidLoad()
     {
       super.viewDidLoad()
-     
+ 
       snippetPriorityPicker.dataSource = self
       snippetPriorityPicker.delegate = self
         
@@ -29,11 +38,9 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
  
     func updateEditedSnippet()
     {
-      guard self.editedSnippet != nil else {return}
-
-      let currentPriority = SnippetPriority(rawValue: editedSnippet.priority!)!
-      snippetPriorityPicker.selectRow(currentPriority.section, inComponent: 0, animated: true)
-     
+      guard let editedSnippet = self.editedSnippet else {return}
+      snippetPriorityPicker.selectRow(editedSnippet.snippetPriorityIndex, inComponent: 0, animated: true)
+ 
     }
     override func viewWillAppear(_ animated: Bool)
     {
@@ -50,10 +57,11 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
     {
      
      let selectedPriority = SnippetPriority.priorities[row]
-     guard editedSnippet.priority != selectedPriority.rawValue else {return}
-     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-     editedSnippet.priority = selectedPriority.rawValue
-     appDelegate.saveContext()
+     guard editedSnippet.snippetPriority != selectedPriority else {return}
+     
+     moc.persistAndWait {self.editedSnippet.snippetPriority = selectedPriority}
+    
+    
  }
  
     func numberOfComponents(in pickerView: UIPickerView) -> Int
@@ -72,14 +80,17 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
       return 50
     }
  
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString?
+    func pickerView(_ pickerView: UIPickerView,
+                      attributedTitleForRow row: Int,
+                      forComponent component: Int) -> NSAttributedString?
     {
       let priority = SnippetPriority.priorities[row]
       let titleColor = SnippetPriority.priorityColorMap[priority]!
       let fontSize: CGFloat = 50
       let font = UIFont.italicSystemFont(ofSize: fontSize)
       let titleAttr = [NSAttributedStringKey.font : font,  NSAttributedStringKey.foregroundColor : titleColor]
-      return NSAttributedString(string: priority.rawValue, attributes: titleAttr)
+      let tag = NSLocalizedString(priority.rawValue, comment: priority.rawValue)
+      return NSAttributedString(string: tag, attributes: titleAttr)
     }
 
     

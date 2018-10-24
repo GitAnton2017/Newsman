@@ -128,37 +128,37 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
   
   switch snippetType
   {
-  case .text:
-   guard let toVC = snippetsVC.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
-    else
-   {
-    return nil
-   }
-   let textSnippet = items[index] as! TextSnippet
-   toVC.textSnippet = textSnippet
-   currentSnippet = textSnippet
-   nextVC = toVC
+   case .text:
+    guard let toVC = snippetsVC.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
+     else
+    {
+     return nil
+    }
+    let textSnippet = items[index] as! TextSnippet
+    toVC.textSnippet = textSnippet
+    currentSnippet = textSnippet
+    nextVC = toVC
    
    
-  case .photo: fallthrough
+   case .photo: fallthrough
    
-  case .video:
-   guard let toVC = snippetsVC.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
-    else
-   {
-    return nil
-   }
+   case .video:
+    guard let toVC = snippetsVC.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
+     else
+    {
+     return nil
+    }
+    
+    let photoSnippet = items[index] as! PhotoSnippet
+    toVC.photoSnippet = photoSnippet
+    currentSnippet = photoSnippet
+    nextVC = toVC
    
-   let photoSnippet = items[index] as! PhotoSnippet
-   toVC.photoSnippet = photoSnippet
-   currentSnippet = photoSnippet
-   nextVC = toVC
    
-  
-  case .audio: break
-  case .sketch: break
-  case .report: break
-   
+   case .audio: break
+   case .sketch: break
+   case .report: break
+   case .undefined: break
   }
   
   

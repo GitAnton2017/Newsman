@@ -315,7 +315,7 @@ func updateDateLabel()
     
  deinit
  {
-  //print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.tag ?? "no tag")")
+  print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.tag ?? "no tag")")
  }
     
 //MARK: ----------------- MEMORY WARNING PROCESSING -------------------------

@@ -8,7 +8,7 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  private let byDate =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),     ascending: false)
  private let byTag =         NSSortDescriptor(key: #keyPath(BaseSnippet.tag),      ascending: true)
  private let byLocation =    NSSortDescriptor(key: #keyPath(BaseSnippet.location), ascending: true)
- private let byPriority =    NSSortDescriptor(key: #keyPath(BaseSnippet.priority), ascending: true)
+ private let byPriority =    NSSortDescriptor(key: #keyPath(BaseSnippet.priorityIndex), ascending: true)
  private let bySnippetType = NSSortDescriptor(key: #keyPath(BaseSnippet.type),     ascending: true)
  
  private var descriptors: [NSSortDescriptor]
@@ -32,7 +32,7 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
   {
    case .plainList:      return nil
    case .byLocation:     return #keyPath(BaseSnippet.location)
-   case .byPriority:     return #keyPath(BaseSnippet.priority)
+   case .byPriority:     return #keyPath(BaseSnippet.priorityIndex)
    case .bySnippetType:  return #keyPath(BaseSnippet.type)
    case .byDateCreated:  return nil
    case .alphabetically: return nil
@@ -55,8 +55,10 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
   
  }()
  
+ 
+ typealias FRCSection = (rows: Int, frcSection: Int?)
 
- private var sectionCounters: [(rows: Int, frcSection: Int?)] = []
+ private var sectionCounters: [FRCSection] = []
 
  var groupType: GroupSnippets
  var predicate: NSPredicate
@@ -83,17 +85,26 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
    emptySet.forEach{sectionCounters.remove(at: $0)}
    tableView.deleteSections(IndexSet(emptySet), with: .none)
   }
-  
-  //tableView.reloadData()
-  
  }
  
  
  private func updateSectionCounters()
  {
-
   sectionCounters.removeAll()
   frc.sections?.enumerated().forEach{sectionCounters.append((rows: $0.1.numberOfObjects, frcSection: $0.0))}
+ }
+
+ 
+ private func updateEmptySections ()
+ {
+  sectionCounters.enumerated().filter{$0.element.rows == 0}.map{$0.offset}.forEach
+  {offset in
+   sectionCounters[offset].frcSection = nil
+   for i in 0..<sectionCounters.count where i > offset && sectionCounters[i].frcSection != nil
+   {
+    sectionCounters[i].frcSection! -= 1
+   }
+  }
  }
  
  
@@ -101,26 +112,15 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  {
   let snippet = self[source]
   deactivateDelegate()
-  moc.persistAndWait 
+  moc.persistAndWait
   {[unowned self] in
-   snippet.priority = self.sectionName(for: destination.section)
+   snippet.snippetPriority = self.sectionPriority(for: destination.section) ?? .normal
   }
   activateDelegate()
   sectionCounters[source.section].rows -= 1
   sectionCounters[destination.section].rows += 1
-  var section = 0
-
-  for i in 0..<sectionCounters.count
-  {
-   if sectionCounters[i].rows == 0
-   {
-    sectionCounters[i].frcSection = nil
-    continue
-    
-   }
-   sectionCounters[i].frcSection = section
-   section += 1
-  }
+  
+  updateEmptySections()
 
   refetch()
   
@@ -132,10 +132,34 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
     self?.tableView.selectRow(at: selected, animated: false, scrollPosition: .top)
    }
   }
-  
-  
-  
 
+ }
+ 
+ func move (from sources: [IndexPath], to destination: IndexPath)
+ {
+  
+  deactivateDelegate()
+  moc.persistAndWait
+   {[unowned self] in
+    sources.forEach {self[$0].priority = self.sectionName(for: destination.section)}
+  }
+  activateDelegate()
+  sources.forEach{sectionCounters[$0.section].rows -= 1}
+  sectionCounters[destination.section].rows += 1
+  
+  
+ 
+  
+  refetch()
+  
+  tableView.performBatchUpdates({[weak self] in self?.tableView.reloadData()})
+  {[weak self]_ in
+   self?.tableView.performBatchUpdates({[weak self] in self?.removeEmptySections()})
+   {[weak self] _ in
+    
+   }
+  }
+  
  }
  
  private func refetch()
@@ -152,18 +176,61 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  
  func fetch()
  {
+  batchUpdate()
   refetch()
   updateSectionCounters()
  }
  
- func sectionName(for index: Int) -> String?
+ private func batchUpdate()
  {
-   if let ind = sectionCounters[index].frcSection
-   {
-    return frc.sections?[ind].name
-   }
+  let request: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
+  request.predicate = predicate
+  do
+  {
+      let items = try moc.fetch(request)
+      moc.persistAndWait
+      {
+       items.forEach
+       {snippet in
+        snippet.priorityIndex = String(snippet.snippetPriorityIndex) + "_" + (snippet.priority ?? "Normal")
+       }
+       
+       print ("\(items.count) RECORDS UPDATED SUCCESSFULLY")
+      }
   
-   return nil
+  }
+  catch
+  {
+      let e = error as NSError
+      print ("Unresolved error \(e) \(e.userInfo)")
+ 
+  }
+  
+ }
+ 
+ func localizedSectionName (for index: Int) -> String?
+ {
+  guard let name = sectionName(for: index),
+        let pos = name.firstIndex(of: "_") else {return nil}
+  
+  let title = String(name.suffix(from: pos).dropFirst())
+  return NSLocalizedString(title, comment: title)
+  
+ }
+ 
+ private func sectionPriority (for index: Int) -> SnippetPriority?
+ {
+  guard let name = sectionName(for: index),
+        let pos = name.firstIndex(of: "_") else {return nil}
+  
+  return SnippetPriority(rawValue: String(name.suffix(from: pos).dropFirst()))
+ }
+ 
+ private func sectionName(for index: Int) -> String?
+ {
+  guard let section = sectionCounters[index].frcSection else {return nil}
+  return frc.sections?[section].name
+  
  }
  
  func numberOfSections() -> Int
@@ -228,37 +295,29 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
                  for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
  {
   updateSectionCounters()
+  
   switch type
   {
    case .insert:
-    if let indexPath = newIndexPath
-    {
-     tableView.insertRows(at: [indexPath], with: .fade)
-    }
-   
+    guard let indexPath = newIndexPath else {break}
+    tableView.insertRows(at: [indexPath], with: .fade)
+  
    case .update:
-    if let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell
-    {
-     let snippet = frc.object(at: indexPath)
-     let priority = SnippetPriority(rawValue: snippet.priority!)
-     cell.backgroundColor = priority?.color
-     cell.snippetTextTag.text = snippet.tag
-     cell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: snippet.date! as Date)
-    }
-   
+    guard let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {break}
+    let snippet = frc.object(at: indexPath)
+    cell.backgroundColor = snippet.snippetPriority.color
+    cell.snippetTextTag.text = snippet.tag
+    cell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: snippet.date! as Date)
+  
    case .delete:
-    if let indexPath = indexPath
-    {
-     tableView.deleteRows(at: [indexPath], with: .fade)
-    }
-   
+    guard let indexPath = indexPath else {break}
+    tableView.deleteRows(at: [indexPath], with: .fade)
+
    case .move:
-    if let toIndexPath = newIndexPath, let fromIndexPath = indexPath//, toIndexPath != fromIndexPath
-    {
-     tableView.deleteRows(at: [fromIndexPath], with: .fade)
-     tableView.insertRows(at: [toIndexPath], with: .fade)
-    }
-   
+    guard let toIndexPath = newIndexPath, let fromIndexPath = indexPath else {break}
+    tableView.deleteRows(at: [fromIndexPath], with: .fade)
+    tableView.insertRows(at: [toIndexPath], with: .fade)
+  
   }
  }
  
@@ -280,9 +339,7 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  {
   tableView.endUpdates()
  }
- 
 
- 
 }
 
 

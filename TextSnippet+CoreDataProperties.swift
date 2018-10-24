@@ -13,7 +13,8 @@ import CoreData
 
 extension TextSnippet {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<TextSnippet> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<TextSnippet>
+    {
         return NSFetchRequest<TextSnippet>(entityName: "TextSnippet")
     }
 
@@ -23,7 +24,9 @@ extension TextSnippet {
 }
 
 // MARK: Generated accessors for reports
-extension TextSnippet {
+
+extension TextSnippet
+{
 
     @objc(addReportsObject:)
     @NSManaged public func addToReports(_ value: Report)

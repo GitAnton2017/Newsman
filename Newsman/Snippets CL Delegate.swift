@@ -50,7 +50,7 @@ extension SnippetsViewController: CLLocationManagerDelegate
                     if let street     = placemark.thoroughfare            {location += ", " + street    }
                     if let substreet  = placemark.subThoroughfare         {location += ", " + substreet }
                     
-                    OperationQueue.main.addOperation{handler(location)}
+                    OperationQueue.main.addOperation {handler(location)}
                 }
                 else
                 {
@@ -68,7 +68,7 @@ extension SnippetsViewController: CLLocationManagerDelegate
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
     {
-     print ("CORE LOCATION ERROR\n********Location manager could not detect location********\n\(error.localizedDescription)")
+     print ("CORE LOCATION ERROR!\nLocation manager could not detect location\n\(error.localizedDescription)")
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation])

@@ -320,6 +320,8 @@ class PhotoItem: NSObject, PhotoItemProtocol
      }
     }
  
+
+ 
    @discardableResult class func cacheThumbnailImage(imageID: String , image: UIImage, width: Int) -> UIImage?
    {
      if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)

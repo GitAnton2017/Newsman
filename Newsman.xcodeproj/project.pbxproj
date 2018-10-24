@@ -9,7 +9,9 @@
 /* Begin PBXBuildFile section */
 		A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */; };
 		A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A704264E1FDA87CA000B3400 /* Photo Item.swift */; };
-		A70B2AA520DA9FED003AD4B5 /* SnippetsVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */; };
+		A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */; };
+		A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */; };
+		A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EA2180779E0025C973 /* Snippets Factory.swift */; };
 		A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */; };
 		A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
@@ -22,13 +24,12 @@
 		A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85C11FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift */; };
 		A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85C21FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift */; };
 		A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85C31FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift */; };
-		A71C85CC1FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85C41FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift */; };
 		A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85C51FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift */; };
 		A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85C61FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift */; };
-		A71C85E71FBED634000F2DD9 /* SnippetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */; };
-		A71C85E91FBED660000F2DD9 /* SnippetsViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */; };
+		A71C85E71FBED634000F2DD9 /* Snippets VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85E61FBED634000F2DD9 /* Snippets VC.swift */; };
+		A71C85E91FBED660000F2DD9 /* Snippets View DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */; };
 		A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */; };
-		A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */; };
+		A71C85ED1FBEFCD1000F2DD9 /* Snippets View Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */; };
 		A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */; };
 		A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */; };
 		A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */; };
@@ -43,12 +44,12 @@
 		A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9B1FCAFDB700207A52 /* Single Item Cell.swift */; };
 		A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */; };
 		A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */; };
-		A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */; };
+		A7330F101FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */; };
 		A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */; };
 		A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */; };
 		A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* DatePickerViewController.swift */; };
 		A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */; };
-		A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */; };
+		A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */; };
 		A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD4920EBEECD0062AF27 /* Playback Button.swift */; };
 		A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */; };
 		A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD6120EF55540062AF27 /* Playback Progress View.swift */; };
@@ -133,7 +134,9 @@
 /* Begin PBXFileReference section */
 		A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV Delegate.swift"; sourceTree = "<group>"; };
 		A704264E1FDA87CA000B3400 /* Photo Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item.swift"; sourceTree = "<group>"; };
-		A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsVCRestoration.swift; sourceTree = "<group>"; };
+		A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets VC Restoration.swift"; sourceTree = "<group>"; };
+		A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A711C0EA2180779E0025C973 /* Snippets Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Factory.swift"; sourceTree = "<group>"; };
 		A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -146,13 +149,12 @@
 		A71C85C11FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A71C85C21FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A71C85C31FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
-		A71C85C41FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A71C85C51FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SketchSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A71C85C61FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SketchSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewController.swift; sourceTree = "<group>"; };
-		A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewDataSource.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		A71C85E61FBED634000F2DD9 /* Snippets VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets VC.swift"; sourceTree = "<group>"; };
+		A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets View DS.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItems.swift; sourceTree = "<group>"; };
-		A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsViewCell.swift; sourceTree = "<group>"; };
+		A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets View Cell.swift"; sourceTree = "<group>"; };
 		A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSnippetViewController.swift; sourceTree = "<group>"; };
 		A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Preview Images Provider.swift"; sourceTree = "<group>"; };
 		A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet Preview Provider.swift"; sourceTree = "<group>"; };
@@ -168,12 +170,12 @@
 		A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Picker Delegate.swift"; sourceTree = "<group>"; };
 		A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS.swift"; sourceTree = "<group>"; };
 		A7317B072015EA4100C8836A /* Newsman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Newsman.entitlements; sourceTree = "<group>"; };
-		A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsTableViewDelegate.swift; sourceTree = "<group>"; };
+		A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Table View Delegate.swift"; sourceTree = "<group>"; };
 		A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7400E741FC731A2006F05DC /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
 		A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerViewController.swift; sourceTree = "<group>"; };
-		A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsCoreLocationDelegate.swift; sourceTree = "<group>"; };
+		A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets CL Delegate.swift"; sourceTree = "<group>"; };
 		A741BD4920EBEECD0062AF27 /* Playback Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Button.swift"; sourceTree = "<group>"; };
 		A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Scrub View.swift"; sourceTree = "<group>"; };
 		A741BD6120EF55540062AF27 /* Playback Progress View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Progress View.swift"; sourceTree = "<group>"; };
@@ -375,8 +377,8 @@
 		A7443F0D202DDD450039BE41 /* AudioSnippet */ = {
 			isa = PBXGroup;
 			children = (
+				A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */,
 				A71C85C31FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift */,
-				A71C85C41FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift */,
 			);
 			name = AudioSnippet;
 			sourceTree = "<group>";
@@ -527,15 +529,16 @@
 		A7CB136B1FD2D2D900AA7294 /* Snippets Menu */ = {
 			isa = PBXGroup;
 			children = (
-				A71C85E61FBED634000F2DD9 /* SnippetsViewController.swift */,
-				A71C85EC1FBEFCD1000F2DD9 /* SnippetsViewCell.swift */,
-				A7330F0F1FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift */,
-				A71C85E81FBED660000F2DD9 /* SnippetsViewDataSource.swift */,
+				A71C85E61FBED634000F2DD9 /* Snippets VC.swift */,
+				A711C0EA2180779E0025C973 /* Snippets Factory.swift */,
+				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
+				A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */,
+				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
 				A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */,
-				A70B2AA420DA9FED003AD4B5 /* SnippetsVCRestoration.swift */,
+				A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
-				A7400E781FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift */,
+				A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */,
 			);
 			name = "Snippets Menu";
 			sourceTree = "<group>";
@@ -769,7 +772,7 @@
 				A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */,
 				A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
-				A71C85E71FBED634000F2DD9 /* SnippetsViewController.swift in Sources */,
+				A71C85E71FBED634000F2DD9 /* Snippets VC.swift in Sources */,
 				A7FAFFEE20F6294900C5B21D /* Duration Stamp View.swift in Sources */,
 				A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */,
 				A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */,
@@ -780,8 +783,8 @@
 				A71C85BC1FBE192D000F2DD9 /* TextSnippet+CoreDataProperties.swift in Sources */,
 				A7A97232217074100061AA07 /* Global Formatters.swift in Sources */,
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
-				A7330F101FC09FCB00D8EBC9 /* SnippetsTableViewDelegate.swift in Sources */,
-				A70B2AA520DA9FED003AD4B5 /* SnippetsVCRestoration.swift in Sources */,
+				A7330F101FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift in Sources */,
+				A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */,
 				A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */,
 				A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */,
 				A7826E3320DE311700FFBBFA /* Photo Snippet TF Delegate.swift in Sources */,
@@ -802,6 +805,7 @@
 				A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
 				A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */,
+				A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */,
 				A7443F06202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift in Sources */,
 				A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */,
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
@@ -816,7 +820,7 @@
 				A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
-				A7400E791FC96C3E006F05DC /* SnippetsCoreLocationDelegate.swift in Sources */,
+				A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
 				A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */,
 				A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */,
@@ -825,6 +829,7 @@
 				A7D39CFA2100E3A000F80CAA /* Folder Nested CV Delegate.swift in Sources */,
 				A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */,
 				A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */,
+				A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */,
 				A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
 				A7826E3520DE3FE100FFBBFA /* TextSnippet TF Delegate.swift in Sources */,
@@ -844,16 +849,15 @@
 				A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
 				A7D93C6A206D3743007891ED /* Helpers.swift in Sources */,
-				A71C85ED1FBEFCD1000F2DD9 /* SnippetsViewCell.swift in Sources */,
+				A71C85ED1FBEFCD1000F2DD9 /* Snippets View Cell.swift in Sources */,
 				A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */,
 				A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */,
 				A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */,
 				A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */,
 				A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */,
-				A71C85E91FBED660000F2DD9 /* SnippetsViewDataSource.swift in Sources */,
+				A71C85E91FBED660000F2DD9 /* Snippets View DS.swift in Sources */,
 				A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */,
 				A71C85BF1FBE1972000F2DD9 /* Report+CoreDataClass.swift in Sources */,
-				A71C85CC1FBE19F3000F2DD9 /* AudioSnippet+CoreDataProperties.swift in Sources */,
 				A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */,
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
 				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,

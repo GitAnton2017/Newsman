@@ -10,6 +10,7 @@
 import Foundation
 import CoreData
 import UIKit
+import CoreLocation
 
 
 protocol SnippetImagesPreviewProvidable: class
@@ -19,8 +20,110 @@ protocol SnippetImagesPreviewProvidable: class
 
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
- var snippetType: SnippetType {return SnippetType(rawValue: type!)!}
- @objc var priorityIndex: Int {return SnippetPriority(rawValue: priority!)!.section}
+
+ var snippetStatus: SnippetStatus
+ {
+  get
+  {
+   guard let snippetStatus = self.status else
+   {
+    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with undefined (NIL) status is encountered in store!")
+    return .new
+   }
+   
+   return SnippetStatus(rawValue: snippetStatus)!
+  }
+  
+  set
+  {
+   self.status = newValue.rawValue
+  }
+  
+ }
+ var snippetType: SnippetType
+ {
+  get
+  {
+   guard let snippetType = self.type else
+   {
+    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with undefined (NIL) type is encountered in store!")
+    return .undefined
+   }
+   
+   return SnippetType(rawValue: snippetType)!
+  }
+  
+  set
+  {
+   self.type = newValue.rawValue
+  }
+  
+ }
+ 
+ 
+ var snippetPriority: SnippetPriority
+ {
+  get
+  {
+   guard let snippetPriority = self.priority else
+   {
+    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with undefined (NIL) priority is encountered in store!")
+    return .normal
+   }
+   return SnippetPriority(rawValue: snippetPriority)!
+  }
+  
+  set
+  {
+   self.priority = newValue.rawValue
+   self.priorityIndex = String(snippetPriorityIndex) + "_" + newValue.rawValue
+  }
+
+ }
+ 
+ var snippetPriorityIndex: Int
+ {
+  return SnippetPriority.prioritySectionsMap[snippetPriority]!
+ }
+ 
+ var snippetCoordinates: CLLocation?
+ {
+  get
+  {
+   return CLLocation(latitude: self.latitude, longitude: self.logitude)
+  }
+  
+  set
+  {
+   self.latitude = newValue?.coordinate.latitude  ?? 0.0
+   self.logitude = newValue?.coordinate.longitude ?? 0.0
+  }
+ }
+ 
+
+// @NSManaged fileprivate var primitivePriorityIndex: NSNumber
+//
+// static let priorityIndexKey = "priorityIndex"
+//
+// @objc public var priorityIndex: Int
+// {
+//  get
+//  {
+//   willAccessValue(forKey: BaseSnippet.priorityIndexKey)
+//   let index = SnippetPriority(rawValue: priority!)!.section
+//   didAccessValue(forKey:  BaseSnippet.priorityIndexKey)
+//   return index
+//  }
+//
+//  set
+//  {
+//   willChangeValue(forKey: BaseSnippet.priorityIndexKey)
+//   primitivePriorityIndex = NSNumber(value: newValue)
+//   didChangeValue(forKey:  BaseSnippet.priorityIndexKey)
+//  }
+// }
+//
+ 
 }
 
 struct SnippetDates
@@ -90,6 +193,8 @@ public enum SnippetType: String
     case audio  = "AudioSnippet"
     case sketch = "SketchSnippet"
     case report = "Report"
+    //*******************************
+    case undefined //error case!!!
     
 }
 
@@ -107,38 +212,28 @@ public enum SnippetPriority: String
     
     static let priorityFilters : [(title: String, predicate: (BaseSnippet) -> Bool)] =
     [
-        (SnippetPriority.hottest.rawValue, {$0.priority == SnippetPriority.hottest.rawValue }),
-        (SnippetPriority.hot.rawValue,     {$0.priority == SnippetPriority.hot.rawValue     }),
-        (SnippetPriority.high.rawValue,    {$0.priority == SnippetPriority.high.rawValue    }),
-        (SnippetPriority.normal.rawValue,  {$0.priority == SnippetPriority.normal.rawValue  }),
-        (SnippetPriority.medium.rawValue,  {$0.priority == SnippetPriority.medium.rawValue  }),
-        (SnippetPriority.low.rawValue,     {$0.priority == SnippetPriority.low.rawValue     })
+        (SnippetPriority.hottest.rawValue, {$0.snippetPriority == .hottest  }),
+        (SnippetPriority.hot.rawValue,     {$0.snippetPriority == .hot      }),
+        (SnippetPriority.high.rawValue,    {$0.snippetPriority == .high     }),
+        (SnippetPriority.normal.rawValue,  {$0.snippetPriority == .normal   }),
+        (SnippetPriority.medium.rawValue,  {$0.snippetPriority == .medium   }),
+        (SnippetPriority.low.rawValue,     {$0.snippetPriority == .low      })
     ]
     
     static let prioritySectionsMap: [SnippetPriority: Int] =
     [
-        .hottest : 0, .hot : 1, .high : 2, .normal : 3, .medium : 4, .low : 5
+        .hottest : 0,  //priority index = 0_hottest
+        .hot :     1,  //priority index = 1_hot
+        .high :    2,  //priority index = 2_high
+        .normal :  3,  //priority index = 3_normal
+        .medium :  4,  //priority index = 4_medium
+        .low :     5   //priority index = 5_low
     ]
-    static let priorities: [SnippetPriority] =
-    [
-        .hottest , .hot, .high, .normal, .medium, .low
-    ]
+    static let priorities: [SnippetPriority] = [.hottest , .hot, .high, .normal, .medium, .low]
     
-    var color: UIColor
-    {
-        get
-        {
-            return SnippetPriority.priorityColorMap[self]!
-        }
-    }
+    var color: UIColor {return SnippetPriority.priorityColorMap[self]!}
     
-    var section: Int
-    {
-        get
-        {
-            return SnippetPriority.prioritySectionsMap[self]!
-        }
-    }
+    var section: Int {return SnippetPriority.prioritySectionsMap[self]!}
     
     static let strings: [String] =
     [
@@ -161,10 +256,7 @@ public enum SnippetPriority: String
 
 public enum SnippetStatus: String
 {
-    
     case new         =   "New"
     case old         =   "Old"
     case archived    =   "Archived"
-   
-    
 }

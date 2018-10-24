@@ -32,29 +32,30 @@ extension NCSnippetsScrollProtocol
    
    switch snippetType
    {
-   case .text:
-    guard let toVC = currentViewController.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
-     else
-    {
-     return
-    }
-    nextVC = toVC
-    toVC.textSnippet = nextSnippet as? TextSnippet
+    case .text:
+     guard let toVC = currentViewController.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController
+      else
+     {
+      return
+     }
+     nextVC = toVC
+     toVC.textSnippet = nextSnippet as? TextSnippet
     
-   case .photo: fallthrough
+    case .photo: fallthrough
     
-   case .video:
-    guard let toVC = currentViewController.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
-     else
-    {
-     return
-    }
-    nextVC = toVC
-    toVC.photoSnippet = nextSnippet as? PhotoSnippet
+    case .video:
+     guard let toVC = currentViewController.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController
+      else
+     {
+      return
+     }
+     nextVC = toVC
+     toVC.photoSnippet = nextSnippet as? PhotoSnippet
     
-   case .audio: break
-   case .sketch: break
-   case .report: break
+    case .audio: break
+    case .sketch: break
+    case .report: break
+    case .undefined: break
     
    }
    

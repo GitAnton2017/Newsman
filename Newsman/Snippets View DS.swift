@@ -289,50 +289,24 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-//        if (groupType == .plainList)
-//        {
-//         return nil
-//        }
-//        else
-//        {
-//          if (snippetsData[section].isEmpty)
-//          {
-//           return nil
-//          }
-//          else
-//          {
-//           return groupTitles[section]
-//          }
-//        }
-     
-        return currentFRC.sectionName(for: section)
+      return currentFRC.localizedSectionName(for: section)
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
-//        return snippetsData.count
-     
-        guard itemsType != nil else {return 0}
-        return currentFRC.numberOfSections()
+      guard itemsType != nil else {return 0}
+      return currentFRC.numberOfSections()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-//        return snippetsData[section].count
-     
      return currentFRC.numberOfRowsInSection(index: section)
-     
-     
     }
 
- 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetsViewCell
-     
-//      let item = snippetsData[indexPath.section][indexPath.row]
-     
-     
+
       let item = currentFRC[indexPath]
      
       cell.hostedSnippet = item as? SnippetImagesPreviewProvidable
@@ -349,8 +323,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
        cell.backgroundColor = SnippetPriority.normal.color
        item.priority = SnippetPriority.normal.rawValue
       }
-     
-        
+   
       return cell
     }
     
@@ -358,44 +331,17 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
     {
      return groupType == .byPriority
- 
     }
 
  
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
     {
-    
-     if groupType == .byPriority, sourceIndexPath.section != destinationIndexPath.section
-     {
-//      currentFRC.deactivateDelegate() //prevent to process edit actions from FRC delegate...
-//
-//      let cnt = currentFRC.numberOfSections()
-//
-//      let movedSnippet = currentFRC[sourceIndexPath]
-//
-//      movedSnippet.priority = currentFRC.sectionName(for: destinationIndexPath.section)
-//
-//      (UIApplication.shared.delegate as! AppDelegate).saveContext()
-//
-//      currentFRC.fetch() //refetch data after snippet priority change...
-//
-//      if cnt == 1
-//      {
-//       tableView.deleteSections([sourceIndexPath.section], with: .fade)
-//      }
-     
-  
-        currentFRC.move(from: sourceIndexPath, to: destinationIndexPath)
-
-      
-    
-
-     }
+     guard groupType == .byPriority, sourceIndexPath.section != destinationIndexPath.section else {return}
+     currentFRC.move(from: sourceIndexPath, to: destinationIndexPath)
     }
  
     func snippetIndexPath(snippet: BaseSnippet) -> IndexPath
     {
-     
      let path = snippetsData.enumerated().lazy.map{($0.offset, $0.element.index(of: snippet))}.first{$0.1 != nil}
      return IndexPath(row: path!.1!, section: path!.0)
     }
