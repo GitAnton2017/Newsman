@@ -5,8 +5,10 @@ import CoreData
 import CoreLocation
 
 
-enum GroupSnippets: String
+enum GroupSnippets: String, StringLocalizable
 {
+  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
+ 
   case byPriority     =  "By Snippet Priority"
   case byDateCreated  =  "By Snippet Date Created"
   case alphabetically =  "Alphabetically"
@@ -52,9 +54,8 @@ class SnippetsViewController: UIViewController
     
     private lazy var appSettings: [Settings] =
     {
-     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-     let moc = appDelegate.persistentContainer.viewContext
      let request: NSFetchRequest<Settings> = Settings.fetchRequest()
+     
      do
      {
       let settings = try moc.fetch(request)
@@ -64,6 +65,7 @@ class SnippetsViewController: UIViewController
      {
       return [Settings]()
      }
+     
     }()
     
     private var currentGrouping: GroupSnippets = .plainList
@@ -252,23 +254,20 @@ class SnippetsViewController: UIViewController
       return
      }
      
-     let loc_title = NSLocalizedString(self.snippetType.rawValue, comment: self.snippetType.rawValue)
-     let loc_message = NSLocalizedString("Please select your snippet priority!", comment: "Priority Selection Alerts")
-     let prioritySelect = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
+     let prioritySelect = UIAlertController(title: snippetType.localizedString,
+                                            message: Localized.prioritySelect, preferredStyle: .alert)
         
      for priority in SnippetPriority.priorities
      {
-      let loc_pr_title = NSLocalizedString(priority.rawValue, comment: priority.rawValue)
-      let action = UIAlertAction(title: loc_pr_title, style: .default)
+      let action = UIAlertAction(title: priority.localizedString, style: .default)
       { _ in
         self.changeSnippetsPriority(self.snippetsTableView, selectedSnippets, priority)
         self.toggleEditMode()
       }
       prioritySelect.addAction(action)
      }
-      
-     let loc_cnx_title = NSLocalizedString("CANCEL", comment: "Cancel Alert Action")
-     let cancelAction = UIAlertAction(title: loc_cnx_title , style: .cancel, handler: nil)
+     
+     let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
         
      prioritySelect.addAction(cancelAction)
         
@@ -311,25 +310,19 @@ class SnippetsViewController: UIViewController
     
     @IBAction func groupSnippetsPress(_ sender: UIBarButtonItem)
     {
-     let loc_title = NSLocalizedString("Group Snippets", comment: "Group Snippets Alerts Title")
-     let loc_message = NSLocalizedString("Please select grouping type", comment: "Group Snippets Alerts Message")
-     let groupAC = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
+     
+     let groupAC = UIAlertController(title: Localized.groupingTitle,
+                                     message: Localized.groupingSelect, preferredStyle: .alert)
         
      for grouping in GroupSnippets.groupingTypes
      {
-       let loc_gr_title = NSLocalizedString(grouping.rawValue, comment: grouping.rawValue)
-       let action = UIAlertAction(title: loc_gr_title, style: .default)
-       { _ in
-            self.groupType = grouping
-       }
+      let action = UIAlertAction(title: grouping.localizedString, style: .default){ _ in self.groupType = grouping}
       groupAC.addAction(action)
      }
      
-     let loc_cnx_title = NSLocalizedString("CANCEL",comment: "Cancel Alert Action")
-     let cancel = UIAlertAction(title: loc_cnx_title, style: .cancel, handler: nil)
+     let cancel = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
         
      groupAC.addAction(cancel)
-      
      self.present(groupAC, animated: true, completion: nil)
     }
     
