@@ -15,13 +15,11 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
  
     @IBOutlet var snippetPriorityPicker: UIPickerView!
  
-    var editedSnippetTableViewCell: SnippetsViewCell!
- 
     var editedSnippet: BaseSnippet!
     {
      didSet
      {
-      self.navigationItem.title = self.editedSnippet.tag
+      self.navigationItem.title = self.editedSnippet.snippetName
      }
     }
  

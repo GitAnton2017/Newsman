@@ -137,32 +137,32 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
 
  }
  
- func move (from sources: [IndexPath], to destination: IndexPath)
- {
-  
-  deactivateDelegate()
-  moc.persistAndWait
-   {[unowned self] in
-    sources.forEach {self[$0].priority = self.sectionName(for: destination.section)}
-  }
-  activateDelegate()
-  sources.forEach{sectionCounters[$0.section].rows -= 1}
-  sectionCounters[destination.section].rows += 1
-  
-  
- 
-  
-  refetch()
-  
-  tableView.performBatchUpdates({[weak self] in self?.tableView.reloadData()})
-  {[weak self]_ in
-   self?.tableView.performBatchUpdates({[weak self] in self?.removeEmptySections()})
-   {[weak self] _ in
-    
-   }
-  }
-  
- }
+// func move (from sources: [IndexPath], to destination: IndexPath)
+// {
+//  
+//  deactivateDelegate()
+//  moc.persistAndWait
+//   {[unowned self] in
+//    sources.forEach {self[$0].priority = self.sectionName(for: destination.section)}
+//  }
+//  activateDelegate()
+//  sources.forEach{sectionCounters[$0.section].rows -= 1}
+//  sectionCounters[destination.section].rows += 1
+//  
+//  
+// 
+//  
+//  refetch()
+//  
+//  tableView.performBatchUpdates({[weak self] in self?.tableView.reloadData()})
+//  {[weak self]_ in
+//   self?.tableView.performBatchUpdates({[weak self] in self?.removeEmptySections()})
+//   {[weak self] _ in
+//    
+//   }
+//  }
+//  
+// }
  
  private func refetch()
  {
@@ -190,11 +190,11 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
   do
   {
    let items = try moc.fetch(request)
-   moc.persistAndWait
+   moc.persist
    {
     items.forEach
     {snippet in
-     snippet.priorityIndex = String(snippet.snippetPriorityIndex) + "_" + (snippet.priority ?? "Normal")
+     snippet.priorityIndex = String(snippet.snippetPriorityIndex) + "_" + snippet.snippetPriority.rawValue
      if let first_ch = snippet.tag?.first
      {
       snippet.alphaIndex = String(first_ch)
@@ -224,30 +224,30 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
   switch groupType
   {
    case .byDateCreated:  fallthrough
-   case .byPriority:     return localizedSectionName(for: index)
-   case .alphabetically: fallthrough
+   case .byPriority:     return localizedSectionName (for: index)
+   case .alphabetically: return localizedAlphabetName(for: index)
    case .byLocation:     fallthrough
    case .bySnippetType:  return sectionName(for: index)
    default :             return nil
   }
  }
  
+ private func localizedAlphabetName (for index: Int) -> String?
+ {
+  guard let name = sectionName(for: index) else {return nil}
+  return name.isEmpty ? Localized.unnamedSection : name
+ }
+ 
  private func localizedSectionName (for index: Int) -> String?
  {
- 
-  guard let name = sectionName(for: index),
-        let pos = name.firstIndex(of: "_") else {return nil}
-  
+  guard let name = sectionName(for: index), let pos = name.firstIndex(of: "_") else {return nil}
   let title = String(name.suffix(from: pos).dropFirst())
   return NSLocalizedString(title, comment: title)
-  
  }
  
  private func sectionPriority (for index: Int) -> SnippetPriority?
  {
-  guard let name = sectionName(for: index),
-        let pos = name.firstIndex(of: "_") else {return nil}
-  
+  guard let name = sectionName(for: index), let pos = name.firstIndex(of: "_") else {return nil}
   return SnippetPriority(rawValue: String(name.suffix(from: pos).dropFirst()))
  }
  
@@ -332,7 +332,7 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
     let snippet = frc.object(at: indexPath)
     cell.backgroundColor = snippet.snippetPriority.color
     cell.snippetTextTag.text = snippet.snippetName
-    cell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: snippet.date! as Date)
+    cell.snippetDateTag.text = snippet.snippetDateTag
   
    case .delete:
     guard let indexPath = indexPath else {break}

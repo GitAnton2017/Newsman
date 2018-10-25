@@ -11,7 +11,7 @@ extension SnippetsViewController
   moc.persistAndWait
   {
     let newTextSnippet = TextSnippet(context: moc)
-    newTextSnippet.date = Date() as NSDate
+    newTextSnippet.snippetDate = Date()
     newTextSnippet.text = "Enter Text Snippet Text here..."
     newTextSnippet.id = UUID()
     newTextSnippet.snippetPriority = .normal //new snipper priority is .normal by default
@@ -35,8 +35,7 @@ extension SnippetsViewController
    moc.persistAndWait
    {
     let newPhotoSnippet = PhotoSnippet(context: moc)
-    
-    newPhotoSnippet.date = Date() as NSDate
+    newPhotoSnippet.snippetDate = Date()
     let newPhotoSnippetID = UUID()
     newPhotoSnippet.id = newPhotoSnippetID
     newPhotoSnippet.snippetPriority = .normal
@@ -74,7 +73,7 @@ extension SnippetsViewController
    {
     
     let newVideoSnippet = PhotoSnippet(context: moc)
-    newVideoSnippet.date = Date() as NSDate
+    newVideoSnippet.snippetDate = Date()
     let newVideoSnippetID = UUID()
     newVideoSnippet.id = newVideoSnippetID
     newVideoSnippet.snippetPriority = .normal

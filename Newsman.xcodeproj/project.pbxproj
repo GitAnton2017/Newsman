@@ -12,6 +12,7 @@
 		A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */; };
 		A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */; };
 		A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EA2180779E0025C973 /* Snippets Factory.swift */; };
+		A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */; };
 		A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */; };
 		A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
@@ -137,6 +138,7 @@
 		A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets VC Restoration.swift"; sourceTree = "<group>"; };
 		A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A711C0EA2180779E0025C973 /* Snippets Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Factory.swift"; sourceTree = "<group>"; };
+		A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Localized Global Strings.swift"; sourceTree = "<group>"; };
 		A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				A7CB13731FD2D5EB00AA7294 /* Localizable.strings */,
+				A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */,
 				A71C85D21FBE228F000F2DD9 /* Core Data Classes */,
 				A75489871FBC4F2900359C0C /* Newsman */,
 				A754899F1FBC4F2900359C0C /* NewsmanTests */,
@@ -794,6 +797,7 @@
 				A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */,
 				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
 				A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */,
+				A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */,
 				A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */,
 				A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */,
 				A7826E3920DFD48F00FFBBFA /* NCPushPopAnimator.swift in Sources */,

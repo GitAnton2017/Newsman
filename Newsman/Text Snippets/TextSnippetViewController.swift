@@ -60,7 +60,9 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
      moc.persistAndWait
      {
        textSnippet.text = textView.text
-       textSnippet.snippetName = textSnippetTitle.text ?? ""
+       guard let text = textSnippetTitle.text else {return}
+       guard text != Localized.unnamedSnippet else {return}
+       textSnippet.snippetName = text
      }
     }
     
@@ -114,7 +116,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
         guard textSnippet != nil else {return}
      
         textView.text = textSnippet.text
-        textSnippetTitle.text = textSnippet.tag
+        textSnippetTitle.text = textSnippet.snippetName
      
     }
  

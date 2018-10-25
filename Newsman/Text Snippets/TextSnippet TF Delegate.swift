@@ -11,7 +11,9 @@ extension TextSnippetViewController: UITextFieldDelegate
  func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
  {
   guard reason == .committed else {return}
-  moc.persistAndWait {textSnippet.snippetName = textField.text ?? ""}
+  guard let text = textField.text else {return}
+  guard text != Localized.unnamedSnippet else {return}
+  moc.persistAndWait {textSnippet.snippetName = text}
  }
  
  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool

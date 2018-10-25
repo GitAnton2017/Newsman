@@ -4,13 +4,12 @@ import UIKit
 
 class DatePickerViewController: UIViewController
 {
-  var editedSnippetTableViewCell: SnippetsViewCell!
  
   var editedSnippet: BaseSnippet!
   {
     didSet
     {
-        navigationItem.title = editedSnippet.tag
+        navigationItem.title = editedSnippet.snippetName
     }
   }
     
@@ -26,17 +25,12 @@ class DatePickerViewController: UIViewController
   override func viewWillAppear(_ animated: Bool)
   {
     super.viewWillAppear(animated)
-    snippetDatePicker.date = editedSnippet.date! as Date
+    snippetDatePicker.date = editedSnippet.snippetDate
   }
     
   override func viewWillDisappear(_ animated: Bool)
   {
     super.viewWillDisappear(animated)
-    editedSnippet.date = snippetDatePicker.date as NSDate
-   
-    if editedSnippetTableViewCell != nil
-    {
-     editedSnippetTableViewCell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: snippetDatePicker.date)
-    }
+    editedSnippet.snippetDate = snippetDatePicker.date
   }
 }

@@ -1120,7 +1120,7 @@ class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
          
             dsGroup.notify(queue: DispatchQueue.main)
             {
-                print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.tag ?? "")\",  COUNT - \(imageSet.count)" )
+                print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.snippetName)\",  COUNT - \(imageSet.count)" )
                 if imageSet.count < photoItems.count
                 {
                  print ("Aborted in NOTIFY GROUP ...")

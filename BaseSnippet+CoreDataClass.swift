@@ -21,9 +21,29 @@ protocol SnippetImagesPreviewProvidable: class
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
 
+ @NSManaged var date: NSDate?
+ @NSManaged var dateIndex: String?
+ var snippetDate: Date
+ {
+  get {return self.date! as Date}
+  set
+  {
+   self.date = newValue as NSDate
+   self.dateIndex = SnippetDates.dateFilter.first{$0.predicate(self)}?.title
+  }
+ }
+ 
+ var snippetDateTag: String {return SnippetsViewDataSource.dateFormatter.string(from: self.snippetDate)}
+ 
+ @NSManaged var tag: String?
+ @NSManaged var alphaIndex: String?
  var snippetName: String
  {
-  get {return self.tag ?? ""}
+  get
+  {
+   guard let tag = self.tag else {return Localized.unnamedSnippet}
+   return tag.isEmpty ? Localized.unnamedSnippet : tag
+  }
   set
   {
    self.tag = newValue
@@ -31,6 +51,7 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
+ @NSManaged var status: String?
  var snippetStatus: SnippetStatus
  {
   get
@@ -44,12 +65,11 @@ protocol SnippetImagesPreviewProvidable: class
    return SnippetStatus(rawValue: snippetStatus)!
   }
   
-  set
-  {
-   self.status = newValue.rawValue
-  }
+  set {self.status = newValue.rawValue}
   
  }
+ 
+ @NSManaged var type: String?
  var snippetType: SnippetType
  {
   get
@@ -63,14 +83,12 @@ protocol SnippetImagesPreviewProvidable: class
    return SnippetType(rawValue: snippetType)!
   }
   
-  set
-  {
-   self.type = newValue.rawValue
-  }
+  set {self.type = newValue.rawValue}
   
  }
  
- 
+ @NSManaged var priority: String?
+ @NSManaged var priorityIndex: String?
  var snippetPriority: SnippetPriority
  {
   get
@@ -91,18 +109,14 @@ protocol SnippetImagesPreviewProvidable: class
 
  }
  
- var snippetPriorityIndex: Int
- {
-  return SnippetPriority.prioritySectionsMap[snippetPriority]!
- }
  
+ var snippetPriorityIndex: Int {return SnippetPriority.prioritySectionsMap[snippetPriority]!}
+ 
+ @NSManaged var latitude: Double
+ @NSManaged var logitude: Double
  var snippetCoordinates: CLLocation?
  {
-  get
-  {
-   return CLLocation(latitude: self.latitude, longitude: self.logitude)
-  }
-  
+  get {return CLLocation(latitude: self.latitude, longitude: self.logitude)}
   set
   {
    self.latitude = newValue?.coordinate.latitude  ?? 0.0
@@ -185,19 +199,21 @@ struct SnippetDates
     
  static let dateFilter : [(title: String, predicate: (BaseSnippet) -> Bool)] =
  [
-    ("0_For Today",         {($0.date! as Date) >= boftd! && ($0.date! as Date) < bofnd!}),
-    ("1_For Yesterday",     {($0.date! as Date) >= bofld! && ($0.date! as Date) < boftd!}),
-    ("2_For This Week",     {($0.date! as Date) >= boftw! && ($0.date! as Date) < bofnd!}),
-    ("3_For Last Week",     {($0.date! as Date) >= boflw! && ($0.date! as Date) < boftw!}),
-    ("4_For This Month",    {($0.date! as Date) >= boftm! && ($0.date! as Date) < bofnd!}),
-    ("5_For Last Month",    {($0.date! as Date) >= boflm! && ($0.date! as Date) < boftm!}),
-    ("7_For This Year",     {($0.date! as Date) >= bofty! && ($0.date! as Date) < bofnd!}),
-    ("8_For Last Year and earlier on",                    {($0.date! as Date) <  bofty! })
+    ("0_For Today",         {$0.snippetDate >= boftd! && $0.snippetDate < bofnd!}),
+    ("1_For Yesterday",     {$0.snippetDate >= bofld! && $0.snippetDate < boftd!}),
+    ("2_For This Week",     {$0.snippetDate >= boftw! && $0.snippetDate < bofnd!}),
+    ("3_For Last Week",     {$0.snippetDate >= boflw! && $0.snippetDate < boftw!}),
+    ("4_For This Month",    {$0.snippetDate >= boftm! && $0.snippetDate < bofnd!}),
+    ("5_For Last Month",    {$0.snippetDate >= boflm! && $0.snippetDate < boftm!}),
+    ("7_For This Year",     {$0.snippetDate >= bofty! && $0.snippetDate < bofnd!}),
+    ("8_For Last Year and earlier on",                 {$0.snippetDate <  bofty!})
  ]
 }
 
-public enum SnippetType: String
+public enum SnippetType: String, StringLocalizable
 {
+    var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
+ 
     case text   = "TextSnippet"
     case photo  = "PhotoSnippet"
     case video  = "VideoSnippet"
@@ -206,11 +222,15 @@ public enum SnippetType: String
     case report = "Report"
     //*******************************
     case undefined //error case!!!
+ 
+ 
     
 }
 
-public enum SnippetPriority: String
+public enum SnippetPriority: String, StringLocalizable
 {
+    var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
+ 
     static let priorityColorMap : [SnippetPriority: UIColor] =
     [
         .hottest : UIColor(red: 0.7, green: 0.1, blue: 0.0, alpha: 1.00),
@@ -265,8 +285,10 @@ public enum SnippetPriority: String
     
 }
 
-public enum SnippetStatus: String
+public enum SnippetStatus: String, StringLocalizable
 {
+    var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
+ 
     case new         =   "New"
     case old         =   "Old"
     case archived    =   "Archived"

@@ -306,24 +306,11 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetsViewCell
-
       let item = currentFRC[indexPath]
-     
       cell.hostedSnippet = item as? SnippetImagesPreviewProvidable
-    
-      cell.snippetDateTag.text = SnippetsViewDataSource.dateFormatter.string(from: item.date! as Date)
-      cell.snippetTextTag.text = item.tag
-     
-      if let snippetPriority = item.priority, let priority = SnippetPriority(rawValue: snippetPriority)
-      {
-       cell.backgroundColor = priority.color
-      }
-      else
-      {
-       cell.backgroundColor = SnippetPriority.normal.color
-       item.priority = SnippetPriority.normal.rawValue
-      }
-   
+      cell.snippetDateTag.text = item.snippetDateTag
+      cell.snippetTextTag.text = item.snippetName
+      cell.backgroundColor = item.snippetPriority.color
       return cell
     }
     

@@ -45,7 +45,7 @@ extension SnippetsViewController: UITableViewDelegate
   
    guard let firstImage = image else
    {
-    print ("NIL IMAGE", indexPath, (snippet as! BaseSnippet).tag ?? "")
+    print ("NIL IMAGE", indexPath, (snippet as! BaseSnippet).snippetName)
     cell.imageSpinner.stopAnimating()
     return
    }
@@ -173,46 +173,35 @@ extension SnippetsViewController: UITableViewDelegate
   
    for indexPath in indexPaths
    {
-     let snippet = snippetsDataSource.currentFRC[indexPath]
-    
-     let oldPriority = snippet.snippetPriority
- 
-     if (newPriority != oldPriority)
-     {
-      if let tag = snippet.tag, !tag.isEmpty
-      {
-       snippetTags.append("\"\(tag)\" from \"\(oldPriority)\" to \"\(newPriority)\"\(cnt == snippets.count ? "" : "\n")")
-      }
-      else
-      {
-       snippetTags.append("\"No tag\" from \"\(oldPriority)\" to \"\(newPriority)\"\(cnt == snippets.count ? "" : "\n")")
-      }
-      snippets.append(snippet)
-      cnt += 1
-     }
-    
+    let snippet = snippetsDataSource.currentFRC[indexPath]
+   
+    let oldPriority = snippet.snippetPriority
+
+    if (newPriority != oldPriority)
+    {
+     let name = NSLocalizedString(snippet.snippetName, comment: snippet.snippetName)
+     let tag = name.quoted + " " + Localized.fromPriority + " " + oldPriority.localizedString.quoted +
+                             " " + Localized.toPriority   + " " + newPriority.localizedString.quoted
+                                 + (cnt == snippets.count ? "" : "\n")
+     snippetTags.append(tag)
+     snippets.append(snippet)
+     cnt += 1
+    }
    }
   
    if snippets.count == 0 {return}
-   let s = (snippets.count == 1 ? "" : "s")
-   let s1 = (snippets.count == 1 ? snippets.first?.type: "Snippets")!
-   let priorityAC = UIAlertController(title: "Change \(s1) priority!",
-     message: "Are your sure\nyou want to change snippet\(s) priority:\n\n\(snippetTags)",
-     preferredStyle: .alert)
+   let priorityAC = UIAlertController(title: Localized.changePriorityTitle,
+                                      message: Localized.changePriorityConfirm + "\n" + snippetTags,
+                                      preferredStyle: .alert)
   
-   let changeAction = UIAlertAction(title: "CHANGE", style: .default)
+   let changeAction = UIAlertAction(title: Localized.changeAction, style: .default)
    { _ in
-    
-    self.moc.persistAndWait
-    {
-      snippets.forEach{$0.snippetPriority = newPriority}
-    }
-    
+    self.moc.persistAndWait {snippets.forEach{$0.snippetPriority = newPriority}}
    }
   
    priorityAC.addAction(changeAction)
   
-   let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+   let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
    priorityAC.addAction(cancelAction)
   
    self.present(priorityAC, animated: true, completion: nil)
@@ -261,20 +250,11 @@ extension SnippetsViewController: UITableViewDelegate
   
      for indexPath in indexPaths
      {
-      
       let snippet = snippetsDataSource.currentFRC[indexPath]
-      
       snippets.append(snippet)
-      if let tag = snippet.tag, !tag.isEmpty
-      {
-       snippetTags.append("\"\(tag)\"\(cnt == indexPaths.count ? "" : "\n")")
-      }
-      else
-      {
-       snippetTags.append("\"No tag\"\(cnt == indexPaths.count ? "" : "\n")")
-      }
+      let name = NSLocalizedString(snippet.snippetName, comment: snippet.snippetName)
+      snippetTags.append("\"\(name)\"\(cnt == indexPaths.count ? "" : "\n")")
       cnt += 1
-
      }
   
      let s = (snippets.count == 1 ? "" : "s")
