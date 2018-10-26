@@ -13,6 +13,8 @@
 		A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */; };
 		A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EA2180779E0025C973 /* Snippets Factory.swift */; };
 		A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */; };
+		A711C0EF2183167C0025C973 /* Snippets Special Enums, Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */; };
+		A711C0F1218318800025C973 /* Photo Snippet Special Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */; };
 		A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */; };
 		A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
@@ -139,6 +141,8 @@
 		A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A711C0EA2180779E0025C973 /* Snippets Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Factory.swift"; sourceTree = "<group>"; };
 		A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Localized Global Strings.swift"; sourceTree = "<group>"; };
+		A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Special Enums, Structs.swift"; sourceTree = "<group>"; };
+		A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Special Enums.swift"; sourceTree = "<group>"; };
 		A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -459,7 +463,6 @@
 				A741BD4B20ECEDDC0062AF27 /* VIDEO PROCESSING */,
 				A7CB13691FD2D27000AA7294 /* Photo Snippets */,
 				A7CB136A1FD2D2AA00AA7294 /* Text Snippets */,
-				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
 			);
 			path = Newsman;
 			sourceTree = "<group>";
@@ -498,6 +501,7 @@
 			isa = PBXGroup;
 			children = (
 				A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */,
+				A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */,
 				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
 				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
@@ -533,11 +537,12 @@
 			isa = PBXGroup;
 			children = (
 				A71C85E61FBED634000F2DD9 /* Snippets VC.swift */,
+				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
+				A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */,
 				A711C0EA2180779E0025C973 /* Snippets Factory.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */,
 				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
-				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
 				A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */,
 				A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
@@ -616,6 +621,7 @@
 			isa = PBXGroup;
 			children = (
 				A71C85961FBD9587000F2DD9 /* Main.storyboard */,
+				A75489941FBC4F2900359C0C /* LaunchScreen.storyboard */,
 				A7A9722E216B6BCB0061AA07 /* Accesorial.storyboard */,
 				A7DC0817214538CC00DD94E8 /* MediaViewControllers.storyboard */,
 				A7DC0814214535BF00DD94E8 /* Snippets.storyboard */,
@@ -826,6 +832,7 @@
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
 				A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
+				A711C0F1218318800025C973 /* Photo Snippet Special Enums.swift in Sources */,
 				A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */,
 				A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */,
 				A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */,
@@ -866,6 +873,7 @@
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
 				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,
 				A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */,
+				A711C0EF2183167C0025C973 /* Snippets Special Enums, Structs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

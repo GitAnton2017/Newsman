@@ -20,49 +20,45 @@ extension SnippetsViewController: UITableViewDropDelegate, UITableViewDragDelega
  {
   //TO DO....
  }
+
  
  func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator)
  {
-  
+  guard let destIndexPath = coordinator.destinationIndexPath else {return}
   guard let editedSnippet = self.editedSnippet else {return}
-  
   guard let sourceIndexPath = snippetsDataSource.currentFRC[editedSnippet] else {return}
   
-  if let destIndexPath = coordinator.destinationIndexPath
+  switch editedSnippet
   {
-   switch editedSnippet
-   {
-    //case let sourcePhotoSnippet as TextSnippet: break
-    
-    case let sourcePhotoSnippet as PhotoSnippet:
-     if let destPhotoSnippet = snippetsDataSource.currentFRC[destIndexPath] as? PhotoSnippet,
-        sourceIndexPath != destIndexPath
+   //case let sourcePhotoSnippet as TextSnippet: break
+   
+   case let sourcePhotoSnippet as PhotoSnippet:
+    if let destPhotoSnippet = snippetsDataSource.currentFRC[destIndexPath] as? PhotoSnippet,
+     sourceIndexPath != destIndexPath
+    {
+     PhotoItem.movePhotos(from: sourcePhotoSnippet, to: destPhotoSnippet)
+     PhotoItem.moveFolders(from: sourcePhotoSnippet, to: destPhotoSnippet)
+     coordinator.session.localDragSession?.localContext = nil
+     PhotoItem.deselectSelectedItems(at: destPhotoSnippet)
+     editVisualSnippet(snippetToEdit: destPhotoSnippet)
+    }
+    else
+    {
+     PhotoItem.deselectSelectedItems(at: sourcePhotoSnippet)
+     if let vc = coordinator.session.localDragSession?.localContext as? PhotoSnippetViewController
      {
-       PhotoItem.movePhotos(from: sourcePhotoSnippet, to: destPhotoSnippet)
-       PhotoItem.moveFolders(from: sourcePhotoSnippet, to: destPhotoSnippet)
-       coordinator.session.localDragSession?.localContext = nil
-       PhotoItem.deselectSelectedItems(at: destPhotoSnippet)
-       editVisualSnippet(snippetToEdit: destPhotoSnippet)
+      navigationController?.pushViewController(vc, animated: true)
      }
-     else
-     {
-       PhotoItem.deselectSelectedItems(at: sourcePhotoSnippet)
-       if let vc = coordinator.session.localDragSession?.localContext as? PhotoSnippetViewController
-       {
-        navigationController?.pushViewController(vc, animated: true)
-       }
-     }
-    
-    default: break
-    
-   }
-    
-   coordinator.items.forEach {coordinator.drop($0.dragItem, toRowAt: destIndexPath)}
-   tableView.reloadRows(at: [destIndexPath], with: .fade)
-   tableView.reloadRows(at: [sourceIndexPath], with: .none)
+    }
+   
+   default: break
+   
   }
-    
   
+
+  coordinator.items.forEach {coordinator.drop($0.dragItem, toRowAt: destIndexPath)}
+  tableView.reloadRows(at: [destIndexPath], with: .fade)
+  tableView.reloadRows(at: [sourceIndexPath], with: .none)
  }
     
     

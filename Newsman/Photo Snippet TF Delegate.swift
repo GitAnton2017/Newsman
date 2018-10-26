@@ -10,11 +10,13 @@ extension PhotoSnippetViewController: UITextFieldDelegate
   self.navigationItem.title = sender.text
  }
 
- 
  func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
  {
   guard reason == .committed else {return}
-  moc.persistAndWait {photoSnippet.snippetName = textField.text ?? ""}
+  guard let text = textField.text else {return}
+  guard text != Localized.unnamedSnippet else {return}
+  guard text != photoSnippet.snippetName else {return}
+  moc.persistAndWait {photoSnippet.snippetName = text}
  }
  
  func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool

@@ -114,8 +114,6 @@ extension SnippetsViewController: UITableViewDelegate
   
   let cell = cell as! SnippetsViewCell
   
-//  print ("willDisplay", indexPath, (cell.hostedSnippet as! BaseSnippet).tag ?? "")
-  
   loadSnippetAnimatedImages(tableView, for: cell, at: indexPath)
   
   let a4r = GKRandomDistribution(lowestValue: 2, highestValue: 3)
@@ -167,9 +165,7 @@ extension SnippetsViewController: UITableViewDelegate
  
  func changeSnippetsPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
  {
-   var snippets: [BaseSnippet] = []
-   var snippetTags = ""
-   var cnt = 1
+   var snippets: [BaseSnippet] = [];  var snippetTags = "";  var cnt = 1
   
    for indexPath in indexPaths
    {
@@ -191,7 +187,7 @@ extension SnippetsViewController: UITableViewDelegate
   
    if snippets.count == 0 {return}
    let priorityAC = UIAlertController(title: Localized.changePriorityTitle,
-                                      message: Localized.changePriorityConfirm + "\n" + snippetTags,
+                                      message: Localized.changePriorityConfirm + "\n\n" + snippetTags,
                                       preferredStyle: .alert)
   
    let changeAction = UIAlertAction(title: Localized.changeAction, style: .default)
@@ -208,64 +204,52 @@ extension SnippetsViewController: UITableViewDelegate
   
  }
  
- 
- //*************************************************************************************************
  func deletePhotoSnippet(photoSnippet: PhotoSnippet)
- //*************************************************************************************************
  {
-     if let photos = photoSnippet.photos
-     {
-         for photo in photos
-         {
-             let photoID = (photo as! Photo).id!.uuidString
-             PhotoItem.imageCacheDict.forEach
-             {
-               $0.value.removeObject(forKey: photoID as NSString)
-             }
-         }
-     }
-  
-     let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-     let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
-     do
-     {
-       try FileManager.default.removeItem(at: snippetURL)
-       print("PHOTO SNIPPET IMAGES DIRECTORY DELETED SUCCESSFULLY AT PATH:\n\(snippetURL.path)")
-     }
-     catch
-     {
-       print("ERROR DELETING PHOTO SNIPPET IMAGES DIRECTORY AT PATH:\n\(snippetURL.path)\n\(error.localizedDescription)")
-     }
+  if let photos = photoSnippet.photos
+  {
+   for photo in photos
+   {
+    let photoID = (photo as! Photo).id!.uuidString
+    PhotoItem.imageCacheDict.forEach {$0.value.removeObject(forKey: photoID as NSString)}
+   }
+  }
+
+  let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+  let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
+  do
+  {
+    try FileManager.default.removeItem(at: snippetURL)
+    print("PHOTO SNIPPET IMAGES DIRECTORY DELETED SUCCESSFULLY AT PATH:\n\(snippetURL.path)")
+  }
+  catch
+  {
+    print("ERROR DELETING PHOTO SNIPPET IMAGES DIRECTORY AT PATH:\n\(snippetURL.path)\n\(error.localizedDescription)")
+  }
   
  }
 
-
- //*************************************************************************************************
  func deleteSnippet(_ tableView: UITableView, _ indexPaths: [IndexPath])
- //*************************************************************************************************
  {
-     var snippets = [BaseSnippet]()
-     var snippetTags = ""
-     var cnt = 1
+     var snippets = [BaseSnippet](); var snippetTags = "";   var cnt = 1
   
      for indexPath in indexPaths
      {
       let snippet = snippetsDataSource.currentFRC[indexPath]
-      snippets.append(snippet)
       let name = NSLocalizedString(snippet.snippetName, comment: snippet.snippetName)
-      snippetTags.append("\"\(name)\"\(cnt == indexPaths.count ? "" : "\n")")
+      let tag = name.quoted + (cnt == snippets.count ? "" : "\n")
+      snippetTags.append(tag)
+      snippets.append(snippet)
       cnt += 1
      }
   
-     let s = (snippets.count == 1 ? "" : "s")
-     let s1 = (snippets.count == 1 ? snippets.first?.type: "Snippets")!
-     let deleteAC = UIAlertController(title: "Delete \(s1)!",
-         message: "Are your sure\nyou want to delete snippet\(s) with tag\(s)\n\n\(snippetTags)",
-         preferredStyle: .alert)
   
-     let deleteAction = UIAlertAction(title: "DELETE", style: .destructive)
+     let deleteAC = UIAlertController(title: Localized.deleteSnippetsTitle,
+                                      message: Localized.deleteSnippestConfirm + "\n\n" + snippetTags,
+                                      preferredStyle: .alert)
+  
+     let deleteAction = UIAlertAction(title: Localized.deleteAction, style: .destructive)
      { _ in
-      
        self.moc.persistAndWait
        {
          for snippet in snippets
@@ -290,57 +274,80 @@ extension SnippetsViewController: UITableViewDelegate
      }
      deleteAC.addAction(deleteAction)
   
-     let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
+     let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
      deleteAC.addAction(cancelAction)
   
      self.present(deleteAC, animated: true, completion: nil)
  }
- //*************************************************************************************************
- func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]?
- //*************************************************************************************************
+ 
+ 
+ func tableView(_ tableView: UITableView,
+                  trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
  {
-   let setPriorityAction = UITableViewRowAction(style: .normal, title: "Priority")
-   {_,indexPath in
-     let prioritySelect = UIAlertController(title: "\(self.snippetType.rawValue)",
-         message: "Please select your snippet priority!",
-         preferredStyle: .alert)
-    
-     for priority in SnippetPriority.priorities
-     {
-         let action = UIAlertAction(title: priority.rawValue, style: .default)
-         { _ in
-             self.changeSnippetsPriority(tableView, [indexPath], priority)
-         }
-         prioritySelect.addAction(action)
-     }
-    
-     let cancelAction = UIAlertAction(title: "CANCEL", style: .cancel, handler: nil)
-    
-     prioritySelect.addAction(cancelAction)
-    
-     self.present(prioritySelect, animated: true, completion: nil)
-   }
+  let priority = UIContextualAction(style: .normal, title: Localized.priorityTag)
+  {action, view, handler in
+   let ac = SnippetPriority.caseSelectorController(title: self.snippetType.localizedString,
+                                                   message: Localized.prioritySelect,
+                                                   style: .alert) {self.changeSnippetsPriority(tableView, [indexPath], $0)}
+   
+   self.present(ac, animated: true, completion: nil)
+   handler(true)
+  }
   
-   setPriorityAction.backgroundColor = UIColor.brown
-
-   let deleteAction = UITableViewRowAction(style: .normal, title: "Delete")
-   {_,indexPath in
-      self.deleteSnippet(tableView, [indexPath])
-    
-   }
-   deleteAction.backgroundColor = UIColor.red
   
-   return [setPriorityAction,deleteAction]
+  priority.backgroundColor = #colorLiteral(red: 0.09259795535, green: 0.0901308983, blue: 0.8686548223, alpha: 1)
+  priority.image = UIImage(named: "flag.menu.icon")
+  
+  let delete = UIContextualAction(style: .normal, title: Localized.deleteTag)
+  { action, view, handler in
+   self.deleteSnippet(tableView, [indexPath])
+   handler(true)
+  }
+  delete.backgroundColor = #colorLiteral(red: 0.905384423, green: 0.2660141546, blue: 0.007257829661, alpha: 1)
+  delete.image = UIImage(named: "trash.menu.icon")
+  
+  return UISwipeActionsConfiguration(actions: [priority, delete])
+  
  }
- //*************************************************************************************************
+
+ func tableView(_ tableView: UITableView,
+                  leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+ {
+  let snippet = snippetsDataSource.currentFRC[indexPath]
+  let rename = UIContextualAction(style: .normal, title: "RENAME")
+  {action, view, handler in
+   let ac = UIAlertController(title: self.snippetType.localizedString, message: nil, preferredStyle: .alert)
+   ac.addTextField
+   {textField in
+    textField.text = (snippet.snippetName == Localized.unnamedSnippet ? "" : snippet.snippetName)
+   }
+   
+   let ok = UIAlertAction(title: "OK", style: .destructive)
+   {_ in
+    guard let newName = ac.textFields?.first?.text, newName != snippet.snippetName else {return}
+    self.moc.persist {snippet.snippetName = newName}
+   }
+   
+   ac.addAction(ok)
+   
+   let cancel = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
+   ac.addAction(cancel)
+   
+   self.present(ac, animated: true, completion: nil)
+   handler(true)
+  }
+  
+  rename.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+  
+  return UISwipeActionsConfiguration(actions: [rename])
+ }
+ 
  func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle
- //*************************************************************************************************
  {
   return .delete
  }
- //*************************************************************************************************
+
  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
- //*************************************************************************************************
  {
   if tableView.isEditing {return}
 
@@ -373,6 +380,7 @@ extension SnippetsViewController: UITableViewDelegate
   self.navigationController?.pushViewController(textSnippetVC, animated: true)
   
  }
+ 
  
  
  func editVisualSnippet(snippetToEdit: PhotoSnippet)

@@ -4,25 +4,6 @@ import UIKit
 import CoreData
 import CoreLocation
 
-
-enum GroupSnippets: String, StringLocalizable
-{
-  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
- 
-  case byPriority     =  "By Snippet Priority"
-  case byDateCreated  =  "By Snippet Date Created"
-  case alphabetically =  "Alphabetically"
-  case bySnippetType  =  "By Snippet Type"
-  case plainList      =  "Plain List"
-  case byLocation     =  "By Snippet Location"
-  case nope           //initial state 
-    
-  static let groupingTypes: [GroupSnippets] =
-  [
-   byPriority, byDateCreated, alphabetically, bySnippetType, plainList, byLocation 
-  ]
-}
-
 class SnippetsViewController: UIViewController
 {
  
@@ -249,29 +230,17 @@ class SnippetsViewController: UIViewController
     
     @objc func changeSelectedSnippetsPriority()
     {
-     guard let selectedSnippets = snippetsTableView.indexPathsForSelectedRows else
-     {
-      return
-     }
+     guard let selectedSnippets = snippetsTableView.indexPathsForSelectedRows else {return}
      
-     let prioritySelect = UIAlertController(title: snippetType.localizedString,
-                                            message: Localized.prioritySelect, preferredStyle: .alert)
-        
-     for priority in SnippetPriority.priorities
+     let ac = SnippetPriority.caseSelectorController(title: snippetType.localizedString,
+                                                     message: Localized.prioritySelect,
+                                                     style: .alert)
      {
-      let action = UIAlertAction(title: priority.localizedString, style: .default)
-      { _ in
-        self.changeSnippetsPriority(self.snippetsTableView, selectedSnippets, priority)
-        self.toggleEditMode()
-      }
-      prioritySelect.addAction(action)
+      self.changeSnippetsPriority(self.snippetsTableView, selectedSnippets, $0)
+      self.toggleEditMode()
      }
-     
-     let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
         
-     prioritySelect.addAction(cancelAction)
-        
-     self.present(prioritySelect, animated: true, completion: nil)
+     self.present(ac, animated: true, completion: nil)
     }
     
     func toggleEditMode()
@@ -310,20 +279,11 @@ class SnippetsViewController: UIViewController
     
     @IBAction func groupSnippetsPress(_ sender: UIBarButtonItem)
     {
+     let ac = GroupSnippets.caseSelectorController(title: Localized.groupingTitle,
+                                                   message: Localized.groupingSelect,
+                                                   style: .alert) {self.groupType = $0}
      
-     let groupAC = UIAlertController(title: Localized.groupingTitle,
-                                     message: Localized.groupingSelect, preferredStyle: .alert)
-        
-     for grouping in GroupSnippets.groupingTypes
-     {
-      let action = UIAlertAction(title: grouping.localizedString, style: .default){ _ in self.groupType = grouping}
-      groupAC.addAction(action)
-     }
-     
-     let cancel = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
-        
-     groupAC.addAction(cancel)
-     self.present(groupAC, animated: true, completion: nil)
+     self.present(ac, animated: true, completion: nil)
     }
     
  

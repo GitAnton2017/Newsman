@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
+final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
 {
  private let byDate =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),          ascending: false)
  private let byTag =         NSSortDescriptor(key: #keyPath(BaseSnippet.tag),           ascending: true)
@@ -58,7 +58,7 @@ class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
  }()
  
  
- typealias FRCSection = (rows: Int, frcSection: Int?)
+ private typealias FRCSection = (rows: Int, frcSection: Int?)
 
  private var sectionCounters: [FRCSection] = []
 

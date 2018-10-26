@@ -13,6 +13,7 @@ extension TextSnippetViewController: UITextFieldDelegate
   guard reason == .committed else {return}
   guard let text = textField.text else {return}
   guard text != Localized.unnamedSnippet else {return}
+  guard text != textSnippet.snippetName else {return}
   moc.persistAndWait {textSnippet.snippetName = text}
  }
  

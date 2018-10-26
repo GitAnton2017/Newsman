@@ -47,13 +47,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     @IBOutlet var textSnippetTitle: UITextField!
     @IBOutlet var textSnippetToolBar: UIToolbar!
     
-    var textSnippet: TextSnippet! 
-    {
-        didSet
-        {
-           navigationItem.title = textSnippet.snippetName
-        }
-    }
+    var textSnippet: TextSnippet! {didSet {navigationItem.title = textSnippet.snippetName}}
     
     func saveTextSnippetData()
     {
@@ -68,81 +62,73 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     
     @IBAction func saveTextButtonPress(_ sender: UIBarButtonItem)
     {
-        saveTextSnippetData()
-        if textView.isFirstResponder {textView.resignFirstResponder()}
-        if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
+     saveTextSnippetData()
+     if textView.isFirstResponder {textView.resignFirstResponder()}
+     if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
     }
     
-    @IBAction func clearTextButtonPress(_ sender: UIBarButtonItem)
-    {
-        textView.text = ""
-    }
+    @IBAction func clearTextButtonPress(_ sender: UIBarButtonItem) {textView.text = ""}
     
     @objc func doneButtonPressed ()
     {
-        if textView.isFirstResponder {textView.resignFirstResponder()}
-        if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
+     if textView.isFirstResponder {textView.resignFirstResponder()}
+     if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
     }
     
     
     override func viewDidLoad()
     {
-        super.viewDidLoad()
-        navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
-        textView.inputAccessoryView = createKeyBoardToolBar()
-        textSnippetTitle.inputAccessoryView = textView.inputAccessoryView
-        textSnippetTitle.delegate = self
+     super.viewDidLoad()
+     navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
+     textView.inputAccessoryView = createKeyBoardToolBar()
+     textSnippetTitle.inputAccessoryView = textView.inputAccessoryView
+     textSnippetTitle.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool)
     {
-        super.viewWillDisappear(animated)
-        if textView.isFirstResponder {textView.resignFirstResponder()}
-        if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
-        saveTextSnippetData()
+     super.viewWillDisappear(animated)
+     if textView.isFirstResponder {textView.resignFirstResponder()}
+     if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
+     saveTextSnippetData()
     }
  
     func updateDateLabel()
     {
-        let dateLabel  = UILabel()
-        dateLabel.textColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
-        dateLabel.font = UIFont(name: "Avenir", size: 20)
-        dateLabel.text = dateFormatter.string(from: textSnippet.date! as Date)
-        navigationItem.titleView = dateLabel
+     let dateLabel  = UILabel()
+     dateLabel.textColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
+     dateLabel.font = UIFont(name: "Avenir", size: 20)
+     dateLabel.text = dateFormatter.string(from: textSnippet.date! as Date)
+     navigationItem.titleView = dateLabel
     }
  
     func updateTextSnippet()
     {
-        guard textSnippet != nil else {return}
-     
-        textView.text = textSnippet.text
-        textSnippetTitle.text = textSnippet.snippetName
-     
+     guard textSnippet != nil else {return}
+     textView.text = textSnippet.text
+     textSnippetTitle.text = (textSnippet.snippetName == Localized.unnamedSnippet ? "" : textSnippet.snippetName)
     }
  
     override func viewWillAppear(_ animated: Bool)
     {
-        super.viewWillAppear(animated)
-        updateTextSnippet()
+     super.viewWillAppear(animated)
+     updateTextSnippet()
     }
  
     override func viewDidAppear(_ animated: Bool)
     {
-        super.viewDidAppear(animated)
-        updateDateLabel()
+     super.viewDidAppear(animated)
+     updateDateLabel()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-      if let segueID = segue.identifier, segueID == "TextSnippetDatePicker"
-      {
-        (segue.destination as! DatePickerViewController).editedSnippet = textSnippet
-      }
-      if let segueID = segue.identifier, segueID == "TextSnippetPriorityPicker"
-      {
-        (segue.destination as! PriorityPickerViewController).editedSnippet = textSnippet
-      }
-      
+     switch segue.identifier
+     {
+      case "TextSnippetDatePicker":     (segue.destination as! DatePickerViewController    ).editedSnippet = textSnippet
+      case "TextSnippetPriorityPicker": (segue.destination as! PriorityPickerViewController).editedSnippet = textSnippet
+      default: break
+     }
     }
 }
 
