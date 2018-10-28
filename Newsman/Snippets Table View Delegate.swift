@@ -284,6 +284,7 @@ extension SnippetsViewController: UITableViewDelegate
  func tableView(_ tableView: UITableView,
                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
  {
+  swipedSnippetIndexPath = indexPath
   let priority = UIContextualAction(style: .normal, title: Localized.priorityTag)
   {action, view, handler in
    let ac = SnippetPriority.caseSelectorController(title: self.snippetType.localizedString,
@@ -296,7 +297,7 @@ extension SnippetsViewController: UITableViewDelegate
   
   
   priority.backgroundColor = #colorLiteral(red: 0.09259795535, green: 0.0901308983, blue: 0.8686548223, alpha: 1)
-  priority.image = UIImage(named: "flag.menu.icon")
+  priority.image = UIImage(named: "priority.tab.icon")
   
   let delete = UIContextualAction(style: .normal, title: Localized.deleteTag)
   { action, view, handler in
@@ -304,42 +305,125 @@ extension SnippetsViewController: UITableViewDelegate
    handler(true)
   }
   delete.backgroundColor = #colorLiteral(red: 0.905384423, green: 0.2660141546, blue: 0.007257829661, alpha: 1)
-  delete.image = UIImage(named: "trash.menu.icon")
+  delete.image = UIImage(named: "trash.snippet.trailing.menu")
   
   return UISwipeActionsConfiguration(actions: [priority, delete])
   
  }
 
+ 
+ @objc func renameFieldChanged (_ sender: UITextField)
+ {
+  var resp: UIResponder! = sender
+  while !(resp is UIAlertController) {resp = resp.next}
+  (resp as! UIAlertController).actions.first{$0.title == Localized.changeAction}?.isEnabled = (sender.text != "")
+  (snippetsTableView.cellForRow(at: swipedSnippetIndexPath!) as! SnippetsViewCell).snippetTextTag.text = sender.text
+ }
+
  func tableView(_ tableView: UITableView,
                   leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
  {
+  
+  swipedSnippetIndexPath = indexPath
   let snippet = snippetsDataSource.currentFRC[indexPath]
-  let rename = UIContextualAction(style: .normal, title: "RENAME")
+  
+  let rename = UIContextualAction(style: .normal, title: "Rename")
   {action, view, handler in
    let ac = UIAlertController(title: self.snippetType.localizedString, message: nil, preferredStyle: .alert)
    ac.addTextField
    {textField in
+    textField.borderStyle = .none
+    textField.font = UIFont.boldSystemFont(ofSize: 12)
+    textField.textColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
+    textField.addTarget(self, action: #selector(self.renameFieldChanged), for: .editingChanged)
+    textField.clearButtonMode = .whileEditing
     textField.text = (snippet.snippetName == Localized.unnamedSnippet ? "" : snippet.snippetName)
+    
    }
    
-   let ok = UIAlertAction(title: "OK", style: .destructive)
+  
+   let ok = UIAlertAction(title: Localized.changeAction, style: .destructive)
    {_ in
     guard let newName = ac.textFields?.first?.text, newName != snippet.snippetName else {return}
     self.moc.persist {snippet.snippetName = newName}
    }
    
+   ok.isEnabled = false
    ac.addAction(ok)
    
    let cancel = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
    ac.addAction(cancel)
    
+   tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
    self.present(ac, animated: true, completion: nil)
+  
    handler(true)
   }
   
   rename.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+  rename.image = UIImage(named: "rename.snippet.leading.menu")
   
   return UISwipeActionsConfiguration(actions: [rename])
+ }
+ 
+
+ @objc func sectionTapped(_ gr: UIGestureRecognizer)
+ {
+  let header = gr.view as! SnippetsTableViewHeaderView
+  let section = header.section
+  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
+  dataSource.currentFRC.foldSection(section: section)
+  header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
+ }
+ 
+ func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
+ {
+  let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SnippetsTableViewHeaderView.reuseID) as! SnippetsTableViewHeaderView
+  
+  let dataSource = tableView.dataSource as! SnippetsViewDataSource
+  
+  header.title = dataSource.currentFRC.sectionTitle(for: section)
+  header.titleColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
+  header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
+  
+  if header.gestureRecognizers == nil
+  {
+   let tgr = UITapGestureRecognizer(target: self, action: #selector(sectionTapped))
+   tgr.numberOfTapsRequired = 2
+   header.addGestureRecognizer(tgr)
+  }
+  
+  header.section = section
+  
+  return header
+ }
+ 
+ func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView?
+ {
+  let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SnippetsTableViewFooterView.reuseID) as! SnippetsTableViewFooterView
+  
+  let dataSource = tableView.dataSource as! SnippetsViewDataSource
+  footer.title = Localized.totalSnippets + String(dataSource.currentFRC.numberOfRowsInSection(index: section))
+  footer.titleColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
+  footer.section = section
+  
+  return footer
+ }
+ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+ {
+  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
+  return dataSource.currentFRC.isHiddenSection(section: indexPath.section) ? 0 : tableView.rowHeight
+ }
+ 
+ func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
+ {
+  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
+  return dataSource.currentFRC.isHiddenSection(section: section) ? 60.0 : 50.0
+ }
+ 
+ func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat
+ {
+  return 40
  }
  
  func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle

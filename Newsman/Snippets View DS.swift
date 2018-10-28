@@ -111,9 +111,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
       }
       
      }
-     
-     
-     
+
     ]
  
     var groupTitles = [String]()
@@ -122,9 +120,9 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     
     var aniImageSetDict: [BaseSnippet : [UIImage]] = [:]
  
+    var hiddenSections = Set<Int>()
  
     var sectionNameKeyPath: String?
- 
  
     func configueCurrentFRC() -> SnippetsFetchController
     {
@@ -287,10 +285,12 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
 //        }
 //    }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
-    {
-      return currentFRC.sectionTitle(for: section)
-    }
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String?
+//    {
+//      return currentFRC.sectionTitle(for: section)
+//    }
+ 
+
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
@@ -317,7 +317,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool
     {
-     return groupType == .byPriority
+     return groupType == .byPriority 
     }
 
  

@@ -61,6 +61,8 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  private typealias FRCSection = (rows: Int, frcSection: Int?)
 
  private var sectionCounters: [FRCSection] = []
+ 
+ private var hiddenSections: Set<Int> = []
 
  var groupType: GroupSnippets
  var predicate: NSPredicate
@@ -110,14 +112,23 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  }
  
  
+ private func moveBatchUpdate(with indexPath: IndexPath?)
+ {
+  tableView.performBatchUpdates({[weak self] in self?.tableView.reloadData()})
+  {[weak self]_ in
+   self?.tableView.performBatchUpdates({[weak self] in self?.removeEmptySections()})
+   {[weak self] _ in
+    self?.tableView.selectRow(at: indexPath, animated: false, scrollPosition: .top)
+   }
+  }
+ }
+ 
  func move (from source: IndexPath, to destination: IndexPath)
  {
+  
   let snippet = self[source]
   deactivateDelegate()
-  moc.persistAndWait
-  {[unowned self] in
-   snippet.snippetPriority = self.sectionPriority(for: destination.section) ?? .normal
-  }
+  moc.persistAndWait {[unowned self] in snippet.snippetPriority = self.sectionPriority(for: destination.section) ?? .normal}
   activateDelegate()
   sectionCounters[source.section].rows -= 1
   sectionCounters[destination.section].rows += 1
@@ -126,14 +137,19 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
 
   refetch()
   
-  tableView.performBatchUpdates({[weak self] in self?.tableView.reloadData()})
-  {[weak self]_ in
-   self?.tableView.performBatchUpdates({[weak self] in self?.removeEmptySections()})
-   {[weak self] _ in
-    let selected = self?[snippet]
-    self?.tableView.selectRow(at: selected, animated: false, scrollPosition: .top)
+  let selected = self[snippet]
+  if isHiddenSection(section: destination.section)
+  {
+   unfoldSection(section: destination.section)
+   {[weak self] in
+    self?.moveBatchUpdate(with: selected)
    }
   }
+  else
+  {
+   moveBatchUpdate(with: selected)
+  }
+ 
 
  }
  
@@ -308,6 +324,63 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  {
   if (frc.delegate != nil) {frc.delegate = nil}
  }
+ 
+ func isHiddenSection(section: Int) -> Bool {return hiddenSections.contains(section)}
+ 
+// func sectionIndexPaths (for section: Int) -> [IndexPath]
+// {
+//  let count = sectionCounters[section].rows
+//  return (0..<count).map{IndexPath(row: $0, section: section)}
+// }
+ 
+ func foldSection (section: Int)
+ {
+//  let indexPaths = sectionIndexPaths(for: section)
+//  if indexPaths.isEmpty {return}
+ 
+  if isHiddenSection(section: section)
+  {
+   hiddenSections.remove(section)
+//   tableView.performBatchUpdates({tableView.insertRows(at: indexPaths, with: .automatic)})
+//   {_ in
+//    self.tableView.scrollToRow(at: indexPaths.first!, at: .top, animated: true)
+//   }
+  }
+  else
+  {
+   hiddenSections.insert(section)
+//   tableView.performBatchUpdates({tableView.deleteRows(at: indexPaths, with: .automatic)})
+//   {_ in
+//    let rect = self.tableView.rect(forSection: section)
+//    self.tableView.scrollRectToVisible(rect, animated: true)
+//   }
+  }
+  tableView.performBatchUpdates(nil)
+ }
+ 
+ private func unfoldSection (section: Int, with block: @escaping () -> Void)
+ {
+//  let indexPaths = sectionIndexPaths(for: section)
+//  if indexPaths.isEmpty {return}
+  
+  hiddenSections.remove(section)
+  if let header = tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView
+  {
+   header.isHiddenSection = false
+  }
+  
+//  tableView.performBatchUpdates({tableView.insertRows(at: indexPaths, with: .automatic)})
+//  {_ in
+//   block()
+//  }
+  
+    tableView.performBatchUpdates(nil)
+    {_ in
+     block()
+    }
+
+ }
+ 
  
  func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
  {

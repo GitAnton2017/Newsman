@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */; };
+		A7021CEC2185A7D1009A5F43 /* Snippets TV Header View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */; };
+		A7021CEE2185A92F009A5F43 /* Snippets TV Footer View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */; };
+		A7021CF021863227009A5F43 /* Snippets TV Supplemetary Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */; };
 		A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A704264E1FDA87CA000B3400 /* Photo Item.swift */; };
 		A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */; };
 		A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */; };
@@ -15,6 +18,7 @@
 		A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */; };
 		A711C0EF2183167C0025C973 /* Snippets Special Enums, Structs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */; };
 		A711C0F1218318800025C973 /* Photo Snippet Special Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */; };
+		A711C10821839D4D0025C973 /* ZoomCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A711C10A21839D4D0025C973 /* ZoomCollectionViewCell.xib */; };
 		A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */; };
 		A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */; };
 		A71C85981FBD9587000F2DD9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A71C85961FBD9587000F2DD9 /* Main.storyboard */; };
@@ -40,7 +44,6 @@
 		A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */; };
 		A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */; };
 		A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7298E142015E9A000A7301D /* CoreData.framework */; };
-		A72B3EAA2057FE5500C02B52 /* ZoomCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */; };
 		A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */; };
 		A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAD2058419000C02B52 /* Zoom View.swift */; };
 		A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */; };
@@ -136,6 +139,9 @@
 
 /* Begin PBXFileReference section */
 		A7018EF21FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV Delegate.swift"; sourceTree = "<group>"; };
+		A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets TV Header View.swift"; sourceTree = "<group>"; };
+		A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets TV Footer View.swift"; sourceTree = "<group>"; };
+		A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets TV Supplemetary Views.swift"; sourceTree = "<group>"; };
 		A704264E1FDA87CA000B3400 /* Photo Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item.swift"; sourceTree = "<group>"; };
 		A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets VC Restoration.swift"; sourceTree = "<group>"; };
 		A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -143,6 +149,38 @@
 		A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Localized Global Strings.swift"; sourceTree = "<group>"; };
 		A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Special Enums, Structs.swift"; sourceTree = "<group>"; };
 		A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Special Enums.swift"; sourceTree = "<group>"; };
+		A711C0F2218399AB0025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Main.strings; sourceTree = "<group>"; };
+		A711C0F3218399AB0025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A711C0F4218399AC0025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Newsman/de.lproj/Accesorial.strings; sourceTree = "<group>"; };
+		A711C0F5218399AC0025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Newsman/de.lproj/MediaViewControllers.strings; sourceTree = "<group>"; };
+		A711C0F6218399AC0025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = Newsman/de.lproj/Snippets.strings; sourceTree = "<group>"; };
+		A711C0F7218399AC0025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A711C0F921839CC80025C973 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A711C0FB21839CC90025C973 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A711C0FD21839CE70025C973 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Newsman/en.lproj/Accesorial.strings; sourceTree = "<group>"; };
+		A711C0FF21839CED0025C973 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Newsman/ru.lproj/Accesorial.strings; sourceTree = "<group>"; };
+		A711C10121839D180025C973 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Newsman/en.lproj/MediaViewControllers.strings; sourceTree = "<group>"; };
+		A711C10321839D1A0025C973 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Newsman/ru.lproj/MediaViewControllers.strings; sourceTree = "<group>"; };
+		A711C10521839D350025C973 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Newsman/en.lproj/Snippets.strings; sourceTree = "<group>"; };
+		A711C10721839D390025C973 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Newsman/ru.lproj/Snippets.strings; sourceTree = "<group>"; };
+		A711C10921839D4D0025C973 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ZoomCollectionViewCell.xib; sourceTree = "<group>"; };
+		A711C10C21839D510025C973 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/ZoomCollectionViewCell.strings; sourceTree = "<group>"; };
+		A711C10E21839D530025C973 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/ZoomCollectionViewCell.strings; sourceTree = "<group>"; };
+		A711C11021839D550025C973 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ZoomCollectionViewCell.strings; sourceTree = "<group>"; };
+		A711C11121839F0F0025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		A711C11221839F100025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A711C11321839F100025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Newsman/fr.lproj/Accesorial.strings; sourceTree = "<group>"; };
+		A711C11421839F100025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Newsman/fr.lproj/MediaViewControllers.strings; sourceTree = "<group>"; };
+		A711C11521839F100025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = Newsman/fr.lproj/Snippets.strings; sourceTree = "<group>"; };
+		A711C11621839F100025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ZoomCollectionViewCell.strings; sourceTree = "<group>"; };
+		A711C11721839F110025C973 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A711C11821839F1B0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		A711C11921839F1C0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		A711C11A21839F1C0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Newsman/es.lproj/Accesorial.strings; sourceTree = "<group>"; };
+		A711C11B21839F1C0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Newsman/es.lproj/MediaViewControllers.strings; sourceTree = "<group>"; };
+		A711C11C21839F1C0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = Newsman/es.lproj/Snippets.strings; sourceTree = "<group>"; };
+		A711C11D21839F1C0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/ZoomCollectionViewCell.strings; sourceTree = "<group>"; };
+		A711C11E21839F1D0025C973 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Delegate.swift"; sourceTree = "<group>"; };
 		A71C85971FBD9587000F2DD9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -168,7 +206,6 @@
 		A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder Item.swift"; sourceTree = "<group>"; };
 		A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A7298E142015E9A000A7301D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ZoomCollectionViewCell.xib; sourceTree = "<group>"; };
 		A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Cell.swift"; sourceTree = "<group>"; };
 		A72B3EAD2058419000C02B52 /* Zoom View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View.swift"; sourceTree = "<group>"; };
 		A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC.swift"; sourceTree = "<group>"; };
@@ -537,12 +574,15 @@
 			isa = PBXGroup;
 			children = (
 				A71C85E61FBED634000F2DD9 /* Snippets VC.swift */,
+				A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */,
+				A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */,
+				A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */,
+				A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */,
 				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
+				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */,
 				A711C0EA2180779E0025C973 /* Snippets Factory.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
-				A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */,
-				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */,
 				A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */,
 				A71715DC2024E8BA00112FFF /* Snippets D&D Delegate.swift */,
@@ -625,7 +665,7 @@
 				A7A9722E216B6BCB0061AA07 /* Accesorial.storyboard */,
 				A7DC0817214538CC00DD94E8 /* MediaViewControllers.storyboard */,
 				A7DC0814214535BF00DD94E8 /* Snippets.storyboard */,
-				A72B3EA92057FE5500C02B52 /* ZoomCollectionViewCell.xib */,
+				A711C10A21839D4D0025C973 /* ZoomCollectionViewCell.xib */,
 			);
 			name = StoryBoards;
 			sourceTree = "<group>";
@@ -728,6 +768,10 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				ru,
+				fr,
+				es,
 			);
 			mainGroup = A754897C1FBC4F2900359C0C;
 			productRefGroup = A75489861FBC4F2900359C0C /* Products */;
@@ -752,7 +796,7 @@
 				A75489961FBC4F2900359C0C /* LaunchScreen.storyboard in Resources */,
 				A7A97230216B6BCB0061AA07 /* Accesorial.storyboard in Resources */,
 				A7DC0816214535BF00DD94E8 /* Snippets.storyboard in Resources */,
-				A72B3EAA2057FE5500C02B52 /* ZoomCollectionViewCell.xib in Resources */,
+				A711C10821839D4D0025C973 /* ZoomCollectionViewCell.xib in Resources */,
 				A75489931FBC4F2900359C0C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -813,6 +857,7 @@
 				A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */,
 				A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */,
 				A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */,
+				A7021CEC2185A7D1009A5F43 /* Snippets TV Header View.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
 				A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */,
 				A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */,
@@ -827,10 +872,12 @@
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
 				A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */,
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,
+				A7021CF021863227009A5F43 /* Snippets TV Supplemetary Views.swift in Sources */,
 				A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
 				A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */,
+				A7021CEE2185A92F009A5F43 /* Snippets TV Footer View.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
 				A711C0F1218318800025C973 /* Photo Snippet Special Enums.swift in Sources */,
 				A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */,
@@ -909,12 +956,28 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		A711C10A21839D4D0025C973 /* ZoomCollectionViewCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A711C10921839D4D0025C973 /* Base */,
+				A711C10C21839D510025C973 /* en */,
+				A711C10E21839D530025C973 /* ru */,
+				A711C11021839D550025C973 /* de */,
+				A711C11621839F100025C973 /* fr */,
+				A711C11D21839F1C0025C973 /* es */,
+			);
+			name = ZoomCollectionViewCell.xib;
+			sourceTree = "<group>";
+		};
 		A71C85961FBD9587000F2DD9 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A71C85971FBD9587000F2DD9 /* Base */,
 				A7CB13671FD27E8700AA7294 /* en */,
 				A7CB13681FD2A63B00AA7294 /* ru */,
+				A711C0F2218399AB0025C973 /* de */,
+				A711C11121839F0F0025C973 /* fr */,
+				A711C11821839F1B0025C973 /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -923,6 +986,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				A75489951FBC4F2900359C0C /* Base */,
+				A711C0F3218399AB0025C973 /* de */,
+				A711C0F921839CC80025C973 /* en */,
+				A711C0FB21839CC90025C973 /* ru */,
+				A711C11221839F100025C973 /* fr */,
+				A711C11921839F1C0025C973 /* es */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -931,6 +999,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				A7A9722F216B6BCB0061AA07 /* Base */,
+				A711C0F4218399AC0025C973 /* de */,
+				A711C0FD21839CE70025C973 /* en */,
+				A711C0FF21839CED0025C973 /* ru */,
+				A711C11321839F100025C973 /* fr */,
+				A711C11A21839F1C0025C973 /* es */,
 			);
 			name = Accesorial.storyboard;
 			sourceTree = "<group>";
@@ -941,15 +1014,24 @@
 				A7CB13721FD2D5EB00AA7294 /* ru */,
 				A7CB13741FD2D61200AA7294 /* Base */,
 				A7CB13751FD2D61400AA7294 /* en */,
+				A711C0F7218399AC0025C973 /* de */,
+				A711C11721839F110025C973 /* fr */,
+				A711C11E21839F1D0025C973 /* es */,
 			);
 			name = Localizable.strings;
 			path = "Newsman/Text Snippets";
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		A7DC0814214535BF00DD94E8 /* Snippets.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A7DC0815214535BF00DD94E8 /* Base */,
+				A711C0F6218399AC0025C973 /* de */,
+				A711C10521839D350025C973 /* en */,
+				A711C10721839D390025C973 /* ru */,
+				A711C11521839F100025C973 /* fr */,
+				A711C11C21839F1C0025C973 /* es */,
 			);
 			name = Snippets.storyboard;
 			sourceTree = "<group>";
@@ -958,6 +1040,11 @@
 			isa = PBXVariantGroup;
 			children = (
 				A7DC0818214538CC00DD94E8 /* Base */,
+				A711C0F5218399AC0025C973 /* de */,
+				A711C10121839D180025C973 /* en */,
+				A711C10321839D1A0025C973 /* ru */,
+				A711C11421839F100025C973 /* fr */,
+				A711C11B21839F1C0025C973 /* es */,
 			);
 			name = MediaViewControllers.storyboard;
 			sourceTree = "<group>";

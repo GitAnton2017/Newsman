@@ -5,26 +5,23 @@ import CoreData
 
 class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
 {
- var currentViewController: UIViewController {return self}
  
+ lazy var moc: NSManagedObjectContext =
+  {
+   let appDelegate = UIApplication.shared.delegate as! AppDelegate
+   let moc = appDelegate.persistentContainer.viewContext
+   return moc
+ }()
+ 
+ var currentViewController: UIViewController {return self}
  var currentSnippet: BaseSnippet             {return photoSnippet}
 
     
 //MARK: ===================== CALCULATED PROPERTIES =========================
-    
-//---------------------------------------------------------------------------
- var photoSnippet: PhotoSnippet!
  
-//---------------------------------------------------------------------------
- {
-  didSet
-  {
-   navigationItem.title = photoSnippet.tag
-  }
- }
-//---------------------------------------------------------------------------
+ var photoSnippet: PhotoSnippet! {didSet {navigationItem.title = photoSnippet.snippetName}}
+
  var imageSize: CGFloat
-//---------------------------------------------------------------------------
  {
   let width = photoCollectionView.frame.width
   let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
@@ -34,36 +31,19 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
   let size = (width - lelfInset - rightInset - itemSpace * CGFloat(nphoto - 1)) / CGFloat(nphoto)
   return trunc (size) 
  }
-//---------------------------------------------------------------------------
+ 
+ 
  var nphoto: Int = 3
-//---------------------------------------------------------------------------
  {
   didSet
   {
-     photoSnippet.nphoto = Int32(nphoto)
-   
-     autoreleasepool
-     {
-      photoCollectionView.visibleCells.forEach
-      {
-       ($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()
-      }
-     }
-   
-
-     if (!isEditingPhotos)
-     {
-      photoCollectionView.locateCellMenu()
-     }
-  
-   
-     photoCollectionView.reloadData()
-   
-   }
+   photoSnippet.nphoto = Int32(nphoto)
+   photoCollectionView.visibleCells.forEach {($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
+   if (!isEditingPhotos) {photoCollectionView.locateCellMenu()}
+   photoCollectionView.reloadData()
+  }
  }
-    
-//---------------------------------------------------------------------------------
-    
+ 
 //MARK: ========================== STORED PROPERTIES ==============================
     
  var isEditingMode = true
@@ -84,7 +64,6 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
  static var menuIndexPath: IndexPath? = nil // CV index path where small photo item menu appeares...
  static var menuShift = CGPoint.zero
 
-
  let imagePicker = UIImagePickerController()
  let imagePickerTransitionDelegate = VCTransitionsDelegate(animator: SpringDoorAnimator(with: 0.6))
  var imagePickerTakeButton: UIButton!
@@ -93,7 +72,6 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
  lazy var photoItems2D: [[PhotoItemProtocol]] = createPhotoItems2D()
  
  var photoSnippetRestorationID: String? = nil
- 
  var photoSnippetVideoID: UUID?
     
 //---------------------------------------------------------------------------------
@@ -185,9 +163,9 @@ func updateDateLabel()
  
   if isEditingMode
   {
+   photoSnippetTitle.text = (photoSnippet.snippetName == Localized.unnamedSnippet ? "" : photoSnippet.snippetName)
    
-   photoSnippetTitle.text = photoSnippet.tag
-   switch SnippetType(rawValue: photoSnippet.type!)!
+   switch photoSnippet.snippetType
    {
      case .video : takePhotoBarButton.image = UIImage(named: "video.tab.icon")
      default: break
@@ -203,23 +181,16 @@ func updateDateLabel()
 
  override func viewDidAppear(_ animated: Bool)
  {
-  
   super.viewDidAppear(animated)
   guard photoSnippet != nil else {return}
   updateDateLabel()
-  
  }
  
  
  override func viewWillDisappear(_ animated: Bool)
  {
    super.viewWillDisappear(animated)
-  
-   photoCollectionView.visibleCells.forEach
-   {
-     ($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()
-   }
-  
+   photoCollectionView.visibleCells.forEach {($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
    savePhotoSnippetData()
  }
 
@@ -315,7 +286,7 @@ func updateDateLabel()
     
  deinit
  {
-  print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.tag ?? "no tag")")
+  print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.snippetName)")
  }
     
 //MARK: ----------------- MEMORY WARNING PROCESSING -------------------------
@@ -349,8 +320,12 @@ func updateDateLabel()
  func savePhotoSnippetData()
 //---------------------------------------------------------------------------
  {
-  photoSnippet.tag = photoSnippetTitle.text
-  (UIApplication.shared.delegate as! AppDelegate).saveContext()
+  moc.persistAndWait
+  {
+    guard let text = photoSnippetTitle.text else {return}
+    guard text != Localized.unnamedSnippet else {return}
+    photoSnippet.snippetName = text
+  }
  }
 //---------------------------------------------------------------------------
 //MARK: -
@@ -374,14 +349,10 @@ func updateDateLabel()
     selectAllPhotoItems(in: photoCollectionView)
    }
  }
-//---------------------------------------------------------------------------
-//MARK: -
-    
-    
-//MARK: -------------- Toggle Photo Items Editing Mode ----------------------
-//---------------------------------------------------------------------------
+
+ 
+ 
  func togglePhotoEditingMode()
-//---------------------------------------------------------------------------
  {
    if isEditingPhotos
    {
@@ -447,43 +418,21 @@ func updateDateLabel()
    }
  }
     
-//---------------------------------------------------------------------------
-//MARK: -
- 
-    
-//MARK: --------------------------- GROUP PHOTO  ----------------------------
 
+ 
+ 
  @objc func groupPhoto()
  {
-    let loc_title = NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
-    let loc_message = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")
-    let groupAC = UIAlertController(title: loc_title, message: loc_message, preferredStyle: .alert)
-    
-    for grouping in GroupPhotos.groupingTypes
-    {
-        let loc_gr_title = NSLocalizedString(grouping.rawValue, comment: grouping.rawValue)
-        let action = UIAlertAction(title: loc_gr_title, style: .default)
-        { _ in
-            self.photoCollectionView.photoGroupType = grouping
-    
-        }
-        groupAC.addAction(action)
-    }
-    
-    let loc_cnx_title = NSLocalizedString("CANCEL",comment: "Cancel Alert Action")
-    let cancel = UIAlertAction(title: loc_cnx_title, style: .cancel, handler: nil)
-    
-    groupAC.addAction(cancel)
-    
-    self.present(groupAC, animated: true, completion: nil)
+  
+  let ac = GroupPhotos.caseSelectorController(title: Localized.groupPhotoTitle,
+                                              message: Localized.groupPhotoSelect,
+                                              style: .alert) {self.photoCollectionView.photoGroupType = $0}
+  
+  self.present(ac, animated: true, completion: nil)
  }
-//---------------------------------------------------------------------------
-//MARK: -
 
-//MARK: --------------------------- VC TRANSITIONS  -------------------------
-//---------------------------------------------------------------------------
+ 
  override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
-//---------------------------------------------------------------------------
  {
     super.viewWillTransition(to: size, with: coordinator)
   
@@ -498,12 +447,6 @@ func updateDateLabel()
      photoCollectionView.reloadData()
     }
  }
-//---------------------------------------------------------------------------
-//MARK: -
- 
- 
- 
-//MARK: ---------------- IMAGE PICKER CONTROLLER PREPARE --------------------
  
  
  @objc func pickImageButtonPress()
@@ -533,22 +476,14 @@ func updateDateLabel()
     
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
  {
-  if let segueID = segue.identifier, segueID == "PhotoSnippetDatePicker",
-     let dest = segue.destination as?  DatePickerViewController
+  switch segue.identifier
   {
-    dest.editedSnippet = photoSnippet
+   case "PhotoSnippetDatePicker":     (segue.destination as! DatePickerViewController    ).editedSnippet = photoSnippet
+   case "PhotoSnippetPriorityPicker": (segue.destination as! PriorityPickerViewController).editedSnippet = photoSnippet
+   default: break
   }
-  
-  if let segueID = segue.identifier, segueID == "PhotoSnippetPriorityPicker",
-     let dest = segue.destination as?  PriorityPickerViewController
-  {
-    dest.editedSnippet = photoSnippet
-  }
-        
  }
     
  var isInvisiblePhotosDraged = false
 
- 
-    
 }

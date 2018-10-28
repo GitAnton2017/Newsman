@@ -40,6 +40,8 @@ struct Localized
  static let groupPhotoTitle =  NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
  static let groupPhotoSelect = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")
  
+ static let totalSnippets = NSLocalizedString("Total Snippets in this category: ", comment: "Total Snippets")
+ 
 }
 
 

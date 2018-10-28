@@ -6,7 +6,6 @@ import CoreLocation
 
 class SnippetsViewController: UIViewController
 {
- 
     lazy var moc: NSManagedObjectContext =
     {
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -15,10 +14,15 @@ class SnippetsViewController: UIViewController
     }()
  
     var snippetType: SnippetType!
+ 
     var createBarButtonIcon: UIImage!
     var createBarButtonTitle: String!
  
     var editedSnippetIndexPath: IndexPath?
+    var swipedSnippetIndexPath: IndexPath?
+ 
+ 
+ 
     var editedSnippet: BaseSnippet?
     {
        didSet {sourceSnippet = oldValue}
@@ -99,7 +103,7 @@ class SnippetsViewController: UIViewController
     let snippetsDataSource = SnippetsViewDataSource()
  
     let locationManager = CLLocationManager()
-    
+ 
     override func viewDidLoad()
     {
      super.viewDidLoad()   
@@ -118,7 +122,12 @@ class SnippetsViewController: UIViewController
      snippetsTableView.rowHeight = 70
      //snippetsTableView.rowHeight = UITableViewAutomaticDimension
      //createNewSnippet.image = createBarButtonIcon
-        
+     
+     snippetsTableView.register(SnippetsTableViewHeaderView.self,
+                                forHeaderFooterViewReuseIdentifier: SnippetsTableViewHeaderView.reuseID)
+     
+     snippetsTableView.register(SnippetsTableViewFooterView.self,
+                                forHeaderFooterViewReuseIdentifier: SnippetsTableViewFooterView.reuseID)
      
      editSnippets.title = "⚒︎"
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)

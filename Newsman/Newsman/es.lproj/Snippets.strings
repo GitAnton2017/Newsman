@@ -1,0 +1,39 @@
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "3aI-lF-zLh"; */
+"3aI-lF-zLh.text" = "Label";
+
+/* Class = "UIViewController"; title = "Photo Snippet VC"; ObjectID = "8Mi-lh-6Iq"; */
+"8Mi-lh-6Iq.title" = "Photo Snippet VC";
+
+/* Class = "UITextView"; text = "Enter your text snippet here!"; ObjectID = "EVW-0P-Phy"; */
+"EVW-0P-Phy.text" = "Enter your text snippet here!";
+
+/* Class = "UINavigationItem"; title = "Text Snippet VC"; ObjectID = "Mg3-pf-Wpy"; */
+"Mg3-pf-Wpy.title" = "Text Snippet VC";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "N8G-V2-vUY"; */
+"N8G-V2-vUY.text" = "Label";
+
+/* Class = "UITextField"; text = "Enter your snippet title here..."; ObjectID = "Pjr-4m-dEk"; */
+"Pjr-4m-dEk.text" = "Enter your snippet title here...";
+
+/* Class = "UIBarButtonItem"; title = "Up"; ObjectID = "S9L-Rf-4pN"; */
+"S9L-Rf-4pN.title" = "Up";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "XnB-zd-Dnw"; */
+"XnB-zd-Dnw.title" = "Item";
+
+/* Class = "UITextField"; text = "Enter your snippet title here..."; ObjectID = "Yve-pF-Sgx"; */
+"Yve-pF-Sgx.text" = "Enter your snippet title here...";
+
+/* Class = "UINavigationItem"; title = "Photo Snippet VC"; ObjectID = "Z6F-jH-QE6"; */
+"Z6F-jH-QE6.title" = "Photo Snippet VC";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "c8J-h7-pgZ"; */
+"c8J-h7-pgZ.title" = "Item";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "sMr-dD-efE"; */
+"sMr-dD-efE.title" = "Item";
+
+/* Class = "UIBarButtonItem"; title = "Down"; ObjectID = "yCO-vd-455"; */
+"yCO-vd-455.title" = "Down";
