@@ -39,6 +39,7 @@ class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
  {
   
   let title = UILabel(frame: CGRect.zero)
+  title.lineBreakMode = .byTruncatingMiddle
   title.backgroundColor = UIColor.clear
   title.textAlignment = .left
   title.textColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
@@ -52,6 +53,7 @@ class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
     title.topAnchor.constraint  (equalTo:  backView.topAnchor),
     title.bottomAnchor.constraint(equalTo: backView.bottomAnchor),
     title.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 10),
+    title.widthAnchor.constraint(equalTo: backView.widthAnchor, constant: -60)
    ]
   )
   

@@ -37,64 +37,95 @@ extension AllCasesSelectorRepresentable
  }
 }
 
-struct SnippetDates
+class SnippetDates
 {
- static let calendar = Calendar(identifier: .gregorian)
- static let today = Date()
+ var calendar: Calendar {return Calendar(identifier: .gregorian)}
+ var today:    Date     {return Date()}
  
- static let hour    = calendar.component(.hour, from: today)
- static let day     = calendar.component(.day, from: today)
- static let month   = calendar.component(.month, from: today)
- static let year    = calendar.component(.year, from: today)
- static let weekday = calendar.component(.weekday, from: today)
+ var hour:     Int      {return calendar.component(.hour,    from: today)}
+ var day:      Int      {return calendar.component(.day,     from: today)}
+ var month:    Int      {return calendar.component(.month,   from: today)}
+ var year:     Int      {return calendar.component(.year,    from: today)}
+ var weekday:  Int      {return calendar.component(.weekday, from: today)}
  
- static let boftd   = calendar.date(from: DateComponents(calendar: calendar,
-                                                         timeZone: TimeZone.current,
-                                                         era: nil,
-                                                         year: year, month: month, day: day,
-                                                         hour: nil, minute: nil, second: nil, nanosecond: nil,
-                                                         weekday: nil, weekdayOrdinal: nil, quarter: nil,
-                                                         weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+ var _boftd:   Date     {return calendar.date(from: DateComponents(calendar: calendar,
+                                              timeZone: TimeZone.current, era: nil,
+                                              year: year, month: month, day: day,
+                                              hour: nil, minute: nil, second: nil, nanosecond: nil,
+                                              weekday: nil, weekdayOrdinal: nil, quarter: nil,
+                                              weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))! }
  
- static let bofnd   = calendar.date(byAdding: .hour, value: 24, to: boftd!)
- static let bofld   = calendar.date(byAdding: .day, value: -1, to: boftd!)
+ lazy var boftd: Date  =  {return _boftd}()
+ lazy var bofnd: Date  =  {return _bofnd}()
+ lazy var bofld: Date  =  {return _bofld}()
+ lazy var boftw: Date  =  {return _boftw}()
+ lazy var bofnw: Date  =  {return _bofnw}()
+ lazy var boflw: Date  =  {return _boflw}()
+ lazy var boftm: Date  =  {return _boftm}()
+ lazy var bofnm: Date  =  {return _bofnm}()
+ lazy var boflm: Date  =  {return _boflm}()
+ lazy var bofty: Date  =  {return _bofty}()
+ lazy var bofny: Date  =  {return _bofny}()
  
- static let boftw   = calendar.date(byAdding: .day, value: -weekday + 1, to: bofnd!)
- static let bofnw   = calendar.date(byAdding: .day, value: 7, to: boftw!)
- static let boflw   = calendar.date(byAdding: .day, value: -7, to: boftw!)
+ func update ()
+ {
+  boftd  =   _boftd
+  bofnd  =   _bofnd
+  bofld  =   _bofld
+  boftw  =   _boftw
+  bofnw  =   _bofnw
+  boflw  =   _boflw
+  boftm  =   _boftm
+  bofnm  =   _bofnm
+  boflm  =   _boflm
+  bofty  =   _bofty
+  bofny  =   _bofny
+ }
  
- static let boftm   = calendar.date(from: DateComponents(calendar: calendar,
-                                                         timeZone: TimeZone.current,
-                                                         era: nil,
-                                                         year: year, month: month, day: 1,
-                                                         hour: nil, minute: nil, second: nil, nanosecond: nil,
-                                                         weekday: nil, weekdayOrdinal: nil, quarter: nil,
-                                                         weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+ var _bofnd:    Date     {return calendar.date(byAdding: .hour, value: 24,           to: _boftd)! }
+ var _bofld:    Date     {return calendar.date(byAdding: .day,  value: -1,           to: _boftd)! }
+ var _boftw:    Date     {return calendar.date(byAdding: .day,  value: -weekday + 1, to: _bofnd)! }
+ var _bofnw:    Date     {return calendar.date(byAdding: .day,  value: 7,            to: _boftw)! }
+ var _boflw:    Date     {return calendar.date(byAdding: .day,  value: -7,           to: _boftw)! }
  
- static let bofnm   = calendar.date(byAdding: .month, value: 1, to: boftm!)
- static let boflm   = calendar.date(byAdding: .month, value: -1, to: boftm!)
+ var _boftm:    Date     {return calendar.date(from: DateComponents(calendar: calendar,
+                                                     timeZone: TimeZone.current, era: nil,
+                                                     year: year, month: month, day: 1,
+                                                     hour: nil, minute: nil, second: nil, nanosecond: nil,
+                                                     weekday: nil, weekdayOrdinal: nil, quarter: nil,
+                                                     weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))! }
  
- static let bofty   = calendar.date(from: DateComponents(calendar: calendar,
-                                                         timeZone: TimeZone.current,
-                                                         era: nil,
-                                                         year: year, month: 1, day: 1,
-                                                         hour: nil, minute: nil, second: nil, nanosecond: nil,
-                                                         weekday: nil, weekdayOrdinal: nil, quarter: nil,
-                                                         weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))
+ var _bofnm:    Date     {return calendar.date(byAdding: .month, value:  1,          to: _boftm)! }
+ var _boflm:    Date     {return calendar.date(byAdding: .month, value: -1,          to: _boftm)! }
  
- static let bofny   = calendar.date(byAdding: .year, value: 1, to: bofty!)
+ var _bofty:    Date     {return calendar.date(from: DateComponents(calendar: calendar,
+                                                     timeZone: TimeZone.current,era: nil,
+                                                     year: year, month: 1, day: 1,
+                                                     hour: nil, minute: nil, second: nil, nanosecond: nil,
+                                                     weekday: nil, weekdayOrdinal: nil, quarter: nil,
+                                                     weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))! }
  
- static let dateFilter : [(title: String, predicate: (BaseSnippet) -> Bool)] =
-  [
-   ("0_For Today",         {$0.snippetDate >= boftd! && $0.snippetDate < bofnd!}),
-   ("1_For Yesterday",     {$0.snippetDate >= bofld! && $0.snippetDate < boftd!}),
-   ("2_For This Week",     {$0.snippetDate >= boftw! && $0.snippetDate < bofnd!}),
-   ("3_For Last Week",     {$0.snippetDate >= boflw! && $0.snippetDate < boftw!}),
-   ("4_For This Month",    {$0.snippetDate >= boftm! && $0.snippetDate < bofnd!}),
-   ("5_For Last Month",    {$0.snippetDate >= boflm! && $0.snippetDate < boftm!}),
-   ("7_For This Year",     {$0.snippetDate >= bofty! && $0.snippetDate < bofnd!}),
-   ("8_For Last Year and earlier on",                 {$0.snippetDate <  bofty!})
-  ]
+ var _bofny:    Date     {return calendar.date(byAdding: .year,   value:  1,         to: _bofty)! }
+ 
+ 
+ typealias DatePredicate = (title: String, predicate: (BaseSnippet) -> Bool)
+ 
+ lazy var datePredicates : [DatePredicate] = {return predicates}()
+ 
+ var predicates : [DatePredicate]
+ {
+  return [
+          ("0_For Today",         {$0.snippetDate >= self.boftd && $0.snippetDate < self.bofnd}),
+          ("1_For Yesterday",     {$0.snippetDate >= self.bofld && $0.snippetDate < self.boftd}),
+          ("2_For This Week",     {$0.snippetDate >= self.boftw && $0.snippetDate < self.bofnd}),
+          ("3_For Last Week",     {$0.snippetDate >= self.boflw && $0.snippetDate < self.boftw}),
+          ("4_For This Month",    {$0.snippetDate >= self.boftm && $0.snippetDate < self.bofnd}),
+          ("5_For Last Month",    {$0.snippetDate >= self.boflm && $0.snippetDate < self.boftm}),
+          ("7_For This Year",     {$0.snippetDate >= self.bofty && $0.snippetDate < self.bofnd}),
+          ("8_For Last Year and earlier on",                      {$0.snippetDate < self.bofty})
+         ]
+ }
+ 
 }
 
 enum SnippetType: String, AllCasesSelectorRepresentable

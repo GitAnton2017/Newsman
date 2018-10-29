@@ -219,7 +219,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
      {
       snippet.alphaIndex = ""
      }
-     snippet.dateIndex = SnippetDates.dateFilter.first{$0.predicate(snippet)}?.title
+     snippet.dateIndex = BaseSnippet.snippetDates.datePredicates.first{$0.predicate(snippet)}?.title
     }
     
     print ("\(items.count) RECORDS UPDATED SUCCESSFULLY")
@@ -399,6 +399,12 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
    case .insert:
     guard let indexPath = newIndexPath else {break}
     tableView.insertRows(at: [indexPath], with: .fade)
+    let section = indexPath.section
+    if let footer = tableView.footerView(forSection: section) as? SnippetsTableViewFooterView
+    {
+     footer.title = Localized.totalSnippets + String(numberOfRowsInSection(index: section))
+    }
+   
   
    case .update:
     guard let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {break}
@@ -410,6 +416,11 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
    case .delete:
     guard let indexPath = indexPath else {break}
     tableView.deleteRows(at: [indexPath], with: .fade)
+    let section = indexPath.section
+    if let footer = tableView.footerView(forSection: section) as? SnippetsTableViewFooterView
+    {
+     footer.title = Localized.totalSnippets + String(numberOfRowsInSection(index: section))
+   }
 
    case .move:
     guard let toIndexPath = newIndexPath, let fromIndexPath = indexPath else {break}

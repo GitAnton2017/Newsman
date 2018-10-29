@@ -20,6 +20,8 @@ protocol SnippetImagesPreviewProvidable: class
 
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
+ 
+ static var snippetDates = SnippetDates()
 
  @NSManaged private (set) var date: NSDate?
  @NSManaged var dateIndex: String?
@@ -30,7 +32,8 @@ protocol SnippetImagesPreviewProvidable: class
   set
   {
    self.date = newValue as NSDate
-   self.dateIndex = SnippetDates.dateFilter.first{$0.predicate(self)}?.title
+   self.dateIndex = BaseSnippet.snippetDates.datePredicates.first{$0.predicate(self)}?.title
+   
   }
  }
  
