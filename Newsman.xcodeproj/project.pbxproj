@@ -237,7 +237,7 @@
 		A754898A1FBC4F2900359C0C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A75489901FBC4F2900359C0C /* Newsman.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Newsman.xcdatamodel; sourceTree = "<group>"; };
 		A75489921FBC4F2900359C0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A75489951FBC4F2900359C0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A75489951FBC4F2900359C0C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A75489971FBC4F2900359C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A754899C1FBC4F2900359C0C /* NewsmanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewsmanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489A01FBC4F2900359C0C /* NewsmanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsmanTests.swift; sourceTree = "<group>"; };
@@ -1006,7 +1006,8 @@
 				A711C11A21839F1C0025C973 /* es */,
 			);
 			name = Accesorial.storyboard;
-			sourceTree = "<group>";
+			path = ../../../../Users/antonk1973/Documents/Newsman/Newsman;
+			sourceTree = DEVELOPER_DIR;
 		};
 		A7CB13731FD2D5EB00AA7294 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
