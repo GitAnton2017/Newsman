@@ -164,9 +164,9 @@
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </toolbar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
                                 <rect key="frame" x="4" y="64" width="406" height="622"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <edgeInsets key="layoutMargins" top="8" left="11" bottom="8" right="11"/>
                                 <color key="separatorColor" red="0.47787757359999999" green="0.122446873" blue="0.055025289310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -175,7 +175,7 @@
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" showsReorderControl="YES" indentationWidth="0.0" reuseIdentifier="SnippetCell" rowHeight="70" id="i7N-u2-v6g" customClass="SnippetsViewCell" customModule="Newsman" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.333333333333343" width="406" height="70"/>
+                                        <rect key="frame" x="0.0" y="28" width="406" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i7N-u2-v6g" id="YtZ-ZP-IsY">
                                             <rect key="frame" x="0.0" y="0.0" width="406" height="69.666666666666671"/>
@@ -331,7 +331,7 @@
                 <viewControllerPlaceholder storyboardIdentifier="DatePickerVC" storyboardName="Accesorial" referencedIdentifier="DatePickerVC" id="oAT-3i-m3u" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TX1-7S-wZF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1528" y="-121"/>
+            <point key="canvasLocation" x="1530" y="-43"/>
         </scene>
         <!--PriorityPickerVC-->
         <scene sceneID="ypc-ga-zeV">
@@ -339,7 +339,7 @@
                 <viewControllerPlaceholder storyboardIdentifier="PriorityPickerVC" storyboardName="Accesorial" referencedIdentifier="PriorityPickerVC" id="CgB-KJ-V9c" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Lc-Me-8lG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1541" y="-78"/>
+            <point key="canvasLocation" x="1530" y="113"/>
         </scene>
         <!--PhotoSnippetVC-->
         <scene sceneID="CmG-AX-Cx2">
@@ -347,7 +347,7 @@
                 <viewControllerPlaceholder storyboardIdentifier="PhotoSnippetVC" storyboardName="Snippets" referencedIdentifier="PhotoSnippetVC" id="sRh-OF-XN0" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p6v-OQ-xxc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1541" y="64"/>
+            <point key="canvasLocation" x="1530" y="274"/>
         </scene>
         <!--TextSnippetVC-->
         <scene sceneID="PZn-Io-lyt">
@@ -355,7 +355,7 @@
                 <viewControllerPlaceholder storyboardIdentifier="TextSnippetVC" storyboardName="Snippets" referencedIdentifier="TextSnippetVC" id="cld-kD-mmo" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yPY-Pb-pVw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1532" y="-18"/>
+            <point key="canvasLocation" x="1530" y="-264"/>
         </scene>
         <!--VideoShootingVC-->
         <scene sceneID="WdL-Gh-5ne">
@@ -363,7 +363,7 @@
                 <viewControllerPlaceholder storyboardIdentifier="VideoShootingVC" storyboardName="MediaViewControllers" referencedIdentifier="VideoShootingVC" id="ggd-xf-B0W" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vgw-mD-LMT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1543" y="-174"/>
+            <point key="canvasLocation" x="1530" y="-168"/>
         </scene>
     </scenes>
     <resources>

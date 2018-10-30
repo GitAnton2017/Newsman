@@ -20,16 +20,20 @@ class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
  lazy var backView: UIView =
  {
   let view = UIView()
-  view.translatesAutoresizingMaskIntoConstraints = false
+  
   view.layer.cornerRadius = 10.0
   contentView.addSubview(view)
-  NSLayoutConstraint.activate(
-   [
-    view.topAnchor.constraint  (equalTo:  contentView.topAnchor, constant: 3),
-    view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -1),
-    view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 1),
-    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2)
-   ])
+  
+  view.translatesAutoresizingMaskIntoConstraints = false
+  
+  let const = [
+   view.topAnchor.constraint      (equalTo: contentView.topAnchor,      constant:  3),
+   view.trailingAnchor.constraint (equalTo: contentView.trailingAnchor, constant: -1),
+   view.leadingAnchor.constraint  (equalTo: contentView.leadingAnchor,  constant:  1),
+   view.bottomAnchor.constraint   (equalTo: contentView.bottomAnchor,   constant: -2)
+  ]
+  const.forEach{$0.priority = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)}
+  NSLayoutConstraint.activate(const)
   
   return view
   
@@ -47,13 +51,12 @@ class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
   backView.addSubview(title)
   
   title.translatesAutoresizingMaskIntoConstraints = false
-  
   NSLayoutConstraint.activate(
    [
-    title.topAnchor.constraint  (equalTo:  backView.topAnchor),
-    title.bottomAnchor.constraint(equalTo: backView.bottomAnchor),
-    title.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 10),
-    title.widthAnchor.constraint(equalTo: backView.widthAnchor, constant: -60)
+    title.topAnchor.constraint    (equalTo: backView.topAnchor                   ),
+    title.bottomAnchor.constraint (equalTo: backView.bottomAnchor                ),
+    title.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant:  10),
+    title.widthAnchor.constraint  (equalTo: backView.widthAnchor,   constant: -60)
    ]
   )
   

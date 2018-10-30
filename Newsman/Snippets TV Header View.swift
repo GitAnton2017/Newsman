@@ -55,7 +55,6 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
   backView.addSubview(arrowView)
   
   arrowView.translatesAutoresizingMaskIntoConstraints = false
-  
   NSLayoutConstraint.activate(
    [
     arrowView.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -13),

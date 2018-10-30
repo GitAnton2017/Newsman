@@ -125,6 +125,7 @@ class SnippetDates
           ("8_For Last Year and earlier on",                      {$0.snippetDate < self.bofty})
          ]
  }
+
  
 }
 
@@ -223,9 +224,7 @@ enum GroupSnippets: String,  AllCasesSelectorRepresentable
  case bySnippetType  =  "By Snippet Type"
  case plainList      =  "Plain List"
  case byLocation     =  "By Snippet Location"
- 
- //***********************************************
- case nope           //initial state
+
  
  static let groupingTypes: [GroupSnippets] =
  [

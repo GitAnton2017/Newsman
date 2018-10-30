@@ -133,8 +133,19 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
- 
- 
+ @NSManaged private(set) var location: String?
+ final var snippetLocation: String?
+ {
+  get
+  {
+   guard let location  = self.location else {return Localized.undefinedLocationSection}
+   return location.isEmpty ? Localized.undefinedLocationSection : location
+  }
+  set
+  {
+   self.location = newValue ?? ""
+  }
+ }
  
  
  

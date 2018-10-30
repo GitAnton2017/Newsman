@@ -209,11 +209,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.483379"
+            timestampString = "562611448.216536"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "269"
-            endingLineNumber = "269"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
             landmarkName = "SnippetsFetchController"
             landmarkType = "3">
          </BreakpointContent>
@@ -340,27 +340,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.48408"
+            timestampString = "562611448.216645"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "moveBatchUpdate(with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.484352"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "410"
-            endingLineNumber = "410"
+            startingLineNumber = "446"
+            endingLineNumber = "446"
             landmarkName = "controller(_:didChange:at:for:newIndexPath:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -404,11 +388,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.484648"
+            timestampString = "562611448.216725"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "SnippetsFetchController"
             landmarkType = "3">
          </BreakpointContent>
@@ -520,22 +504,6 @@
             endingLineNumber = "132"
             landmarkName = "configueCurrentFRC()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.4849859"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
-            landmarkName = "SnippetsFetchController"
-            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -885,11 +853,11 @@
             condition = "po print(&quot;DELETE&quot;, indexPath (anObject as! BaseSnippet).tag)"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.485459"
+            timestampString = "562611448.217072"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "427"
+            endingLineNumber = "427"
             landmarkName = "controllerWillChangeContent(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -901,11 +869,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "Yes"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.4857171"
+            timestampString = "562611448.2171201"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "390"
-            endingLineNumber = "390"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "SnippetsFetchController"
             landmarkType = "3">
             <Actions>
@@ -941,106 +909,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.4859869"
+            timestampString = "562611448.217178"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "361"
-            endingLineNumber = "361"
+            startingLineNumber = "390"
+            endingLineNumber = "390"
             landmarkName = "unfoldSection(section:with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.486245"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "removeEmptySections()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Newsman.SnippetsFetchController.removeEmptySections() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "559709184.337674"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "80"
-                  endingLineNumber = "80"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 ((offset: Swift.Int, element: (rows: Swift.Int, frcSection: Swift.Optional&lt;Swift.Int&gt;))) -&gt; Swift.Bool in Newsman.SnippetsFetchController.removeEmptySections() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "559709184.339826"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "80"
-                  endingLineNumber = "80"
-                  offsetFromSymbolStart = "24">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 ((offset: Swift.Int, element: (rows: Swift.Int, frcSection: Swift.Optional&lt;Swift.Int&gt;))) -&gt; Swift.Int in Newsman.SnippetsFetchController.removeEmptySections() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "559709184.341465"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "80"
-                  endingLineNumber = "80"
-                  offsetFromSymbolStart = "24">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (Swift.Int, Swift.Int) -&gt; Swift.Bool in Newsman.SnippetsFetchController.removeEmptySections() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "559709184.342963"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "80"
-                  endingLineNumber = "80"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.4864939"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
-            landmarkName = "removeEmptySections()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1403,106 +1277,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.486974"
+            timestampString = "562611448.21746"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "updateSectionCounters()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.48722"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
-            landmarkName = "moveBatchUpdate(with:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.487461"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
-            landmarkName = "updateEmptySections()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Newsman.SnippetsFetchController.(updateEmptySections in _1FE84A113FA4A97802979BD80BBE2C69)() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "561916253.84175"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "36">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 ((offset: Swift.Int, element: (rows: Swift.Int, frcSection: Swift.Optional&lt;Swift.Int&gt;))) -&gt; Swift.Bool in Newsman.SnippetsFetchController.(updateEmptySections in _1FE84A113FA4A97802979BD80BBE2C69)() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "561916253.843858"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "24">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 ((offset: Swift.Int, element: (rows: Swift.Int, frcSection: Swift.Optional&lt;Swift.Int&gt;))) -&gt; Swift.Int in Newsman.SnippetsFetchController.(updateEmptySections in _1FE84A113FA4A97802979BD80BBE2C69)() -&gt; ()"
-                  moduleName = "Newsman"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/antonk1973/Documents/Newsman/Newsman/Snippets%20Table%20View%20FRC.swift"
-                  timestampString = "561916253.845378"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Newsman/Snippets Table View FRC.swift"
-            timestampString = "562507978.487709"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "389"
-            endingLineNumber = "389"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
             landmarkName = "SnippetsFetchController"
             landmarkType = "3">
          </BreakpointContent>
@@ -1655,7 +1434,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Newsman/Snippets Special Enums, Structs.swift"
-            timestampString = "562507978.488032"
+            timestampString = "562611448.2175471"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "85"

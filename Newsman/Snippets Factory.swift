@@ -22,7 +22,7 @@ extension SnippetsViewController
     getLocationString
     {location in
       print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR NEW TEXT SNIPPET")
-      self.moc.persist{newTextSnippet.location = location}
+      self.moc.persist{newTextSnippet.snippetLocation = location}
     }
     
     editTextSnippet(snippetToEdit: newTextSnippet)
@@ -59,7 +59,7 @@ extension SnippetsViewController
     getLocationString
     {location in
       print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR PHOTO SNIPPET")
-      self.moc.persist{newPhotoSnippet.location = location}
+      self.moc.persist{newPhotoSnippet.snippetLocation = location}
     }
     
     editVisualSnippet(snippetToEdit: newPhotoSnippet)
@@ -99,7 +99,7 @@ extension SnippetsViewController
     getLocationString
      {location in
       print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR VIDEO SNIPPET")
-      self.moc.persist{newVideoSnippet.location = location}
+      self.moc.persist{newVideoSnippet.snippetLocation = location}
     }
     
     editVisualSnippet(snippetToEdit: newVideoSnippet)

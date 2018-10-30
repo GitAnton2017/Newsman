@@ -19,6 +19,5 @@ extension BaseSnippet
  }
 
  @NSManaged public var id: UUID?
- @NSManaged public var location: String?
- 
+
 }

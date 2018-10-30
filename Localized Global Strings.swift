@@ -1,26 +1,50 @@
 
 import Foundation
 
+
+prefix operator §§
+
 extension String
 {
  var quoted: String {return "\"" + self + "\""}
+ 
+ static prefix func §§ (s: String) -> String
+ {
+  return NSLocalizedString(s, comment: s)
+ }
+ 
 }
+
 
 protocol StringLocalizable
 {
  var localizedString: String {get}
 }
 
+
+
+
 struct Localized
 {
+ 
+ 
  static let fromPriority   = NSLocalizedString("From", comment: "From Priority")
  static let toPriority     = NSLocalizedString("To", comment: "To Priority")
- static let unnamedSnippet = NSLocalizedString("Unnamed Snippet", comment: "Unnamed Snippet")
- static let unnamedSection = NSLocalizedString("Unnamed Snippets", comment: "Unnamed Snippets")
- static let prioritySelect = NSLocalizedString("Please select your snippet priority!", comment: "Priority Selection Alerts")
  
- static let groupingTitle  = NSLocalizedString("Group Snippets", comment: "Group Snippets Alerts Title")
- static let groupingSelect = NSLocalizedString("Please select grouping type", comment: "Group Snippets Alerts Message")
+ static let unnamedSnippet = §§"Unnamed Snippet"
+ static let unnamedSection = §§"Unnamed Snippets"
+ 
+ static let undefinedSnippetLocation = §§"Undefined Snippet Location"
+ static let undefinedLocationSection = §§"Snippets with Undefined Location"
+ 
+ static let prioritySelect = NSLocalizedString("Please select your snippet priority!",
+                                               comment: "Priority Selection Alerts")
+ 
+ static let groupingTitle  = NSLocalizedString("Group Snippets",
+                                              comment: "Group Snippets Alerts Title")
+ 
+ static let groupingSelect = NSLocalizedString("Please select grouping type",
+                                               comment: "Group Snippets Alerts Message")
  
  static let cancelAction   = NSLocalizedString("CANCEL", comment: "Cancel Alert Action")
  static let changeAction   = NSLocalizedString("CHANGE", comment: "Change Alert Action")
@@ -29,13 +53,16 @@ struct Localized
  static let priorityTag   =  NSLocalizedString("Priority", comment: "Priority Action Tag")
  static let deleteTag   =    NSLocalizedString("Delete",   comment: "Delete Action Tag")
  
- static let changePriorityTitle = NSLocalizedString("Change Snippets Priority", comment: "Change Snippets Priority Alert Action")
+ static let changePriorityTitle = NSLocalizedString("Change Snippets Priority",
+                                                    comment: "Change Snippets Priority Alert Action")
  
- static let changePriorityConfirm = NSLocalizedString("Are you sure you want to change the following snippets priorities?", comment: "Change Snippets Priority Alert Confimation")
+ static let changePriorityConfirm = NSLocalizedString("Are you sure you want to change the following snippets priorities?",
+                                                      comment: "Change Snippets Priority Alert Confimation")
  
  static let deleteSnippetsTitle = NSLocalizedString("Deleting Snippets!", comment: "Deletу Snippets Alert Action")
  
- static let deleteSnippestConfirm = NSLocalizedString("Are you sure you want to delete the following snippets?!", comment: "Delete Snippets Alert Confimation")
+ static let deleteSnippestConfirm = NSLocalizedString("Are you sure you want to delete the following snippets?!",
+                                                      comment: "Delete Snippets Alert Confimation")
  
  static let groupPhotoTitle =  NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
  static let groupPhotoSelect = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")

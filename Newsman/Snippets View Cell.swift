@@ -106,6 +106,46 @@ protocol ImageContextLoadProtocol
      }
     }
  
+    private func getDisclosureImage(of color: UIColor) -> UIImage
+    {
+     let format = UIGraphicsImageRendererFormat.preferred()
+     let rect = CGRect(origin: .zero, size: CGSize(width: 20, height: 20))
+     let render = UIGraphicsImageRenderer(bounds: rect, format: format)
+     let image = render.image
+     {_ in
+      
+      let p1 = CGPoint.zero
+      let p2 = CGPoint(x: rect.width , y: rect.height / 2)
+      let p3 = CGPoint(x: 0,  y: rect.height)
+      let p4 = CGPoint(x: rect.width / 3, y: rect.height / 2)
+      
+      let path = UIBezierPath(points: [p1, p2, p3, p4])
+      
+      color.setFill()
+      path.fill()
+      
+     }
+     
+     return image
+    }
+ 
+    @objc func disclosurePressed(_ sender: UIButton)
+    {
+    }
+ 
+    private func configueDisclosure()
+    {
+     let b = UIButton(type: .custom)
+  
+     b.setImage(getDisclosureImage(of: #colorLiteral(red: 1, green: 0.08644389563, blue: 0.04444610194, alpha: 1)), for: .normal)
+     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)), for: .highlighted)
+     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)), for: .focused)
+     b.addTarget(self, action: #selector(disclosurePressed), for: .touchDown)
+     
+     b.sizeToFit()
+     accessoryView = b
+     
+    }
  
     override func awakeFromNib()
     {
@@ -115,6 +155,7 @@ protocol ImageContextLoadProtocol
      //snippetImage.layer.borderWidth = 1.25
      //snippetImage.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
      snippetImage.layer.masksToBounds = true
+     configueDisclosure()
      
     }
  
@@ -136,9 +177,11 @@ protocol ImageContextLoadProtocol
 
     }
  
+ 
     override func prepareForReuse()
     {
      super.prepareForReuse()
+     
      clear()
    
     }

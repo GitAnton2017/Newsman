@@ -33,7 +33,9 @@ extension SnippetsViewController: UITableViewDelegate
   let provider = snippet.imageProvider
 
   let iconWidth = cell.snippetImage.frame.width
- 
+  
+  if dataSource.currentFRC.isHiddenSection(section: indexPath.section) {return}
+  
   provider.getLatestImage(requiredImageWidth: iconWidth)
   {[weak wds = dataSource, weak wtv = tableView] (image) in
  
@@ -49,7 +51,9 @@ extension SnippetsViewController: UITableViewDelegate
     cell.imageSpinner.stopAnimating()
     return
    }
-  
+   
+   if ds.currentFRC.isHiddenSection(section: ip.section) {return}
+   
    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
    {[weak wds = dataSource, weak wtv = tableView] in
     
@@ -59,6 +63,8 @@ extension SnippetsViewController: UITableViewDelegate
     guard let ip = ds.currentFRC[snippet as! BaseSnippet],
           let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
     
+    if ds.currentFRC.isHiddenSection(section: ip.section) {return}
+    
     cell.imageSpinner.stopAnimating()
    
     UIView.transition(with: cell.snippetImage,
@@ -67,6 +73,7 @@ extension SnippetsViewController: UITableViewDelegate
                       animations: {cell.snippetImage.image = image},
                       completion:
                       {_ in
+              
                        cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
                        UIView.animate(withDuration: 0.15,
                                       delay: 0.25,
@@ -76,6 +83,7 @@ extension SnippetsViewController: UITableViewDelegate
                                       animations: {cell.snippetImage.transform = .identity},
                                       completion:
                                       { _ in
+                                       if ds.currentFRC.isHiddenSection(section: ip.section) {return}
                                        provider.getRandomImages(requiredImageWidth: iconWidth)
                                        {[weak wds = dataSource, weak wtv = tableView] (images) in
                                         
