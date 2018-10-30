@@ -148,7 +148,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ULo-bY-QyT"/>
-                                    <barButtonItem title="Button" id="wwM-RC-fnL">
+                                    <barButtonItem title="BUTTON" id="wwM-RC-fnL">
                                         <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
                                         <connections>
                                             <action selector="createNewSnippetPress:" destination="8F0-Wa-TO0" id="bii-3b-oGu"/>
