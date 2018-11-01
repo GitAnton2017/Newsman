@@ -81,6 +81,8 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
      super.viewDidLoad()
      navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
      textView.inputAccessoryView = createKeyBoardToolBar()
+     //textView.textContainerInset = UIEdgeInsets(top: 10, left: 5, bottom: 2, right: 5)
+     textView.contentInset = UIEdgeInsets(top: 10, left: 5, bottom: 2, right: 5)
      textSnippetTitle.inputAccessoryView = textView.inputAccessoryView
      textSnippetTitle.delegate = self
     }

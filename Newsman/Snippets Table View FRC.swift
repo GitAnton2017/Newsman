@@ -332,8 +332,17 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   if (frc.delegate != nil) {frc.delegate = nil}
  }
  
- func isHiddenSection(section: Int) -> Bool {return hiddenSections.contains(section)}
+ func isHiddenSection(section: Int) -> Bool
+ {
+  return self[IndexPath(row: 0, section: section)].hiddenSection
+ }
  
+ func isDisclosedCell(for indexPath: IndexPath) -> Bool
+ {
+  return self[indexPath].disclosedCell
+ }
+ 
+
  private func sectionIndexPaths (for section: Int) -> [IndexPath]
  {
   let count = sectionCounters[section].rows
@@ -350,6 +359,13 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   sectionCells(for: section).forEach{$0.stopImageProvider()}
  }
  
+ private func reset(section: Int, state: Bool)
+ {
+  deactivateDelegate()
+  moc.persistAndWait {self.sectionIndexPaths(for: section).forEach{self[$0].hiddenSection = state}}
+  activateDelegate()
+ }
+ 
  func foldSection (section: Int)
  {
 //  let indexPaths = sectionIndexPaths(for: section)
@@ -357,8 +373,10 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  
   if isHiddenSection(section: section)
   {
-   hiddenSections.remove(section)
-   tableView.reloadSections([section], with: .automatic)
+   reset(section: section, state: false)
+   //hiddenSections.remove(section)
+   //tableView.reloadSections([section], with: .automatic)
+   tableView.reloadRows(at: sectionIndexPaths(for: section), with: .automatic)
    
 //   tableView.performBatchUpdates(nil)
 //   {[weak self] _ in
@@ -373,7 +391,9 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   }
   else
   {
-   hiddenSections.insert(section)
+   
+   //hiddenSections.insert(section)
+   reset(section: section, state: true)
    tableView.performBatchUpdates(nil)
    {[weak self] _ in
     self?.cancelAllOperations(for: section)
@@ -392,7 +412,8 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
 //  let indexPaths = sectionIndexPaths(for: section)
 //  if indexPaths.isEmpty {return}
   
-  hiddenSections.remove(section)
+  //hiddenSections.remove(section)
+  reset(section: section, state: false)
   if let header = tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView
   {
    header.isHiddenSection = false

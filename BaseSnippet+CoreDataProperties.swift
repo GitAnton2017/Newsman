@@ -18,6 +18,9 @@ extension BaseSnippet
    return NSFetchRequest<BaseSnippet>(entityName: "BaseSnippet")
  }
 
- @NSManaged public var id: UUID?
+ @NSManaged var id: UUID?
+ 
+ @NSManaged var hiddenSection: Bool
+ @NSManaged var disclosedCell: Bool
 
 }

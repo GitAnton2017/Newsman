@@ -225,7 +225,7 @@
                                                 <constraint firstItem="Qqb-23-EaJ" firstAttribute="leading" secondItem="lZK-7m-eLo" secondAttribute="trailing" constant="10" id="5Ja-TG-sq4"/>
                                                 <constraint firstItem="lZK-7m-eLo" firstAttribute="leading" secondItem="YtZ-ZP-IsY" secondAttribute="leadingMargin" id="AO1-f1-X4b"/>
                                                 <constraint firstItem="Qqb-23-EaJ" firstAttribute="bottom" secondItem="lZK-7m-eLo" secondAttribute="bottom" id="PtH-pj-AAV"/>
-                                                <constraint firstItem="lZK-7m-eLo" firstAttribute="centerY" secondItem="YtZ-ZP-IsY" secondAttribute="centerY" id="PtR-cw-5bp"/>
+                                                <constraint firstItem="lZK-7m-eLo" firstAttribute="centerY" secondItem="YtZ-ZP-IsY" secondAttribute="centerY" identifier="imageCenterY" id="PtR-cw-5bp"/>
                                                 <constraint firstItem="nSb-8A-J19" firstAttribute="centerX" secondItem="lZK-7m-eLo" secondAttribute="centerX" id="b5S-XH-XXf"/>
                                                 <constraint firstItem="8uF-fe-ELp" firstAttribute="top" secondItem="lZK-7m-eLo" secondAttribute="top" id="it9-xg-maO"/>
                                                 <constraint firstItem="8uF-fe-ELp" firstAttribute="leading" secondItem="lZK-7m-eLo" secondAttribute="trailing" constant="10" id="oV1-hn-uU6"/>

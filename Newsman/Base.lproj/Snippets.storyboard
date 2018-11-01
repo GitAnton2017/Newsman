@@ -66,10 +66,19 @@
                                     <action selector="titleTextChanged:" destination="mw8-gL-CtC" eventType="editingChanged" id="gXj-Ll-XVL"/>
                                 </connections>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter your text snippet here!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="EVW-0P-Phy">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EVW-0P-Phy">
                                 <rect key="frame" x="4" y="82" width="406" height="604"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="backgroundColor" red="1" green="0.93623086393478894" blue="0.92165692943164446" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="2" maxY="0.0"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Enter your text snippet here!">
+                                        <attributes>
+                                            <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" size="20" name=".AppleSystemUIFont"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="4" tighteningFactorForTruncation="0.0"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                             </textView>
                         </subviews>
@@ -432,7 +441,7 @@
         <image name="save.tab.icon" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="yLx-ea-9QV"/>
-        <segue reference="CdP-HO-XWj"/>
+        <segue reference="U6G-5E-WPd"/>
+        <segue reference="4xf-O6-s6P"/>
     </inferredMetricsTieBreakers>
 </document>

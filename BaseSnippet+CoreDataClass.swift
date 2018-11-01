@@ -37,7 +37,7 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
- var snippetDateTag: String {return SnippetsViewDataSource.dateFormatter.string(from: self.snippetDate)}
+ final var snippetDateTag: String {return SnippetsViewDataSource.dateFormatter.string(from: self.snippetDate)}
  
  @NSManaged private (set) var tag: String?
  @NSManaged var  alphaIndex: String?

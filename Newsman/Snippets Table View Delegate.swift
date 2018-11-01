@@ -417,10 +417,14 @@ extension SnippetsViewController: UITableViewDelegate
   
   return footer
  }
+ 
+ 
  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
  {
   let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
-  return dataSource.currentFRC.isHiddenSection(section: indexPath.section) ? 0 : tableView.rowHeight
+  let h = tableView.rowHeight
+  return dataSource.currentFRC.isHiddenSection(section: indexPath.section) ? 0 :
+       ((dataSource.currentFRC.isDisclosedCell(for: indexPath)) ? h * 2 : h)
  }
  
  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat

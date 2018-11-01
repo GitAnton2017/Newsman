@@ -47,6 +47,19 @@ protocol ImageContextLoadProtocol
     }
  
     weak var hostedSnippet: SnippetImagesPreviewProvidable?
+    {
+     didSet
+     {
+      guard let snippet = snippet else {return}
+      discloseView?.transform = snippet.disclosedCell ? CGAffineTransform(rotationAngle: .pi / 2): .identity
+      
+      let dy = -contentView.bounds.height / 4
+      contentView.constraints.first{$0.identifier == "imageCenterY"}?.constant = snippet.disclosedCell ? dy : 0
+      
+      locationLabel.isHidden = !snippet.disclosedCell
+      locationLabel.text = snippet.snippetLocation
+     }
+    }
  
     var isLoadTaskCancelled: Bool
     {
@@ -106,10 +119,10 @@ protocol ImageContextLoadProtocol
      }
     }
  
-    private func getDisclosureImage(of color: UIColor) -> UIImage
+    private func getDisclosureImage(of color: UIColor, and size: CGSize) -> UIImage
     {
      let format = UIGraphicsImageRendererFormat.preferred()
-     let rect = CGRect(origin: .zero, size: CGSize(width: 20, height: 20))
+     let rect = CGRect(origin: .zero, size: size)
      let render = UIGraphicsImageRenderer(bounds: rect, format: format)
      let image = render.image
      {_ in
@@ -129,21 +142,137 @@ protocol ImageContextLoadProtocol
      return image
     }
  
-    @objc func disclosurePressed(_ sender: UIButton)
+    private lazy var locationLabel: UILabel =
     {
+      let title = UILabel(frame: CGRect.zero)
+      title.lineBreakMode = .byTruncatingMiddle
+      title.backgroundColor = UIColor.clear
+      title.textAlignment = .left
+      title.textColor = #colorLiteral(red: 0.3176470697, green: 0.07450980693, blue: 0.02745098062, alpha: 1)
+      title.font = UIFont.systemFont(ofSize: 13)
+      contentView.addSubview(title)
+      
+      title.translatesAutoresizingMaskIntoConstraints = false
+      NSLayoutConstraint.activate(
+       [
+        title.topAnchor.constraint       (equalTo: snippetImage.bottomAnchor, constant: 10),
+        title.leadingAnchor.constraint   (equalTo: snippetImage.leadingAnchor, constant: 0),
+        title.trailingAnchor.constraint  (equalTo: contentView.trailingAnchor, constant: -10)
+       ]
+      )
+      
+      return title
+    }()
+ 
+    private var tableView: UITableView?
+    {
+     return self.superview as? UITableView
     }
+    private var currentFRC: SnippetsFetchController?
+    {
+     return (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
+    }
+    private var snippet: BaseSnippet?
+    {
+     return hostedSnippet as? BaseSnippet
+    }
+    private var discloseView: UIImageView?
+    {
+     return (accessoryView as? UIButton)?.imageView
+    }
+ 
+    private func refresh()
+    {
+     guard let snippet = snippet else {return}
+     currentFRC?.deactivateDelegate()
+     snippet.managedObjectContext?.persistAndWait{snippet.disclosedCell = !snippet.disclosedCell}
+     currentFRC?.activateDelegate()
+     
+     
+     if snippet.disclosedCell
+     {
+      tableView?.performBatchUpdates(nil)
+      {[weak self] _ in
+       guard let cell = self else {return}
+       let dy = -cell.contentView.bounds.height / 4
+       cell.contentView.constraints.first{$0.identifier == "imageCenterY"}?.constant = dy
+       
+       let locationLabelAnim: (Bool) -> Void  =
+       {[weak self] _ in
+        self?.locationLabel.transform = CGAffineTransform(translationX: 0, y: -dy * 2)
+        self?.locationLabel.isHidden = false
+        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 1.5,
+                       initialSpringVelocity: 10, options: [.curveEaseIn],
+                       animations:
+                       {[weak self] in self?.locationLabel.transform = .identity},
+                       completion: nil)
+        
+       }
+       
+       UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.35,
+                      initialSpringVelocity: 10, options: [.curveEaseIn],
+                      animations:
+                      {[weak self] in self?.contentView.layoutIfNeeded()},
+                      completion: locationLabelAnim)
+      }
+     }
+     else
+     {
+      contentView.constraints.first{$0.identifier == "imageCenterY"}?.constant = 0
+      UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.35,
+                     initialSpringVelocity: 10, options: [.curveEaseOut],
+                     animations:
+                     {[weak self] in self?.contentView.layoutIfNeeded()
+                      self?.locationLabel.isHidden = true
+                     },
+                     completion:
+                     {[weak self] _ in
+                      
+                      self?.tableView?.performBatchUpdates(nil)
+                     })
+     }
+     
+     
+    }
+ 
+    @objc private func disclosurePressed(_ sender: UIButton)
+    {
+     
+     guard let snippet = snippet else {return}
+     let rt = CGAffineTransform(rotationAngle: .pi / 2)
+     discloseView?.transform = snippet.disclosedCell ? rt: .identity
+     
+     UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.5,
+                    initialSpringVelocity: 10, options: [.curveEaseOut],
+                    animations: {[weak self] in self?.discloseView?.transform = snippet.disclosedCell ? .identity : rt},
+                    completion: nil)
+     
+     refresh()
+    }
+ 
+ 
  
     private func configueDisclosure()
     {
-     let b = UIButton(type: .custom)
-  
-     b.setImage(getDisclosureImage(of: #colorLiteral(red: 1, green: 0.08644389563, blue: 0.04444610194, alpha: 1)), for: .normal)
-     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)), for: .highlighted)
-     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)), for: .focused)
+     
+     let rs: CGFloat = 22.0
+     let a = bounds.size.height
+     let size = CGSize(width: a, height: a)
+     let rect = CGRect(origin: .zero, size: size)
+     
+     let b = UIButton(frame: rect)
+    
+     b.imageEdgeInsets = UIEdgeInsets(top: a / 3, left: a / 3 + rs, bottom: a / 3, right: a / 3 - rs)
+     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), and: size), for: .normal)
+     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1), and: size), for: .highlighted)
+     b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1), and: size), for: .focused)
      b.addTarget(self, action: #selector(disclosurePressed), for: .touchDown)
+     
      
      b.sizeToFit()
      accessoryView = b
+     
+     
      
     }
  
@@ -166,6 +295,7 @@ protocol ImageContextLoadProtocol
  
     func clear()
     {
+ 
      isLoadTaskCancelled = false
      hostedSnippet = nil
      snippetImage.layer.removeAllAnimations()
