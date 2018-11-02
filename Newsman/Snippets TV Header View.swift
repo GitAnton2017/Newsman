@@ -15,12 +15,12 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
    titleLabel.textColor = titleLabel.textColor.withAlphaComponent(isHiddenSection ? 0.75 : 1.0)
    backView.backgroundColor = backView.backgroundColor?.withAlphaComponent(isHiddenSection ? 0.5 : 1.0)
    
-   arrowView.transform = isHiddenSection ? .identity : CGAffineTransform(rotationAngle: .pi/2)
+   arrowView.transform = isHiddenSection ? .identity : .rotate90p
   
    UIView.animate(withDuration: 0.35)
    {[weak self] in
     guard let view = self else {return}
-    view.arrowView.transform = view.isHiddenSection ? CGAffineTransform(rotationAngle: .pi/2) : .identity
+    view.arrowView.transform = view.isHiddenSection ? .rotate90p : .identity
    }
 
   }

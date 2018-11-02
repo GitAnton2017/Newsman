@@ -1,14 +1,13 @@
 
 import Foundation
 import UIKit
+import GameplayKit
 
 protocol ImageContextLoadProtocol
 {
  var isLoadTaskCancelled: Bool {get set}
 // var photoItems: [PhotoItem] {get set}
 }
-
-
 
 @IBDesignable class BorderedImageView: UIImageView
 {
@@ -39,6 +38,8 @@ protocol ImageContextLoadProtocol
  
 //    var photoItems: [PhotoItem] = []
  
+    var observers: Set<NSKeyValueObservation> = []
+ 
     private var _stop_flag = false
  
     var snippetID: String
@@ -46,18 +47,29 @@ protocol ImageContextLoadProtocol
      return (hostedSnippet as? BaseSnippet)?.id?.uuidString ?? ""
     }
  
+    private lazy var imageCenterYConstraint = {contentView.constraints.lazy.first{$0.identifier == "imageCenterY"}}()
+    private lazy var imageHeightConstraint  = {snippetImage.constraints.lazy.first{$0.identifier == "imageHeight"}}()
+ 
+    private lazy var imageHeight: CGFloat = {imageHeightConstraint?.constant ?? 0}()
+    private lazy var dx:          CGFloat = {imageHeight * 0.75                  }()
+ 
+    private var dy: CGFloat {return -(contentView.bounds.height / 4 - dx / 2)}
+ 
     weak var hostedSnippet: SnippetImagesPreviewProvidable?
     {
      didSet
      {
       guard let snippet = snippet else {return}
-      discloseView?.transform = snippet.disclosedCell ? CGAffineTransform(rotationAngle: .pi / 2): .identity
+      discloseView?.transform = snippet.disclosedCell ? .rotate90p: .identity
       
-      let dy = -contentView.bounds.height / 4
-      contentView.constraints.first{$0.identifier == "imageCenterY"}?.constant = snippet.disclosedCell ? dy : 0
-      
+      imageCenterYConstraint?.constant = snippet.disclosedCell ? dy : 0
+      imageHeightConstraint?.constant = imageHeight  + (snippet.disclosedCell ? dx : 0)
+    
+      locationLabel.transform = snippet.disclosedCell ? .identity: CGAffineTransform(translationX: bounds.width, y: 0)
       locationLabel.isHidden = !snippet.disclosedCell
       locationLabel.text = snippet.snippetLocation
+      snippetTextTag.font = snippet.disclosedCell ? UIFont.boldSystemFont(ofSize: 20) : UIFont.systemFont(ofSize: 17)
+      snippetDateTag.font = snippet.disclosedCell ? UIFont.boldSystemFont(ofSize: 18) : UIFont.systemFont(ofSize: 15)
      }
     }
  
@@ -80,7 +92,7 @@ protocol ImageContextLoadProtocol
  
     @IBOutlet var snippetTextTag: UILabel!
     @IBOutlet var snippetDateTag: UILabel!
-    @IBOutlet var snippetImage: UIImageView!
+    @IBOutlet  var snippetImage: UIImageView!
     @IBOutlet var imageSpinner: UIActivityIndicatorView!
  
     var animate: ((TimeInterval) -> Void)?
@@ -149,15 +161,15 @@ protocol ImageContextLoadProtocol
       title.backgroundColor = UIColor.clear
       title.textAlignment = .left
       title.textColor = #colorLiteral(red: 0.3176470697, green: 0.07450980693, blue: 0.02745098062, alpha: 1)
-      title.font = UIFont.systemFont(ofSize: 13)
+      title.font = UIFont.systemFont(ofSize: 14)
       contentView.addSubview(title)
       
       title.translatesAutoresizingMaskIntoConstraints = false
       NSLayoutConstraint.activate(
        [
-        title.topAnchor.constraint       (equalTo: snippetImage.bottomAnchor, constant: 10),
+        title.topAnchor.constraint       (equalTo: snippetImage.bottomAnchor, constant: 12),
         title.leadingAnchor.constraint   (equalTo: snippetImage.leadingAnchor, constant: 0),
-        title.trailingAnchor.constraint  (equalTo: contentView.trailingAnchor, constant: -10)
+        title.trailingAnchor.constraint  (equalTo: contentView.trailingAnchor, constant: 10)
        ]
       )
       
@@ -168,14 +180,17 @@ protocol ImageContextLoadProtocol
     {
      return self.superview as? UITableView
     }
+ 
     private var currentFRC: SnippetsFetchController?
     {
      return (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
     }
+ 
     private var snippet: BaseSnippet?
     {
      return hostedSnippet as? BaseSnippet
     }
+ 
     private var discloseView: UIImageView?
     {
      return (accessoryView as? UIButton)?.imageView
@@ -194,41 +209,58 @@ protocol ImageContextLoadProtocol
       tableView?.performBatchUpdates(nil)
       {[weak self] _ in
        guard let cell = self else {return}
-       let dy = -cell.contentView.bounds.height / 4
-       cell.contentView.constraints.first{$0.identifier == "imageCenterY"}?.constant = dy
+     
+       let dy = cell.dy
+       cell.imageCenterYConstraint?.constant = dy
+       cell.imageHeightConstraint?.constant += cell.dx
        
        let locationLabelAnim: (Bool) -> Void  =
        {[weak self] _ in
         self?.locationLabel.transform = CGAffineTransform(translationX: 0, y: -dy * 2)
         self?.locationLabel.isHidden = false
-        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 1.5,
+        UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.4,
                        initialSpringVelocity: 10, options: [.curveEaseIn],
                        animations:
-                       {[weak self] in self?.locationLabel.transform = .identity},
+                       {[weak self] in
+                        guard let cell = self else {return}
+                        cell.locationLabel.transform = .identity
+                       },
                        completion: nil)
         
        }
        
-       UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.35,
+       UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 1.5,
                       initialSpringVelocity: 10, options: [.curveEaseIn],
                       animations:
-                      {[weak self] in self?.contentView.layoutIfNeeded()},
+                      {[weak self] in
+                       guard let cell = self else {return}
+                       cell.snippetTextTag.font = UIFont.boldSystemFont(ofSize: 20)
+                       cell.snippetDateTag.font = UIFont.boldSystemFont(ofSize: 18)
+                       cell.contentView.layoutIfNeeded()
+                      },
                       completion: locationLabelAnim)
       }
      }
      else
      {
-      contentView.constraints.first{$0.identifier == "imageCenterY"}?.constant = 0
-      UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.35,
+      imageCenterYConstraint?.constant = 0
+      imageHeightConstraint?.constant -= dx
+      UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.4,
                      initialSpringVelocity: 10, options: [.curveEaseOut],
                      animations:
-                     {[weak self] in self?.contentView.layoutIfNeeded()
-                      self?.locationLabel.isHidden = true
+                     {[weak self] in
+                      guard let cell = self else {return}
+                      cell.contentView.layoutIfNeeded()
+                      cell.locationLabel.transform = CGAffineTransform(translationX: cell.bounds.width, y: 0)
+                      cell.snippetTextTag.font = UIFont.systemFont(ofSize: 17)
+                      cell.snippetDateTag.font = UIFont.systemFont(ofSize: 15)
+                    
                      },
                      completion:
                      {[weak self] _ in
-                      
-                      self?.tableView?.performBatchUpdates(nil)
+                      guard let cell = self else {return}
+                      cell.locationLabel.isHidden = true
+                      cell.tableView?.performBatchUpdates(nil)
                      })
      }
      
@@ -239,12 +271,16 @@ protocol ImageContextLoadProtocol
     {
      
      guard let snippet = snippet else {return}
-     let rt = CGAffineTransform(rotationAngle: .pi / 2)
-     discloseView?.transform = snippet.disclosedCell ? rt: .identity
+  
+     discloseView?.transform = snippet.disclosedCell ? .rotate90p: .identity
      
      UIView.animate(withDuration: 0.25, delay: 0, usingSpringWithDamping: 0.5,
                     initialSpringVelocity: 10, options: [.curveEaseOut],
-                    animations: {[weak self] in self?.discloseView?.transform = snippet.disclosedCell ? .identity : rt},
+                    animations:
+                    {[weak self] in
+                     guard let cell = self else {return}
+                     cell.discloseView?.transform = snippet.disclosedCell ? .identity : .rotate90p
+                    },
                     completion: nil)
      
      refresh()
@@ -276,13 +312,57 @@ protocol ImageContextLoadProtocol
      
     }
  
+    required init?(coder aDecoder: NSCoder)
+    {
+     super.init(coder: aDecoder)
+     let bounds_ob = observe(\.snippetImage.bounds, options: [.new, .old])
+     {cell, bounds in
+      if let nh = bounds.newValue?.height, let oh = bounds.oldValue?.height, nh > oh
+      {
+       cell.snippetImage.layer.removeAllAnimations()
+       cell.snippetImage.image = nil
+       cell.animating = [:]
+       cell.transDuration = 0.0
+       cell.imageSpinner.startAnimating()
+       
+       cell.hostedSnippet?.imageProvider.getLatestImage(requiredImageWidth: nh)
+       {[weak w_cell = cell] image in
+        guard let cell = w_cell else {return}
+        cell.snippetImage.image = image
+        cell.imageSpinner.stopAnimating()
+        if let ip = cell.tableView?.indexPath(for: cell),
+           let frc = cell.currentFRC,
+           frc.isHiddenSection(section: ip.section) {return}
+        
+        cell.hostedSnippet?.imageProvider.getRandomImages(requiredImageWidth: nh)
+        {[weak w_cell = cell] images in
+         guard let cell = w_cell else {return}
+         cell.snippetImage.layer.removeAllAnimations()
+         cell.animating = [:]
+         guard var imgs = images else {return}
+         if let firstImage = image {imgs.insert(firstImage, at: 0)}
+         guard let ds = cell.tableView?.dataSource as? SnippetsViewDataSource else {return}
+         let max_b = ds.imagesAnimators.count - 1
+         let a4rnd = GKRandomDistribution(lowestValue: 0, highestValue: max_b)
+         ds.imagesAnimators[a4rnd.nextInt()](Array(Set(imgs)), cell, 2.0, 5.0)
+        }
+        
+       }
+      }
+     }
+     observers.insert(bounds_ob)
+     
+    }
+    
     override func awakeFromNib()
     {
+     
      super.awakeFromNib()
      
      //snippetImage.layer.cornerRadius = 3.5
      //snippetImage.layer.borderWidth = 1.25
      //snippetImage.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
+     
      snippetImage.layer.masksToBounds = true
      configueDisclosure()
      

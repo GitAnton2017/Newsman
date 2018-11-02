@@ -67,6 +67,7 @@
 		A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A748D8B420F4CD5500DA190A /* Play Icon View.swift */; };
 		A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */; };
 		A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F41FF656590009F03C /* Photo Snippet CV.swift */; };
+		A751FC4C218C7FD20088D9C5 /* CG Affine Transform Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */; };
 		A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */; };
 		A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489881FBC4F2900359C0C /* AppDelegate.swift */; };
 		A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A754898A1FBC4F2900359C0C /* MainViewController.swift */; };
@@ -206,6 +207,7 @@
 		A748D8B420F4CD5500DA190A /* Play Icon View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Play Icon View.swift"; sourceTree = "<group>"; };
 		A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A75117F41FF656590009F03C /* Photo Snippet CV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV.swift"; sourceTree = "<group>"; };
+		A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CG Affine Transform Extension.swift"; sourceTree = "<group>"; };
 		A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Table View FRC.swift"; sourceTree = "<group>"; };
 		A75489851FBC4F2900359C0C /* Newsman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Newsman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489881FBC4F2900359C0C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -457,6 +459,7 @@
 				A7317B072015EA4100C8836A /* Newsman.entitlements */,
 				A7DC081A214538EE00DD94E8 /* StoryBoards */,
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
+				A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */,
 				A7A97231217074100061AA07 /* Global Formatters.swift */,
 				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
 				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
@@ -891,6 +894,7 @@
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
 				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,
 				A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */,
+				A751FC4C218C7FD20088D9C5 /* CG Affine Transform Extension.swift in Sources */,
 				A711C0EF2183167C0025C973 /* Snippets Special Enums, Structs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
