@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -110,12 +110,12 @@
                         </subviews>
                         <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="nTZ-3z-fPL" secondAttribute="trailing" constant="4" id="RDz-Ms-ef1"/>
-                            <constraint firstItem="nTZ-3z-fPL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="4" id="VHv-8f-nTo"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="nTZ-3z-fPL" secondAttribute="bottom" constant="50" id="Vkt-iP-usX"/>
-                            <constraint firstItem="nTZ-3z-fPL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="f7F-jR-8uZ"/>
+                            <constraint firstItem="WXC-5W-HkX" firstAttribute="trailing" secondItem="nTZ-3z-fPL" secondAttribute="trailing" constant="4" id="RDz-Ms-ef1"/>
+                            <constraint firstItem="nTZ-3z-fPL" firstAttribute="leading" secondItem="WXC-5W-HkX" secondAttribute="leading" constant="4" id="VHv-8f-nTo"/>
+                            <constraint firstItem="WXC-5W-HkX" firstAttribute="bottom" secondItem="nTZ-3z-fPL" secondAttribute="bottom" constant="50" id="Vkt-iP-usX"/>
+                            <constraint firstItem="nTZ-3z-fPL" firstAttribute="top" secondItem="WXC-5W-HkX" secondAttribute="top" id="f7F-jR-8uZ"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <viewLayoutGuide key="safeArea" id="WXC-5W-HkX"/>
                     </view>
                     <navigationItem key="navigationItem" title="NEWSMAN" leftItemsSupplementBackButton="YES" largeTitleDisplayMode="never" id="0mi-Nr-yQW">
                         <barButtonItem key="backBarButtonItem" title="Back" id="6dI-Si-6U4"/>
@@ -136,34 +136,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
-                                <rect key="frame" x="0.0" y="686" width="414" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Pea-M7-Sff"/>
-                                </constraints>
-                                <items>
-                                    <barButtonItem systemItem="refresh" id="V4k-Ye-d1M">
-                                        <connections>
-                                            <action selector="groupSnippetsPress:" destination="8F0-Wa-TO0" id="Z96-t2-EwS"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ULo-bY-QyT"/>
-                                    <barButtonItem title="BUTTON" id="wwM-RC-fnL">
-                                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
-                                        <connections>
-                                            <action selector="createNewSnippetPress:" destination="8F0-Wa-TO0" id="bii-3b-oGu"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Eoc-TW-de4"/>
-                                    <barButtonItem title="Edit" id="KUQ-Fn-oir">
-                                        <connections>
-                                            <action selector="editSnippetsPress:" destination="8F0-Wa-TO0" id="qeF-1D-zgj"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </toolbar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
                                 <rect key="frame" x="4" y="64" width="406" height="622"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -236,7 +208,7 @@
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="10"/>
+                                                <real key="value" value="8"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
                                                 <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -257,20 +229,47 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
+                                <rect key="frame" x="0.0" y="686" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Pea-M7-Sff"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem systemItem="refresh" id="V4k-Ye-d1M">
+                                        <connections>
+                                            <action selector="groupSnippetsPress:" destination="8F0-Wa-TO0" id="Z96-t2-EwS"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="ULo-bY-QyT"/>
+                                    <barButtonItem title="BUTTON" id="wwM-RC-fnL">
+                                        <inset key="largeContentSizeImageInsets" minX="0.0" minY="1" maxX="0.0" maxY="0.0"/>
+                                        <connections>
+                                            <action selector="createNewSnippetPress:" destination="8F0-Wa-TO0" id="bii-3b-oGu"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Eoc-TW-de4"/>
+                                    <barButtonItem title="Edit" id="KUQ-Fn-oir">
+                                        <connections>
+                                            <action selector="editSnippetsPress:" destination="8F0-Wa-TO0" id="qeF-1D-zgj"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="QNI-h6-xfy" firstAttribute="top" secondItem="eyJ-fM-0bg" secondAttribute="bottom" id="3po-x4-Zjy"/>
-                            <constraint firstItem="anT-34-Kv0" firstAttribute="trailing" secondItem="eyJ-fM-0bg" secondAttribute="trailing" constant="4" id="Uwt-el-D2q"/>
-                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="top" secondItem="anT-34-Kv0" secondAttribute="top" id="V2W-ky-631"/>
-                            <constraint firstItem="anT-34-Kv0" firstAttribute="bottom" secondItem="eyJ-fM-0bg" secondAttribute="bottom" constant="50" id="VP0-6x-ty7"/>
-                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="centerX" secondItem="ULZ-Fl-aNF" secondAttribute="centerX" id="bYN-cm-5DY"/>
-                            <constraint firstItem="QNI-h6-xfy" firstAttribute="trailing" secondItem="anT-34-Kv0" secondAttribute="trailing" id="fwH-q5-8XS"/>
-                            <constraint firstItem="QNI-h6-xfy" firstAttribute="leading" secondItem="anT-34-Kv0" secondAttribute="leading" id="wdY-d5-I16"/>
-                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="leading" secondItem="anT-34-Kv0" secondAttribute="leading" constant="4" id="xqD-XH-RiS"/>
-                            <constraint firstItem="QNI-h6-xfy" firstAttribute="bottom" secondItem="anT-34-Kv0" secondAttribute="bottom" id="xtU-s9-iEB"/>
+                            <constraint firstItem="uxl-ll-qSE" firstAttribute="trailing" secondItem="eyJ-fM-0bg" secondAttribute="trailing" constant="4" id="Uwt-el-D2q"/>
+                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="top" secondItem="uxl-ll-qSE" secondAttribute="top" id="V2W-ky-631"/>
+                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="bottom" secondItem="QNI-h6-xfy" secondAttribute="top" id="VP0-6x-ty7"/>
+                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="centerX" secondItem="uxl-ll-qSE" secondAttribute="centerX" id="bYN-cm-5DY"/>
+                            <constraint firstItem="QNI-h6-xfy" firstAttribute="trailing" secondItem="uxl-ll-qSE" secondAttribute="trailing" id="fwH-q5-8XS"/>
+                            <constraint firstItem="QNI-h6-xfy" firstAttribute="leading" secondItem="uxl-ll-qSE" secondAttribute="leading" id="wdY-d5-I16"/>
+                            <constraint firstItem="eyJ-fM-0bg" firstAttribute="leading" secondItem="uxl-ll-qSE" secondAttribute="leading" constant="4" id="xqD-XH-RiS"/>
+                            <constraint firstItem="QNI-h6-xfy" firstAttribute="bottom" secondItem="ULZ-Fl-aNF" secondAttribute="bottom" id="xtU-s9-iEB"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="anT-34-Kv0"/>
+                        <viewLayoutGuide key="safeArea" id="uxl-ll-qSE"/>
                     </view>
                     <navigationItem key="navigationItem" title="SNIPPETS VC" largeTitleDisplayMode="never" id="hte-ci-Lpa">
                         <barButtonItem key="rightBarButtonItem" title="Home" image="home.tab.icon" id="xzU-wy-zVM">
