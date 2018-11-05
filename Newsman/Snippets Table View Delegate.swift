@@ -24,46 +24,26 @@ extension SnippetsViewController: UITableViewDelegate
 
  private func loadSnippetAnimatedImages(_ tableView: UITableView, for cell: SnippetsViewCell, at indexPath: IndexPath)
  {
-  
-  let dataSource = tableView.dataSource as! SnippetsViewDataSource
-//  let snippet = dataSource.snippetsData[indexPath.section][indexPath.row] as! SnippetImagesPreviewProvidable
-  
-  guard let snippet = cell.hostedSnippet else {return}
-  
-  let provider = snippet.imageProvider
+ 
+  guard let provider = cell.hostedSnippet?.imageProvider  else {return}
+  guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
+  if snippet.hiddenSection {return}
 
   let iconWidth = cell.snippetImage.frame.width
   
-  if dataSource.currentFRC.isHiddenSection(section: indexPath.section) {return}
-  
   provider.getLatestImage(requiredImageWidth: iconWidth)
-  {[weak wds = dataSource, weak wtv = tableView] (image) in
+  {[weak w_cell = cell, weak w_snippet = snippet] (image) in
  
-   guard let ds = wds, let tv = wtv else {return}
-//   let ip = (ds.groupType == .byPriority) ? ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
-   
-   guard let ip = ds.currentFRC[snippet as! BaseSnippet],
-         let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
-  
-   guard let firstImage = image else
-   {
-    print ("NIL IMAGE", indexPath, (snippet as! BaseSnippet).snippetName)
-    cell.imageSpinner.stopAnimating()
-    return
-   }
-   
-   if ds.currentFRC.isHiddenSection(section: ip.section) {return}
+   guard let wc = w_cell, let ws = w_snippet else {return}
+   guard wc.hostedSnippet === ws else {return}
+   if ws.hiddenSection {return}
    
    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
-   {[weak wds = dataSource, weak wtv = tableView] in
+   {[weak w_cell = cell, weak w_snippet = snippet] in
     
-    guard let ds = wds, let tv = wtv else {return}
-//    let ip = (ds.groupType == .byPriority) ? ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
-    
-    guard let ip = ds.currentFRC[snippet as! BaseSnippet],
-          let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
-    
-    if ds.currentFRC.isHiddenSection(section: ip.section) {return}
+    guard let wc = w_cell, let ws = w_snippet else {return}
+    guard wc.hostedSnippet === ws else {return}
+    if ws.hiddenSection {return}
     
     cell.imageSpinner.stopAnimating()
    
@@ -72,8 +52,12 @@ extension SnippetsViewController: UITableViewDelegate
                       options: [.transitionFlipFromTop, .curveEaseInOut],
                       animations: {cell.snippetImage.image = image},
                       completion:
-                      {_ in
-              
+                      {[weak w_cell = cell, weak w_snippet = snippet] _ in
+                       
+                       guard let wc = w_cell, let ws = w_snippet else {return}
+                       guard wc.hostedSnippet === ws else {return}
+                       if ws.hiddenSection {return}
+                       
                        cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
                        UIView.animate(withDuration: 0.15,
                                       delay: 0.25,
@@ -82,31 +66,25 @@ extension SnippetsViewController: UITableViewDelegate
                                       options: .curveEaseInOut,
                                       animations: {cell.snippetImage.transform = .identity},
                                       completion:
-                                      { _ in
-                                       if ds.currentFRC.isHiddenSection(section: ip.section) {return}
+                                      { [weak w_cell = cell, weak w_snippet = snippet] _ in
+                                       
+                                       guard let wc = w_cell, let ws = w_snippet else {return}
+                                       guard wc.hostedSnippet === ws else {return}
+                                       if ws.hiddenSection {return}
+                                       
                                        provider.getRandomImages(requiredImageWidth: iconWidth)
-                                       {[weak wds = dataSource, weak wtv = tableView] (images) in
+                                       {[weak w_cell = cell, weak w_snippet = snippet] (images) in
+                                        guard var images = images else {return}
+                                        guard let wc = w_cell, let ws = w_snippet else {return}
+                                        guard wc.hostedSnippet === ws else {return}
+                                        if ws.hiddenSection {return}
                                         
-                                        guard let ds = wds, let tv = wtv else {return}
+                                        if let firstImage = image {images.insert(firstImage, at: 0)}
                                         
-//                                        let ip = (ds.groupType == .byPriority) ?
-//                                         ds.snippetIndexPath(snippet: snippet as! BaseSnippet) : indexPath
-        
-                                        guard let ip = ds.currentFRC[snippet as! BaseSnippet],
-                                              let cell = tv.cellForRow(at: ip) as? SnippetsViewCell else {return}
-                                        
-        
-                                        cell.snippetImage.layer.removeAllAnimations()
-                                        cell.animating = [:]
-        
-                                        guard var imgs = images else {return}
-        
-                                        imgs.insert(firstImage, at: 0)
-                                        
-                                        let max_b = ds.imagesAnimators.count - 1
-                                        let a4rnd = GKRandomDistribution(lowestValue: 0, highestValue: max_b)
-        
-                                        ds.imagesAnimators[a4rnd.nextInt()](Array(Set(imgs)), cell, 2.0, 5.0)
+                                        SnippetsAnimator.startRandom(for: Array(Set(images)),
+                                                                     cell: wc,
+                                                                     duration: 2.0, delay: 5.0)
+                                      
            
                                        }//photoSnippet.imageProvider.getRandomImages {images in....
                                       } /* completion: { _ in.... */ )
@@ -119,9 +97,10 @@ extension SnippetsViewController: UITableViewDelegate
 
  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
  {
-  
   let cell = cell as! SnippetsViewCell
-  
+  guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
+  if snippet.hiddenSection {return}
+
   loadSnippetAnimatedImages(tableView, for: cell, at: indexPath)
   
   let a4r = GKRandomDistribution(lowestValue: 2, highestValue: 3)
@@ -370,6 +349,7 @@ extension SnippetsViewController: UITableViewDelegate
   
   rename.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
   rename.image = UIImage(named: "rename.snippet.leading.menu")
+  
   
   return UISwipeActionsConfiguration(actions: [rename])
  }

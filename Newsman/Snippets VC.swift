@@ -103,10 +103,12 @@ class SnippetsViewController: UIViewController
     let snippetsDataSource = SnippetsViewDataSource()
  
     let locationManager = CLLocationManager()
+
  
     override func viewDidLoad()
     {
-     super.viewDidLoad()   
+     additionalSafeAreaInsets = UIEdgeInsetsMake(1, 0, 0, 0)
+     super.viewDidLoad()
      navigationItem.backBarButtonItem = UIBarButtonItem(title:"", style: .plain, target: self, action: nil)
      snippetsTableView.delegate = self
      snippetsTableView.dragDelegate = self

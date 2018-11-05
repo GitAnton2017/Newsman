@@ -80,10 +80,10 @@
 		A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */; };
 		A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */; };
 		A768ED6B21883AAD006AED31 /* Accesorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6921883AAD006AED31 /* Accesorial.storyboard */; };
-		A768ED6E21883AC9006AED31 /* Media.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6C21883AC9006AED31 /* Media.storyboard */; };
+		A768ED6E21883AC9006AED31 /* MediaViewControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6C21883AC9006AED31 /* MediaViewControllers.storyboard */; };
 		A768ED7121883B41006AED31 /* Snippets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6F21883B41006AED31 /* Snippets.storyboard */; };
-		A768ED7621883DEF006AED31 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED7421883DEE006AED31 /* Main.storyboard */; };
 		A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A2824212AD0610094AA5F /* Photo Item Operations.swift */; };
+		A77BB205218D9A97000F2E85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A77BB203218D9A97000F2E85 /* Main.storyboard */; };
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DS.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
@@ -96,6 +96,7 @@
 		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */; };
+		A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */; };
 		A7A97232217074100061AA07 /* Global Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A97231217074100061AA07 /* Global Formatters.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
@@ -117,6 +118,7 @@
 		A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */; };
 		A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */; };
 		A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EF606120EA1CB500FD09A7 /* Video Player View.swift */; };
+		A7FA2DEE218ECF7E00A2EE8D /* Snippet Cell Animators.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */; };
 		A7FAFFEE20F6294900C5B21D /* Duration Stamp View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FAFFED20F6294900C5B21D /* Duration Stamp View.swift */; };
 /* End PBXBuildFile section */
 
@@ -226,10 +228,10 @@
 		A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateVCRestoration.swift; sourceTree = "<group>"; };
 		A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC Restoration.swift"; sourceTree = "<group>"; };
 		A768ED6A21883AAD006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Accesorial.storyboard; sourceTree = "<group>"; };
-		A768ED6D21883AC9006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Media.storyboard; sourceTree = "<group>"; };
+		A768ED6D21883AC9006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaViewControllers.storyboard; sourceTree = "<group>"; };
 		A768ED7021883B41006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Snippets.storyboard; sourceTree = "<group>"; };
-		A768ED7521883DEE006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A76A2824212AD0610094AA5F /* Photo Item Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Operations.swift"; sourceTree = "<group>"; };
+		A77BB204218D9A97000F2E85 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
 		A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Images Provider.swift"; sourceTree = "<group>"; };
+		A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Image View.swift"; sourceTree = "<group>"; };
 		A7A97231217074100061AA07 /* Global Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Formatters.swift"; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
@@ -265,6 +268,7 @@
 		A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionsDelegate.swift; sourceTree = "<group>"; };
 		A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VC Transitions Delegate.swift"; sourceTree = "<group>"; };
 		A7EF606120EA1CB500FD09A7 /* Video Player View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Player View.swift"; sourceTree = "<group>"; };
+		A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Animators.swift"; sourceTree = "<group>"; };
 		A7FAFFED20F6294900C5B21D /* Duration Stamp View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Duration Stamp View.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -555,7 +559,9 @@
 				A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */,
 				A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */,
 				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
+				A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
+				A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */,
 				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */,
 				A711C0EA2180779E0025C973 /* Snippets Factory.swift */,
@@ -636,10 +642,10 @@
 		A7DC081A214538EE00DD94E8 /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
-				A768ED7421883DEE006AED31 /* Main.storyboard */,
+				A77BB203218D9A97000F2E85 /* Main.storyboard */,
 				A768ED6921883AAD006AED31 /* Accesorial.storyboard */,
 				A768ED6F21883B41006AED31 /* Snippets.storyboard */,
-				A768ED6C21883AC9006AED31 /* Media.storyboard */,
+				A768ED6C21883AC9006AED31 /* MediaViewControllers.storyboard */,
 				A711C10A21839D4D0025C973 /* ZoomCollectionViewCell.xib */,
 			);
 			name = StoryBoards;
@@ -765,9 +771,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A768ED7621883DEF006AED31 /* Main.storyboard in Resources */,
+				A77BB205218D9A97000F2E85 /* Main.storyboard in Resources */,
 				A768ED7121883B41006AED31 /* Snippets.storyboard in Resources */,
-				A768ED6E21883AC9006AED31 /* Media.storyboard in Resources */,
+				A768ED6E21883AC9006AED31 /* MediaViewControllers.storyboard in Resources */,
 				A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */,
 				A711C10821839D4D0025C973 /* ZoomCollectionViewCell.xib in Resources */,
 				A768ED6B21883AAD006AED31 /* Accesorial.storyboard in Resources */,
@@ -798,6 +804,7 @@
 			files = (
 				A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */,
 				A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */,
+				A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
 				A71C85E71FBED634000F2DD9 /* Snippets VC.swift in Sources */,
 				A7FAFFEE20F6294900C5B21D /* Duration Stamp View.swift in Sources */,
@@ -811,6 +818,7 @@
 				A7A97232217074100061AA07 /* Global Formatters.swift in Sources */,
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
 				A7330F101FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift in Sources */,
+				A7FA2DEE218ECF7E00A2EE8D /* Snippet Cell Animators.swift in Sources */,
 				A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */,
 				A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */,
 				A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */,
@@ -952,12 +960,12 @@
 			name = Accesorial.storyboard;
 			sourceTree = "<group>";
 		};
-		A768ED6C21883AC9006AED31 /* Media.storyboard */ = {
+		A768ED6C21883AC9006AED31 /* MediaViewControllers.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A768ED6D21883AC9006AED31 /* Base */,
 			);
-			name = Media.storyboard;
+			name = MediaViewControllers.storyboard;
 			sourceTree = "<group>";
 		};
 		A768ED6F21883B41006AED31 /* Snippets.storyboard */ = {
@@ -968,10 +976,10 @@
 			name = Snippets.storyboard;
 			sourceTree = "<group>";
 		};
-		A768ED7421883DEE006AED31 /* Main.storyboard */ = {
+		A77BB203218D9A97000F2E85 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				A768ED7521883DEE006AED31 /* Base */,
+				A77BB204218D9A97000F2E85 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";

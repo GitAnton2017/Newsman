@@ -205,7 +205,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   do
   {
    let items = try moc.fetch(request)
-   moc.persist
+   moc.persistAndWait
    {
     items.forEach
     {snippet in
@@ -376,7 +376,9 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
    reset(section: section, state: false)
    //hiddenSections.remove(section)
    //tableView.reloadSections([section], with: .automatic)
+   
    tableView.reloadRows(at: sectionIndexPaths(for: section), with: .automatic)
+   sectionCells(for: section).forEach{$0.snippetImage.layer.removeAllAnimations()}
    
 //   tableView.performBatchUpdates(nil)
 //   {[weak self] _ in
