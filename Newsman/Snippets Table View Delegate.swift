@@ -451,6 +451,8 @@ extension SnippetsViewController: UITableViewDelegate
   editedSnippet = snippetToEdit
 
   textSnippetVC.textSnippet = snippetToEdit
+  textSnippetVC.currentFRC = self.snippetsDataSource.currentFRC
+  
   (self.navigationController?.delegate as? NCTransitionsDelegate)?.currentSnippet = snippetToEdit
   textSnippetVC.textSnippet.snippetStatus = .old
   self.navigationController?.pushViewController(textSnippetVC, animated: true)
@@ -466,6 +468,8 @@ extension SnippetsViewController: UITableViewDelegate
   editedSnippet = snippetToEdit
 
   photoSnippetVC.photoSnippet = snippetToEdit
+  photoSnippetVC.currentFRC = self.snippetsDataSource.currentFRC
+  
   (self.navigationController?.delegate as? NCTransitionsDelegate)?.currentSnippet = snippetToEdit
   photoSnippetVC.photoSnippet.snippetStatus = .old
   self.navigationController?.pushViewController(photoSnippetVC, animated: true)

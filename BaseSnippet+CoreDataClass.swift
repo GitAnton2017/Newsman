@@ -145,8 +145,28 @@ protocol SnippetImagesPreviewProvidable: class
   {
    self.location = newValue ?? ""
   }
+
  }
  
+ @NSManaged private(set) var hiddenSet: Int16
+ 
+ final subscript(groupedBy: GroupSnippets) -> Bool
+ {
+  get {return groupedBy.checkMask(for: hiddenSet)}
+  set
+  {
+   let mask = GroupSnippets.groupingBitsMap[groupedBy]!
+   if newValue
+   {
+    self.hiddenSet |= mask
+   }
+   else
+   {
+    self.hiddenSet &= ~mask
+   }
+   
+  }
+ }
  
  
  

@@ -33,6 +33,29 @@ protocol ImageContextLoadProtocol
  private lazy var dx:          CGFloat = {imageHeight * 0.75                  }()
 
  private var dy: CGFloat {return -(contentView.bounds.height / 4 - dx / 2)}
+ 
+ private lazy var priorityView: SnippetPriorityView =
+ {
+  
+  let pv = SnippetPriorityView(frame: .zero)
+  
+  pv.backgroundColor = .clear
+  
+  contentView.addSubview(pv)
+  
+  pv.translatesAutoresizingMaskIntoConstraints = false
+  
+  NSLayoutConstraint.activate(
+   [
+    pv.topAnchor.constraint      (equalTo: snippetTextTag.topAnchor, constant: 0 ),
+    pv.bottomAnchor.constraint   (equalTo: snippetDateTag.bottomAnchor, constant: 0),
+    pv.trailingAnchor.constraint (equalTo: contentView.trailingAnchor, constant:  0),
+    pv.widthAnchor.constraint    (equalToConstant: 100)
+   ]
+  )
+  
+  return pv
+ }()
 
  weak var hostedSnippet: SnippetImagesPreviewProvidable?
  {
@@ -40,9 +63,14 @@ protocol ImageContextLoadProtocol
   {
    guard let snippet = snippet else {return}
    
+   snippetDateTag.text = snippet.snippetDateTag
+   snippetTextTag.text = snippet.snippetName
+   
    snippetImage.layer.removeAllAnimations()
    animate = nil
    transDuration = 0.0
+   
+   priorityView.priority = snippet.snippetPriority
    
    discloseView?.transform = snippet.disclosedCell ? .rotate90p: .identity
    
@@ -354,7 +382,33 @@ protocol ImageContextLoadProtocol
   }
  }
 
-
+// override func draw(_ rect: CGRect)
+// {
+//  guard let section = snippet?.snippetPriority.section else {return}
+//  
+//  let S: CGFloat = rect.width * 0.9
+//  let w: CGFloat = 13
+//  let h: CGFloat = rect.height
+//  let dw: CGFloat = 5
+//  
+//  for i in 0..<6 - section
+//  {
+//   let p1 = CGPoint(x: S - h / 2 - w * CGFloat(i + 1) - dw * CGFloat(i), y: h / 2)
+//   
+//   let p2 = CGPoint(x: S - w * CGFloat(i + 1) - dw * CGFloat(i), y: 0)
+//   let p3 = CGPoint(x: S - (w + dw) * CGFloat(i), y: 0)
+//   let p4 = CGPoint(x: S - h / 2 - (w + dw)  * CGFloat(i), y: h / 2)
+//   let p5 = CGPoint(x: S - (w + dw) * CGFloat(i), y: h)
+//   let p6 = CGPoint(x: S - w * CGFloat(i + 1) - dw * CGFloat(i) , y: h)
+//   
+//   let path = UIBezierPath(points: [p1, p2, p3, p4, p5, p6])
+//   
+//   #colorLiteral(red: 0.7254902124, green: 0.4784313738, blue: 0.09803921729, alpha: 1).setFill()
+//   path.fill()
+//  }
+// }
+ 
+ 
  override init(style: UITableViewCellStyle, reuseIdentifier: String?)
  //Must be implemented together with other initilizers of the @IBDesignable class
  {

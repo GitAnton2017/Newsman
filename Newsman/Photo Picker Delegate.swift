@@ -4,17 +4,61 @@ import UIKit
 
 extension PhotoSnippetViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate
 {
+  @objc func pickImageButtonPress()
+  {
+   imagePickerTakeButton.isEnabled = false
+   imagePickerCnxxButton.isEnabled = false
+   imagePicker.takePicture()
+  }
+ 
+  @objc func cancelImageButtonPress()
+  {
+   dismiss(animated: true)
+   {
+    guard let ip = self.currentFRC?[self.photoSnippet] else {return}
+    self.currentFRC?.tableView.reloadRows(at: [ip], with: .automatic)
+    self.currentFRC?.activateDelegate()
+   }
+  }
+ 
+ 
+  @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
+  {
+   isEditingMode = false
+   
+   if SnippetType(rawValue: photoSnippet.type!)! == .video
+   {
+    showVideoShootingController ()
+    return
+   }
+   
+   if UIImagePickerController.isSourceTypeAvailable(.camera)
+   {
+    imagePicker.sourceType = .camera
+    imagePicker.showsCameraControls = false
+    createImagePickerCustomView(imagePickerView: imagePicker.view)
+   }
+   else if UIImagePickerController.isSourceTypeAvailable(.photoLibrary)
+   {
+    imagePicker.sourceType = .photoLibrary
+   }
+   else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
+   {
+    imagePicker.sourceType = .savedPhotosAlbum
+   }
+   else
+   {
+    return
+   }
+   
+   present(imagePicker, animated: true) {self.currentFRC?.deactivateDelegate()}
+   
+  }
+ 
+ 
   func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
   {
    guard let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {return}
-   
-   
-   if let NC = navigationController,
-      let snippetsVC = NC.viewControllers[NC.viewControllers.count - 2] as? SnippetsViewController
-   {
-    snippetsVC.snippetsTableView.visibleCells.forEach{($0 as? SnippetsViewCell)?.stopImageProvider()}
-   }
- 
    
    PhotoItem.createNewPhoto(in: photoSnippet, with: pickedImage, ofRequiredSize: imageSize)
    {photoItem in

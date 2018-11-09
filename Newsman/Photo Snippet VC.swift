@@ -7,11 +7,13 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
 {
  
  lazy var moc: NSManagedObjectContext =
-  {
+ {
    let appDelegate = UIApplication.shared.delegate as! AppDelegate
    let moc = appDelegate.persistentContainer.viewContext
    return moc
  }()
+ 
+ weak var currentFRC: SnippetsFetchController?
  
  var currentViewController: UIViewController {return self}
  var currentSnippet: BaseSnippet             {return photoSnippet}
@@ -191,7 +193,9 @@ func updateDateLabel()
  {
    super.viewWillDisappear(animated)
    photoCollectionView.visibleCells.forEach {($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
+   guard isEditingMode else {return}
    savePhotoSnippetData()
+   currentFRC?.tableView.reloadData()
  }
 
     
@@ -244,48 +248,13 @@ func updateDateLabel()
  }
  
  
- 
-//---------------------------------------------------------------------------
- @IBAction func takePhotoBarButtonPress(_ sender: UIBarButtonItem)
-//---------------------------------------------------------------------------
- {
-    isEditingMode = false
- 
-  
-    if SnippetType(rawValue: photoSnippet.type!)! == .video
-    {
-     showVideoShootingController ()
-     
-     return
-    }
-  
-    if UIImagePickerController.isSourceTypeAvailable(.camera)
-    {
-        imagePicker.sourceType = .camera
-        imagePicker.showsCameraControls = false
-        createImagePickerCustomView(imagePickerView: imagePicker.view)
-    }
-    else if UIImagePickerController.isSourceTypeAvailable(.photoLibrary)
-    {
-        imagePicker.sourceType = .photoLibrary
-    }
-    else if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
-    {
-        imagePicker.sourceType = .savedPhotosAlbum
-    }
-    else
-    {
-        return
-    }
-  
-    present(imagePicker, animated: true, completion: nil)
-    
- }
 //---------------------------------------------------------------------------
 //MARK: -
     
  deinit
  {
+  
+  
   print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.snippetName)")
  }
     
@@ -448,19 +417,6 @@ func updateDateLabel()
     }
  }
  
- 
- @objc func pickImageButtonPress()
- {
- 
-  imagePickerTakeButton.isEnabled = false
-  imagePickerCnxxButton.isEnabled = false
-  imagePicker.takePicture()
- }
-
- @objc func cancelImageButtonPress()
- {
-  dismiss(animated: true, completion: nil)
- }
 
  
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)

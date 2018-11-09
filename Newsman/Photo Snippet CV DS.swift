@@ -218,6 +218,7 @@ func insertNewPhotoItem(_ newPhotoItem: PhotoItem)
   let indexPath = IndexPath(row: row, section: 0)
   self.photoCollectionView.insertItems(at: [indexPath])
   self.photoCollectionView.reloadSections([0])
+
  }
  
 }// func insertNewPhotoItem(_:)...

@@ -84,6 +84,7 @@
 		A768ED7121883B41006AED31 /* Snippets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6F21883B41006AED31 /* Snippets.storyboard */; };
 		A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A2824212AD0610094AA5F /* Photo Item Operations.swift */; };
 		A77BB205218D9A97000F2E85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A77BB203218D9A97000F2E85 /* Main.storyboard */; };
+		A77C73912194392D00E1C57F /* Snippet Bar Rating View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77C73902194392D00E1C57F /* Snippet Bar Rating View.swift */; };
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DS.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
@@ -232,6 +233,7 @@
 		A768ED7021883B41006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Snippets.storyboard; sourceTree = "<group>"; };
 		A76A2824212AD0610094AA5F /* Photo Item Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Operations.swift"; sourceTree = "<group>"; };
 		A77BB204218D9A97000F2E85 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A77C73902194392D00E1C57F /* Snippet Bar Rating View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Bar Rating View.swift"; sourceTree = "<group>"; };
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
@@ -561,6 +563,7 @@
 				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
 				A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
+				A77C73902194392D00E1C57F /* Snippet Bar Rating View.swift */,
 				A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */,
 				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */,
@@ -854,6 +857,7 @@
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
 				A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */,
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,
+				A77C73912194392D00E1C57F /* Snippet Bar Rating View.swift in Sources */,
 				A7021CF021863227009A5F43 /* Snippets TV Supplemetary Views.swift in Sources */,
 				A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,

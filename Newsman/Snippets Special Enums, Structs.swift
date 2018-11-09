@@ -230,4 +230,20 @@ enum GroupSnippets: String,  AllCasesSelectorRepresentable
  [
    byPriority, byDateCreated, alphabetically, bySnippetType, plainList, byLocation
  ]
+ 
+ static let groupingBitsMap: [GroupSnippets : Int16] =
+ [
+   byPriority :      0b0000000_1,
+   byDateCreated:    0b000000_10,
+   alphabetically:   0b00000_100,
+   bySnippetType:    0b0000_1000,
+   plainList:        0b000_10000,
+   byLocation:       0b00_100000
+ ]
+ 
+ func checkMask(for value: Int16) -> Bool
+ {
+  let mask = GroupSnippets.groupingBitsMap[self]!
+  return mask & value == mask
+ }
 }

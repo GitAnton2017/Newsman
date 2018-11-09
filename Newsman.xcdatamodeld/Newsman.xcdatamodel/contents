@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="17G3025" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AudioSnippet" representedClassName="AudioSnippet" parentEntity="BaseSnippet" syncable="YES">
         <attribute name="audio" optional="YES" attributeType="Binary" syncable="YES"/>
         <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="audios" inverseEntity="Report" syncable="YES"/>
@@ -10,6 +10,7 @@
         <attribute name="dateIndex" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="disclosedCell" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="hiddenSection" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hiddenSet" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
@@ -73,7 +74,7 @@
     <fetchRequest name="Snippets" entity="BaseSnippet" predicateString="type == $p1"/>
     <elements>
         <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
-        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="255"/>
+        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="270"/>
         <element name="Photo" positionX="-855" positionY="-558" width="128" height="148"/>
         <element name="PhotoFolder" positionX="-848" positionY="-355" width="137" height="148"/>
         <element name="PhotoSnippet" positionX="-650" positionY="-448" width="128" height="133"/>

@@ -48,6 +48,8 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     @IBOutlet var textSnippetToolBar: UIToolbar!
     
     var textSnippet: TextSnippet! {didSet {navigationItem.title = textSnippet.snippetName}}
+ 
+    weak var currentFRC: SnippetsFetchController?
     
     func saveTextSnippetData()
     {
@@ -93,6 +95,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
      if textView.isFirstResponder {textView.resignFirstResponder()}
      if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
      saveTextSnippetData()
+     currentFRC?.tableView.reloadData()
     }
  
     func updateDateLabel()

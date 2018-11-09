@@ -22,5 +22,6 @@ extension BaseSnippet
  
  @NSManaged var hiddenSection: Bool
  @NSManaged var disclosedCell: Bool
+ 
 
 }

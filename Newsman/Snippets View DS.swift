@@ -200,11 +200,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetsViewCell
-      let item = currentFRC[indexPath]
-      cell.hostedSnippet = item as? SnippetImagesPreviewProvidable
-      cell.snippetDateTag.text = item.snippetDateTag
-      cell.snippetTextTag.text = item.snippetName
-      cell.backgroundColor = item.snippetPriority.color
+      cell.hostedSnippet = currentFRC[indexPath] as? SnippetImagesPreviewProvidable
       return cell
     }
     

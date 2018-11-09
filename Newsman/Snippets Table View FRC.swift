@@ -356,7 +356,11 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  
  private func cancelAllOperations(for section: Int)
  {
-  sectionCells(for: section).forEach{$0.stopImageProvider()}
+  sectionCells(for: section).forEach
+  {
+   guard $0.bounds.height == 0 else {return}
+   $0.stopImageProvider()
+  }
  }
  
  private func reset(section: Int, state: Bool)
@@ -467,11 +471,8 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   
    case .update:
     guard let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else {break}
-    let snippet = frc.object(at: indexPath)
-    cell.backgroundColor = snippet.snippetPriority.color
-    cell.snippetTextTag.text = snippet.snippetName
-    cell.snippetDateTag.text = snippet.snippetDateTag
-  
+    cell.hostedSnippet = frc.object(at: indexPath) as? SnippetImagesPreviewProvidable
+
    case .delete:
     guard let indexPath = indexPath else {break}
     tableView.deleteRows(at: [indexPath], with: .fade)
