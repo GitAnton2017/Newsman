@@ -48,6 +48,8 @@ enum SnippetsAnimator
     
     guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
     
+    let groupType = cell
+    
     var i = 0
     
     let animationID = UUID()
@@ -72,7 +74,7 @@ enum SnippetsAnimator
                         guard let wc = w_cell, let ws = w_snippet else {return}
                         guard wc.animationID == animationID else {return}
                         guard wc.hostedSnippet === ws else {return}
-                        if ws.hiddenSection {return}
+                        if let gt = wc.groupType, ws[gt] {return}
                         if (i < imgs.count - 1) {i += 1} else {i = 0}
                         
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.75 * duration)
@@ -80,7 +82,7 @@ enum SnippetsAnimator
                          guard let wc = w_cell, let ws = w_snippet else {return}
                          guard wc.animationID == animationID else {return}
                          guard wc.hostedSnippet === ws else {return}
-                         if ws.hiddenSection {return}
+                         if let gt = wc.groupType, ws[gt] {return}
                          animate()
                         }
                       })
@@ -92,7 +94,7 @@ enum SnippetsAnimator
      guard let wc = w_cell, let ws = w_snippet else {return}
      guard wc.animationID == animationID else {return}
      guard wc.hostedSnippet === ws else {return}
-     if ws.hiddenSection {return}
+     if let gt = wc.groupType, ws[gt] {return}
      animate()
     }
     
@@ -137,7 +139,7 @@ enum SnippetsAnimator
      guard let wc = w_cell, let ws = w_snippet else {return}
      guard wc.animationID == animationID else {return}
      guard wc.hostedSnippet === ws else {return}
-     if ws.hiddenSection {return}
+     if let gt = wc.groupType, ws[gt] {return}
      animate(duration * 0.25)
     }
     

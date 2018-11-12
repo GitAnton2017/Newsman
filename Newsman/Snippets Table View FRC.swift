@@ -92,7 +92,10 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  private func updateSectionCounters()
  {
   sectionCounters.removeAll()
-  frc.sections?.enumerated().forEach{sectionCounters.append((rows: $0.1.numberOfObjects, frcSection: $0.0))}
+  frc.sections?.enumerated().forEach
+  {
+   sectionCounters.append((rows: $0.1.numberOfObjects, frcSection: $0.0))
+  }
  }
 
  
@@ -281,17 +284,25 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   
  }
  
- func numberOfSections() -> Int
+ final func numberOfSections() -> Int
  {
   return sectionCounters.count
  }
  
- func numberOfRowsInSection(index: Int) -> Int
+ final func numberOfRowsInSection(index: Int) -> Int
  {
   return sectionCounters[index].rows
  }
  
- subscript (indexPath: IndexPath) -> BaseSnippet
+ final subscript (section: Int) -> Int?
+ {
+  get
+  {
+   return sectionCounters[section].frcSection
+  }
+ }
+ 
+ final subscript (indexPath: IndexPath) -> BaseSnippet
  {
   get
   {
@@ -301,7 +312,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   }
  }
  
- subscript (snippet: BaseSnippet) -> IndexPath?
+ final subscript (snippet: BaseSnippet) -> IndexPath?
  {
   get
   {
@@ -315,29 +326,30 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   }
  }
  
- var items: [BaseSnippet]? {return frc.fetchedObjects}
+ final var items: [BaseSnippet]? {return frc.fetchedObjects}
  
- subscript (snippetID: String) -> BaseSnippet?
+ final subscript (snippetID: String) -> BaseSnippet?
  {
   get {return items?.first{$0.id?.uuidString == snippetID}}
  }
  
- func activateDelegate()
+ final func activateDelegate()
  {
   if (frc.delegate == nil) {frc.delegate = self}
  }
  
- func deactivateDelegate()
+ final func deactivateDelegate()
  {
   if (frc.delegate != nil) {frc.delegate = nil}
  }
  
- func isHiddenSection(section: Int) -> Bool
+ final func isHiddenSection(section: Int) -> Bool
  {
-  return self[IndexPath(row: 0, section: section)].hiddenSection
+  guard sectionCounters[section].frcSection != nil else {return true}
+  return self[IndexPath(row: 0, section: section)][groupType]
  }
  
- func isDisclosedCell(for indexPath: IndexPath) -> Bool
+ final func isDisclosedCell(for indexPath: IndexPath) -> Bool
  {
   return self[indexPath].disclosedCell
  }
@@ -366,7 +378,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  private func reset(section: Int, state: Bool)
  {
   deactivateDelegate()
-  moc.persistAndWait {self.sectionIndexPaths(for: section).forEach{self[$0].hiddenSection = state}}
+  moc.persistAndWait {self.sectionIndexPaths(for: section).forEach{self[$0][groupType] = state}}
   activateDelegate()
  }
  
@@ -455,6 +467,15 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   tableView.beginUpdates()
  }
  
+ private func updateFootersHeaders()
+ {
+  sectionCounters.forEach
+  {
+   guard let section = $0.frcSection else {return}
+   (tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView)?.section = section
+   (tableView.footerView(forSection: section) as? SnippetsTableViewFooterView)?.section = section
+  }
+ }
  
  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                  didChange anObject: Any, at indexPath: IndexPath?,
@@ -499,10 +520,13 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
    case .insert: tableView.insertSections(indexSet, with: .fade)
    default: break
   }
+  
+
  }
  
  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
  {
+  updateFootersHeaders()
   tableView.endUpdates()
  }
 

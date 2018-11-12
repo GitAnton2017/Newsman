@@ -22,6 +22,8 @@ protocol ImageContextLoadProtocol
  {
   return (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
  }
+ 
+ final var groupType: GroupSnippets? {return currentFRC?.groupType}
 
  private var snippet: BaseSnippet? {return hostedSnippet as? BaseSnippet}
  private var discloseView: UIImageView? {return (accessoryView as? UIButton)?.imageView}
@@ -34,25 +36,33 @@ protocol ImageContextLoadProtocol
 
  private var dy: CGFloat {return -(contentView.bounds.height / 4 - dx / 2)}
  
+ 
+ 
+ private  var priorityViewConstraints: [NSLayoutConstraint] = []
+ 
  private lazy var priorityView: SnippetPriorityView =
  {
   
   let pv = SnippetPriorityView(frame: .zero)
+  guard let snippet = snippet else {return pv}
   
   pv.backgroundColor = .clear
   
   contentView.addSubview(pv)
   
   pv.translatesAutoresizingMaskIntoConstraints = false
+ 
+  priorityViewConstraints  =
+  [
+   pv.topAnchor.constraint      (equalTo: snippetTextTag.topAnchor, constant: 0),
+   pv.bottomAnchor.constraint   (equalTo: snippetDateTag.bottomAnchor, constant:  0),
+   pv.trailingAnchor.constraint (equalTo: contentView.trailingAnchor, constant: 30),
+   pv.widthAnchor.constraint    (equalToConstant:  90)
+  ]
   
-  NSLayoutConstraint.activate(
-   [
-    pv.topAnchor.constraint      (equalTo: snippetTextTag.topAnchor, constant: 0 ),
-    pv.bottomAnchor.constraint   (equalTo: snippetDateTag.bottomAnchor, constant: 0),
-    pv.trailingAnchor.constraint (equalTo: contentView.trailingAnchor, constant:  0),
-    pv.widthAnchor.constraint    (equalToConstant: 100)
-   ]
-  )
+
+
+  NSLayoutConstraint.activate(priorityViewConstraints)
   
   return pv
  }()

@@ -15,7 +15,7 @@ extension UIBezierPath
 
 class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
 {
- var section = 0
+ var section: Int?
  
  lazy var backView: UIView =
  {

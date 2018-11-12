@@ -25,9 +25,10 @@ extension SnippetsViewController: UITableViewDelegate
  private func loadSnippetAnimatedImages(_ tableView: UITableView, for cell: SnippetsViewCell, at indexPath: IndexPath)
  {
  
+  let groupType = self.groupType
   guard let provider = cell.hostedSnippet?.imageProvider  else {return}
   guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
-  if snippet.hiddenSection {return}
+  if snippet[groupType] {return}
 
   let iconWidth = cell.snippetImage.frame.width
   
@@ -36,14 +37,14 @@ extension SnippetsViewController: UITableViewDelegate
  
    guard let wc = w_cell, let ws = w_snippet else {return}
    guard wc.hostedSnippet === ws else {return}
-   if ws.hiddenSection {return}
+   if ws[groupType] {return}
    
    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
    {[weak w_cell = cell, weak w_snippet = snippet] in
     
     guard let wc = w_cell, let ws = w_snippet else {return}
     guard wc.hostedSnippet === ws else {return}
-    if ws.hiddenSection {return}
+    if ws[groupType] {return}
     
     cell.imageSpinner.stopAnimating()
    
@@ -56,7 +57,7 @@ extension SnippetsViewController: UITableViewDelegate
                        
                        guard let wc = w_cell, let ws = w_snippet else {return}
                        guard wc.hostedSnippet === ws else {return}
-                       if ws.hiddenSection {return}
+                       if ws[groupType] {return}
                        
                        cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
                        UIView.animate(withDuration: 0.15,
@@ -70,14 +71,14 @@ extension SnippetsViewController: UITableViewDelegate
                                        
                                        guard let wc = w_cell, let ws = w_snippet else {return}
                                        guard wc.hostedSnippet === ws else {return}
-                                       if ws.hiddenSection {return}
+                                       if ws[groupType] {return}
                                        
                                        provider.getRandomImages(requiredImageWidth: iconWidth)
                                        {[weak w_cell = cell, weak w_snippet = snippet] (images) in
                                         guard var images = images else {return}
                                         guard let wc = w_cell, let ws = w_snippet else {return}
                                         guard wc.hostedSnippet === ws else {return}
-                                        if ws.hiddenSection {return}
+                                        if ws[groupType] {return}
                                         
                                         if let firstImage = image {images.insert(firstImage, at: 0)}
                                         
@@ -99,7 +100,7 @@ extension SnippetsViewController: UITableViewDelegate
  {
   let cell = cell as! SnippetsViewCell
   guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
-  if snippet.hiddenSection {return}
+  if snippet[groupType] {return}
 
   loadSnippetAnimatedImages(tableView, for: cell, at: indexPath)
   
@@ -357,8 +358,9 @@ extension SnippetsViewController: UITableViewDelegate
 
  @objc func sectionTapped(_ gr: UIGestureRecognizer)
  {
-  let header = gr.view as! SnippetsTableViewHeaderView
-  let section = header.section
+  guard let header = gr.view as? SnippetsTableViewHeaderView else {return}
+  guard let section = header.section else {return}
+ 
   let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
   dataSource.currentFRC.foldSection(section: section)
   header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
@@ -381,7 +383,7 @@ extension SnippetsViewController: UITableViewDelegate
    header.addGestureRecognizer(tgr)
   }
   
-  header.section = section
+  header.section = dataSource.currentFRC[section]
   
   return header
  }
@@ -393,7 +395,8 @@ extension SnippetsViewController: UITableViewDelegate
   let dataSource = tableView.dataSource as! SnippetsViewDataSource
   footer.title = Localized.totalSnippets + String(dataSource.currentFRC.numberOfRowsInSection(index: section))
   footer.titleColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
-  footer.section = section
+  
+  footer.section = dataSource.currentFRC[section]
   
   return footer
  }

@@ -184,6 +184,8 @@ enum SnippetPriority: String, AllCasesSelectorRepresentable
  
  var section: Int {return SnippetPriority.prioritySectionsMap[self]!}
  
+ 
+ 
  static let strings: [String] =
  [
    SnippetPriority.hottest.rawValue,
