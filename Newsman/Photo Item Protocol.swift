@@ -4,22 +4,25 @@ import UIKit
 import CoreData
 
 //MARK: ----------------- Photo Item Protocol ----------------
-protocol PhotoItemProtocol: NSItemProviderWriting, NSItemProviderReading, Codable
-    //------------------------------------------------------------
+protocol PhotoItemProtocol: NSItemProviderWriting, NSItemProviderReading, Codable, Draggable
+//------------------------------------------------------------
 {
-    var photoSnippet: PhotoSnippet     { get     }
+    var photoSnippet: PhotoSnippet     { get      }
+ 
     var date: Date                     { get     }
     var position: Int16                { get set }
     var priority: Int                  { get     }
     var priorityFlag: String?          { get set }
-    var isSelected: Bool               { get set }
-    var id: UUID                       { get     }
-    var url: URL                       { get     }
+    var url: URL                       { get     } //conformer url getter to get access to the virtual data files
  
-    var dragSession: UIDragSession?    { get set }
-    
+    var hostingCollectionViewCell: PhotoSnippetCellProtocol?  {get set}
+    //weak reference to the the CV cell that will display the conformer visual video preview or photo content
+ 
     func deleteImages()
  
+    func cancelImageOperations() //cancells all image loading backgroud operation
+    func toggleSelection()
+
     
 }//protocol PhotoItemProtocol...
 //-------------------------------------------------------------

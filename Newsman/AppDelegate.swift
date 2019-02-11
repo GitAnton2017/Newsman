@@ -25,8 +25,6 @@ import AVKit
 
     var window: UIWindow?
  
-    var globalDragItems: [Any] = []
- 
     var anim: UIViewImplicitlyAnimating?
  
     var ncDelegate: UINavigationControllerDelegate?

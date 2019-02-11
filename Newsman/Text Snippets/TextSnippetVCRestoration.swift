@@ -26,7 +26,7 @@ extension TextSnippetViewController
   {
    
    self.textSnippet = textSnippet
-   
+   self.textSnippet.currentFRC = snippetsVC.snippetsDataSource.currentFRC
    (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = textSnippet
    
    updateTextSnippet()

@@ -13,8 +13,10 @@ extension PhotoSnippetViewController
  func createPhotoItems2D() -> [[PhotoItemProtocol]]
 //---------------------------------------------------------------------------
  {
+  
    var photoItems = [[PhotoItemProtocol]]()
-   if let allPhotos = photoSnippet.photos?.allObjects as? [Photo]
+  
+   if let allPhotos = photoSnippet?.photos?.allObjects as? [Photo]
    {
     if let sortPred = GroupPhotos(rawValue: photoSnippet.grouping!)?.sortPredicate
     {
@@ -35,7 +37,7 @@ extension PhotoSnippetViewController
   
   return photoItems
     
-  }//func createPhotoItems2D()...
+ }//func createPhotoItems2D()...
 
 //MARK: --------------- Creating Sectioned Photo Items ----------------------
 //---------------------------------------------------------------------------
@@ -43,6 +45,7 @@ extension PhotoSnippetViewController
 //---------------------------------------------------------------------------
  {
   var photoItems = [[PhotoItemProtocol]]()
+  
   if let allPhotos = photoSnippet.photos?.allObjects as? [Photo], allPhotos.count > 0
   {
    // if photo has no folder we take the photo flag otherwise we take the flag of the folder...
@@ -63,11 +66,14 @@ extension PhotoSnippetViewController
      // add all photo folders first...
      if let folders = (photoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({($0.priorityFlag ?? "") == title})
      {
-        newSection.append(contentsOf: folders.map{PhotoFolderItem(folder: $0)})
+       newSection.append(contentsOf: folders.map{PhotoFolderItem(folder: $0)})
      }
     
      // then add all photos which are not assigned to any existing folder...
-     newSection.append(contentsOf: allPhotos.filter {$0.folder == nil && ($0.priorityFlag ?? "") == title}.map{PhotoItem(photo: $0)})
+     let notFoldered = allPhotos.filter {$0.folder == nil && ($0.priorityFlag ?? "") == title}
+                                .map{PhotoItem(photo: $0)}
+    
+     newSection.append(contentsOf: notFoldered)
     
      photoItems.append(newSection.sorted{$0.date <= $1.date})
    }
@@ -424,7 +430,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
        
        view.headerLabel.text = nil
        
-       if photoCollectionView.photoGroupType == .makeGroups, let titles = sectionTitles, itemsCount > 0
+       if photoCollectionView.photoGroupType == .makeGroups, let titles = sectionTitles
        {
         let title = (titles[indexPath.section].isEmpty) ? "Not Flagged Yet" : titles[indexPath.section]
         view.headerLabel.text = NSLocalizedString(title, comment: title)
@@ -451,7 +457,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
                                                                   for: indexPath) as! PhotoSectionFooter
        view.footerLabel.text = nil
        
-       if photoCollectionView.photoGroupType == .makeGroups, itemsCount > 0
+       if photoCollectionView.photoGroupType == .makeGroups
        {
         view.backgroundColor = collectionView.backgroundColor
         view.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") + ": \(itemsCount)"
@@ -502,7 +508,16 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  {
   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSnippetCell", for: indexPath) as! PhotoSnippetCell
   
-  cell.hostedPhotoItem = photoItem //holding weak reference to PhotoItem shown by cell...
+  cell.photoSnippetVC = self
+  cell.photoSnippet = self.photoSnippet //weak ref must be initialized prior to call of hostedItem observer!!
+
+  
+  cell.hostedItem = photoItem
+  //holding weak reference to PhotoItem shown by cell...
+  //setting this property will call observer that will set some other crucial cell properties before displaying in CV.
+  //see <PhotoSnippetCell> class definition...
+  
+
     
   let photoCV = collectionView as! PhotoSnippetCollectionView
     
@@ -519,12 +534,9 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
     
   }
  
-  cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
-  
   cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
- 
 
-   return cell
+  return cell
     
  }//func getPhotoCell (_ collectionView: UICollectionView...
 //---------------------------------------------------------------------------------------------------------------------
@@ -532,83 +544,81 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
 
     
 //MARK:---------------------- GETTING CV REQUIRED PHOTO FOLDER ITEM CELL ----------------------------------------------
- func getFolderCell (_ collectionView: UICollectionView, at indexPath: IndexPath, with photoFolder: PhotoFolderItem) -> PhotoFolderCell
+ func getFolderCell (_ collectionView: UICollectionView,
+                       at indexPath: IndexPath,
+                       with photoFolder: PhotoFolderItem) -> PhotoFolderCell
 //---------------------------------------------------------------------------------------------------------------------
  {
-   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCell", for: indexPath) as! PhotoFolderCell
-
-    print ("indexPath =\(indexPath)")
-    
-    let photoCV = collectionView as! PhotoSnippetCollectionView
-    
-    photoCV.layer.addSublayer(cell.layer)
-    
-    if let path = photoCV.menuIndexPath, path == indexPath
-    {
-        let cellPoint = CGPoint(x: round(cell.frame.width * photoCV.menuShift.x),
-                                y: round(cell.frame.height * photoCV.menuShift.y))
-        
-        let menuPoint = cell.photoCollectionView.layer.convert(cellPoint, to: photoCV.layer)
-        
-        photoCV.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuPoint, menuItems: mainMenuItems)
-        
-    }
-    
-    cell.photoCollectionView.isUserInteractionEnabled = !isEditingPhotos
- 
- 
-    cell.photoFolder = photoFolder
-    cell.groupTaskCount = 0
-    
-    if let items = photoFolder.folder.photos?.allObjects as? [Photo]
-    {
-        cell.photoItems = items.map{PhotoItem(photo: $0)}
-    }
-    else
-    {
-        cell.photoItems = []
-    }
-    
-    cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
+  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCell", for: indexPath) as! PhotoFolderCell
   
-    cell.nphoto = nPhotoFolderMap[nphoto]!
-    cell.frameSize = imageSize
+  cell.photoSnippetVC = self
+  cell.photoSnippet = self.photoSnippet //weak ref must be initialized prior to call of hostedItem observer!!
 
-    return cell
+  cell.hostedItem = photoFolder
+ 
+  //holding weak reference to PhotoFolderItem that is to shown by cell...
+  //setting this property will call observer that will set some other crucial cell properties before displaying in CV.
+  //see <PhotoFolderCell> class definition
+  
+  
+
+  //print ("indexPath =\(indexPath)")
+  
+  let photoCV = collectionView as! PhotoSnippetCollectionView
+  
+  photoCV.layer.addSublayer(cell.layer)
+  
+  if let path = photoCV.menuIndexPath, path == indexPath
+  {
+      let cellPoint = CGPoint(x: round(cell.frame.width * photoCV.menuShift.x),
+                              y: round(cell.frame.height * photoCV.menuShift.y))
+   
+      let menuPoint = cell.photoCollectionView.layer.convert(cellPoint, to: photoCV.layer)
+   
+      photoCV.drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: menuPoint, menuItems: mainMenuItems)
+   
+  }
+  
+  cell.photoCollectionView.isUserInteractionEnabled = !isEditingPhotos
+
+  cell.cornerRadius = ceil(10 * (1 - 1/exp(CGFloat(11 - nphoto) / 4)))
+
+  cell.nphoto = nPhotoFolderMap[nphoto]!
+
+  cell.frameSize = imageSize
+
+  return cell
     
  }//func getFolderCell (_ collectionView: UICollectionView,...
 //------------------------------------------------------------------------------------------------------------------
 //MARK: -
 
+ 
+ 
 //MARK:------------------------------------- GETTING CV GENERALIZED CELL -------------------------------------------
  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
 //------------------------------------------------------------------------------------------------------------------
  {
-   var cell = UICollectionViewCell()
-   let photoItem = photoItems2D[indexPath.section][indexPath.row]
+  var cell = UICollectionViewCell()
+  let photoItem = photoItems2D[indexPath.section][indexPath.row]
+ 
+  switch (photoItem)
+  {
+   case let item as PhotoItem:       cell = getPhotoCell  (collectionView, at: indexPath, with: item)
+   case let item as PhotoFolderItem: cell = getFolderCell (collectionView, at: indexPath, with: item)
+   default: break
+  }
+ 
+  let cellInter = UISpringLoadedInteraction
+  {inter, context in
+   let photoCV = collectionView as! PhotoSnippetCollectionView
+   photoCV.zoomView = photoCV.cellSpringInt(context)
+   
+  }
   
-   switch (photoItem)
-   {
-    case let item as PhotoItem:       cell = getPhotoCell  (collectionView, at: indexPath, with: item)
-    case let item as PhotoFolderItem: cell = getFolderCell (collectionView, at: indexPath, with: item)
-    default: break
-   }
-  
-   let cellInter = UISpringLoadedInteraction
-   {inter, context in
-    let photoCV = collectionView as! PhotoSnippetCollectionView
-    photoCV.zoomView = photoCV.cellSpringInt(context)
-    
-   }
-    
-   cell.addInteraction(cellInter)
-  
-   if globalDragItems.contains(where: {($0 as! PhotoItemProtocol).id == photoItem.id})
-   {
-    PhotoSnippetViewController.startCellDragAnimation(cell: cell)
-   }
-    
-   return cell
+  cell.addInteraction(cellInter)
+
+  return cell
  }
 }//func collectionView(_ collectionView: UICollectionView,...
 //-----------------------------------------------------------------------------------------------------------------

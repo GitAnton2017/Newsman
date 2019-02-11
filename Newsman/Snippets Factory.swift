@@ -6,6 +6,33 @@ import CoreLocation
 
 extension SnippetsViewController
 {
+ func createSnippet<S> (with _ : S.Type, _ T: BaseSnippet.Type, snippetType: SnippetType)
+ where S: SnippetsRepresentable
+ {
+  moc.persistAndWait
+  {
+    let newSnippet = T.init(context: moc)
+    newSnippet.snippetDate = Date()
+    let newSnippetID = UUID()
+    newSnippet.id = newSnippetID
+    newSnippet.snippetPriority = .normal
+    newSnippet.snippetType = snippetType
+    newSnippet.snippetStatus = .new
+    newSnippet.snippetCoordinates = snippetLocation
+   
+    newSnippet.initStorage()
+   
+    getLocationString
+    {location in
+      print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR \(snippetType)")
+      self.moc.persist{newSnippet.snippetLocation = location}
+    }
+    
+    editSnippet(with: S.self, snippetToEdit: newSnippet)
+  }
+  
+ }
+ 
  func createNewTextSnippet()
  {
   moc.persistAndWait
@@ -25,7 +52,7 @@ extension SnippetsViewController
       self.moc.persist{newTextSnippet.snippetLocation = location}
     }
     
-    editTextSnippet(snippetToEdit: newTextSnippet)
+    editSnippet(with: TextSnippetViewController.self, snippetToEdit: newTextSnippet)
   }
   
  }
@@ -62,7 +89,7 @@ extension SnippetsViewController
       self.moc.persist{newPhotoSnippet.snippetLocation = location}
     }
     
-    editVisualSnippet(snippetToEdit: newPhotoSnippet)
+    editSnippet(with: PhotoSnippetViewController.self, snippetToEdit: newPhotoSnippet)
   }
   
  }
@@ -102,7 +129,7 @@ extension SnippetsViewController
       self.moc.persist{newVideoSnippet.snippetLocation = location}
     }
     
-    editVisualSnippet(snippetToEdit: newVideoSnippet)
+    editSnippet(with: PhotoSnippetViewController.self, snippetToEdit: newVideoSnippet)
   }
  }
  

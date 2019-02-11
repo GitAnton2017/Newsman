@@ -218,12 +218,12 @@ class SnippetsViewController: UIViewController
      
       switch type
       {
-        case .text:    createNewTextSnippet()
-        case .photo:   createNewPhotoSnippet()
-        case .video:   createNewVideoSnippet()
-        case .audio:   createNewAudioSnippet()
-        case .sketch:  createNewSketchSnippet()
-        case .report:  createNewReport()
+        case .text:    createSnippet(with: TextSnippetViewController.self, TextSnippet.self, snippetType: type)
+        case .photo:   fallthrough
+        case .video:   createSnippet(with: PhotoSnippetViewController.self, PhotoSnippet.self, snippetType: type)
+        case .audio:   break
+        case .sketch:  break
+        case .report:  break
         case .undefined: break
       
       }

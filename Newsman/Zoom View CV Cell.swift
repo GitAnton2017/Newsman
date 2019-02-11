@@ -4,37 +4,75 @@ import UIKit
 
 class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
-    func cancelImageOperations()
-    {
-     
-    }
  
+ var hostedViewSelectedAlpha: CGFloat = 0.5
  
-    var photoItemView: UIView {return self.contentView}
+ var hostedView: UIView {return photoIconView}
+ var hostedAccessoryView: UIView? {return spinner}
  
-    var cellFrame: CGRect {return self.frame}
+ @IBOutlet weak var photoIconView: UIImageView!
+ @IBOutlet weak var spinner: UIActivityIndicatorView!
  
-    var isPhotoItemSelected: Bool = false
+ weak var hostedItem: PhotoItemProtocol?
+ {
+  didSet
+  {
+   guard let hosted = self.hostedItem as? PhotoItem else {return}
+   
+   updateImage()
+   
+   hosted.hostingZoomedCollectionViewCell = self
+   
+   self.photoIconView.alpha = hosted.isSelected ? 0.5 : 1
+   
+   self.isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
+   
+   AppDelegate.globalDropItems.compactMap{$0 as? PhotoItem}
+                              .first{$0.photo === hosted.photo}?
+                              .hostingZoomedCollectionViewCell = self
+  }
+  
+ }//weak var hostedItem: PhotoItemProtocol?...
+
+ func cancelImageOperations()
+ {
+  hostedItem?.cancelImageOperations()
+ }
+
+ var photoItemView: UIView {return self.contentView}
+
+ var cellFrame: CGRect {return self.frame}
+
+ private var _selected = false
+ var isPhotoItemSelected: Bool
+ {
+  set
+  {
+   _selected = newValue
+   photoIconView.alpha = newValue ? hostedViewSelectedAlpha : 1
+   touchSpring()
+  }
+  
+  get {return _selected}
+ }
+
  
-    @IBOutlet weak var photoIconView: UIImageView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
-    
-    override func awakeFromNib()
-    {
-        super.awakeFromNib()
-     
-        spinner.startAnimating()
-        photoIconView.image = nil
-        imageRoundClip(cornerRadius: 10)
+ override func awakeFromNib()
+ {
+     super.awakeFromNib()
+     self.hostedItem = nil
+     spinner.startAnimating()
+     photoIconView.image = nil
+     imageRoundClip(cornerRadius: 10)
+
+ }
  
-    }
-    
-    override func prepareForReuse()
-    {
-        super.prepareForReuse()
-     
-        spinner.startAnimating()
-        photoIconView.image = nil
-        imageRoundClip(cornerRadius: 10)
-    }
-}
+ override func prepareForReuse()
+ {
+     super.prepareForReuse()
+     self.hostedItem = nil
+     spinner.startAnimating()
+     photoIconView.image = nil
+     imageRoundClip(cornerRadius: 10)
+ }
+}//class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol...

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -12,7 +12,6 @@
         <!--Video Shooting VC-->
         <scene sceneID="bEz-36-dI8">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="e9n-HL-amK" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="VideoShootingVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Yym-NY-ket" userLabel="Video Shooting VC" customClass="VideoShootingViewController" customModule="Newsman" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ESH-pJ-cGI">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
@@ -35,7 +34,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="ySa-ZV-9hZ"/>
                                     <barButtonItem style="plain" id="kwJ-Cy-IfG">
                                         <button key="customView" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" id="iIg-NW-Oc1">
-                                            <rect key="frame" x="183" y="13.666666666666664" width="48" height="33"/>
+                                            <rect key="frame" x="171" y="0.0" width="72" height="60"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                             <state key="normal" image="start.recording.tab.icon"/>
@@ -68,11 +67,12 @@
                         <outlet property="shootingBarButton" destination="iIg-NW-Oc1" id="K2X-z0-TkS"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="e9n-HL-amK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1419" y="-739"/>
         </scene>
     </scenes>
     <resources>
-        <image name="start.recording.tab.icon" width="32" height="32"/>
+        <image name="start.recording.tab.icon" width="72" height="72"/>
     </resources>
 </document>

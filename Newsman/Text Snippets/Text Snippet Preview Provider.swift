@@ -5,14 +5,9 @@ import UIKit
 
 class TextPreviewProvider: SnippetPreviewImagesProvider
 {
- func cancel()
+ func cancelRandomImagesOperations()
  {
-  
- }
- 
- func cancelLocal()
- {
-  
+  print (#function, self)
  }
 
  init(textSnippet: TextSnippet)
@@ -29,8 +24,6 @@ class TextPreviewProvider: SnippetPreviewImagesProvider
  
  func getRandomImages(requiredImageWidth: CGFloat, completion: @escaping ([UIImage]?) -> Void)
  {
-  
  }
- 
  
 }

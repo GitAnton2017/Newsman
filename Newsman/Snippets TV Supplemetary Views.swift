@@ -15,7 +15,21 @@ extension UIBezierPath
 
 class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
 {
- var section: Int?
+ var sectionNumber: Int?
+ {
+  guard let tv = tableView else {return nil}
+  let N = tv.numberOfSections
+  return (0..<N).map{($0, tv.headerView(forSection: $0))}.first{$0.1 === self}?.0
+ }
+ 
+ weak var tableView: UITableView? {return self.superview as? UITableView}
+ 
+ weak var currentFRC: SnippetsFetchController?
+ {
+  return (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
+ }
+ 
+// var section: Int?
  
  lazy var backView: UIView =
  {

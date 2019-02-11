@@ -131,6 +131,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   moc.persistAndWait
   {[unowned self] in
    snippet.snippetPriority = self.sectionPriority(for: destination.section) ?? .normal
+   snippet[groupType] = isHiddenSection(section: destination.section)
   }
   activateDelegate()
   sectionCounters[source.section].rows -= 1
@@ -382,6 +383,8 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   activateDelegate()
  }
  
+
+ 
  func foldSection (section: Int)
  {
 //  let indexPaths = sectionIndexPaths(for: section)
@@ -411,6 +414,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   {
    
    //hiddenSections.insert(section)
+   
    reset(section: section, state: true)
    tableView.performBatchUpdates(nil)
    {[weak self] _ in
@@ -431,6 +435,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
 //  if indexPaths.isEmpty {return}
   
   //hiddenSections.remove(section)
+  
   reset(section: section, state: false)
   if let header = tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView
   {
@@ -467,15 +472,15 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   tableView.beginUpdates()
  }
  
- private func updateFootersHeaders()
- {
-  sectionCounters.forEach
-  {
-   guard let section = $0.frcSection else {return}
-   (tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView)?.section = section
-   (tableView.footerView(forSection: section) as? SnippetsTableViewFooterView)?.section = section
-  }
- }
+// private func updateFootersHeaders()
+// {
+//  sectionCounters.forEach
+//  {
+//   guard let section = $0.frcSection else {return}
+//   (tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView)?.section = section
+//   (tableView.footerView(forSection: section) as? SnippetsTableViewFooterView)?.section = section
+//  }
+// }
  
  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                  didChange anObject: Any, at indexPath: IndexPath?,
@@ -526,7 +531,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  
  func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
  {
-  updateFootersHeaders()
+  //updateFootersHeaders()
   tableView.endUpdates()
  }
 

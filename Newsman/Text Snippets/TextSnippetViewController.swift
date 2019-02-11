@@ -3,8 +3,18 @@ import Foundation
 import UIKit
 import CoreData
 
-class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
+class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, SnippetsRepresentable
 {
+   static var storyBoardID = "TextSnippetVC"
+ 
+   weak var currentFRC: SnippetsFetchController?
+   {
+    didSet
+    {
+     currentSnippet.currentFRC = self.currentFRC
+    }
+   }
+ 
    let dateFormatter =
    { () -> DateFormatter in
       let df = DateFormatter()
@@ -25,7 +35,11 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
  
    var currentViewController: UIViewController {return self}
  
-   var currentSnippet: BaseSnippet {return textSnippet}
+   var currentSnippet: BaseSnippet
+   {
+    get {return textSnippet}
+    set  {textSnippet = newValue as? TextSnippet}
+   }
  
    @IBAction func itemUpBarButtonPress(_ sender: UIBarButtonItem)
    {
@@ -48,8 +62,6 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol
     @IBOutlet var textSnippetToolBar: UIToolbar!
     
     var textSnippet: TextSnippet! {didSet {navigationItem.title = textSnippet.snippetName}}
- 
-    weak var currentFRC: SnippetsFetchController?
     
     func saveTextSnippetData()
     {

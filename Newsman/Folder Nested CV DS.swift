@@ -5,11 +5,6 @@ import AVKit
 
 extension PhotoFolderCell:  UICollectionViewDataSource
 {
- var globalDragItems: [Any]
- {
-  return (UIApplication.shared.delegate as! AppDelegate).globalDragItems
- }
- 
  var imageSize: CGFloat
  {
   get
@@ -38,17 +33,11 @@ extension PhotoFolderCell:  UICollectionViewDataSource
   
   let photoItem = photoItems[indexPath.row]
   
-  cell.hostedPhotoItem = photoItem
+  cell.hostedItem = photoItem
   
-  cell.photoIconView.alpha = photoItem.isSelected ? 0.5 : 1
+  cell.owner = self
   
   cell.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
- 
-  
-  if globalDragItems.contains(where: {($0 as! PhotoItemProtocol).id == photoItem.id})
-  {
-   PhotoSnippetViewController.startCellDragAnimation(cell: cell)
-  }
   
   return cell
  }

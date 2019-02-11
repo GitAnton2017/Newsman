@@ -13,4 +13,9 @@ import CoreData
 @objc(TextSnippet) public class TextSnippet: BaseSnippet, SnippetImagesPreviewProvidable
 {
  lazy var imageProvider: SnippetPreviewImagesProvider = {TextPreviewProvider(textSnippet: self)}()
+ 
+ override func initStorage()
+ {
+  self.text = "Enter Snippet Text Here..."
+ }
 }

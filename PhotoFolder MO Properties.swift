@@ -11,24 +11,28 @@ import Foundation
 import CoreData
 
 
-extension PhotoFolder {
+extension PhotoFolder
+{
+ @nonobjc public class func fetchRequest() -> NSFetchRequest<PhotoFolder>
+ {
+  return NSFetchRequest<PhotoFolder>(entityName: "PhotoFolder")
+ }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<PhotoFolder> {
-        return NSFetchRequest<PhotoFolder>(entityName: "PhotoFolder")
-    }
-
-    @NSManaged public var date: NSDate?
-    @NSManaged public var id: UUID?
-    @NSManaged public var isSelected: Bool
-    @NSManaged public var position: Int16
-    @NSManaged public var priorityFlag: String?
-    @NSManaged public var photoSnippet: PhotoSnippet?
-    @NSManaged public var photos: NSSet?
-
+ @NSManaged public var date: NSDate?
+ @NSManaged public var id: UUID?
+ @NSManaged public var isSelected: Bool //Managed and persisted state of folder visual selected state.
+ @NSManaged public var position: Int16
+ @NSManaged public var priorityFlag: String?
+ @NSManaged public var photoSnippet: PhotoSnippet?
+ @NSManaged public var photos: NSSet?
 }
 
+
+
+
 // MARK: Generated accessors for photos
-extension PhotoFolder {
+extension PhotoFolder
+{
 
     @objc(addPhotosObject:)
     @NSManaged public func addToPhotos(_ value: Photo)

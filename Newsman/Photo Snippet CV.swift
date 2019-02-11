@@ -270,12 +270,14 @@ class PhotoSnippetCollectionView: UICollectionView
         
          let tappedItem = photoItems2D[indexPath.section][indexPath.row]
          zoomView.zoomedPhotoItem = tappedItem
+      
         
          switch cellForItem(at: indexPath)
          {
           case _ as PhotoSnippetCell:
            
              let photoItem = tappedItem as! PhotoItem
+             zoomView.zoomedManagedObject = photoItem.photo
              
              switch (photoItem.type)
              {
@@ -295,6 +297,8 @@ class PhotoSnippetCollectionView: UICollectionView
           
             
           case let cell as PhotoFolderCell:
+            let photoFolderItem = tappedItem as! PhotoFolderItem
+            zoomView.zoomedManagedObject = photoFolderItem.folder
             let cv  = zoomView.openWithCV(in: mainView)
             zoomView.photoItems = cell.photoItems
             cv.reloadData()
@@ -504,7 +508,6 @@ class PhotoSnippetCollectionView: UICollectionView
       let touchPoint = gr.location(in: self)
       if let _ = indexPathForItem(at: touchPoint), gr.state == .ended
       {
-       PhotoSnippetViewController.clearAllDraggedItems()
        drawCellMenu(menuColor: #colorLiteral(red: 0.8867584074, green: 0.8232105379, blue: 0.7569611658, alpha: 1), touchPoint: touchPoint, menuItems: mainMenuItems)
       }
       else
@@ -540,7 +543,39 @@ class PhotoSnippetCollectionView: UICollectionView
       }
      }
     }
-    
+ 
+ 
+ 
+ 
+    func updateSection (sectionIndex: Int)   //update section without reloading all the section's CV cells
+    {
+     guard let ds = dataSource as? PhotoSnippetViewController else {return}
+     guard sectionIndex < photoItems2D.count else {return}
+     
+     let itemsCount = ds.photoItems2D[sectionIndex].count
+     
+     if itemsCount == 0
+     {
+      ds.photoItems2D.remove(at: sectionIndex)
+      ds.photoCollectionView.deleteSections([sectionIndex])
+      ds.sectionTitles?.remove(at: sectionIndex)
+      return
+     }
+     
+     let kind = UICollectionElementKindSectionFooter
+     let indexPath = IndexPath(row: 0, section: sectionIndex)
+     //CV supplementary view IndexPath is IndexPath with row = 0, section = section index!
+     
+     if let footer = supplementaryView(forElementKind: kind, at: indexPath) as? PhotoSectionFooter
+     {
+      footer.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") + ": \(itemsCount)"
+     }
+     
+    }
+ 
+ 
+ 
+ 
     func refreshSections (sourceIndexPath: IndexPath, destinationIndexPath: IndexPath)
     {
      let ds = dataSource as! PhotoSnippetViewController

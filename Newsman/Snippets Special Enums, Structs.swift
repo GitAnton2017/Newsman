@@ -5,6 +5,11 @@ import UIKit
 import CoreLocation
 
 
+protocol StringLocalizable
+{
+ var localizedString: String {get}
+}
+
 protocol AllCasesSelectorRepresentable: StringLocalizable, CaseIterable
 {
  typealias ActionType  = (Self) -> Void
@@ -132,6 +137,14 @@ class SnippetDates
 enum SnippetType: String, AllCasesSelectorRepresentable
 {
  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
+ 
+ private static let presentingVCTypesMap: [SnippetType : SnippetsRepresentable.Type] =
+ [
+  .photo: PhotoSnippetViewController.self,
+  .video: PhotoSnippetViewController.self
+ ]
+ 
+ var presenterType:SnippetsRepresentable.Type {return SnippetType.presentingVCTypesMap[self]!}
  
  case text   = "TextSnippet"
  case photo  = "PhotoSnippet"

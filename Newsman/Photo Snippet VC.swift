@@ -3,8 +3,21 @@ import Foundation
 import UIKit
 import CoreData
 
-class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
+class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, SnippetsRepresentable
 {
+ var photoSnippetVC: PhotoSnippetViewController!
+ 
+ var deletedSections:  Set<Int> = []
+ var insertedSections: Set<Int> = []
+ 
+ static var storyBoardID = "PhotoSnippetVC"
+ 
+ var currentSnippet: BaseSnippet
+ {
+  get {return photoSnippet}
+  set {photoSnippet = newValue as? PhotoSnippet}
+ }
+ 
  
  lazy var moc: NSManagedObjectContext =
  {
@@ -13,16 +26,30 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
    return moc
  }()
  
+ 
  weak var currentFRC: SnippetsFetchController?
+ {
+  didSet
+  {
+   currentSnippet.currentFRC = self.currentFRC
+  }
+ }
  
  var currentViewController: UIViewController {return self}
- var currentSnippet: BaseSnippet             {return photoSnippet}
-
+ 
     
 //MARK: ===================== CALCULATED PROPERTIES =========================
  
- var photoSnippet: PhotoSnippet! {didSet {navigationItem.title = photoSnippet.snippetName}}
-
+ var photoSnippet: PhotoSnippet!
+ {
+  didSet
+  {
+   navigationItem.title = photoSnippet.snippetName
+   allPhotosSelected = photoItems2D.flatMap{$0}.allSatisfy{$0.isSelected}
+  }
+ }
+ 
+ 
  var imageSize: CGFloat
  {
   let width = photoCollectionView.frame.width
@@ -39,7 +66,7 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol
  {
   didSet
   {
-   photoSnippet.nphoto = Int32(nphoto)
+   photoSnippet?.nphoto = Int32(nphoto)
    photoCollectionView.visibleCells.forEach {($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
    if (!isEditingPhotos) {photoCollectionView.locateCellMenu()}
    photoCollectionView.reloadData()
@@ -253,9 +280,7 @@ func updateDateLabel()
     
  deinit
  {
-  
-  
-  print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet.snippetName)")
+  //print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet?.snippetName)")
  }
     
 //MARK: ----------------- MEMORY WARNING PROCESSING -------------------------
@@ -293,7 +318,7 @@ func updateDateLabel()
   {
     guard let text = photoSnippetTitle.text else {return}
     guard text != Localized.unnamedSnippet else {return}
-    photoSnippet.snippetName = text
+    photoSnippet?.snippetName = text
   }
  }
 //---------------------------------------------------------------------------
@@ -305,18 +330,9 @@ func updateDateLabel()
  @objc func toggleAllPhotosSelection()
 //---------------------------------------------------------------------------
  {
-   if allPhotosSelected
-   {
-    allPhotosSelected = false
-    selectBarButton.title = "★★★"
-    deselectSelectedItems(in: photoCollectionView)
-   }
-   else
-   {
-    allPhotosSelected = true
-    selectBarButton.title = "☆☆☆"
-    selectAllPhotoItems(in: photoCollectionView)
-   }
+   allPhotosSelected.toggle()
+   selectBarButton.title = allPhotosSelected ? "☆☆☆" : "★★★"
+   photoItems2D.flatMap{$0}.forEach{$0.isSelected = allPhotosSelected}
  }
 
  
@@ -362,7 +378,10 @@ func updateDateLabel()
     
     let deleteItem  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deletePhotosBarButtonPress))
     
-    let selectItem = UIBarButtonItem(title: "★★★", style: .plain, target: self, action: #selector(toggleAllPhotosSelection))
+    let selectItem = UIBarButtonItem(title: allPhotosSelected ? "☆☆☆" : "★★★",
+                                     style: .plain, target: self,
+                                     action: #selector(toggleAllPhotosSelection))
+    
     selectItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .selected)
     selectItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 35)], for: .normal)
     

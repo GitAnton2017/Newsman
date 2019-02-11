@@ -51,7 +51,7 @@ extension PhotoFolderItem
          case kUTTypePDF as String as String:
             
              var imageSet: [UIImage] = []
-             singlePhotoItems?.forEach
+             singlePhotoItems.forEach
              {photoItem in
                     do
                     {

@@ -6,6 +6,28 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
 {
  static let reuseID = "snippetsTableViewHeader"
  
+
+ @objc func sectionTapped(_ gr: UIGestureRecognizer)
+ {
+  guard let section = sectionNumber else {return}
+  currentFRC?.foldSection(section: section)
+  isHiddenSection = !isHiddenSection
+ }
+ 
+ override init(reuseIdentifier: String?)
+ {
+  super.init(reuseIdentifier: reuseIdentifier)
+  let tgr = UITapGestureRecognizer(target: self, action: #selector(sectionTapped))
+  tgr.numberOfTapsRequired = 2
+  addGestureRecognizer(tgr)
+  
+ }
+ 
+ required init?(coder aDecoder: NSCoder)
+ {
+  super.init(coder: aDecoder)
+ }
+ 
  var isHiddenSection = false
  {
   didSet

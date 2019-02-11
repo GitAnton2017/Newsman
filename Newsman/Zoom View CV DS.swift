@@ -28,48 +28,48 @@ extension ZoomView:  UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
   
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ZoomCollectionViewCell", for: indexPath) as! ZoomViewCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ZoomCollectionViewCell",
+                                                      for: indexPath) as! ZoomViewCollectionViewCell
         
         let photoItem = photoItems[indexPath.row]
      
+        cell.hostedItem = photoItem
+     
         cell.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
         
-        photoItem.getImage(requiredImageWidth:  imageSize)
-        {(image) in
-        
-         cell.spinner.stopAnimating()
-         
-         UIView.transition(with: cell.photoIconView,
-                           duration: 0.75,
-                           options: .transitionCrossDissolve,
-                           animations: {cell.photoIconView.image = image},
-                           completion:
-                           {_ in
-                         
-                            if (photoItem.type == .video)
-                            {
-                             cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
-                             cell.showVideoDuration(textColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), duration: AVURLAsset(url: photoItem.url).duration)
-                            }
-                            
-                            cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                            UIView.animate(withDuration: 0.15,
-                                           delay: 0,
-                                           usingSpringWithDamping: 2500,
-                                           initialSpringVelocity: 0,
-                                           options: .curveEaseInOut,
-                                           animations:
-                                           {
-                                            cell.photoItemView.transform = .identity
-                                           },
-                                           completion: nil)
-                           })
-        }
-     
-        if globalDragItems.contains(where: {($0 as! PhotoItemProtocol).id == photoItem.id})
-        {
-         PhotoSnippetViewController.startCellDragAnimation(cell: cell)
-        }
+//        photoItem.getImage(requiredImageWidth:  imageSize)
+//        {(image) in
+//        
+//         cell.spinner.stopAnimating()
+//         
+//         UIView.transition(with: cell.photoIconView,
+//                           duration: 0.75,
+//                           options: .transitionCrossDissolve,
+//                           animations: {cell.photoIconView.image = image},
+//                           completion:
+//                           {_ in
+//                         
+//                            if (photoItem.type == .video)
+//                            {
+//                             cell.showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
+//                             cell.showVideoDuration(textColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), duration: AVURLAsset(url: photoItem.url).duration)
+//                            }
+//                            
+//                            cell.photoItemView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+//                            UIView.animate(withDuration: 0.15,
+//                                           delay: 0,
+//                                           usingSpringWithDamping: 2500,
+//                                           initialSpringVelocity: 0,
+//                                           options: .curveEaseInOut,
+//                                           animations:
+//                                           {
+//                                            cell.photoItemView.transform = .identity
+//                                           },
+//                                           completion: nil)
+//                           })
+//        }
+//     
+   
         
         return cell
     }

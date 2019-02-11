@@ -356,15 +356,17 @@ extension SnippetsViewController: UITableViewDelegate
  }
  
 
- @objc func sectionTapped(_ gr: UIGestureRecognizer)
- {
-  guard let header = gr.view as? SnippetsTableViewHeaderView else {return}
-  guard let section = header.section else {return}
- 
-  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
-  dataSource.currentFRC.foldSection(section: section)
-  header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
- }
+// @objc func sectionTapped(_ gr: UIGestureRecognizer)
+// {
+//  guard let header = gr.view as? SnippetsTableViewHeaderView else {return}
+//  guard let section = header.section else {return}
+// 
+//  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
+//  dataSource.currentFRC.foldSection(section: section)
+//  header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
+//  
+// 
+// }
  
  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
  {
@@ -376,14 +378,14 @@ extension SnippetsViewController: UITableViewDelegate
   header.titleColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
   header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
   
-  if header.gestureRecognizers == nil
-  {
-   let tgr = UITapGestureRecognizer(target: self, action: #selector(sectionTapped))
-   tgr.numberOfTapsRequired = 2
-   header.addGestureRecognizer(tgr)
-  }
-  
-  header.section = dataSource.currentFRC[section]
+//  if header.gestureRecognizers == nil
+//  {
+//   let tgr = UITapGestureRecognizer(target: self, action: #selector(sectionTapped))
+//   tgr.numberOfTapsRequired = 2
+//   header.addGestureRecognizer(tgr)
+//  }
+//
+//  header.section = dataSource.currentFRC[section]
   
   return header
  }
@@ -396,7 +398,7 @@ extension SnippetsViewController: UITableViewDelegate
   footer.title = Localized.totalSnippets + String(dataSource.currentFRC.numberOfRowsInSection(index: section))
   footer.titleColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
   
-  footer.section = dataSource.currentFRC[section]
+//  footer.section = dataSource.currentFRC[section]
   
   return footer
  }
@@ -430,53 +432,36 @@ extension SnippetsViewController: UITableViewDelegate
  {
   if tableView.isEditing {return}
 
-  guard let type = snippetType else {return}
-
   let selectedSnippet = snippetsDataSource.currentFRC[indexPath]
-
-  switch type
+  
+  switch selectedSnippet.snippetType
   {
-   case .text:      editTextSnippet(snippetToEdit: selectedSnippet as! TextSnippet)
+   case .text:      editSnippet(with: TextSnippetViewController.self, snippetToEdit: selectedSnippet)
    case .video:     fallthrough
-   case .photo:     editVisualSnippet(snippetToEdit: selectedSnippet as! PhotoSnippet)
+   case .photo:     editSnippet(with: PhotoSnippetViewController.self, snippetToEdit: selectedSnippet)
    case .audio:     break
    case .sketch:    break
    case .report:    break
    case .undefined: break
   }
- }
-
- 
- func editTextSnippet(snippetToEdit: TextSnippet)
- {
-  guard let textSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "TextSnippetVC") as? TextSnippetViewController else {return}
-
-  editedSnippet = snippetToEdit
-
-  textSnippetVC.textSnippet = snippetToEdit
-  textSnippetVC.currentFRC = self.snippetsDataSource.currentFRC
-  
-  (self.navigationController?.delegate as? NCTransitionsDelegate)?.currentSnippet = snippetToEdit
-  textSnippetVC.textSnippet.snippetStatus = .old
-  self.navigationController?.pushViewController(textSnippetVC, animated: true)
   
  }
- 
- 
- 
- func editVisualSnippet(snippetToEdit: PhotoSnippet)
+
+ func editSnippet <T> (with _ : T.Type, snippetToEdit: BaseSnippet) where T: SnippetsRepresentable
  {
-  guard let photoSnippetVC = self.storyboard?.instantiateViewController(withIdentifier: "PhotoSnippetVC") as? PhotoSnippetViewController else {return}
-
+  guard var vc = self.storyboard?.instantiateViewController(withIdentifier: T.storyBoardID) as? T else {return}
+  
   editedSnippet = snippetToEdit
-
-  photoSnippetVC.photoSnippet = snippetToEdit
-  photoSnippetVC.currentFRC = self.snippetsDataSource.currentFRC
+  
+  vc.currentSnippet = snippetToEdit
+  vc.currentFRC = self.snippetsDataSource.currentFRC
+  
   
   (self.navigationController?.delegate as? NCTransitionsDelegate)?.currentSnippet = snippetToEdit
-  photoSnippetVC.photoSnippet.snippetStatus = .old
-  self.navigationController?.pushViewController(photoSnippetVC, animated: true)
-
+  
+  vc.currentSnippet.snippetStatus = .old
+  
+  self.navigationController?.pushViewController(vc, animated: true)
  }
 
 }

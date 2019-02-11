@@ -40,7 +40,7 @@ extension SnippetsViewController: UITableViewDropDelegate, UITableViewDragDelega
      PhotoItem.moveFolders(from: sourcePhotoSnippet, to: destPhotoSnippet)
      coordinator.session.localDragSession?.localContext = nil
      PhotoItem.deselectSelectedItems(at: destPhotoSnippet)
-     editVisualSnippet(snippetToEdit: destPhotoSnippet)
+     editSnippet(with: PhotoSnippetViewController.self, snippetToEdit: destPhotoSnippet)
     }
     else
     {

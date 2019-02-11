@@ -26,6 +26,7 @@ extension PhotoSnippetViewController
   {
    
    self.photoSnippet = photoSnippet
+   self.photoSnippet.currentFRC = snippetsVC.snippetsDataSource.currentFRC
    (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
  
    updatePhotoSnippet()

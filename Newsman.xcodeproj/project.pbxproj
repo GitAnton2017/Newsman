@@ -11,7 +11,7 @@
 		A7021CEC2185A7D1009A5F43 /* Snippets TV Header View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */; };
 		A7021CEE2185A92F009A5F43 /* Snippets TV Footer View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */; };
 		A7021CF021863227009A5F43 /* Snippets TV Supplemetary Views.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */; };
-		A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A704264E1FDA87CA000B3400 /* Photo Item.swift */; };
+		A704264F1FDA87CA000B3400 /* Photo Item Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A704264E1FDA87CA000B3400 /* Photo Item Wrapper.swift */; };
 		A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */; };
 		A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */; };
 		A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711C0EA2180779E0025C973 /* Snippets Factory.swift */; };
@@ -40,7 +40,7 @@
 		A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */; };
 		A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */; };
 		A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */; };
-		A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */; };
+		A71EDA692063D0E900E6AB7A /* Photo Folder Item Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA682063D0E900E6AB7A /* Photo Folder Item Wrapper.swift */; };
 		A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */; };
 		A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7298E142015E9A000A7301D /* CoreData.framework */; };
 		A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */; };
@@ -50,6 +50,7 @@
 		A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */; };
 		A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */; };
 		A7330F101FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */; };
+		A73BDA7921D0F62C007E0416 /* Snippets Representable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */; };
 		A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */; };
 		A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */; };
 		A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* DatePickerViewController.swift */; };
@@ -58,10 +59,11 @@
 		A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD4920EBEECD0062AF27 /* Playback Button.swift */; };
 		A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */; };
 		A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD6120EF55540062AF27 /* Playback Progress View.swift */; };
+		A7438686219D70C3005ECACD /* AppDelegate D&D.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7438685219D70C3005ECACD /* AppDelegate D&D.swift */; };
 		A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */; };
-		A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */; };
-		A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */; };
-		A7443F06202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F04202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift */; };
+		A7443F01202DD3F60039BE41 /* PhotoFolder MO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFD202DD3F60039BE41 /* PhotoFolder MO.swift */; };
+		A7443F05202DD7600039BE41 /* Photo MO Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F03202DD7600039BE41 /* Photo MO Properties.swift */; };
+		A7443F06202DD7600039BE41 /* PhotoFolder MO Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F04202DD7600039BE41 /* PhotoFolder MO Properties.swift */; };
 		A7443F122035D2F80039BE41 /* Folder Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F112035D2F80039BE41 /* Folder Cell.swift */; };
 		A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F13203881790039BE41 /* Flag Items Menu.swift */; };
 		A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A748D8B420F4CD5500DA190A /* Play Icon View.swift */; };
@@ -96,25 +98,45 @@
 		A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */; };
 		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
+		A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */; };
 		A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */; };
+		A79548F221E62B4300A37959 /* Thread Safe Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F121E62B4300A37959 /* Thread Safe Map.swift */; };
+		A79548F421E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F321E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift */; };
+		A79548F621EC98AC00A37959 /* Single Cell D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F521EC98AC00A37959 /* Single Cell D&D Delegate.swift */; };
 		A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */; };
+		A7A72E4C21F622DD003AA849 /* Photo Folder MO Manipulations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */; };
 		A7A97232217074100061AA07 /* Global Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A97231217074100061AA07 /* Global Formatters.swift */; };
+		A7AFE5C121F1C48900EBD4C9 /* SCP Video Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C021F1C48900EBD4C9 /* SCP Video Extension.swift */; };
+		A7AFE5C321F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */; };
+		A7AFE5C521F1C7A500EBD4C9 /* SCP Image Load Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */; };
+		A7AFE5C821F3870B00EBD4C9 /* Photo MO Manipulations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */; };
+		A7B2B07D2205BEC400D40008 /* Remove Dependencies Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B07C2205BEC400D40008 /* Remove Dependencies Extension.swift */; };
+		A7B2B07F2205BF5500D40008 /* Context Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B07E2205BF5500D40008 /* Context Operation.swift */; };
+		A7B2B0812205C25F00D40008 /* Cached Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0802205C25F00D40008 /* Cached Image Operation.swift */; };
+		A7B2B0832205C2F100D40008 /* Operation Provider Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0822205C2F100D40008 /* Operation Provider Protocols.swift */; };
+		A7B2B0852205C5F000D40008 /* Saved Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0842205C5F000D40008 /* Saved Image Operation.swift */; };
+		A7B2B0872205CAFD00D40008 /* Render Video Preview Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0862205CAFD00D40008 /* Render Video Preview Operation.swift */; };
+		A7B2B0892205CBB600D40008 /* Thumbnail Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0882205CBB600D40008 /* Thumbnail Image Operation.swift */; };
+		A7B2B08B2205CD2700D40008 /* Resize Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B08A2205CD2700D40008 /* Resize Image Operation.swift */; };
+		A7B2B08D2205CED300D40008 /* Image Set Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B08C2205CED300D40008 /* Image Set Operation.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
 		A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D520C82611005D566A /* Layer Transitions Animator.swift */; };
 		A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7CB13731FD2D5EB00AA7294 /* Localizable.strings */; };
-		A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol.swift */; };
+		A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */; };
 		A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */; };
 		A7D39CF72100E21500F80CAA /* Folder Nested CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */; };
 		A7D39CFA2100E3A000F80CAA /* Folder Nested CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF92100E3A000F80CAA /* Folder Nested CV Delegate.swift */; };
 		A7D39CFC2100EF3700F80CAA /* Item Flag View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CFB2100EF3700F80CAA /* Item Flag View.swift */; };
+		A7D83BBD220F2C460050A0CF /* Drop View Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D83BBC220F2C460050A0CF /* Drop View Protocol.swift */; };
+		A7D83BBF220F35E20050A0CF /* Folder Cell D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D83BBE220F35E20050A0CF /* Folder Cell D&D Delegate.swift */; };
 		A7D93C6A206D3743007891ED /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D93C69206D3743007891ED /* Helpers.swift */; };
 		A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */; };
 		A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */; };
 		A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7DD7D8D20A4517E00572A25 /* CloudKit.framework */; };
 		A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */; };
-		A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */; };
+		A7EB39961FE6A46A00D93E3B /* Photo MO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo MO.swift */; };
 		A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */; };
 		A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */; };
 		A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */; };
@@ -145,7 +167,7 @@
 		A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets TV Header View.swift"; sourceTree = "<group>"; };
 		A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets TV Footer View.swift"; sourceTree = "<group>"; };
 		A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets TV Supplemetary Views.swift"; sourceTree = "<group>"; };
-		A704264E1FDA87CA000B3400 /* Photo Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item.swift"; sourceTree = "<group>"; };
+		A704264E1FDA87CA000B3400 /* Photo Item Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo Item Wrapper.swift"; path = "Newsman/Photo Item Wrapper.swift"; sourceTree = "<group>"; };
 		A70B2AA420DA9FED003AD4B5 /* Snippets VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets VC Restoration.swift"; sourceTree = "<group>"; };
 		A711C0E2217C86040025C973 /* AudioSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AudioSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A711C0EA2180779E0025C973 /* Snippets Factory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Factory.swift"; sourceTree = "<group>"; };
@@ -182,7 +204,7 @@
 		A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Preview Images Provider.swift"; sourceTree = "<group>"; };
 		A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet Preview Provider.swift"; sourceTree = "<group>"; };
 		A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extensions.swift"; sourceTree = "<group>"; };
-		A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder Item.swift"; sourceTree = "<group>"; };
+		A71EDA682063D0E900E6AB7A /* Photo Folder Item Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo Folder Item Wrapper.swift"; path = "Newsman/Photo Folder Item Wrapper.swift"; sourceTree = "<group>"; };
 		A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A7298E142015E9A000A7301D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Cell.swift"; sourceTree = "<group>"; };
@@ -193,6 +215,7 @@
 		A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS.swift"; sourceTree = "<group>"; };
 		A7317B072015EA4100C8836A /* Newsman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Newsman.entitlements; sourceTree = "<group>"; };
 		A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Table View Delegate.swift"; sourceTree = "<group>"; };
+		A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Representable.swift"; sourceTree = "<group>"; };
 		A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7400E741FC731A2006F05DC /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
@@ -201,10 +224,11 @@
 		A741BD4920EBEECD0062AF27 /* Playback Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Button.swift"; sourceTree = "<group>"; };
 		A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Scrub View.swift"; sourceTree = "<group>"; };
 		A741BD6120EF55540062AF27 /* Playback Progress View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Progress View.swift"; sourceTree = "<group>"; };
+		A7438685219D70C3005ECACD /* AppDelegate D&D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate D&D.swift"; sourceTree = "<group>"; };
 		A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder+CoreDataClass.swift"; sourceTree = "<group>"; };
-		A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A7443F04202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A7443EFD202DD3F60039BE41 /* PhotoFolder MO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder MO.swift"; sourceTree = "<group>"; };
+		A7443F03202DD7600039BE41 /* Photo MO Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Properties.swift"; sourceTree = "<group>"; };
+		A7443F04202DD7600039BE41 /* PhotoFolder MO Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder MO Properties.swift"; sourceTree = "<group>"; };
 		A7443F112035D2F80039BE41 /* Folder Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Cell.swift"; sourceTree = "<group>"; };
 		A7443F13203881790039BE41 /* Flag Items Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flag Items Menu.swift"; sourceTree = "<group>"; };
 		A748D8B420F4CD5500DA190A /* Play Icon View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Play Icon View.swift"; sourceTree = "<group>"; };
@@ -245,9 +269,27 @@
 		A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollProtocol.swift; sourceTree = "<group>"; };
 		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
+		A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Images Provider.swift"; sourceTree = "<group>"; };
+		A79548F121E62B4300A37959 /* Thread Safe Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread Safe Map.swift"; sourceTree = "<group>"; };
+		A79548F321E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Cell D&D Waggle Animation.swift"; sourceTree = "<group>"; };
+		A79548F521EC98AC00A37959 /* Single Cell D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Single Cell D&D Delegate.swift"; sourceTree = "<group>"; };
 		A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Image View.swift"; sourceTree = "<group>"; };
+		A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Manipulations.swift"; sourceTree = "<group>"; };
 		A7A97231217074100061AA07 /* Global Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Formatters.swift"; sourceTree = "<group>"; };
+		A7AFE5C021F1C48900EBD4C9 /* SCP Video Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Video Extension.swift"; sourceTree = "<group>"; };
+		A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Flag Markers Extension.swift"; sourceTree = "<group>"; };
+		A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Image Load Extension.swift"; sourceTree = "<group>"; };
+		A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Manipulations.swift"; sourceTree = "<group>"; };
+		A7B2B07C2205BEC400D40008 /* Remove Dependencies Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Remove Dependencies Extension.swift"; sourceTree = "<group>"; };
+		A7B2B07E2205BF5500D40008 /* Context Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Context Operation.swift"; sourceTree = "<group>"; };
+		A7B2B0802205C25F00D40008 /* Cached Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cached Image Operation.swift"; sourceTree = "<group>"; };
+		A7B2B0822205C2F100D40008 /* Operation Provider Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Operation Provider Protocols.swift"; sourceTree = "<group>"; };
+		A7B2B0842205C5F000D40008 /* Saved Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Saved Image Operation.swift"; sourceTree = "<group>"; };
+		A7B2B0862205CAFD00D40008 /* Render Video Preview Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Render Video Preview Operation.swift"; sourceTree = "<group>"; };
+		A7B2B0882205CBB600D40008 /* Thumbnail Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thumbnail Image Operation.swift"; sourceTree = "<group>"; };
+		A7B2B08A2205CD2700D40008 /* Resize Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Resize Image Operation.swift"; sourceTree = "<group>"; };
+		A7B2B08C2205CED300D40008 /* Image Set Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image Set Operation.swift"; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -255,17 +297,19 @@
 		A7CB13721FD2D5EB00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7CB13741FD2D61200AA7294 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7CB13751FD2D61400AA7294 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Protocol.swift"; sourceTree = "<group>"; };
+		A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Protocol (SCP).swift"; sourceTree = "<group>"; };
 		A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV Cell.swift"; sourceTree = "<group>"; };
 		A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS.swift"; sourceTree = "<group>"; };
 		A7D39CF92100E3A000F80CAA /* Folder Nested CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV Delegate.swift"; sourceTree = "<group>"; };
 		A7D39CFB2100EF3700F80CAA /* Item Flag View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item Flag View.swift"; sourceTree = "<group>"; };
+		A7D83BBC220F2C460050A0CF /* Drop View Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drop View Protocol.swift"; sourceTree = "<group>"; };
+		A7D83BBE220F35E20050A0CF /* Folder Cell D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Cell D&D Delegate.swift"; sourceTree = "<group>"; };
 		A7D93C69206D3743007891ED /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Drop Item Provider.swift"; sourceTree = "<group>"; };
-		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Protocol.swift"; sourceTree = "<group>"; };
+		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo Item Protocol.swift"; path = "Newsman/Photo Item Protocol.swift"; sourceTree = "<group>"; };
 		A7DD7D8D20A4517E00572A25 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC Restoration.swift"; sourceTree = "<group>"; };
-		A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A7EB39941FE6A46A00D93E3B /* Photo MO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO.swift"; sourceTree = "<group>"; };
 		A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionAnimation.swift; sourceTree = "<group>"; };
 		A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionsDelegate.swift; sourceTree = "<group>"; };
 		A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VC Transitions Delegate.swift"; sourceTree = "<group>"; };
@@ -347,8 +391,11 @@
 		A7443F07202DDB7E0039BE41 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
-				A7EB39941FE6A46A00D93E3B /* Photo+CoreDataClass.swift */,
-				A7443F03202DD7600039BE41 /* Photo+CoreDataProperties.swift */,
+				A7EB39941FE6A46A00D93E3B /* Photo MO.swift */,
+				A7443F03202DD7600039BE41 /* Photo MO Properties.swift */,
+				A704264E1FDA87CA000B3400 /* Photo Item Wrapper.swift */,
+				A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */,
+				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -356,8 +403,10 @@
 		A7443F08202DDBCF0039BE41 /* PhotoFolder */ = {
 			isa = PBXGroup;
 			children = (
-				A7443EFD202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift */,
-				A7443F04202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift */,
+				A7443EFD202DD3F60039BE41 /* PhotoFolder MO.swift */,
+				A7443F04202DD7600039BE41 /* PhotoFolder MO Properties.swift */,
+				A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */,
+				A71EDA682063D0E900E6AB7A /* Photo Folder Item Wrapper.swift */,
 			);
 			name = PhotoFolder;
 			sourceTree = "<group>";
@@ -467,6 +516,7 @@
 				A75489881FBC4F2900359C0C /* AppDelegate.swift */,
 				A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */,
 				A7A97231217074100061AA07 /* Global Formatters.swift */,
+				A79548F121E62B4300A37959 /* Thread Safe Map.swift */,
 				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
 				A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */,
 				A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */,
@@ -504,6 +554,36 @@
 			path = NewsmanUITests;
 			sourceTree = "<group>";
 		};
+		A7AFE5C621F1C7C800EBD4C9 /* Snippet Cell Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				A7D83BBC220F2C460050A0CF /* Drop View Protocol.swift */,
+				A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */,
+				A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */,
+				A7AFE5C021F1C48900EBD4C9 /* SCP Video Extension.swift */,
+				A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */,
+			);
+			name = "Snippet Cell Protocol";
+			sourceTree = "<group>";
+		};
+		A7B2B07B2205BE5600D40008 /* Photo Operations */ = {
+			isa = PBXGroup;
+			children = (
+				A7B2B07C2205BEC400D40008 /* Remove Dependencies Extension.swift */,
+				A7B2B0822205C2F100D40008 /* Operation Provider Protocols.swift */,
+				A7B2B07E2205BF5500D40008 /* Context Operation.swift */,
+				A7B2B0802205C25F00D40008 /* Cached Image Operation.swift */,
+				A7B2B0842205C5F000D40008 /* Saved Image Operation.swift */,
+				A7B2B08A2205CD2700D40008 /* Resize Image Operation.swift */,
+				A7B2B0862205CAFD00D40008 /* Render Video Preview Operation.swift */,
+				A7B2B0882205CBB600D40008 /* Thumbnail Image Operation.swift */,
+				A7B2B08C2205CED300D40008 /* Image Set Operation.swift */,
+				A76A2824212AD0610094AA5F /* Photo Item Operations.swift */,
+				A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */,
+			);
+			name = "Photo Operations";
+			sourceTree = "<group>";
+		};
 		A7C6A7D220C822AD005D566A /* VC Custom Transitions */ = {
 			isa = PBXGroup;
 			children = (
@@ -519,18 +599,14 @@
 		A7CB13691FD2D27000AA7294 /* Photo Snippets */ = {
 			isa = PBXGroup;
 			children = (
+				A7B2B07B2205BE5600D40008 /* Photo Operations */,
 				A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */,
 				A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */,
-				A71EDA682063D0E900E6AB7A /* Photo Folder Item.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
-				A704264E1FDA87CA000B3400 /* Photo Item.swift */,
-				A76A2824212AD0610094AA5F /* Photo Item Operations.swift */,
-				A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */,
 				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
 				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */,
 				A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */,
-				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
 				A7443F13203881790039BE41 /* Flag Items Menu.swift */,
 				A7D39CFB2100EF3700F80CAA /* Item Flag View.swift */,
 				A7D39CF82100E32800F80CAA /* Delegates */,
@@ -556,6 +632,7 @@
 			isa = PBXGroup;
 			children = (
 				A71C85E61FBED634000F2DD9 /* Snippets VC.swift */,
+				A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */,
 				A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */,
 				A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */,
@@ -601,7 +678,7 @@
 		A7D39CEF2100C31100F80CAA /* CV Cells */ = {
 			isa = PBXGroup;
 			children = (
-				A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol.swift */,
+				A7AFE5C621F1C7C800EBD4C9 /* Snippet Cell Protocol */,
 				A7304A9B1FCAFDB700207A52 /* Single Item Cell.swift */,
 				A7443F112035D2F80039BE41 /* Folder Cell.swift */,
 				A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */,
@@ -613,9 +690,14 @@
 		A7D39CF02100C35500F80CAA /* Drag & Drop */ = {
 			isa = PBXGroup;
 			children = (
-				A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */,
-				A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */,
+				A7438685219D70C3005ECACD /* AppDelegate D&D.swift */,
+				A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */,
 				A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */,
+				A79548F521EC98AC00A37959 /* Single Cell D&D Delegate.swift */,
+				A7D83BBE220F35E20050A0CF /* Folder Cell D&D Delegate.swift */,
+				A79548F321E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift */,
+				A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */,
+				A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */,
 			);
 			name = "Drag & Drop";
 			sourceTree = "<group>";
@@ -805,13 +887,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7443F05202DD7600039BE41 /* Photo+CoreDataProperties.swift in Sources */,
+				A7B2B0812205C25F00D40008 /* Cached Image Operation.swift in Sources */,
+				A7443F05202DD7600039BE41 /* Photo MO Properties.swift in Sources */,
 				A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */,
 				A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
+				A73BDA7921D0F62C007E0416 /* Snippets Representable.swift in Sources */,
 				A71C85E71FBED634000F2DD9 /* Snippets VC.swift in Sources */,
 				A7FAFFEE20F6294900C5B21D /* Duration Stamp View.swift in Sources */,
 				A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */,
+				A7B2B0892205CBB600D40008 /* Thumbnail Image Operation.swift in Sources */,
 				A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */,
 				A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */,
 				A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */,
@@ -830,8 +915,10 @@
 				A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */,
 				A7D39CF72100E21500F80CAA /* Folder Nested CV DS.swift in Sources */,
 				A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */,
+				A7438686219D70C3005ECACD /* AppDelegate D&D.swift in Sources */,
 				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
 				A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */,
+				A7AFE5C821F3870B00EBD4C9 /* Photo MO Manipulations.swift in Sources */,
 				A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */,
 				A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */,
 				A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */,
@@ -839,15 +926,17 @@
 				A7443F122035D2F80039BE41 /* Folder Cell.swift in Sources */,
 				A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */,
 				A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */,
+				A7A72E4C21F622DD003AA849 /* Photo Folder MO Manipulations.swift in Sources */,
 				A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */,
 				A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */,
 				A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */,
 				A7021CEC2185A7D1009A5F43 /* Snippets TV Header View.swift in Sources */,
+				A7B2B0852205C5F000D40008 /* Saved Image Operation.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
 				A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */,
 				A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */,
-				A7443F06202DD7600039BE41 /* PhotoFolder+CoreDataProperties.swift in Sources */,
-				A704264F1FDA87CA000B3400 /* Photo Item.swift in Sources */,
+				A7443F06202DD7600039BE41 /* PhotoFolder MO Properties.swift in Sources */,
+				A704264F1FDA87CA000B3400 /* Photo Item Wrapper.swift in Sources */,
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
 				A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */,
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
@@ -860,7 +949,9 @@
 				A77C73912194392D00E1C57F /* Snippet Bar Rating View.swift in Sources */,
 				A7021CF021863227009A5F43 /* Snippets TV Supplemetary Views.swift in Sources */,
 				A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */,
+				A7D83BBF220F35E20050A0CF /* Folder Cell D&D Delegate.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
+				A7AFE5C521F1C7A500EBD4C9 /* SCP Image Load Extension.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
 				A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */,
 				A7021CEE2185A92F009A5F43 /* Snippets TV Footer View.swift in Sources */,
@@ -869,13 +960,16 @@
 				A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */,
 				A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */,
 				A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */,
+				A7B2B0832205C2F100D40008 /* Operation Provider Protocols.swift in Sources */,
 				A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */,
 				A7D39CFA2100E3A000F80CAA /* Folder Nested CV Delegate.swift in Sources */,
 				A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */,
+				A7B2B07F2205BF5500D40008 /* Context Operation.swift in Sources */,
 				A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */,
 				A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */,
 				A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
+				A7AFE5C121F1C48900EBD4C9 /* SCP Video Extension.swift in Sources */,
 				A7826E3520DE3FE100FFBBFA /* TextSnippet TF Delegate.swift in Sources */,
 				A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */,
 				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
@@ -883,29 +977,39 @@
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
 				A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */,
 				A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */,
-				A7EB39961FE6A46A00D93E3B /* Photo+CoreDataClass.swift in Sources */,
-				A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol.swift in Sources */,
-				A71EDA692063D0E900E6AB7A /* Photo Folder Item.swift in Sources */,
+				A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */,
+				A7EB39961FE6A46A00D93E3B /* Photo MO.swift in Sources */,
+				A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift in Sources */,
+				A71EDA692063D0E900E6AB7A /* Photo Folder Item Wrapper.swift in Sources */,
 				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,
+				A7B2B07D2205BEC400D40008 /* Remove Dependencies Extension.swift in Sources */,
 				A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */,
 				A7D39CFC2100EF3700F80CAA /* Item Flag View.swift in Sources */,
 				A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */,
+				A7AFE5C321F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift in Sources */,
 				A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
 				A7D93C6A206D3743007891ED /* Helpers.swift in Sources */,
+				A79548F421E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* Snippets View Cell.swift in Sources */,
+				A7B2B08D2205CED300D40008 /* Image Set Operation.swift in Sources */,
+				A7D83BBD220F2C460050A0CF /* Drop View Protocol.swift in Sources */,
+				A79548F221E62B4300A37959 /* Thread Safe Map.swift in Sources */,
 				A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */,
 				A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */,
-				A7443F01202DD3F60039BE41 /* PhotoFolder+CoreDataClass.swift in Sources */,
+				A7443F01202DD3F60039BE41 /* PhotoFolder MO.swift in Sources */,
+				A79548F621EC98AC00A37959 /* Single Cell D&D Delegate.swift in Sources */,
 				A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */,
 				A75489891FBC4F2900359C0C /* AppDelegate.swift in Sources */,
 				A71C85E91FBED660000F2DD9 /* Snippets View DS.swift in Sources */,
 				A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */,
 				A71C85BF1FBE1972000F2DD9 /* Report+CoreDataClass.swift in Sources */,
+				A7B2B0872205CAFD00D40008 /* Render Video Preview Operation.swift in Sources */,
 				A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */,
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
 				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,
 				A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */,
+				A7B2B08B2205CD2700D40008 /* Resize Image Operation.swift in Sources */,
 				A751FC4C218C7FD20088D9C5 /* CG Affine Transform Extension.swift in Sources */,
 				A711C0EF2183167C0025C973 /* Snippets Special Enums, Structs.swift in Sources */,
 			);
@@ -1040,7 +1144,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

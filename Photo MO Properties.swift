@@ -14,13 +14,14 @@ import CoreData
 extension Photo
 {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Photo> {
-        return NSFetchRequest<Photo>(entityName: "Photo")
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Photo>
+    {
+      return NSFetchRequest<Photo>(entityName: "Photo")
     }
 
     @NSManaged public var date: NSDate?
     @NSManaged public var id: UUID?
-    @NSManaged public var isSelected: Bool
+    @NSManaged public var isSelected: Bool //Managed and persisted state of single photo visual selected state.
     @NSManaged public var position: Int16
     @NSManaged public var priorityFlag: String?
     @NSManaged public var photoSnippet: PhotoSnippet?

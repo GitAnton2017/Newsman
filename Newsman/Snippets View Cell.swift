@@ -16,9 +16,9 @@ protocol ImageContextLoadProtocol
 
  var snippetID: String {return (hostedSnippet as? BaseSnippet)?.id?.uuidString ?? "No Snippet Assigned"}
 
- private var tableView: UITableView? {return self.superview as? UITableView}
+ private weak var tableView: UITableView? {return self.superview as? UITableView}
  
- private var currentFRC: SnippetsFetchController?
+ private weak var currentFRC: SnippetsFetchController?
  {
   return (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
  }
@@ -354,7 +354,7 @@ protocol ImageContextLoadProtocol
 
  func stopImageProvider()
  {
-   hostedSnippet?.imageProvider.cancel()
+   hostedSnippet?.imageProvider.cancelRandomImagesOperations()
  }
 
 

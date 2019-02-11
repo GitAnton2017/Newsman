@@ -9,33 +9,47 @@ import CoreData
  class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
  {
- 
-    let  group =  DispatchGroup()
+    var isSetForClear: Bool
+    {
+     get {return folder.dragAndDropAnimationSetForClearanceState}
+     set {folder.dragAndDropAnimationSetForClearanceState = newValue}
+    }
+  
+    func cancelImageOperations(){}
+  
+    var dragAnimationCancelWorkItem: DispatchWorkItem?
+    // the strong ref to work item responsible for cancellation of self draggable visual state.
+  
+    weak var hostingCollectionViewCell: PhotoSnippetCellProtocol?
+    //the CV folder cell that is currently displaying this PhotoFolderItem photos or video previews
+  
+    let  group = DispatchGroup()
   
     weak var dragSession: UIDragSession?
   
     static let folderItemUTI = "folderitem.newsman"
     
     let PDFContextSize = CGSize(width: 300, height: 500)
-    
-//-----------------------------------------
-    var folder: PhotoFolder
-//-----------------------------------------
-    
-    var singlePhotoItems: [PhotoItem]?
-    {
-        return (folder.photos?.allObjects as? [Photo])?.map{PhotoItem(photo: $0)}
-    }
-    
-    var url: URL
-    {
-        let docFolder = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let snippetURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
-        return snippetURL.appendingPathComponent(id.uuidString)
-    }
-    
-    var id: UUID {return folder.id!}
   
+    var folder: PhotoFolder
+
+    var hostedManagedObject: NSManagedObject {return folder}
+    //getter for using in Draggable protocol to get wrapped MO
+  
+    var singlePhotoItems: [PhotoItem]
+    {
+     return self.folder.folderedPhotos.map{PhotoItem(photo: $0)}
+    }
+  
+    var count: Int  {return self.folder.count}
+  
+    var isEmpty: Bool {return self.folder.isEmpty}
+    
+    var url: URL {return self.folder.url}
+    
+    var id: UUID {return self.folder.id!}
+  
+    var photoSnippet: PhotoSnippet {return folder.photoSnippet!}
   
     func deleteFolder ()
     {
@@ -45,7 +59,7 @@ import CoreData
   
     func deleteImages()
     {
-     PhotoSnippetViewController.removeDraggedItem(PhotoItemToRemove: self)
+     self.remove() //remove folder from drags
      (folder.photos?.allObjects as? [Photo])?.forEach
      {photo in
       PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: photo.id!.uuidString as NSString)}
@@ -57,31 +71,56 @@ import CoreData
     
     var priorityFlag: String?
     {
-        get {return folder.priorityFlag}
-        set {folder.priorityFlag = newValue}
+     get {return folder.priorityFlag}
+     set {folder.priorityFlag = newValue}
     }
     
-    var priority: Int {return PhotoPriorityFlags(rawValue: folder.priorityFlag ?? "")?.rateIndex ?? -1}
+    var priority: Int {return self.folder.priorityIndex}
     
-    var date: Date {return folder.date! as Date}
+    var date: Date {return self.folder.date! as Date}
     
     var position: Int16
     {
-        get {return folder.position}
-        set {folder.position = newValue}
+     get {return self.folder.position}
+     set {self.folder.position = newValue}
     }
-    
+  
+    func toggleSelection()
+    {
+     isSelected.toggle()
+    }
+  
     var isSelected: Bool
     {
-        get {return folder.isSelected}
-        set
-        {
-         folder.isSelected = newValue
-         folder.photos?.forEach {($0 as! Photo).isSelected = newValue}
-        }
+     get {return self.folder.isSelected}
+     set
+     {
+      folder.photoSnippet?.currentFRC?.deactivateDelegate()
+      folder.managedObjectContext?.persistAndWait(block:
+      {
+       self.folder.isSelected = newValue
+       self.folder.photos?.forEach {($0 as! Photo).isSelected = newValue}
+      })
+      {flag in
+       if flag
+       {
+        self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
+        self.folder.photoSnippet?.currentFRC?.activateDelegate()
+       }
+      }
+     }
     }
-    
-    var photoSnippet: PhotoSnippet {return folder.photoSnippet!}
+  
+    var isDragAnimating: Bool
+    {
+     get {return folder.dragAndDropAnimationState}
+     set
+     {
+      folder.dragAndDropAnimationState = newValue
+      self.hostingCollectionViewCell?.isDragAnimating = newValue
+     }
+    }
+ 
   
     enum FolderMOKeys: CodingKey
     {

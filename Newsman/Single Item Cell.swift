@@ -1,72 +1,107 @@
 import UIKit
 import Foundation
+import AVKit
 
-class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol
+class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItemsDraggable, DropViewProvidable
 {
-    func cancelImageOperations()
-    {
-     hostedPhotoItem?.cancelImageOperation()
-    }
  
-    weak var hostedPhotoItem: PhotoItem?
+ lazy var dropView: UIView = self.setDropView()
  
-    var isPhotoItemSelected: Bool
-    {
-      set {photoIconView.alpha = newValue ? 0.5 : 1}
-      get {return photoIconView.alpha == 0.5       }
-    }
+ lazy var dropDelegate: UIDropInteractionDelegate =
+ {
+  let dropDelegate = SingleCellDropViewDelegate(owner: self)
+  return dropDelegate
+ }()
  
-    var photoItemView: UIView {return self.contentView}
-    var cellFrame: CGRect     {return self.frame}
- 
-    @IBOutlet weak var photoIconView: UIImageView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
 
-    
-    override func awakeFromNib()
-    {
-        super.awakeFromNib()
-        hostedPhotoItem = nil
-     
-        spinner.startAnimating()
-        photoIconView.image = nil
-        clearFlagMarker()
-        clearVideoDuration()
-        hidePlayIcon()
-        imageRoundClip(cornerRadius: 10)
-        addObserver(self, forKeyPath: #keyPath(PhotoSnippetCell.bounds), options: [.new], context: nil)
-        
-    }
-    
-    override func prepareForReuse()
-    {
-        super.prepareForReuse()
-       
-        hostedPhotoItem = nil
-        spinner.startAnimating()
-        photoIconView.image = nil
-        clearFlagMarker()
-        clearVideoDuration()
-        hidePlayIcon()
-        imageRoundClip(cornerRadius: 10)
-     
-    }
+ var hostedView: UIView {return photoIconView}
+ var hostedAccessoryView: UIView? {return spinner}
+
+ weak var photoSnippet: PhotoSnippet!
+ weak var photoSnippetVC: PhotoSnippetViewController!
  
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
-                               change: [NSKeyValueChangeKey : Any]?,
-                               context: UnsafeMutableRawPointer?)
-    {
-      if keyPath == #keyPath(PhotoSnippetCell.bounds)
-      {
-      }
-    }
+ @IBOutlet weak var photoIconView: UIImageView!        //hosted photo UIImageView...
+ @IBOutlet weak var spinner: UIActivityIndicatorView!
  
-    deinit
-    {
-     removeObserver(self, forKeyPath: #keyPath(PhotoSnippetCell.bounds))
-    }
-    
-    
-}
+ func cancelImageOperations()
+ {
+  hostedItem?.cancelImageOperations()
+ }
+
+ weak var hostedItem: PhotoItemProtocol?
+ //The sigle PhotoItem that is currently hosted and visualized by this type of UICollectionViewCell...
+ {
+  didSet
+  {
+   guard let hosted = self.hostedItem as? PhotoItem else {return}
+  
+   updateImage()
+   
+   hosted.hostingCollectionViewCell = self
+   //weak reference to this cell that will display this PhotoItem...
+   
+   photoIconView.alpha = hosted.isSelected ? 0.5 : 1
+   
+   self.isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
+
+   //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
+  }
+  
+ }//weak var hostedItem: PhotoItemProtocol?...
+
+ let hostedViewSelectedAlpha: CGFloat = 0.5
+ 
+ 
+ private var _selected = false
+ var isPhotoItemSelected: Bool
+ {
+   set
+   {
+    _selected = newValue
+    photoIconView.alpha = newValue ? hostedViewSelectedAlpha : 1
+    touchSpring()
+   }
+  
+   get {return _selected}
+ }
+ 
+ override func awakeFromNib()
+ {
+  super.awakeFromNib()
+  self.hostedItem = nil
+  _selected = false
+  
+  let dropper = UIDropInteraction(delegate: dropDelegate)
+  dropper.allowsSimultaneousDropSessions = true
+  dropView.addInteraction(dropper)
+  
+  spinner.startAnimating()
+  photoIconView.image = nil
+  photoIconView.alpha = 1
+  clearFlagMarker()
+  clearVideoDuration()
+  hidePlayIcon()
+  imageRoundClip(cornerRadius: 10)
+  
+ }
+ 
+ override func prepareForReuse()
+ {
+  super.prepareForReuse()
+
+  self.hostedItem = nil
+  spinner.startAnimating()
+  photoIconView.image = nil
+  photoIconView.alpha = 1
+  _selected = false
+  clearFlagMarker()
+  clearVideoDuration()
+  hidePlayIcon()
+  imageRoundClip(cornerRadius: 10)
+  
+ }
+ 
+ 
+}//class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol...
 
 

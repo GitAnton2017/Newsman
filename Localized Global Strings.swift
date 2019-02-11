@@ -16,14 +16,6 @@ extension String
 }
 
 
-protocol StringLocalizable
-{
- var localizedString: String {get}
-}
-
-
-
-
 struct Localized
 {
  

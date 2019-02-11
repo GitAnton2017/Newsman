@@ -2,10 +2,9 @@
 import Foundation
 import UIKit
 
-protocol NCSnippetsScrollProtocol
+protocol NCSnippetsScrollProtocol: SnippetsBaseRepresentable
 {
  var currentViewController: UIViewController { get }
- var currentSnippet: BaseSnippet             { get }
  
  func itemUpBarButtonPress(_ sender: UIBarButtonItem)
  func itemDownBarButtonPress(_ sender: UIBarButtonItem)

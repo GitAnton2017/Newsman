@@ -71,11 +71,11 @@ enum PhotoPriorityFlags: String, AllCasesSelectorRepresentable
  ]
  
  static let prioritySectionsMap: [PhotoPriorityFlags: Int] =
-  [
+ [
    .hottest : 0, .hot : 1, .high : 2, .normal : 3, .medium : 4, .low : 5
  ]
  static let priorities: [PhotoPriorityFlags] =
-  [
+ [
    .hottest , .hot, .high, .normal, .medium, .low
  ]
  

@@ -2,6 +2,7 @@
 import Foundation
 import UIKit
 import AVKit
+import CoreData
 
 class ZoomView: UIView
 {
@@ -20,7 +21,9 @@ class ZoomView: UIView
     @objc dynamic var playerView: PlayerView?
  
     weak var photoSnippetVC: PhotoSnippetViewController!
+ 
     weak var zoomedPhotoItem: PhotoItemProtocol?
+    weak var zoomedManagedObject: NSManagedObject?
  
     var zoomedCellIndexPath: IndexPath!
     var presentSubview: UIView!
@@ -89,15 +92,15 @@ class ZoomView: UIView
                        delay: 0,
                        options: [.curveEaseIn],
                        animations:
-                       {[unowned self] in
-                        self.removingZoomView = true
-                        self.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
-                        self.center = CGPoint(x: UIScreen.main.bounds.maxX, y: UIScreen.main.bounds.maxY)
+                       {[weak self] in
+                        self?.removingZoomView = true
+                        self?.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+                        self?.center = CGPoint(x: UIScreen.main.bounds.maxX, y: UIScreen.main.bounds.maxY)
                        },
                        completion:
-                       {[unowned self] _ in
-                        self.removeFromSuperview()
-                        self.removingZoomView = false
+                       {[weak self] _ in
+                        self?.removeFromSuperview()
+                        self?.removingZoomView = false
                        })
     }
  
@@ -106,8 +109,8 @@ class ZoomView: UIView
      UIView.transition(with: self,
                        duration: 1,
                        options: [.curveEaseOut, .transitionFlipFromBottom, .transitionCrossDissolve],
-                       animations: {[unowned self]   in self.addSubview(subView)},
-                       completion: {[unowned self] _ in self.setConstraints(of: subView)})
+                       animations: {[weak self]   in self?.addSubview(subView)},
+                       completion: {[weak self] _ in self?.setConstraints(of: subView)})
     }
  
  
@@ -119,10 +122,12 @@ class ZoomView: UIView
                     usingSpringWithDamping: 0.9,
                     initialSpringVelocity: 12,
                     options: [.curveEaseInOut],
-                    animations: {[unowned self] in
-                                  self.transform = CGAffineTransform.identity
-                                  self.center = self.superview!.center
-                                 }, completion: completion)
+                    animations: {[weak self] in
+                                  guard let zv = self else {return}
+                                  zv.transform = CGAffineTransform.identity
+                                  zv.center = zv.superview!.center
+                                 },
+                                 completion: completion)
     }
     
     func setConstraints (to mainView: UIView)
@@ -301,9 +306,16 @@ class ZoomView: UIView
         
       let dropper = UIDropInteraction(delegate: self)
       addInteraction(dropper)
-      
-        
-      openAnim()
+     
+     
+      if (presentSubview != nil) {changeAnim(to: iv)}
+      else
+      {
+       self.addSubview(iv)
+       setConstraints(of: iv)
+       openAnim()
+      }
+     
       presentSubview = iv
       return iv
       
@@ -315,7 +327,7 @@ class ZoomView: UIView
       {
        if let cv = sv as? UICollectionView {return cv}
       }
-      
+     
       subviews.forEach{$0.removeFromSuperview()}
         
       interactions.removeAll()

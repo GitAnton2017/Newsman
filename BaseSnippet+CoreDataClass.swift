@@ -21,6 +21,11 @@ protocol SnippetImagesPreviewProvidable: class
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
  
+ weak var currentFRC: SnippetsFetchController?
+ //the weak ref to current FRC wrapper that fetched and manages this Snippet
+
+ func initStorage(){} //Polymorphic method to intialize virtual type of storage for concrete snippet type.
+ 
  static var snippetDates = SnippetDates()
 
  @NSManaged private (set) var date: NSDate?
@@ -168,6 +173,16 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
+ private var docFolder: URL
+ {
+  return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+ }
+ 
+ 
+ final var url: URL
+ {
+  return docFolder.appendingPathComponent(self.id!.uuidString)
+ }
  
  
 
