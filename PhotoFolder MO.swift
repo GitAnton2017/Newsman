@@ -39,6 +39,9 @@ import CoreData
  final var dragAndDropAnimationState: Bool = false
  //PhotoFolder MO internal not persisted current state of animation PhotoFolderItem wrapper dragged
  
+ final var zoomedPhotoItemState: Bool = false
+ //PhotoFolder MO internal not persisted current state if its PhotoFolderItem wrapper is currently presented in ZoomView
+ 
 } //@objc(PhotoFolder) public class PhotoFolder: NSManagedObject...
 
 

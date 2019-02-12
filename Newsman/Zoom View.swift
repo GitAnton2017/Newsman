@@ -23,6 +23,22 @@ class ZoomView: UIView
     weak var photoSnippetVC: PhotoSnippetViewController!
  
     weak var zoomedPhotoItem: PhotoItemProtocol?
+    {
+     didSet
+     {
+      oldValue?.isZoomed = false
+      zoomedPhotoItem?.isZoomed = true
+     }
+     //as soon as we open ZoomView with <zoomedPhotoItem> assigned here we set <isZoomed> state of PhotoItem
+     //of PhotoFolderItem and consequently the underlying state of its MO...
+    }
+ 
+    deinit
+    {
+     zoomedPhotoItem?.isZoomed = false
+     //before ZoomView is destructed we unset <isZoomed> state of zoomed photo item...
+    }
+ 
     weak var zoomedManagedObject: NSManagedObject?
  
     var zoomedCellIndexPath: IndexPath!
@@ -349,6 +365,12 @@ class ZoomView: UIView
       cv.dragInteractionEnabled = true
       cv.dropDelegate = self
       cv.dragDelegate = self
+      cv.contentInsetAdjustmentBehavior = .never //!!!
+     // Constants indicating how safe area insets are added to the adjusted content inset.
+     // .automatic - Automatically adjust the scroll view insets.
+     // .scrollableAxes - Adjust the insets only in the scrollable directions.
+     // .never - Do not adjust the scroll view insets.
+     // .always -Always include the safe area insets in the content adjustment.
      
         
       let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)

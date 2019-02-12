@@ -34,22 +34,23 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
   
  {
   
-  let photoItem = photoItems[indexPath.row]
+  let dragged = photoItems[indexPath.row]
   
-  guard collectionView.cellForItem(at: indexPath) != nil else {return []}
+  guard collectionView.cellForItem(at: indexPath) != nil else { return [] }
   
-  let itemProvider = NSItemProvider(object: photoItem)
+  guard dragged.isDraggable else { return [] } //check up eligibility for dragging with current drag session...
+ 
+  
+  AppDelegate.globalDragItems.append(dragged)
+  
+  let itemProvider = NSItemProvider(object: dragged)
   let dragItem = UIDragItem(itemProvider: itemProvider)
   
+  dragged.isSelected = true          //make selected in MOC
+  dragged.isDragAnimating = true     //start drag animation of associated view
+  dragged.dragSession = session
+  dragItem.localObject = dragged
   
-  guard allPhotoItems.lazy.first(where: {$0 === photoItem || $0 === zoomedPhotoItem}) == nil else {return []}
-  
-  AppDelegate.globalDragItems.append(photoItem)
-  
-  photoItem.isSelected = true      //make selected in MOC
-  photoItem.isDragAnimating = true //start drag animation of associated view
-  photoItem.dragSession = session  
-  dragItem.localObject = photoItem
   AppDelegate.printAllDraggedItems()
   
   return [dragItem]
@@ -274,7 +275,7 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
  {
   print (#function)
   
-  guard zoomedFolder !== photoFolderItem else {return}// Disallow dropping ZoomedFolder into self!!!
+  if photoFolderItem.isZoomed {return}// Disallow dropping ZoomedFolder into self!!!
  
   let singlePhotoItems = photoFolderItem.singlePhotoItems
  

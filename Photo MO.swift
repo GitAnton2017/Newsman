@@ -50,6 +50,11 @@ import UIKit
  final var dragAndDropAnimationState: Bool = false
  //Photo MO internal not persisted current state of animation PhotoItem wrapper dragged
  
+ final var zoomedPhotoItemState: Bool = false
+ //Photo MO internal not persisted current state if its PhotoItem wrapper is currently presented in ZoomView
+ 
+ 
+ 
 
 }
 

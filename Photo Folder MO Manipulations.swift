@@ -66,6 +66,13 @@ extension PhotoFolder //managed object extension
    return
   }
   
+  guard self !== destination else
+  {
+   print(#function, terminator: ">>> ")
+   print ("THE FOLDER IS NOT ALLOWED TO BE REFOLDERED INTO SELF!")
+   return
+  }
+  
   let foldered = NSSet(array: folderedPhotos)
   guard foldered.count > 0 else
   {

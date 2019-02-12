@@ -22,14 +22,14 @@ class FolderCellDropViewDelegate: SingleCellDropViewDelegate
   let count = mergedFolder.singlePhotoItems.count - folderCell.photoItems.count
   let indexPath = IndexPath(row: folderCell.photoItems.count, section: 0)
   let indexPaths = Array(repeating: indexPath, count: count)
-  folderCell.photoItems = mergedFolder.singlePhotoItems
+  let itemsToInsert = Set(mergedFolder.singlePhotoItems).subtracting(folderCell.photoItems)
+  folderCell.photoItems.append(contentsOf: itemsToInsert)
   folderCell.photoCollectionView.insertItems(at: indexPaths)
   
-  
   guard let zoomView = cv.zoomView else { return }
-  guard zoomView.zoomedPhotoItem?.hostedManagedObject === folderCell.hostedItem?.hostedManagedObject else { return }
+  guard let hosted = folderCell.hostedItem, hosted.isZoomed else { return }
   
-  zoomView.photoItems = mergedFolder.singlePhotoItems
+  zoomView.photoItems.append(contentsOf: itemsToInsert)
   (zoomView.presentSubview as? UICollectionView)?.insertItems(at: indexPaths)
   
   

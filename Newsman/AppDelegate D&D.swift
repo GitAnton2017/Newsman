@@ -13,14 +13,31 @@ protocol Draggable: class
  var isDragAnimating: Bool          { get set } //not managed...
  var isSetForClear: Bool            { get set } //not managed...
  //this state is traced to avoid multiple clearance animations to be fired for cell when drop session ends...
+ 
+ var isFolderDragged: Bool          { get }
+ var isZoomed: Bool                 { get set }
 
  var dragAnimationCancelWorkItem: DispatchWorkItem? {get set}
  
  func move(to snippet: PhotoSnippet, to photoItem: PhotoItemProtocol?)
 }
 
+
+
+func == (lhs: Draggable?, rhs: Draggable?) -> Bool
+{
+ return lhs?.hostedManagedObject === rhs?.hostedManagedObject
+}
+
+
+
 extension Draggable
 {
+ var isDraggable: Bool
+ {
+  return !(isDragAnimating || isSetForClear || isFolderDragged)
+ }
+ 
  func clear (with delays: (forDragAnimating: Int, forSelected: Int), completion: (()->())? = nil)
  {
  
@@ -53,6 +70,8 @@ extension Draggable
    case     (_ , false):
     AppDelegate.globalDropItems.append(self)
    case let (folderItem as PhotoFolderItem, true):
+    folderItem.isSelected = false
+    folderItem.isDragAnimating = false
     AppDelegate.globalDropItems.append(contentsOf: folderItem.singlePhotoItems)
    default: break
   }

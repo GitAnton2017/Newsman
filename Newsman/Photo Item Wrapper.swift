@@ -13,6 +13,30 @@ import AVKit
 
 class PhotoItem: NSObject, PhotoItemProtocol
 {
+    var isZoomed: Bool
+    {
+     get {return photo.zoomedPhotoItemState}
+     set {photo.zoomedPhotoItemState = newValue}
+    }
+ 
+    var isFolderDragged: Bool
+    {
+     guard let folder = self.folder else {return false}
+     return folder.dragAndDropAnimationState
+    }
+ 
+    override func isEqual(_ object: Any?) -> Bool
+    {
+     return self.photo === (object as? PhotoItem)?.photo
+    }
+ 
+    override var hash: Int
+    {
+     var hasher = Hasher()
+     hasher.combine(photo)
+     return hasher.finalize()
+    }
+ 
     var isSetForClear: Bool
     {
      get {return photo.dragAndDropAnimationSetForClearanceState}

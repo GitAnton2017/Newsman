@@ -44,26 +44,21 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
   
   print (#function, self.debugDescription, session.description)
   
-  guard collectionView.cellForItem(at: indexPath) != nil else {return []}
+  guard collectionView.cellForItem(at: indexPath) != nil else { return [] }
   
-  let photoItem = photoItems2D[indexPath.section][indexPath.row]
+  let dragged = photoItems2D[indexPath.section][indexPath.row]
   
-  let itemProvider = NSItemProvider(object: photoItem)
+  guard dragged.isDraggable else { return [] } //check up if it is really eligible for drags...
+  
+  let itemProvider = NSItemProvider(object: dragged)
   let dragItem = UIDragItem(itemProvider: itemProvider)
   
-  guard allPhotoItems.first(where: {$0.id == photoItem.id}) == nil else {return []}
+  AppDelegate.globalDragItems.append(dragged) //if all OK put it in drags first...
+  dragged.isSelected = true                   //make selected in MOC
+  dragged.isDragAnimating = true              //start drag animation of associated view
+  dragged.dragSession = session
+  dragItem.localObject = dragged
   
-  if let dragged = photoItem as? PhotoFolderItem
-  {
-   guard allPhotos.first(where: {$0.photo.folder?.id == dragged.id}) == nil else {return []}
-  }
-  
-  
-  AppDelegate.globalDragItems.append(photoItem)
-  photoItem.isSelected = true      //make selected in MOC
-  photoItem.isDragAnimating = true //start drag animation of associated view
-  photoItem.dragSession = session
-  dragItem.localObject = photoItem
   AppDelegate.printAllDraggedItems()
  
   return [dragItem]

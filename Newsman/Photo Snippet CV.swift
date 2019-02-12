@@ -258,56 +258,51 @@ class PhotoSnippetCollectionView: UICollectionView
     {
      for view in mainView.subviews
      {
-         if let zoomView = view as? ZoomView {return zoomView}
+      if let zoomView = view as? ZoomView {return zoomView}
      }
      
      if let indexPath = indexPathForItem(at: touchPoint)
      {
-         let zoomView = ZoomView()
-         zoomView.center = centerAt
-         zoomView.zoomedCellIndexPath = indexPath
-         zoomView.photoSnippetVC = dataSource as? PhotoSnippetViewController
-        
-         let tappedItem = photoItems2D[indexPath.section][indexPath.row]
-         zoomView.zoomedPhotoItem = tappedItem
+       let zoomView = ZoomView()
+       zoomView.center = centerAt
+       zoomView.zoomedCellIndexPath = indexPath
+       zoomView.photoSnippetVC = dataSource as? PhotoSnippetViewController
       
-        
-         switch cellForItem(at: indexPath)
-         {
-          case _ as PhotoSnippetCell:
-           
-             let photoItem = tappedItem as! PhotoItem
-             zoomView.zoomedManagedObject = photoItem.photo
-             
-             switch (photoItem.type)
-             {
-              case .photo:
-               let imageView = zoomView.openWithIV(in: mainView)
-               photoItem.getImage(requiredImageWidth: zoomSize)
-               {image in
-                zoomView.stopSpinner()
-                imageView.image = image
-                image?.setSquared(in: imageView)
-               }
-              
-              case .video: zoomView.openWithVideoPlayer(in: mainView, for:  photoItem.url)
-              
-              default: break
+       let tappedItem = photoItems2D[indexPath.section][indexPath.row]
+       zoomView.zoomedPhotoItem = tappedItem
+    
+       switch cellForItem(at: indexPath)
+       {
+        case is PhotoSnippetCell:
+         
+         let photoItem = tappedItem as! PhotoItem
+           switch (photoItem.type)
+           {
+            case .photo:
+             let imageView = zoomView.openWithIV(in: mainView)
+             photoItem.getImage(requiredImageWidth: zoomSize)
+             {image in
+              zoomView.stopSpinner()
+              imageView.image = image
+              image?.setSquared(in: imageView)
              }
-          
             
-          case let cell as PhotoFolderCell:
-            let photoFolderItem = tappedItem as! PhotoFolderItem
-            zoomView.zoomedManagedObject = photoFolderItem.folder
-            let cv  = zoomView.openWithCV(in: mainView)
-            zoomView.photoItems = cell.photoItems
-            cv.reloadData()
+            case .video: zoomView.openWithVideoPlayer(in: mainView, for:  photoItem.url)
             
-          default: break
-            
-         }
+            default: break
+           }
         
-         return zoomView
+        
+        case let cell as PhotoFolderCell:
+          let cv  = zoomView.openWithCV(in: mainView)
+          zoomView.photoItems = cell.photoItems
+          cv.reloadData()
+        
+        default: break
+        
+       }
+      
+       return zoomView
         
      }
         

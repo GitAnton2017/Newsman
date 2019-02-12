@@ -9,10 +9,18 @@ import CoreData
  class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
  {
+    var isFolderDragged: Bool {return false}
+  
     var isSetForClear: Bool
     {
      get {return folder.dragAndDropAnimationSetForClearanceState}
      set {folder.dragAndDropAnimationSetForClearanceState = newValue}
+    }
+  
+    var isZoomed: Bool
+    {
+     get {return folder.zoomedPhotoItemState}
+     set {folder.zoomedPhotoItemState = newValue}
     }
   
     func cancelImageOperations(){}
