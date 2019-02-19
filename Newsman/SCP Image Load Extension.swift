@@ -10,27 +10,19 @@ import UIKit
 
 extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
 {
- 
- func updateDraggableHostingCell()
- /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
- property) may change due to cells updates in CVs (TVs) so we have to update references to the dragged animated cells to
- animate post Drag & Drop activitity clearances with the proper cells in "Draggable.clear(...)" method! */
- {
-  AppDelegate.globalDragDropItems.compactMap{$0 as? PhotoItemProtocol}
-                                 .first{$0.hostedManagedObject === hostedItem?.hostedManagedObject}?
-                                 .hostingCollectionViewCell = self
- }
- 
+
  func updateImage()
  {
-  guard let hosted = self.hostedItem as? PhotoItem else {return}
+  guard let hosted = self.hostedItem as? PhotoItem else { return }
   
   hosted.getImageOperation(requiredImageWidth:  frame.width)
-  {[weak w_hosted = hosted,  weak self] (image) in
+  {[weak hosted, weak self] (image) in
    
-   guard let cell = self else {return}
-   guard let photoItem = cell.hostedItem as? PhotoItem else {return}
-   guard let wh = w_hosted, wh === photoItem  else {return}
+   guard let cell = self else { return }
+   guard let photoItem = cell.hostedItem as? PhotoItem else { return }
+   guard hosted == photoItem  else { return }
+   // we capture hosted weakly by completion closure and use overloaded == operator
+   // to check if hosted item is change while we processed required image async...
    
    (cell.hostedAccessoryView as? UIActivityIndicatorView)?.stopAnimating()
    
@@ -48,7 +40,7 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
     
    guard let image = image else
    {
-    print ("<<<<<<<<<<UPDATED MORE...>>>>>>>>>>")
+//    print ("<<<<<<<<<<UPDATED MORE...>>>>>>>>>>")
     spinner.startAnimating()
     updateImage()
     return

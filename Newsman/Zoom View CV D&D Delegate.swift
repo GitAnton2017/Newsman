@@ -4,8 +4,14 @@ import CoreData
 import UIKit
 
 
-extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
+extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate, PhotoItemsDraggable
 {
+ var photoSnippet: PhotoSnippet!
+ {
+  return photoSnippetVC.photoSnippet
+ }
+ 
+ var isDraggable: Bool { return true }
  
  func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
  {
@@ -40,7 +46,7 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
   
   guard dragged.isDraggable else { return [] } //check up eligibility for dragging with current drag session...
  
-  
+ 
   AppDelegate.globalDragItems.append(dragged)
   
   let itemProvider = NSItemProvider(object: dragged)
@@ -66,6 +72,8 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
  {
   print (#function, self.debugDescription, session.description)
 
+  guard isDraggable else { return [] }
+  
   let itemsForBeginning = getDragItems(collectionView, for: session, forCellAt: indexPath)
   
   //Auto cancel all dragged PhotoItems only!
@@ -102,30 +110,33 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
 
  
  
+ 
  func collectionView(_ collectionView: UICollectionView,
                        dropSessionDidUpdate session: UIDropSession,
                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
  {
    //print(#function)
-   if session.localDragSession != nil
-   {
-    if session.items.count == 1
-    {
-     return UICollectionViewDropProposal(operation: .move, intent: .unspecified)
-    }
-    
+  
+  switch (session.localDragSession, session.items.count, session.items.first?.localObject)
+  {
+   case (_?,  1, let dragged as PhotoFolderItem):
+    let op: UIDropOperation = dragged.isDragAnimating && dragged.isZoomed ? .forbidden : .move
+    return UICollectionViewDropProposal(operation: op , intent: .insertAtDestinationIndexPath)
+   case (_?,  1, is PhotoItem):
+    return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+   case (_?, let k, _) where k > 1:
     return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
-   }
-   else
-   {
-    return UICollectionViewDropProposal(operation: .copy , intent: .insertAtDestinationIndexPath)
-   }
+   case (nil, _, _):
+    return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+   default:
+    return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
+  }
+  
  }
  
  
  
  
- //-------------------------------------------------------------------------------------------------
  
  func copyPhotosFromSideApp (_ collectionView: UICollectionView,
                              performDropWith coordinator: UICollectionViewDropCoordinator,
@@ -171,14 +182,13 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
  }
  
  
- //-------------------------------------------------------------------------------------------------
  
  func moveItemInside(_ collectionView: UICollectionView,
                      in zoomedFolder: PhotoFolderItem,
                      item photoItem: PhotoItem,
                      to destinationIndexPath: IndexPath)
   
- //-------------------------------------------------------------------------------------------------
+ 
  {
   print (#function)
   
@@ -202,7 +212,9 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
   }
  }
  
- //-------------------------------------------------------------------------------------------------
+ 
+ 
+ 
  
  func moveFromOtherFolderItem(_ collectionView: UICollectionView,   // Zoom View CV
                                 in zoomedFolder: PhotoFolderItem,   // Main PhotoSnippet CV zoomed folder
@@ -210,10 +222,9 @@ extension ZoomView: UICollectionViewDragDelegate, UICollectionViewDropDelegate
                                 from photoFolder: PhotoFolder,      // Source PhotoFolder MO
                                 to destinationIndexPath: IndexPath) // Destination IndexPath in Zoom View CV
  
- //-------------------------------------------------------------------------------------------------
+
  // Moves dragged visible CV cell to ZoomedView CV and underlying Photo MO from visible folder of this PhotoSnippet VC or
  // from outer PhotoSnippet
- //-------------------------------------------------------------------------------------------------
  {
   print (#function)
  

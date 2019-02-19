@@ -106,7 +106,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
      super.viewWillDisappear(animated)
      if textView.isFirstResponder {textView.resignFirstResponder()}
      if textSnippetTitle.isFirstResponder {textSnippetTitle.resignFirstResponder()}
-     saveTextSnippetData()
+     //saveTextSnippetData()
      currentFRC?.tableView.reloadData()
     }
  

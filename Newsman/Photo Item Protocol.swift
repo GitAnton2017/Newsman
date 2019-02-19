@@ -33,6 +33,11 @@ func == (lhs: PhotoItemProtocol?, rhs: PhotoItemProtocol?) -> Bool
  return lhs?.hostedManagedObject === rhs?.hostedManagedObject
 }
 
+func != (lhs: PhotoItemProtocol?, rhs: PhotoItemProtocol?) -> Bool
+{
+ return lhs?.hostedManagedObject !== rhs?.hostedManagedObject
+}
+
 
 //MARK: ----------------- Photo Item Protocol Extension ----------------
 extension PhotoItemProtocol

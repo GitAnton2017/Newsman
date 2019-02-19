@@ -13,10 +13,11 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
  
   var groupTaskCount: Int = 0
 
-  var hostedView: UIView {return photoCollectionView}
+  var hostedView: UIView { return photoCollectionView }
   var hostedAccessoryView: UIView?
  
   weak var photoSnippet: PhotoSnippet!
+ 
   weak var photoSnippetVC: PhotoSnippetViewController!
  
   @IBOutlet weak var photoCollectionView: UICollectionView! //hosted folder cells internal CV...
@@ -26,7 +27,9 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
   {
    didSet
    {
-    guard let hosted = self.hostedItem as? PhotoFolderItem else {return}
+    guard let hosted = self.hostedItem as? PhotoFolderItem else { return }
+    
+    dropView.isHidden = isDraggable
     
     // if zoomView is open and dispays this folder cell we will use [PhotoItems] of ZoomView to preserve ordering
     if let zv = photoSnippetVC.photoCollectionView.zoomView, zv.zoomedPhotoItem === hosted
@@ -65,7 +68,7 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
   //this individual method realization overrides one defined by PhotoCollectionViewProtocol to add up some func!!
   {
    self.startWaggleAnimation()
-   hostedCells.forEach{$0.dragWaggleBegin()} //add-on...
+   hostedCells.forEach{ $0.dragWaggleBegin() } //add-on...
    
   }
 
@@ -73,13 +76,13 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
   //this individual method realization overrides one defined by PhotoCollectionViewProtocol to add up some func!!
   {
    self.stopWaggleAnimation()
-   hostedCells.forEach{$0.dragWaggleEnd()} //add-on...
+   hostedCells.forEach{ $0.dragWaggleEnd() } //add-on...
   }
 
   func cancelImageOperations()
   {
    hostedItem?.cancelImageOperations()
-   self.photoItems.forEach{$0.cancelImageOperations()}
+   self.photoItems.forEach{ $0.cancelImageOperations() }
   }
 
 
@@ -119,14 +122,17 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
 
     super.awakeFromNib()
    
-    self.hostedItem = nil
-    self._selected = false
-    self.photoItems = nil
-    self.photoCollectionView.alpha = 1
+    hostedItem = nil
+    _selected = false
+    photoItems = nil
+    photoCollectionView.alpha = 1
+    contentView.alpha = 1
    
     let dropper = UIDropInteraction(delegate: dropDelegate)
-    dropper.allowsSimultaneousDropSessions = true
     dropView.addInteraction(dropper)
+   
+    photoCollectionView.dragInteractionEnabled = true
+    photoCollectionView.dragDelegate = self
    
     clearFlagMarker()
     imageRoundClip(cornerRadius: 10)
@@ -140,10 +146,11 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
    
      super.prepareForReuse()
    
-     self.hostedItem = nil
-     self._selected = false
-     self.photoItems = nil
-     self.photoCollectionView.alpha = 1
+     //self.hostedItem = nil
+     _selected = false
+     photoItems = nil
+     photoCollectionView.alpha = 1
+     contentView.alpha = 1
    
      groupTaskCount = 0
      clearFlagMarker()

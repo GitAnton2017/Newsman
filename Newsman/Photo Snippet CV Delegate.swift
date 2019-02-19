@@ -23,7 +23,9 @@ extension PhotoSnippetViewController: UICollectionViewDelegate, UICollectionView
                        didEndDisplaying cell: UICollectionViewCell,
                        forItemAt indexPath: IndexPath)
  {
-  (cell as? PhotoSnippetCellProtocol)?.cancelImageOperations()
+  guard let photoCell = cell as? PhotoSnippetCellProtocol else { return }
+  photoCell.cancelImageOperations()
+  //photoCell.hostedItem?.hostingCollectionViewCell = nil
  }
  
  

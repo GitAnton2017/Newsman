@@ -34,7 +34,3 @@ extension DropViewProvidable where Self: UICollectionViewCell
   }
 }
 
-extension DropViewProvidable
-{
- 
-}

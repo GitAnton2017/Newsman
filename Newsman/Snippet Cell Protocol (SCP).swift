@@ -26,7 +26,7 @@ protocol PhotoSnippetCellProtocol: class
  
  func cancelImageOperations()
  
- var isDragAnimating: Bool                  {get set}
+ var isDragAnimating: Bool                   {get set}
  
  func dragWaggleBegin()
  func dragWaggleEnd()
@@ -39,6 +39,16 @@ protocol PhotoSnippetCellProtocol: class
 
 extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
 {
+ 
+ func updateDraggableHostingCell()
+  /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
+   property) may change due to cells updates in CVs (TVs) so we have to update references to the dragged animated cells to
+   animate post Drag & Drop activitity clearances with the proper cells in "Draggable.clear(...)" method! */
+ {
+  AppDelegate.globalDragDropItems.compactMap{$0 as? PhotoItemProtocol}.first{$0 == hostedItem}?
+                                 .hostingCollectionViewCell = self
+ }
+ 
  var cornerRadius: CGFloat
  {
   get {return contentView.layer.cornerRadius    }

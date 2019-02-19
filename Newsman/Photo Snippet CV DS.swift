@@ -501,16 +501,35 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  }//func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection...
 //----------------------------------------------------------------------------------------
 
+ 
+ func updatePreviousHostedItem(_ collectionView: UICollectionView,
+                                 forReusableCell cell: PhotoSnippetCellProtocol,
+                                 newPhotoItem: PhotoItemProtocol)
+ {
+  guard let prevHostedItem = cell.hostedItem else { return }
+  guard     prevHostedItem != newPhotoItem   else { return }
+  guard let prevIndexPath = photoItemIndexPath(photoItem: prevHostedItem) else { return }
+  guard let hostingCell = collectionView.cellForItem(at: prevIndexPath)   else { return }
+ 
+  prevHostedItem.hostingCollectionViewCell = hostingCell as? PhotoSnippetCellProtocol
+  prevHostedItem.zoomView?.dropDelegate.owner = hostingCell
+ 
+ }
     
 //MARK:----------------------------------- GETTING CV REQUIRED SINGLE PHOTO ITEM CELL --------------------------------
- func getPhotoCell (_ collectionView: UICollectionView, at indexPath: IndexPath, with photoItem: PhotoItem) -> PhotoSnippetCell
+ func getPhotoCell (_ collectionView: UICollectionView,
+                      at indexPath: IndexPath,
+                      with photoItem: PhotoItem) -> PhotoSnippetCell
 //--------------------------------------------------------------------------------------------------------------------
  {
-  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSnippetCell", for: indexPath) as! PhotoSnippetCell
+  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoSnippetCell",
+                                                for: indexPath) as! PhotoSnippetCell
+ 
   
   cell.photoSnippetVC = self
   cell.photoSnippet = self.photoSnippet //weak ref must be initialized prior to call of hostedItem observer!!
 
+  updatePreviousHostedItem(collectionView, forReusableCell: cell, newPhotoItem: photoItem)
   
   cell.hostedItem = photoItem
   //holding weak reference to PhotoItem shown by cell...
@@ -542,6 +561,8 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
 //---------------------------------------------------------------------------------------------------------------------
 //MARK: -
 
+ 
+ 
     
 //MARK:---------------------- GETTING CV REQUIRED PHOTO FOLDER ITEM CELL ----------------------------------------------
  func getFolderCell (_ collectionView: UICollectionView,
@@ -549,7 +570,10 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
                        with photoFolder: PhotoFolderItem) -> PhotoFolderCell
 //---------------------------------------------------------------------------------------------------------------------
  {
-  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCell", for: indexPath) as! PhotoFolderCell
+  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCell",
+                                                for: indexPath) as! PhotoFolderCell
+  
+  updatePreviousHostedItem(collectionView, forReusableCell: cell, newPhotoItem: photoFolder)
   
   cell.photoSnippetVC = self
   cell.photoSnippet = self.photoSnippet //weak ref must be initialized prior to call of hostedItem observer!!
@@ -559,8 +583,6 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
   //holding weak reference to PhotoFolderItem that is to shown by cell...
   //setting this property will call observer that will set some other crucial cell properties before displaying in CV.
   //see <PhotoFolderCell> class definition
-  
-  
 
   //print ("indexPath =\(indexPath)")
   
@@ -596,11 +618,13 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
  
  
 //MARK:------------------------------------- GETTING CV GENERALIZED CELL -------------------------------------------
- func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+ func collectionView(_ collectionView: UICollectionView,
+                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
 //------------------------------------------------------------------------------------------------------------------
  {
   var cell = UICollectionViewCell()
   let photoItem = photoItems2D[indexPath.section][indexPath.row]
+  
  
   switch (photoItem)
   {

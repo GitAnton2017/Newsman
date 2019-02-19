@@ -395,7 +395,7 @@ extension SnippetsViewController: UITableViewDelegate
   let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SnippetsTableViewFooterView.reuseID) as! SnippetsTableViewFooterView
   
   let dataSource = tableView.dataSource as! SnippetsViewDataSource
-  footer.title = Localized.totalSnippets + String(dataSource.currentFRC.numberOfRowsInSection(index: section))
+  footer.title = Localized.totalSnippets + String(dataSource.currentFRC.totalNumberOfRowsInSection(index: section))
   footer.titleColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
   
 //  footer.section = dataSource.currentFRC[section]
@@ -408,9 +408,12 @@ extension SnippetsViewController: UITableViewDelegate
  {
   let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
   let h = tableView.rowHeight
-  return dataSource.currentFRC.isHiddenSection(section: indexPath.section) ? 0 :
+  return /*dataSource.currentFRC.isHiddenSection(section: indexPath.section) ? 0 :*/
        ((dataSource.currentFRC.isDisclosedCell(for: indexPath)) ? h * 2 : h)
  }
+ 
+ 
+ 
  
  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
  {

@@ -153,54 +153,64 @@
                                             <rect key="frame" x="0.0" y="0.0" width="406" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lZK-7m-eLo" customClass="BorderedImageView" customModule="Newsman" customModuleProvider="target">
-                                                    <rect key="frame" x="11" y="11" width="48" height="48"/>
-                                                    <color key="backgroundColor" red="0.86096129441624369" green="0.42940520365132839" blue="0.41328064587052804" alpha="0.54917594179999996" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="48" identifier="imageHeight" id="DNo-1m-suL"/>
-                                                        <constraint firstAttribute="width" secondItem="lZK-7m-eLo" secondAttribute="height" multiplier="1:1" id="Tnj-uN-SMW"/>
-                                                    </constraints>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                            <real key="value" value="8"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                            <real key="value" value="0.75"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                            <color key="value" red="0.79164685785467859" green="0.39118910848602229" blue="0.36940740564761687" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8uF-fe-ELp">
-                                                    <rect key="frame" x="69" y="11" width="297" height="15"/>
+                                                    <rect key="frame" x="71" y="10" width="295" height="15"/>
                                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
                                                     <nil key="highlightedColor"/>
                                                     <size key="shadowOffset" width="0.0" height="0.0"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqb-23-EaJ">
-                                                    <rect key="frame" x="69" y="40" width="262" height="19"/>
+                                                    <rect key="frame" x="71" y="41" width="235" height="19"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <color key="textColor" red="0.47787757359644667" green="0.1224468730437069" blue="0.055025289314372665" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="nSb-8A-J19">
-                                                    <rect key="frame" x="25" y="25" width="20" height="20"/>
-                                                    <color key="tintColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <color key="color" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
-                                                </activityIndicatorView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oDv-xT-xUx" userLabel="FlipperView">
+                                                    <rect key="frame" x="10" y="10" width="50" height="50"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lZK-7m-eLo" customClass="BorderedImageView" customModule="Newsman" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <color key="backgroundColor" red="0.86096129441624369" green="0.42940520365132839" blue="0.41328064587052804" alpha="0.54917594179999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="8"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                                    <real key="value" value="0.80000000000000004"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                                    <color key="value" red="0.79164685785467859" green="0.39118910848602229" blue="0.36940740564761687" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </imageView>
+                                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="nSb-8A-J19">
+                                                            <rect key="frame" x="15" y="15" width="20" height="20"/>
+                                                            <color key="tintColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="color" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                                        </activityIndicatorView>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" secondItem="oDv-xT-xUx" secondAttribute="height" multiplier="1:1" id="0Tc-5U-ZcN"/>
+                                                        <constraint firstItem="lZK-7m-eLo" firstAttribute="leading" secondItem="oDv-xT-xUx" secondAttribute="leading" id="18c-bm-I0b"/>
+                                                        <constraint firstItem="nSb-8A-J19" firstAttribute="centerY" secondItem="lZK-7m-eLo" secondAttribute="centerY" id="3i9-yQ-6zS"/>
+                                                        <constraint firstAttribute="trailing" secondItem="lZK-7m-eLo" secondAttribute="trailing" id="8gN-03-JOC"/>
+                                                        <constraint firstItem="lZK-7m-eLo" firstAttribute="top" secondItem="oDv-xT-xUx" secondAttribute="top" id="XP0-Kx-e3X"/>
+                                                        <constraint firstItem="nSb-8A-J19" firstAttribute="centerX" secondItem="lZK-7m-eLo" secondAttribute="centerX" id="dm9-pH-ilo"/>
+                                                        <constraint firstAttribute="bottom" secondItem="lZK-7m-eLo" secondAttribute="bottom" id="gSp-ZK-dEj"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="nSb-8A-J19" firstAttribute="centerY" secondItem="lZK-7m-eLo" secondAttribute="centerY" id="2kP-lQ-TGl"/>
-                                                <constraint firstAttribute="trailing" secondItem="Qqb-23-EaJ" secondAttribute="trailing" constant="75" id="4jz-6h-pcE"/>
+                                                <constraint firstAttribute="trailing" secondItem="Qqb-23-EaJ" secondAttribute="trailing" constant="100" id="2WN-03-WdE"/>
+                                                <constraint firstItem="oDv-xT-xUx" firstAttribute="trailing" secondItem="Qqb-23-EaJ" secondAttribute="leading" constant="-11" id="4jz-6h-pcE"/>
                                                 <constraint firstAttribute="trailing" secondItem="8uF-fe-ELp" secondAttribute="trailing" constant="40" id="51V-hg-nMC"/>
-                                                <constraint firstItem="Qqb-23-EaJ" firstAttribute="leading" secondItem="lZK-7m-eLo" secondAttribute="trailing" constant="10" id="5Ja-TG-sq4"/>
-                                                <constraint firstItem="lZK-7m-eLo" firstAttribute="leading" secondItem="YtZ-ZP-IsY" secondAttribute="leading" constant="11" id="AO1-f1-X4b"/>
-                                                <constraint firstItem="Qqb-23-EaJ" firstAttribute="bottom" secondItem="lZK-7m-eLo" secondAttribute="bottom" id="PtH-pj-AAV"/>
-                                                <constraint firstItem="lZK-7m-eLo" firstAttribute="centerY" secondItem="YtZ-ZP-IsY" secondAttribute="centerY" identifier="imageCenterY" id="PtR-cw-5bp"/>
-                                                <constraint firstItem="nSb-8A-J19" firstAttribute="centerX" secondItem="lZK-7m-eLo" secondAttribute="centerX" id="b5S-XH-XXf"/>
-                                                <constraint firstItem="8uF-fe-ELp" firstAttribute="top" secondItem="lZK-7m-eLo" secondAttribute="top" id="it9-xg-maO"/>
-                                                <constraint firstItem="8uF-fe-ELp" firstAttribute="leading" secondItem="lZK-7m-eLo" secondAttribute="trailing" constant="10" id="oV1-hn-uU6"/>
+                                                <constraint firstItem="oDv-xT-xUx" firstAttribute="top" secondItem="YtZ-ZP-IsY" secondAttribute="top" constant="10" id="9Yx-bQ-fJ3"/>
+                                                <constraint firstItem="oDv-xT-xUx" firstAttribute="leading" secondItem="YtZ-ZP-IsY" secondAttribute="leading" constant="10" id="MHC-CH-9yy"/>
+                                                <constraint firstAttribute="bottom" secondItem="oDv-xT-xUx" secondAttribute="bottom" constant="10" id="X2W-7v-wy5"/>
+                                                <constraint firstItem="oDv-xT-xUx" firstAttribute="bottom" secondItem="Qqb-23-EaJ" secondAttribute="bottom" id="czg-TY-FAg"/>
+                                                <constraint firstItem="oDv-xT-xUx" firstAttribute="top" secondItem="8uF-fe-ELp" secondAttribute="top" id="f2u-cz-g1Y"/>
+                                                <constraint firstItem="8uF-fe-ELp" firstAttribute="leading" secondItem="oDv-xT-xUx" secondAttribute="trailing" constant="11" id="ufn-z3-nw8"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="0.83197623914873542" green="0.65704293200732533" blue="0.57695643147784492" alpha="0.50832084760273977" colorSpace="custom" customColorSpace="sRGB"/>
@@ -220,6 +230,8 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <outlet property="flipperView" destination="oDv-xT-xUx" id="huk-nq-9pr"/>
+                                            <outlet property="flipperViewBottom" destination="X2W-7v-wy5" id="gST-qL-7Uy"/>
                                             <outlet property="imageSpinner" destination="nSb-8A-J19" id="s8k-xd-oaG"/>
                                             <outlet property="snippetDateTag" destination="Qqb-23-EaJ" id="mfI-8t-n95"/>
                                             <outlet property="snippetImage" destination="lZK-7m-eLo" id="63e-3K-Bht"/>
@@ -290,7 +302,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aN1-gB-Oog" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="6uu-d9-JNM" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="974" y="25"/>
+            <point key="canvasLocation" x="973.91304347826099" y="24.456521739130437"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OAs-zD-MWr">

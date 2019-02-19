@@ -13,6 +13,20 @@ import UIKit
 
 extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate, PhotoItemsDraggable
 {
+
+ var isDraggable: Bool
+ {
+  switch (itemsInRow, deviceType, vsc, hsc)
+  {
+  case (2... , .phone, .regular, .compact),
+       (5... , .phone, .compact, .compact),
+       (6... , .phone, .compact, .regular),
+       (7... , .pad,   .regular, .regular): return true
+  default: return false
+  }
+ }
+ 
+ 
  func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
  {
   print (#function, self.debugDescription, session.description, session.items.count)
@@ -20,8 +34,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
   
  }
  
- 
- 
+
  func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
  {
   print (#function, self.debugDescription, session.description)
@@ -75,6 +88,8 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  {
   print (#function, self.debugDescription, session.description)
   
+  guard isDraggable else { return [] }
+  
   let itemsForBeginning = getDragItems(collectionView, for: session, forCellAt: indexPath)
   
   //Auto cancel all dragged PhotoFolderItems and PhotoItems as PhotoItemProtocol!
@@ -119,12 +134,6 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  {
   if session.localDragSession != nil
   {
-   
-   if session.items.count == 1
-   {
-    return UICollectionViewDropProposal(operation: .move, intent: .unspecified)
-   }
-   
    return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
   }
   else
@@ -201,7 +210,6 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
      
      self.photoItems2D.insert([], at: singleItemSection!)
      self.sectionTitles?.insert(singlePhotoItem.priorityFlag ?? "", at: singleItemSection!)
-     self.insertedSections.insert(singleItemSection!)
      self.photoCollectionView.insertSections([singleItemSection!])
    }
    

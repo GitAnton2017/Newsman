@@ -18,6 +18,12 @@ class ZoomView: UIView
     var minPinchVelocity: CGFloat = 0.15
     var removingZoomView = false
  
+    lazy var dropDelegate: SingleCellZoomViewDropDelegate =
+    {
+      let dropDelegate = SingleCellZoomViewDropDelegate(owner: self)
+      return dropDelegate
+    }()
+ 
     @objc dynamic var playerView: PlayerView?
  
     weak var photoSnippetVC: PhotoSnippetViewController!
@@ -27,7 +33,9 @@ class ZoomView: UIView
      didSet
      {
       oldValue?.isZoomed = false
+      oldValue?.zoomView = nil
       zoomedPhotoItem?.isZoomed = true
+      zoomedPhotoItem?.zoomView = self
      }
      //as soon as we open ZoomView with <zoomedPhotoItem> assigned here we set <isZoomed> state of PhotoItem
      //of PhotoFolderItem and consequently the underlying state of its MO...
@@ -316,13 +324,9 @@ class ZoomView: UIView
       setConstraints(of: iv)
       setConstraints(of: spinner)
         
-      let dragger = UIDragInteraction(delegate: self)
-      addInteraction(dragger)
-      dragger.isEnabled = true
-        
-      let dropper = UIDropInteraction(delegate: self)
-      addInteraction(dropper)
      
+      let dropper = UIDropInteraction(delegate: dropDelegate)
+      addInteraction(dropper)
      
       if (presentSubview != nil) {changeAnim(to: iv)}
       else

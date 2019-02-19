@@ -3,19 +3,36 @@ import UIKit
 class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
  
+ private lazy var dropper: UIDropInteraction? =
+ {
+  guard let dropDelegate = self.owner?.dropDelegate else { return nil }
+  let dropper = UIDropInteraction(delegate: dropDelegate)
+  hostedView.addInteraction(dropper)
+  return dropper
+ }()
+ 
+ 
  var hostedViewSelectedAlpha: CGFloat = 0.5
  
- weak var owner: PhotoFolderCell?
+ weak var owner: PhotoFolderCell? // weak ref to FolderCell which hosts he nested CV.
+ {
+  didSet
+  {
+   guard dropper != nil else { return }
+   hostedView.isUserInteractionEnabled = owner!.isDraggable
+  }
+ }
  
- var hostedView: UIView {return photoIconView}
- var hostedAccessoryView: UIView? {return spinner}
+ var hostedView: UIView { return photoIconView }
+ var hostedAccessoryView: UIView? { return spinner }
  
  weak var hostedItem: PhotoItemProtocol?
  //The sigle PhotoItem wrapper instance that is currently hosted and visualized by this type of UICollectionViewCell...
  {
   didSet
   {
-   guard let hosted = self.hostedItem as? PhotoItem else {return}
+   guard let hosted = self.hostedItem as? PhotoItem else { return }
+  
    
    self.updateImage()
    
@@ -27,7 +44,7 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProto
    self.isDragAnimating = hosted.isDragAnimating
    //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
    
-   self.updateDraggableHostingCell()
+   updateDraggableHostingCell()
    /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
     property) may change due to cells updates in CVs so we have to update references to the dragged animated cells to
     animate drag clearances with the proper cells in "Draggable.clear(...)" method!  */
@@ -65,6 +82,7 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProto
  override func awakeFromNib()
  {
   super.awakeFromNib()
+
   
   spinner.startAnimating()
   self.hostedItem = nil

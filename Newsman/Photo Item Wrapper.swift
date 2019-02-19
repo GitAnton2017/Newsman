@@ -13,17 +13,7 @@ import AVKit
 
 class PhotoItem: NSObject, PhotoItemProtocol
 {
-    var isZoomed: Bool
-    {
-     get {return photo.zoomedPhotoItemState}
-     set {photo.zoomedPhotoItemState = newValue}
-    }
- 
-    var isFolderDragged: Bool
-    {
-     guard let folder = self.folder else {return false}
-     return folder.dragAndDropAnimationState
-    }
+    weak var zoomView: ZoomView?
  
     override func isEqual(_ object: Any?) -> Bool
     {
@@ -36,12 +26,7 @@ class PhotoItem: NSObject, PhotoItemProtocol
      hasher.combine(photo)
      return hasher.finalize()
     }
- 
-    var isSetForClear: Bool
-    {
-     get {return photo.dragAndDropAnimationSetForClearanceState}
-     set {photo.dragAndDropAnimationSetForClearanceState = newValue}
-    }
+
  
     func cancelImageOperations()
     {
@@ -126,41 +111,6 @@ class PhotoItem: NSObject, PhotoItemProtocol
     var id:   UUID        {return self.photo.id!  }  //UUID of this photo which must be not NIL!
     var type: SnippetType {return self.photo.type }  //Snippet type of managed object which owns this photo.
     var url:  URL         {return self.photo.url  }  //Image of video data file url on disk...
- 
-    func toggleSelection()
-    {
-     isSelected.toggle()
-    }
- 
-    var isSelected: Bool
-    {
-      get {return self.photo.isSelected}
-      set
-      {
-       photo.photoSnippet?.currentFRC?.deactivateDelegate()
-       photo.managedObjectContext?.persistAndWait(block: {self.photo.isSelected = newValue})
-       {flag in
-        if flag
-        {
-         self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
-         self.hostingZoomedCollectionViewCell?.isPhotoItemSelected = newValue
-         self.photo.photoSnippet?.currentFRC?.activateDelegate()
-        }
-       }
-      }
-    }
- 
- 
-    var isDragAnimating: Bool
-    {
-     get {return photo.dragAndDropAnimationState}
-     set
-     {
-      photo.dragAndDropAnimationState = newValue
-      self.hostingCollectionViewCell?.isDragAnimating = newValue
-      self.hostingZoomedCollectionViewCell?.isDragAnimating = newValue
-     }
-    }
  
  
 

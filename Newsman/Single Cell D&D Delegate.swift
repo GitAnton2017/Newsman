@@ -10,14 +10,27 @@ import UIKit
 
 class SingleCellDropViewDelegate: NSObject,  UIDropInteractionDelegate
 {
- final var photoSnippetVC: PhotoSnippetViewController?
+ 
+ var photoSnippetVC: PhotoSnippetViewController?
  {
   return (self.owner as? PhotoItemsDraggable)?.photoSnippetVC
  }
  
+ var hosted: PhotoItemProtocol?
+ {
+  return (self.owner as? PhotoSnippetCellProtocol)?.hostedItem
+ }
+ 
+ var isDropAllowed: Bool
+ {
+  guard let hostedItem = self.hosted else {return false}
+  return !hostedItem.isDragAnimating
+ }
+ 
+ 
  weak var owner: UICollectionViewCell?
  
- init( owner:  UICollectionViewCell )
+ init( owner:  UICollectionViewCell? )
  {
   self.owner = owner
   super.init()
@@ -34,7 +47,7 @@ class SingleCellDropViewDelegate: NSObject,  UIDropInteractionDelegate
  {
   animator.addAnimations
   {
-   interaction.view?.superview?.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
+   self.owner?.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
    self.owner?.contentView.backgroundColor = UIColor.red
   }
  }//func dropInteraction(_ interaction: ...
@@ -46,7 +59,7 @@ class SingleCellDropViewDelegate: NSObject,  UIDropInteractionDelegate
  {
   UIView.animate(withDuration: 0.25, animations:
   {
-   interaction.view?.superview?.transform = .identity
+   self.owner?.transform = .identity
    self.owner?.contentView.backgroundColor = UIColor.gray
   })
   {_ in
@@ -81,6 +94,8 @@ class SingleCellDropViewDelegate: NSObject,  UIDropInteractionDelegate
  func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnd session: UIDropSession)
  {
   print (#function)
+  owner?.contentView.layer.borderWidth = 1.0
+  owner?.contentView.alpha = 1.0
   AppDelegate.clearAllDraggedItems()
   //clear Global Drags Array with delayed unselection and removing drag animation from all hosted cells in drag items
  }//func dropInteraction(_ interaction:...
@@ -91,7 +106,7 @@ class SingleCellDropViewDelegate: NSObject,  UIDropInteractionDelegate
  {
   if session.localDragSession != nil
   {
-   return UIDropProposal(operation: .move)
+   return UIDropProposal(operation: isDropAllowed ? .move : .forbidden)
   }
   else
   {
@@ -234,12 +249,13 @@ class SingleCellDropViewDelegate: NSObject,  UIDropInteractionDelegate
  }
  
  
+ 
  func mergeWithInAppItems(_ interaction: UIDropInteraction, performDrop session: UIDropSession)
  {
   print (#function)
   
   guard let photoSnippet = photoSnippetVC?.photoSnippet else { return }
-  guard let hostedItem = (self.owner as? PhotoSnippetCellProtocol)?.hostedItem else { return }
+  guard let hostedItem = self.hosted else { return }
   
   defer //finally update PhotoSnippet CV sections afted all merge operations ...
   {

@@ -9,20 +9,9 @@ import CoreData
  class PhotoFolderItem: NSObject, PhotoItemProtocol
 //-------------------------------------------------------------
  {
-    var isFolderDragged: Bool {return false}
   
-    var isSetForClear: Bool
-    {
-     get {return folder.dragAndDropAnimationSetForClearanceState}
-     set {folder.dragAndDropAnimationSetForClearanceState = newValue}
-    }
-  
-    var isZoomed: Bool
-    {
-     get {return folder.zoomedPhotoItemState}
-     set {folder.zoomedPhotoItemState = newValue}
-    }
-  
+    weak var zoomView: ZoomView?
+ 
     func cancelImageOperations(){}
   
     var dragAnimationCancelWorkItem: DispatchWorkItem?
@@ -93,42 +82,7 @@ import CoreData
      set {self.folder.position = newValue}
     }
   
-    func toggleSelection()
-    {
-     isSelected.toggle()
-    }
-  
-    var isSelected: Bool
-    {
-     get {return self.folder.isSelected}
-     set
-     {
-      folder.photoSnippet?.currentFRC?.deactivateDelegate()
-      folder.managedObjectContext?.persistAndWait(block:
-      {
-       self.folder.isSelected = newValue
-       self.folder.photos?.forEach {($0 as! Photo).isSelected = newValue}
-      })
-      {flag in
-       if flag
-       {
-        self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
-        self.folder.photoSnippet?.currentFRC?.activateDelegate()
-       }
-      }
-     }
-    }
-  
-    var isDragAnimating: Bool
-    {
-     get {return folder.dragAndDropAnimationState}
-     set
-     {
-      folder.dragAndDropAnimationState = newValue
-      self.hostingCollectionViewCell?.isDragAnimating = newValue
-     }
-    }
- 
+    
   
     enum FolderMOKeys: CodingKey
     {

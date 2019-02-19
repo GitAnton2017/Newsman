@@ -10,8 +10,9 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
  @objc func sectionTapped(_ gr: UIGestureRecognizer)
  {
   guard let section = sectionNumber else {return}
-  currentFRC?.foldSection(section: section)
-  isHiddenSection = !isHiddenSection
+//  currentFRC?.foldSection(section: section)
+  currentFRC?.toggleFoldSection(section: section)
+  isHiddenSection.toggle()
  }
  
  override init(reuseIdentifier: String?)

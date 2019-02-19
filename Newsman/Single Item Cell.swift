@@ -4,6 +4,7 @@ import AVKit
 
 class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItemsDraggable, DropViewProvidable
 {
+ var isDraggable: Bool { return true }
  
  lazy var dropView: UIView = self.setDropView()
  
@@ -33,12 +34,14 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoIte
  {
   didSet
   {
-   guard let hosted = self.hostedItem as? PhotoItem else {return}
-  
-   updateImage()
+   guard let hosted = self.hostedItem as? PhotoItem else { return }
    
    hosted.hostingCollectionViewCell = self
    //weak reference to this cell that will display this PhotoItem...
+   
+   hosted.zoomView?.dropDelegate.owner = self
+  
+   updateImage()
    
    photoIconView.alpha = hosted.isSelected ? 0.5 : 1
    
@@ -68,16 +71,18 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoIte
  override func awakeFromNib()
  {
   super.awakeFromNib()
+  
   self.hostedItem = nil
+  
   _selected = false
   
   let dropper = UIDropInteraction(delegate: dropDelegate)
-  dropper.allowsSimultaneousDropSessions = true
   dropView.addInteraction(dropper)
   
   spinner.startAnimating()
   photoIconView.image = nil
   photoIconView.alpha = 1
+  contentView.alpha = 1
   clearFlagMarker()
   clearVideoDuration()
   hidePlayIcon()
@@ -88,11 +93,12 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoIte
  override func prepareForReuse()
  {
   super.prepareForReuse()
-
-  self.hostedItem = nil
+  
+//  self.hostedItem = nil
   spinner.startAnimating()
   photoIconView.image = nil
   photoIconView.alpha = 1
+  contentView.alpha = 1
   _selected = false
   clearFlagMarker()
   clearVideoDuration()

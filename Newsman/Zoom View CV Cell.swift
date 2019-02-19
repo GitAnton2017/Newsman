@@ -4,6 +4,13 @@ import UIKit
 
 class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
+ func updateDraggableHostingCell()
+ {
+  AppDelegate.globalDragDropItems.compactMap{$0 as? PhotoItem}
+             .first{$0 == hostedItem}?
+             .hostingZoomedCollectionViewCell = self
+ }
+ 
  
  var hostedViewSelectedAlpha: CGFloat = 0.5
  
@@ -25,11 +32,9 @@ class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
    
    self.photoIconView.alpha = hosted.isSelected ? 0.5 : 1
    
-   self.isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
+   self.isDragAnimating = hosted.isDragAnimating
    
-   AppDelegate.globalDropItems.compactMap{$0 as? PhotoItem}
-                              .first{$0.photo === hosted.photo}?
-                              .hostingZoomedCollectionViewCell = self
+   updateDraggableHostingCell()
   }
   
  }//weak var hostedItem: PhotoItemProtocol?...

@@ -6,16 +6,17 @@ import CoreData
 class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, SnippetsRepresentable
 {
  var photoSnippetVC: PhotoSnippetViewController!
- 
- var deletedSections:  Set<Int> = []
- var insertedSections: Set<Int> = []
- 
+ {
+  get { return self }
+  set {}
+ }
+
  static var storyBoardID = "PhotoSnippetVC"
  
  var currentSnippet: BaseSnippet
  {
-  get {return photoSnippet}
-  set {photoSnippet = newValue as? PhotoSnippet}
+  get { return photoSnippet }
+  set { photoSnippet = newValue as? PhotoSnippet }
  }
  
  
@@ -29,10 +30,7 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sn
  
  weak var currentFRC: SnippetsFetchController?
  {
-  didSet
-  {
-   currentSnippet.currentFRC = self.currentFRC
-  }
+  didSet { currentSnippet.currentFRC = self.currentFRC }
  }
  
  var currentViewController: UIViewController {return self}
@@ -72,6 +70,8 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sn
    photoCollectionView.reloadData()
   }
  }
+ 
+ 
  
 //MARK: ========================== STORED PROPERTIES ==============================
     

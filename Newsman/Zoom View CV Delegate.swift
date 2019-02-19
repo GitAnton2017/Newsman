@@ -31,7 +31,9 @@ extension ZoomView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
                        didEndDisplaying cell: UICollectionViewCell,
                        forItemAt indexPath: IndexPath)
  {
-  (cell as? PhotoSnippetCellProtocol)?.cancelImageOperations()
+  guard let zoomCell = cell as? ZoomViewCollectionViewCell else { return }
+  zoomCell.cancelImageOperations()
+  //(zoomCell.hostedItem as? PhotoItem)?.hostingZoomedCollectionViewCell = nil
  }
  
 }
