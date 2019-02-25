@@ -4,13 +4,6 @@ import CoreData
 
 class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate
 {
-    
-    lazy var moc: NSManagedObjectContext =
-    {
-      let appDelegate = UIApplication.shared.delegate as! AppDelegate
-      let moc = appDelegate.persistentContainer.viewContext
-      return moc
-    }()
  
  
     @IBOutlet var snippetPriorityPicker: UIPickerView!
@@ -53,14 +46,16 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
  
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
-     
      let selectedPriority = SnippetPriority.priorities[row]
      guard editedSnippet.snippetPriority != selectedPriority else {return}
+     //editedSnippet.setPriority(to: selectedPriority)
      
-     moc.persistAndWait {self.editedSnippet.snippetPriority = selectedPriority}
+     editedSnippet.managedObjectContext?.persistAndWait
+     {
+       editedSnippet.snippetPriority = selectedPriority
+     }
     
-    
- }
+    }
  
     func numberOfComponents(in pickerView: UIPickerView) -> Int
     {

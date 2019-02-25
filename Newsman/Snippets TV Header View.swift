@@ -6,13 +6,17 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
 {
  static let reuseID = "snippetsTableViewHeader"
  
-
+ override func prepareForReuse()
+ {
+   super.prepareForReuse()
+   isHiddenSection = false
+ }
+ 
  @objc func sectionTapped(_ gr: UIGestureRecognizer)
  {
   guard let section = sectionNumber else {return}
-//  currentFRC?.foldSection(section: section)
-  currentFRC?.toggleFoldSection(section: section)
   isHiddenSection.toggle()
+  currentFRC?.toggleFoldSection(section: section)
  }
  
  override init(reuseIdentifier: String?)

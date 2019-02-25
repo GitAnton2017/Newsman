@@ -106,6 +106,7 @@
 		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */; };
+		A787566822213479006503D7 /* Snippets Hidden Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A787566722213479006503D7 /* Snippets Hidden Cell.swift */; };
 		A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */; };
 		A79548F221E62B4300A37959 /* Thread Safe Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F121E62B4300A37959 /* Thread Safe Map.swift */; };
 		A79548F421E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F321E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift */; };
@@ -284,6 +285,7 @@
 		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
 		A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D&D Delegate.swift"; sourceTree = "<group>"; };
+		A787566722213479006503D7 /* Snippets Hidden Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Hidden Cell.swift"; sourceTree = "<group>"; };
 		A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Images Provider.swift"; sourceTree = "<group>"; };
 		A79548F121E62B4300A37959 /* Thread Safe Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread Safe Map.swift"; sourceTree = "<group>"; };
 		A79548F321E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Cell D&D Waggle Animation.swift"; sourceTree = "<group>"; };
@@ -663,6 +665,7 @@
 				A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */,
 				A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */,
 				A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */,
+				A787566722213479006503D7 /* Snippets Hidden Cell.swift */,
 				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
 				A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */,
 				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
@@ -998,6 +1001,7 @@
 				A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */,
 				A7B2B07F2205BF5500D40008 /* Context Operation.swift in Sources */,
 				A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */,
+				A787566822213479006503D7 /* Snippets Hidden Cell.swift in Sources */,
 				A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */,
 				A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,

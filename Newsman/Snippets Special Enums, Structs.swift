@@ -256,6 +256,15 @@ enum GroupSnippets: String,  AllCasesSelectorRepresentable
    byLocation:       0b00_100000
  ]
  
+ static let groupingKeyPath: [GroupSnippets : String] =
+ [
+   byPriority :      #keyPath(BaseSnippet.priority),
+   byDateCreated:    #keyPath(BaseSnippet.dateIndex),
+   alphabetically:   #keyPath(BaseSnippet.alphaIndex),
+   bySnippetType:    #keyPath(BaseSnippet.type),
+   byLocation:       #keyPath(BaseSnippet.location)
+ ]
+ 
  func checkMask(for value: Int16) -> Bool
  {
   let mask = GroupSnippets.groupingBitsMap[self]!

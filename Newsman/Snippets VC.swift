@@ -6,6 +6,9 @@ import CoreLocation
 
 class SnippetsViewController: UIViewController
 {
+ deinit {
+  print("\(self.debugDescription) is destroyed")
+ }
     lazy var moc: NSManagedObjectContext =
     {
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -130,6 +133,8 @@ class SnippetsViewController: UIViewController
      
      snippetsTableView.register(SnippetsTableViewFooterView.self,
                                 forHeaderFooterViewReuseIdentifier: SnippetsTableViewFooterView.reuseID)
+     
+     snippetsTableView.register(HiddenCell.self, forCellReuseIdentifier: HiddenCell.reuseID)
      
      editSnippets.title = "⚒︎"
      editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)

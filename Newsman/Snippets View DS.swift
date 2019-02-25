@@ -6,6 +6,10 @@ import GameplayKit
 
 class SnippetsViewDataSource: NSObject, UITableViewDataSource
 {
+     deinit {
+      print("\(self.debugDescription) is destroyed)")
+     }
+ 
     var snippetsTableView: UITableView!
  
     var groupTitles = [String]()
@@ -199,6 +203,12 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
+      if currentFRC.isHiddenSection(section: indexPath.section)
+      {
+       let cell = tableView.dequeueReusableCell(withIdentifier: HiddenCell.reuseID, for: indexPath)
+       return cell
+      }
+     
       let cell = tableView.dequeueReusableCell(withIdentifier: "SnippetCell", for: indexPath) as! SnippetsViewCell
       cell.hostedSnippet = currentFRC[indexPath] as? SnippetImagesPreviewProvidable
       return cell
@@ -211,11 +221,11 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
     }
 
  
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
-    {
-     guard groupType == .byPriority, sourceIndexPath.section != destinationIndexPath.section else {return}
-     currentFRC.move(from: sourceIndexPath, to: destinationIndexPath)
-    }
+//    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath)
+//    {
+//     guard groupType == .byPriority, sourceIndexPath.section != destinationIndexPath.section else {return}
+//     currentFRC.move(from: sourceIndexPath, to: destinationIndexPath)
+//    }
  
     func snippetIndexPath(snippet: BaseSnippet) -> IndexPath
     {

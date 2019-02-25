@@ -9,10 +9,13 @@ extension SnippetsViewController
  func createSnippet<S> (with _ : S.Type, _ T: BaseSnippet.Type, snippetType: SnippetType)
  where S: SnippetsRepresentable
  {
-  moc.persistAndWait
+  var newSnippet: BaseSnippet!
+  moc.persistAndWait(block:
   {
-    let newSnippet = T.init(context: moc)
+    newSnippet = T.init(context: moc)
+    newSnippet.currentFRC = snippetsDataSource.currentFRC
     newSnippet.snippetDate = Date()
+    newSnippet.snippetName = ""
     let newSnippetID = UUID()
     newSnippet.id = newSnippetID
     newSnippet.snippetPriority = .normal
@@ -28,8 +31,13 @@ extension SnippetsViewController
       self.moc.persist{newSnippet.snippetLocation = location}
     }
     
-    editSnippet(with: S.self, snippetToEdit: newSnippet)
+   
+  })
+  {flag in
+   guard flag else { return }
+   self.editSnippet(with: S.self, snippetToEdit: newSnippet)
   }
+  
   
  }
  
