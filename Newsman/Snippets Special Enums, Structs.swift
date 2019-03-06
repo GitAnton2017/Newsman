@@ -154,6 +154,27 @@ enum SnippetType: String, AllCasesSelectorRepresentable
  case report = "Report"
  //*******************************
  case undefined //error case!!!
+ 
+ var localizedSearchScopeBarTitles: [String] { return SnippetType.searchScopeBarTitles[self]! }
+ 
+ 
+ private static let baseScopeBarTitles: [String] = [ Localized.overallScope,
+                                                     Localized.nameScope,
+                                                     Localized.dateScope,
+                                                     Localized.priorityScope,
+                                                     Localized.LocationScope ]
+
+ private static let searchScopeBarTitles : [SnippetType : [String] ] =
+ [
+  .text   : baseScopeBarTitles + [Localized.contentScope],
+  .photo  : baseScopeBarTitles,
+  .video  : baseScopeBarTitles,
+  .audio  : baseScopeBarTitles,
+  .sketch : baseScopeBarTitles,
+  .report : baseScopeBarTitles
+ ]
+
+ 
 
 }
 
@@ -258,7 +279,7 @@ enum GroupSnippets: String,  AllCasesSelectorRepresentable
  
  static let groupingKeyPath: [GroupSnippets : String] =
  [
-   byPriority :      #keyPath(BaseSnippet.priority),
+   byPriority :      #keyPath(BaseSnippet.priorityIndex),
    byDateCreated:    #keyPath(BaseSnippet.dateIndex),
    alphabetically:   #keyPath(BaseSnippet.alphaIndex),
    bySnippetType:    #keyPath(BaseSnippet.type),

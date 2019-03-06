@@ -11,11 +11,13 @@ import Foundation
 import CoreData
 
 
-extension Settings {
+extension Settings
+{
+ @nonobjc public class func fetchRequest() -> NSFetchRequest<Settings>
+ {
+   return NSFetchRequest<Settings>(entityName: "Settings")
+ }
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Settings> {
-        return NSFetchRequest<Settings>(entityName: "Settings")
-    }
-
-    @NSManaged public var grouping: String?
+ @NSManaged public var grouping: String?
+ 
 }

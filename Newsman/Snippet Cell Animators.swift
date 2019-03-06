@@ -43,10 +43,8 @@ enum SnippetsAnimator
 //   },
    
    {imgs, cell, duration, delay in
-    
-    cell.flipperView.layer.removeAllAnimations()
-    
-    guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
+        
+    guard let snippet = cell.hostedSnippet as? BaseSnippet else { return }
     
     let groupType = cell
     
@@ -69,20 +67,16 @@ enum SnippetsAnimator
                        options: [option, .curveEaseInOut],
                        animations: {cell.snippetImage.image = imgs[i]},
                        completion:
-                       {[weak w_cell = cell, weak w_snippet = snippet] finished  in
-                        guard finished else {return}
-                        guard let wc = w_cell, let ws = w_snippet else {return}
-                        guard wc.animationID == animationID else {return}
-                        guard wc.hostedSnippet === ws else {return}
-                        if let gt = wc.groupType, ws[gt] {return}
+                       {finished  in
+                        guard finished else { return }
+                        guard cell.animationID == animationID else { return }
+                        guard cell.hostedSnippet === snippet else { return }
                         if (i < imgs.count - 1) {i += 1} else {i = 0}
                         
                         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.75 * duration)
-                        {[weak w_cell = cell, weak w_snippet = snippet] in
-                         guard let wc = w_cell, let ws = w_snippet else {return}
-                         guard wc.animationID == animationID else {return}
-                         guard wc.hostedSnippet === ws else {return}
-                         if let gt = wc.groupType, ws[gt] {return}
+                        {
+                         guard cell.animationID == animationID else { return }
+                         guard cell.hostedSnippet === snippet else { return }
                          animate()
                         }
                       })
@@ -90,20 +84,16 @@ enum SnippetsAnimator
     
     
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay)
-    {[weak w_cell = cell, weak w_snippet = snippet] in
-     guard let wc = w_cell, let ws = w_snippet else {return}
-     guard wc.animationID == animationID else {return}
-     guard wc.hostedSnippet === ws else {return}
-     if let gt = wc.groupType, ws[gt] {return}
+    {
+     guard cell.animationID == animationID else { return }
+     guard cell.hostedSnippet === snippet else { return }
      animate()
     }
     
    },
    
    {imgs, cell, duration, delay in
-    
-    cell.flipperView.layer.removeAllAnimations()
-    
+   
     guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
 
     var i = 0
@@ -127,7 +117,7 @@ enum SnippetsAnimator
      trans.duration = duration
      cell.flipperView.layer.add(trans, forKey: transitions2)
      cell.snippetImage.image = imgs[i]
-     if (i < imgs.count - 1) {i += 1} else {i = 0}
+     if (i < imgs.count - 1) { i += 1 } else { i = 0 }
      
     }
     
@@ -135,11 +125,9 @@ enum SnippetsAnimator
     cell.animate = animate
     
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + delay)
-    {[weak w_cell = cell, weak w_snippet = snippet] in
-     guard let wc = w_cell, let ws = w_snippet else {return}
-     guard wc.animationID == animationID else {return}
-     guard wc.hostedSnippet === ws else {return}
-     if let gt = wc.groupType, ws[gt] {return}
+    {
+     guard cell.animationID == animationID else { return }
+     guard cell.hostedSnippet === snippet else { return }
      animate(duration * 0.25)
     }
     

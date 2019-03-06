@@ -176,7 +176,7 @@ func updateDateLabel()
  let dateLabel  = UILabel()
  dateLabel.textColor = #colorLiteral(red: 0.9999960065, green: 1, blue: 1, alpha: 1)
  dateLabel.font = UIFont(name: "Avenir", size: 20)
- dateLabel.text = DateFormatters.shortDate.string(from: photoSnippet.date! as Date)
+ dateLabel.text = DateFormatters.short.string(from: photoSnippet.date! as Date)
  navigationItem.titleView = dateLabel
  
 }

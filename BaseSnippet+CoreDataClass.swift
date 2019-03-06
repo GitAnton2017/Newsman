@@ -18,19 +18,35 @@ protocol SnippetImagesPreviewProvidable: class
  var imageProvider: SnippetPreviewImagesProvider {get}
 }
 
+
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
  
- final func isHiddenSection(groupType: GroupSnippets, for newValue: String) -> Bool
+ struct HiddenSectionKey: Hashable
  {
+  let snippetType: SnippetType
+  let groupType: GroupSnippets
+  let sectionName: String
+ }
+ 
+
+ static var hiddenSections:  [HiddenSectionKey : Bool] = [ : ]
+ 
+ final func isHiddenSection(groupType: GroupSnippets, for newValue: String? = nil) -> Bool
+ {
+  
+  let key = HiddenSectionKey(snippetType: snippetType, groupType: groupType, sectionName: newValue ?? "")
+  
+  if let hidden = BaseSnippet.hiddenSections[key] { return hidden }
+  
   let frq: NSFetchRequest<BaseSnippet> = BaseSnippet.fetchRequest()
+  
   let selfTypePred = NSPredicate(format: "SELF.type == %@.type", self)
   let notSelfPred  = NSPredicate(format: "SELF <> %@",           self)
  
-  
-  if let keyPath = GroupSnippets.groupingKeyPath[groupType]
+  if let keyPath = GroupSnippets.groupingKeyPath[groupType], newValue != nil
   {
-   let keyPathPred = NSPredicate(format: "%K == %@", keyPath, newValue)
+   let keyPathPred = NSPredicate(format: "%K == %@", keyPath, newValue!)
    frq.predicate = NSCompoundPredicate(type: .and, subpredicates: [keyPathPred, selfTypePred, notSelfPred])
   }
   else
@@ -39,9 +55,15 @@ protocol SnippetImagesPreviewProvidable: class
   }
   
   let fetch = (try? managedObjectContext?.fetch(frq) ?? []) ?? []
+  let hidden = fetch.isEmpty ? false : fetch.allSatisfy{ $0[groupType] }
+  
+  BaseSnippet.hiddenSections[key] = hidden
  
-  return fetch.isEmpty ? false : fetch.allSatisfy{ $0[groupType] }
+  return hidden
+  
  }
+ 
+ 
  
  final func isHiddenSection(groupType: GroupSnippets, predicate: (BaseSnippet) -> Bool ) -> Bool
  {
@@ -52,7 +74,7 @@ protocol SnippetImagesPreviewProvidable: class
  weak var currentFRC: SnippetsFetchController?
  //the weak ref to current FRC wrapper that fetched and manages this Snippet
 
- func initStorage(){} //Polymorphic method to intialize virtual type of storage for concrete snippet type.
+ func initStorage(){ } //Polymorphic method to intialize virtual type of storage for concrete snippet type.
  
  static var snippetDates = SnippetDates()
 
@@ -66,17 +88,24 @@ protocol SnippetImagesPreviewProvidable: class
   {
    self.date = newValue as NSDate
    self.dateIndex = BaseSnippet.snippetDates.datePredicates.first{$0.predicate(self)}?.title
-   //self[.byDateCreated] = isHiddenSection(groupType: .byDateCreated){ $0.dateIndex == self.dateIndex }
-   self[.byDateCreated] = isHiddenSection(groupType: .byDateCreated, for: self.dateIndex!)
+   self[.byDateCreated] = isHiddenSection(groupType: .byDateCreated, for: self.dateIndex)
   }
  }
  
- final var snippetDateTag: String {return SnippetsViewDataSource.dateFormatter.string(from: self.snippetDate)}
+ final var snippetDateTag: String
+ {
+  return DateFormatters.medium.string(from: self.snippetDate)
+ }
+ 
+ @objc final var dateSearchIndex: String
+ {
+  return DateFormatters.localizedSearchString(for: snippetDate)
+ }
  
  @NSManaged private (set) var tag: String?
  @NSManaged var  alphaIndex: String?
  
- final var snippetName: String
+ @objc final var snippetName: String // calculated property for snippet search by Name!
  {
   get
   {
@@ -87,8 +116,7 @@ protocol SnippetImagesPreviewProvidable: class
   {
    self.tag = newValue
    self.alphaIndex = newValue.isEmpty ? newValue : String(newValue.first!)
-   //self[.alphabetically] = isHiddenSection(groupType: .alphabetically){ $0.alphaIndex == self.alphaIndex }
-   self[.alphabetically] = isHiddenSection(groupType: .alphabetically, for: self.alphaIndex!)
+   self[.alphabetically] = isHiddenSection(groupType: .alphabetically, for: self.alphaIndex)
   }
  }
  
@@ -100,14 +128,14 @@ protocol SnippetImagesPreviewProvidable: class
   {
    guard let snippetStatus = self.status else
    {
-    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with undefined (NIL) status is encountered in store!")
+    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with NIL status is encountered in store!")
     return .new
    }
    
    return SnippetStatus(rawValue: snippetStatus)!
   }
   
-  set {self.status = newValue.rawValue}
+  set { self.status = newValue.rawValue }
   
  }
  
@@ -129,8 +157,8 @@ protocol SnippetImagesPreviewProvidable: class
   set
   {
    self.type = newValue.rawValue
-   //self[.bySnippetType] = isHiddenSection(groupType: .bySnippetType){ $0.snippetType == newValue }
-   self[.bySnippetType] = isHiddenSection(groupType: .bySnippetType, for: newValue.rawValue)
+   self[.bySnippetType] = isHiddenSection(groupType: .bySnippetType, for: self.type)
+   self[.plainList] = isHiddenSection(groupType: .plainList)
   }
   
  }
@@ -138,15 +166,22 @@ protocol SnippetImagesPreviewProvidable: class
  @NSManaged private (set) var priority: String?
  @NSManaged var priorityIndex: String?
  
+ 
+ @objc final var localizedPriority: String  // calculated property for snippet search by Priority!
+ {
+  return NSLocalizedString(priority ?? "", comment: priority ?? "")
+ }
+ 
  final var snippetPriority: SnippetPriority
  {
   get
   {
    guard let snippetPriority = self.priority else
    {
-    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with undefined (NIL) priority is encountered in store!")
+    print("WARNING! Snippet ID: \(self.id?.uuidString ?? "NIL") with NIL priority is encountered in store!")
     return .normal
    }
+   
    return SnippetPriority(rawValue: snippetPriority)!
   }
   
@@ -154,37 +189,11 @@ protocol SnippetImagesPreviewProvidable: class
   {
    self.priority = newValue.rawValue
    self.priorityIndex = String(snippetPriorityIndex) + "_" + newValue.rawValue
-   //self[.byPriority] = isHiddenSection(groupType: .byPriority) { $0.snippetPriority ==  newValue }
-   self[.byPriority] = isHiddenSection(groupType: .byPriority, for: newValue.rawValue)
+   self[.byPriority] = isHiddenSection(groupType: .byPriority, for: self.priorityIndex)
   }
 
  }
  
-// final func setPriority(to newPriority: SnippetPriority)
-// {
-//  guard let frc = self.currentFRC else { return }
-//  guard frc.groupType == .byPriority else
-//  {
-//   frc.moc.persist{ self.snippetPriority = newPriority }
-//   return
-//  }
-//
-//  frc.deactivateDelegate()
-//  frc.moc.persistAndWait(block: { self.snippetPriority = newPriority })
-//  {flag in
-//
-//   guard flag else
-//   {
-//    frc.activateDelegate()
-//    return
-//   }
-//
-//   frc.refetch()
-//   frc.updateSectionCounters()
-//   frc.tableView.reloadData()
-//   frc.activateDelegate()
-//  }
-// }
  
  final var snippetPriorityIndex: Int {return SnippetPriority.prioritySectionsMap[snippetPriority]!}
  
@@ -201,8 +210,11 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
+ 
+ 
  @NSManaged private(set) var location: String?
- final var snippetLocation: String?
+ 
+ @objc final var snippetLocation: String? // calculated property for snippet search by GPS Location!
  {
   get
   {
@@ -212,8 +224,7 @@ protocol SnippetImagesPreviewProvidable: class
   set
   {
    self.location = newValue ?? ""
-   //self[.byLocation] = isHiddenSection(groupType: .byLocation){ $0.location == self.location }
-   self[.byLocation] = isHiddenSection(groupType: .byLocation, for: self.location!)
+   self[.byLocation] = isHiddenSection(groupType: .byLocation, for: self.location)
   }
 
  }
@@ -248,6 +259,9 @@ protocol SnippetImagesPreviewProvidable: class
  {
   return docFolder.appendingPathComponent(self.id!.uuidString)
  }
+ 
+ 
+ 
  
  
 

@@ -283,16 +283,26 @@
                         <viewLayoutGuide key="safeArea" id="uxl-ll-qSE"/>
                     </view>
                     <navigationItem key="navigationItem" title="SNIPPETS VC" largeTitleDisplayMode="never" id="hte-ci-Lpa">
-                        <barButtonItem key="rightBarButtonItem" title="Home" image="home.tab.icon" id="xzU-wy-zVM">
-                            <connections>
-                                <segue destination="6uu-d9-JNM" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="HdK-Qt-bAG"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Home" image="home.tab.icon" id="xzU-wy-zVM">
+                                <connections>
+                                    <segue destination="6uu-d9-JNM" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwind:" id="HdK-Qt-bAG"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="search" id="ckr-XP-lpR">
+                                <inset key="imageInsets" minX="3" minY="3" maxX="3" maxY="3"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <action selector="searchButtonPress:" destination="8F0-Wa-TO0" id="gGY-aU-RnA"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="createNewSnippet" destination="wwM-RC-fnL" id="8nF-1o-fb6"/>
                         <outlet property="editSnippets" destination="KUQ-Fn-oir" id="ABN-R7-KUH"/>
                         <outlet property="groupSnippets" destination="V4k-Ye-d1M" id="JIL-yl-91X"/>
+                        <outlet property="searchBarButtonItem" destination="ckr-XP-lpR" id="UFc-Nl-NbU"/>
                         <outlet property="snippetsTableView" destination="eyJ-fM-0bg" id="WNX-mL-PKI"/>
                         <outlet property="snippetsToolBar" destination="QNI-h6-xfy" id="RZw-Rw-e5e"/>
                         <segue destination="sRh-OF-XN0" kind="show" identifier="PushPhotoSnippetVC" id="2Q8-zr-ekv"/>

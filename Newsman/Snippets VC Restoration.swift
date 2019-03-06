@@ -9,6 +9,7 @@ extension SnippetsViewController
   super.decodeRestorableState(with: coder)
   self.menuTitle = coder.decodeObject(forKey: "menuTitle") as? String
   self.createBarButtonTitle = coder.decodeObject(forKey: "createBarButtonTitle") as? String
+  
   if let snippetTypeStr = coder.decodeObject(forKey: "snippetType") as? String
   {
    self.snippetType = SnippetType(rawValue: snippetTypeStr)

@@ -51,16 +51,30 @@ struct Localized
  static let changePriorityConfirm = NSLocalizedString("Are you sure you want to change the following snippets priorities?",
                                                       comment: "Change Snippets Priority Alert Confimation")
  
- static let deleteSnippetsTitle = NSLocalizedString("Deleting Snippets!", comment: "Deletу Snippets Alert Action")
+ static let deleteSnippetsTitle = NSLocalizedString("Deleting Snippets!",
+                                                    comment: "Deletу Snippets Alert Action")
  
  static let deleteSnippestConfirm = NSLocalizedString("Are you sure you want to delete the following snippets?!",
                                                       comment: "Delete Snippets Alert Confimation")
  
  static let groupPhotoTitle =  NSLocalizedString("Group Photos", comment: "Group Photos Alerts Title")
- static let groupPhotoSelect = NSLocalizedString("Please select photo grouping type", comment: "Group Photos Alerts Message")
+ static let groupPhotoSelect = NSLocalizedString("Please select photo grouping type",
+                                                 comment: "Group Photos Alerts Message")
  
- static let totalSnippets = NSLocalizedString("Total Snippets in this category: ", comment: "Total Snippets")
+ static let totalSnippets = NSLocalizedString("Total Snippets in this category: ",
+                                              comment: "Total Snippets")
  
+ static let plainList = NSLocalizedString("Plain List", comment: "Plain List")
+ 
+ 
+ static let overallScope =  NSLocalizedString("Overall",   comment: "Overall")
+ static let priorityScope = NSLocalizedString("Priorities",comment: "Priorities")
+ static let nameScope =     NSLocalizedString("Names",     comment: "Names")
+ static let dateScope =     NSLocalizedString("Dates",     comment: "Dates")
+ static let contentScope =  NSLocalizedString("Texts",     comment: "Texts")
+ static let LocationScope = NSLocalizedString("Locations", comment: "Locations")
+ 
+  
 }
 
 

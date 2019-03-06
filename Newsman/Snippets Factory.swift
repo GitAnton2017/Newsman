@@ -13,15 +13,18 @@ extension SnippetsViewController
   moc.persistAndWait(block:
   {
     newSnippet = T.init(context: moc)
-    newSnippet.currentFRC = snippetsDataSource.currentFRC
-    newSnippet.snippetDate = Date()
-    newSnippet.snippetName = ""
     let newSnippetID = UUID()
     newSnippet.id = newSnippetID
-    newSnippet.snippetPriority = .normal
     newSnippet.snippetType = snippetType
     newSnippet.snippetStatus = .new
+   
+    newSnippet.currentFRC = snippetsDataSource.currentFRC
+   
+    newSnippet.snippetDate = Date()
+    newSnippet.snippetName = ""
+    newSnippet.snippetPriority = .normal
     newSnippet.snippetCoordinates = snippetLocation
+    newSnippet.snippetLocation = ""
    
     newSnippet.initStorage()
    

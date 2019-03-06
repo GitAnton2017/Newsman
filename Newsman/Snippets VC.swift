@@ -6,9 +6,8 @@ import CoreLocation
 
 class SnippetsViewController: UIViewController
 {
- deinit {
-  print("\(self.debugDescription) is destroyed")
- }
+    deinit { print("\(self.debugDescription) is destroyed") }
+ 
     lazy var moc: NSManagedObjectContext =
     {
      let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -23,12 +22,10 @@ class SnippetsViewController: UIViewController
  
     var editedSnippetIndexPath: IndexPath?
     var swipedSnippetIndexPath: IndexPath?
- 
- 
- 
+
     var editedSnippet: BaseSnippet?
     {
-       didSet {sourceSnippet = oldValue}
+     didSet { sourceSnippet = oldValue }
     }
  
     var sourceSnippet: BaseSnippet?
@@ -60,41 +57,44 @@ class SnippetsViewController: UIViewController
     
     var groupType: GroupSnippets
     {
-        get
+     get
+     {
+      if let savedGroupingRaw = appSettings.first?.grouping,
+         let savedGrouping = GroupSnippets(rawValue: savedGroupingRaw)
+       {
+         currentGrouping = savedGrouping
+       }
+      
+       return currentGrouping
+     }
+     
+     set
+     {
+      if (currentGrouping != newValue)
+      {
+       currentGrouping = newValue
+       snippetsDataSource.groupType = newValue // fire reloadData() in DaraSource didSet obsever...
+     
+       if appSettings.isEmpty
+       {
+        var newSettings: Settings!
+        moc.persist(block:
         {
-         if let savedGroupingRaw = appSettings.first?.grouping,
-            let savedGrouping = GroupSnippets(rawValue: savedGroupingRaw)
-          {
-            currentGrouping = savedGrouping
-          }
-         
-          return currentGrouping
+         newSettings = Settings(context: self.moc)
+         newSettings.grouping = self.currentGrouping.rawValue
+        })
+        {success in
+         guard success else { return }
+         self.appSettings.append(newSettings)
         }
-        set
-        {
-         if (currentGrouping != newValue)
-         {
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            currentGrouping = newValue
-            snippetsDataSource.groupType = newValue
-            //snippetsDataSource.rebuildData()
-            snippetsTableView.reloadData()
-          
-            if (!appSettings.isEmpty)
-            {
-             appSettings.first!.grouping = currentGrouping.rawValue
-            }
-            else
-            {
-             let moc = appDelegate.persistentContainer.viewContext
-             let newSettings = Settings(context: moc)
-             newSettings.grouping = currentGrouping.rawValue
-             appSettings.append(newSettings)
-            }
-          
-            appDelegate.saveContext()
-         }
-        }
+       }
+       else
+       {
+        appSettings.first!.grouping = self.currentGrouping.rawValue
+       }
+       
+      }
+     }
     }
     
     @IBOutlet var snippetsToolBar: UIToolbar!
@@ -137,54 +137,57 @@ class SnippetsViewController: UIViewController
      snippetsTableView.register(HiddenCell.self, forCellReuseIdentifier: HiddenCell.reuseID)
      
      editSnippets.title = "⚒︎"
-     editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
-     editSnippets.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
+     editSnippets.setTitleTextAttributes(
+      [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
+     
+     editSnippets.setTitleTextAttributes(
+      [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
      
      
      snippetsTableView.dataSource = snippetsDataSource
      snippetsDataSource.snippetsTableView = self.snippetsTableView
+     snippetsDataSource.snippetsVC = self
      
      currentToolBarItems = snippetsToolBar.items
      snippetsTableView.allowsMultipleSelectionDuringEditing = true
      
-     
-     
-     //snippetsTableView.translatesAutoresizingMaskIntoConstraints = false
-        
      setLocationPermissions()
+     configueSearchController()
      updateSnippets()
+   
 
     }
  
     func updateSnippets()
     {
-     guard snippetType != nil else {return}
-     
+     guard snippetType != nil else { return }
+    
+ 
      createNewSnippet.title = createBarButtonTitle
-     createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
-     createNewSnippet.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
+     
+     createNewSnippet.setTitleTextAttributes(
+      [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
+     createNewSnippet.setTitleTextAttributes(
+      [NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
      
      snippetsDataSource.itemsType = snippetType
-     
-//     snippetsDataSource.rebuildData()
-     
      snippetsDataSource.groupType = groupType // fetch with FRC...
-     
      snippetsTableView.reloadData()
      
+
+     
+
+     
     }
+ 
+ 
  
     override func viewWillAppear(_ animated: Bool)
     {
      super.viewWillAppear(animated)
-     
-//     if let indexPaths = snippetsTableView.indexPathsForVisibleRows
-//     {
-//      snippetsTableView.reloadRows(at: indexPaths, with: .automatic)
-//     }
-     
-    
     }
+ 
+ 
  
     override func viewDidAppear(_ animated: Bool)
     {
@@ -195,8 +198,13 @@ class SnippetsViewController: UIViewController
     override func viewWillDisappear(_ animated: Bool)
     {
      super.viewWillDisappear(animated)
+     self.dismiss(animated: true, completion: nil) //!!!!!!
+     //Have to dismiss UISearchController to prevent VC ref cycle!!!
      snippetsTableView.visibleCells.forEach{($0 as? SnippetsViewCell)?.stopImageProvider()}
     }
+ 
+ 
+ 
  
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator)
     {
@@ -256,35 +264,40 @@ class SnippetsViewController: UIViewController
       self.toggleEditMode()
      }
         
-     self.present(ac, animated: true, completion: nil)
+     self.presenter.present(ac, animated: true, completion: nil)
     }
     
     func toggleEditMode()
     {
       if snippetsTableView.isEditing
       {
+       snippetsTableView.setEditing(false, animated: true)
+       snippetsToolBar.setItems(currentToolBarItems, animated: true)
+      
+       self.searchBarButtonItem.tintColor = UIColor.white
+       searchBarButtonItem.isEnabled = true
        
-        snippetsTableView.setEditing(false, animated: true)
-        snippetsToolBar.setItems(currentToolBarItems, animated: true)
       }
       else
       {
+     
+       snippetsTableView.setEditing(true, animated: true)
+      
+       self.searchBarButtonItem.tintColor = UIColor.clear
+       searchBarButtonItem.isEnabled = false
+      
+       let doneItem = UIBarButtonItem(title: "⏎", style: .plain, target: self, action: #selector(editSnippetsPress))
+       doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
+       doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
        
-   
-        snippetsTableView.setEditing(true, animated: true)
-
-        let doneItem = UIBarButtonItem(title: "⏎", style: .plain, target: self, action: #selector(editSnippetsPress))
-        doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 28)], for: .selected)
-        doneItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .normal)
-        
-        let deleteItem  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteSelectedSnippets))
-        let priorityItem = UIBarButtonItem(title: "⚠︎", style: .plain, target: self, action: #selector(changeSelectedSnippetsPriority))
-        priorityItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
-        priorityItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .normal)
-        
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
-        snippetsToolBar.setItems([deleteItem, flexSpace, priorityItem,flexSpace, doneItem], animated: true)
+       let deleteItem  = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteSelectedSnippets))
+       let priorityItem = UIBarButtonItem(title: "⚠︎", style: .plain, target: self, action: #selector(changeSelectedSnippetsPriority))
+       priorityItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 30)], for: .selected)
+       priorityItem.setTitleTextAttributes([NSAttributedStringKey.font : UIFont.systemFont(ofSize: 33)], for: .normal)
+       
+       let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+       
+       snippetsToolBar.setItems([deleteItem, flexSpace, priorityItem,flexSpace, doneItem], animated: true)
       }
     }
     
@@ -299,10 +312,16 @@ class SnippetsViewController: UIViewController
                                                    message: Localized.groupingSelect,
                                                    style: .alert) {self.groupType = $0}
      
-     self.present(ac, animated: true, completion: nil)
+     self.presenter.present(ac, animated: true, completion: nil)
     }
-    
  
-    
+ 
+ @IBOutlet var searchBarButtonItem: UIBarButtonItem!
+
+ @IBAction func searchButtonPress(_ sender: UIBarButtonItem)
+ {
+ }
+ 
+ 
 }
 

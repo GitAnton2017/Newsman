@@ -88,6 +88,9 @@
 		A75DB6462215BA320045E9E2 /* Photo Items Draggable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB6452215BA320045E9E2 /* Photo Items Draggable Protocol.swift */; };
 		A75DB6482215BAEF0045E9E2 /* Photo Items Draggable Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB6472215BAEF0045E9E2 /* Photo Items Draggable Extension.swift */; };
 		A75DB64B2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB64A2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift */; };
+		A7660E40222676DA00F845E8 /* Snippet Cell Images Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7660E3F222676DA00F845E8 /* Snippet Cell Images Loading.swift */; };
+		A7660E422226781000F845E8 /* Snippet Cells Disclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7660E412226781000F845E8 /* Snippet Cells Disclosure.swift */; };
+		A7660E4422267BF700F845E8 /* Snippet Cell CA Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7660E4322267BF700F845E8 /* Snippet Cell CA Delegate.swift */; };
 		A768ED6B21883AAD006AED31 /* Accesorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6921883AAD006AED31 /* Accesorial.storyboard */; };
 		A768ED6E21883AC9006AED31 /* MediaViewControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6C21883AC9006AED31 /* MediaViewControllers.storyboard */; };
 		A768ED7121883B41006AED31 /* Snippets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6F21883B41006AED31 /* Snippets.storyboard */; };
@@ -118,6 +121,7 @@
 		A7AFE5C321F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */; };
 		A7AFE5C521F1C7A500EBD4C9 /* SCP Image Load Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */; };
 		A7AFE5C821F3870B00EBD4C9 /* Photo MO Manipulations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */; };
+		A7B0954F2229A06E0089BC9A /* Snippets Search Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B0954E2229A06E0089BC9A /* Snippets Search Controller.swift */; };
 		A7B2B07D2205BEC400D40008 /* Remove Dependencies Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B07C2205BEC400D40008 /* Remove Dependencies Extension.swift */; };
 		A7B2B07F2205BF5500D40008 /* Context Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B07E2205BF5500D40008 /* Context Operation.swift */; };
 		A7B2B0812205C25F00D40008 /* Cached Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0802205C25F00D40008 /* Cached Image Operation.swift */; };
@@ -267,6 +271,9 @@
 		A75DB6452215BA320045E9E2 /* Photo Items Draggable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Items Draggable Protocol.swift"; sourceTree = "<group>"; };
 		A75DB6472215BAEF0045E9E2 /* Photo Items Draggable Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Items Draggable Extension.swift"; sourceTree = "<group>"; };
 		A75DB64A2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Cell CV D&D Delegate.swift"; sourceTree = "<group>"; };
+		A7660E3F222676DA00F845E8 /* Snippet Cell Images Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Images Loading.swift"; sourceTree = "<group>"; };
+		A7660E412226781000F845E8 /* Snippet Cells Disclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cells Disclosure.swift"; sourceTree = "<group>"; };
+		A7660E4322267BF700F845E8 /* Snippet Cell CA Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell CA Delegate.swift"; sourceTree = "<group>"; };
 		A768ED6A21883AAD006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Accesorial.storyboard; sourceTree = "<group>"; };
 		A768ED6D21883AC9006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaViewControllers.storyboard; sourceTree = "<group>"; };
 		A768ED7021883B41006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Snippets.storyboard; sourceTree = "<group>"; };
@@ -297,6 +304,7 @@
 		A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Flag Markers Extension.swift"; sourceTree = "<group>"; };
 		A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Image Load Extension.swift"; sourceTree = "<group>"; };
 		A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Manipulations.swift"; sourceTree = "<group>"; };
+		A7B0954E2229A06E0089BC9A /* Snippets Search Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Search Controller.swift"; sourceTree = "<group>"; };
 		A7B2B07C2205BEC400D40008 /* Remove Dependencies Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Remove Dependencies Extension.swift"; sourceTree = "<group>"; };
 		A7B2B07E2205BF5500D40008 /* Context Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Context Operation.swift"; sourceTree = "<group>"; };
 		A7B2B0802205C25F00D40008 /* Cached Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cached Image Operation.swift"; sourceTree = "<group>"; };
@@ -583,6 +591,19 @@
 			name = DELEGATES;
 			sourceTree = "<group>";
 		};
+		A7660E4522267C6D00F845E8 /* SNIPPET CELL */ = {
+			isa = PBXGroup;
+			children = (
+				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
+				A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */,
+				A7660E412226781000F845E8 /* Snippet Cells Disclosure.swift */,
+				A787566722213479006503D7 /* Snippets Hidden Cell.swift */,
+				A7660E3F222676DA00F845E8 /* Snippet Cell Images Loading.swift */,
+				A7660E4322267BF700F845E8 /* Snippet Cell CA Delegate.swift */,
+			);
+			name = "SNIPPET CELL";
+			sourceTree = "<group>";
+		};
 		A7AFE5C621F1C7C800EBD4C9 /* Snippet Cell Protocol */ = {
 			isa = PBXGroup;
 			children = (
@@ -660,18 +681,17 @@
 			isa = PBXGroup;
 			children = (
 				A71C85E61FBED634000F2DD9 /* Snippets VC.swift */,
+				A7660E4522267C6D00F845E8 /* SNIPPET CELL */,
 				A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */,
+				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */,
+				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
 				A7021CEB2185A7D1009A5F43 /* Snippets TV Header View.swift */,
 				A7021CED2185A92F009A5F43 /* Snippets TV Footer View.swift */,
 				A7021CEF21863227009A5F43 /* Snippets TV Supplemetary Views.swift */,
-				A787566722213479006503D7 /* Snippets Hidden Cell.swift */,
-				A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */,
-				A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */,
-				A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */,
+				A7B0954E2229A06E0089BC9A /* Snippets Search Controller.swift */,
 				A77C73902194392D00E1C57F /* Snippet Bar Rating View.swift */,
 				A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */,
-				A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */,
 				A711C0EE2183167C0025C973 /* Snippets Special Enums, Structs.swift */,
 				A711C0EA2180779E0025C973 /* Snippets Factory.swift */,
 				A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */,
@@ -962,6 +982,7 @@
 				A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */,
 				A7A72E4C21F622DD003AA849 /* Photo Folder MO Manipulations.swift in Sources */,
 				A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */,
+				A7660E4422267BF700F845E8 /* Snippet Cell CA Delegate.swift in Sources */,
 				A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */,
 				A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */,
 				A75DB63E2215B68B0045E9E2 /* Photo Item D&D Extension.swift in Sources */,
@@ -972,6 +993,7 @@
 				A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */,
 				A7443F06202DD7600039BE41 /* PhotoFolder MO Properties.swift in Sources */,
 				A704264F1FDA87CA000B3400 /* Photo Item Wrapper.swift in Sources */,
+				A7660E40222676DA00F845E8 /* Snippet Cell Images Loading.swift in Sources */,
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
 				A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */,
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
@@ -1026,6 +1048,7 @@
 				A7AFE5C321F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift in Sources */,
 				A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
+				A7B0954F2229A06E0089BC9A /* Snippets Search Controller.swift in Sources */,
 				A7D93C6A206D3743007891ED /* Helpers.swift in Sources */,
 				A79548F421E7812A00A37959 /* Photo Cell D&D Waggle Animation.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* Snippets View Cell.swift in Sources */,
@@ -1045,6 +1068,7 @@
 				A7B2B0872205CAFD00D40008 /* Render Video Preview Operation.swift in Sources */,
 				A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */,
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
+				A7660E422226781000F845E8 /* Snippet Cells Disclosure.swift in Sources */,
 				A75DB6462215BA320045E9E2 /* Photo Items Draggable Protocol.swift in Sources */,
 				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,
 				A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */,

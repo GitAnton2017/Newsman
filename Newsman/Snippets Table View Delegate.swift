@@ -22,7 +22,8 @@ extension SnippetsViewController: UITableViewDelegate
 
  }
 
- private func loadSnippetAnimatedImages(_ tableView: UITableView, for cell: SnippetsViewCell, at indexPath: IndexPath)
+ private func loadSnippetAnimatedImages(_ tableView: UITableView,
+                                          for cell: SnippetsViewCell, at indexPath: IndexPath)
  {
  
   let groupType = self.groupType
@@ -39,7 +40,7 @@ extension SnippetsViewController: UITableViewDelegate
    guard wc.hostedSnippet === ws else {return}
    if ws[groupType] {return}
    
-   DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(1))
+   DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200))
    {[weak w_cell = cell, weak w_snippet = snippet] in
     
     guard let wc = w_cell, let ws = w_snippet else {return}
@@ -98,12 +99,14 @@ extension SnippetsViewController: UITableViewDelegate
 
  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
  {
-  guard let cell = cell as? SnippetsViewCell else { return }
-  guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
-  if snippet[groupType] {return}
-
-  loadSnippetAnimatedImages(tableView, for: cell, at: indexPath)
   
+//  guard let cell = cell as? SnippetsViewCell else { return }
+//  guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
+//  
+//
+//  if snippet[groupType] {return}
+//  loadSnippetAnimatedImages(tableView, for: cell, at: indexPath)
+
   let a4r = GKRandomDistribution(lowestValue: 2, highestValue: 3)
   let div = CGFloat(a4r.nextUniform())
   let dir = CGFloat(a4r.nextBool() ? 1 : -1)
@@ -151,13 +154,66 @@ extension SnippetsViewController: UITableViewDelegate
  }
 
  
+ final func persistSnippetsPriorityChange(for snippets: [BaseSnippet], to newPriority: SnippetPriority)
+ {
+  moc.persist(block:
+  {
+   snippets.forEach{ $0.snippetPriority = newPriority }
+  })
+  {flag in
+   guard flag else { return }
+   self.snippetsDataSource.reloadSearchData()
+  }
+ }
+ 
+ 
+ 
+ final func persistSnippetsDeletion(for snippets: [BaseSnippet])
+ {
+  moc.persist(block:
+  {
+    for snippet in snippets
+    {
+     switch snippet.snippetType
+     {
+      case .text:   break
+      case .photo:  fallthrough
+      case .video:  self.deletePhotoSnippet(photoSnippet: snippet as! PhotoSnippet)
+      case .audio:  break
+      case .sketch: break
+      case .report: break
+      case .undefined: break
+     }
+     
+     self.moc.delete(snippet)
+    }
+  })
+  {flag in
+   guard flag else { return }
+   self.snippetsDataSource.reloadSearchData()
+  }
+ }
+ 
+ final func persistSnippetNameChange(for snippet: BaseSnippet, to newName: String)
+ {
+  guard newName != snippet.snippetName else { return }
+  moc.persist(block: { snippet.snippetName = newName })
+  {flag in
+   guard flag else { return }
+   self.snippetsDataSource.reloadSearchData()
+  }
+ }
+ 
+ 
  func changeSnippetsPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
  {
-   var snippets: [BaseSnippet] = [];  var snippetTags = "";  var cnt = 1
+   var snippets: [BaseSnippet] = []
+   var snippetTags = ""
+   var cnt = 1
   
    for indexPath in indexPaths
    {
-    let snippet = snippetsDataSource.currentFRC[indexPath]
+    let snippet = snippetsDataSource[indexPath]
     
     let oldPriority = snippet.snippetPriority
 
@@ -180,12 +236,7 @@ extension SnippetsViewController: UITableViewDelegate
   
    let changeAction = UIAlertAction(title: Localized.changeAction, style: .default)
    { _ in
-    //self.snippetsDataSource.currentFRC.setSnippetsPriority(at: indexPaths, to: newPriority)
-    
-    snippets.first?.managedObjectContext?.persistAndWait
-    {
-     snippets.forEach{ $0.snippetPriority = newPriority}
-    }
+    self.persistSnippetsPriorityChange(for: snippets, to: newPriority)
    }
   
    priorityAC.addAction(changeAction)
@@ -193,7 +244,7 @@ extension SnippetsViewController: UITableViewDelegate
    let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
    priorityAC.addAction(cancelAction)
   
-   self.present(priorityAC, animated: true, completion: nil)
+   self.presenter.present(priorityAC, animated: true, completion: nil)
   
  }
  
@@ -228,7 +279,7 @@ extension SnippetsViewController: UITableViewDelegate
   
      for indexPath in indexPaths
      {
-      let snippet = snippetsDataSource.currentFRC[indexPath]
+      let snippet = snippetsDataSource[indexPath]
       let name = NSLocalizedString(snippet.snippetName, comment: snippet.snippetName)
       let tag = name.quoted + (cnt == snippets.count ? "" : "\n")
       snippetTags.append(tag)
@@ -243,36 +294,18 @@ extension SnippetsViewController: UITableViewDelegate
   
      let deleteAction = UIAlertAction(title: Localized.deleteAction, style: .destructive)
      { _ in
-       self.moc.persistAndWait
-       {
-         for snippet in snippets
-         {
-          switch snippet.snippetType
-          {
-           case .text:   break
-           case .photo:  fallthrough
-           case .video:  self.deletePhotoSnippet(photoSnippet: snippet as! PhotoSnippet)
-           case .audio:  break
-           case .sketch: break
-           case .report: break
-           case .undefined: break
-          }
-          
-          self.moc.delete(snippet)
-          
-         }
-      }
-      
-   
+      self.persistSnippetsDeletion(for: snippets)
      }
+  
      deleteAC.addAction(deleteAction)
   
      let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
      deleteAC.addAction(cancelAction)
   
-     self.present(deleteAC, animated: true, completion: nil)
+     self.presenter.present(deleteAC, animated: true, completion: nil)
  }
  
+
  
  func tableView(_ tableView: UITableView,
                   trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
@@ -282,9 +315,13 @@ extension SnippetsViewController: UITableViewDelegate
   {[unowned self] action, view, handler in
    let ac = SnippetPriority.caseSelectorController(title: self.snippetType.localizedString,
                                                    message: Localized.prioritySelect,
-                                                   style: .alert) {self.changeSnippetsPriority(tableView, [indexPath], $0)}
+                                                   style: .alert)
+   {
+    self.changeSnippetsPriority(tableView, [indexPath], $0)
+   }
    
-   self.present(ac, animated: true, completion: nil)
+   self.presenter.present(ac, animated: true, completion: nil)
+   
    handler(true)
   }
   
@@ -318,8 +355,7 @@ extension SnippetsViewController: UITableViewDelegate
  {
   
   swipedSnippetIndexPath = indexPath
-  let snippet = snippetsDataSource.currentFRC[indexPath]
-  
+  let snippet = snippetsDataSource[indexPath]
   let rename = UIContextualAction(style: .normal, title: "Rename")
   {[unowned self] action, view, handler in
    let ac = UIAlertController(title: self.snippetType.localizedString, message: nil, preferredStyle: .alert)
@@ -337,11 +373,8 @@ extension SnippetsViewController: UITableViewDelegate
   
    let ok = UIAlertAction(title: Localized.changeAction, style: .destructive)
    {_ in
-    guard let newName = ac.textFields?.first?.text, newName != snippet.snippetName else { return }
-    self.moc.persist
-    {
-     snippet.snippetName = newName
-    }
+    guard let newName = ac.textFields?.first?.text else { return }
+    self.persistSnippetNameChange(for: snippet, to: newName)
    }
    
    ok.isEnabled = false
@@ -351,7 +384,8 @@ extension SnippetsViewController: UITableViewDelegate
    ac.addAction(cancel)
    
    tableView.selectRow(at: indexPath, animated: true, scrollPosition: .top)
-   self.present(ac, animated: true, completion: nil)
+   
+   self.presenter.present(ac, animated: true, completion: nil)
   
    handler(true)
   }
@@ -362,18 +396,17 @@ extension SnippetsViewController: UITableViewDelegate
   
   return UISwipeActionsConfiguration(actions: [rename])
  }
- 
 
  
  func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView?
  {
+  guard snippetsDataSource.searchString.isEmpty else { return nil }
+  
   let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: SnippetsTableViewHeaderView.reuseID) as! SnippetsTableViewHeaderView
-  
-  let dataSource = tableView.dataSource as! SnippetsViewDataSource
-  
-  header.title = dataSource.currentFRC.sectionTitle(for: section)
+ 
+  header.title = snippetsDataSource.sectionTitle(for: section)
   header.titleColor = #colorLiteral(red: 0.9568627477, green: 0.6588235497, blue: 0.5450980663, alpha: 1)
-  header.isHiddenSection = dataSource.currentFRC.isHiddenSection(section: section)
+  header.isHiddenSection = snippetsDataSource.isHiddenSection(section: section)
   
   
   return header
@@ -383,22 +416,19 @@ extension SnippetsViewController: UITableViewDelegate
  {
   let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SnippetsTableViewFooterView.reuseID) as! SnippetsTableViewFooterView
   
-  let dataSource = tableView.dataSource as! SnippetsViewDataSource
-  footer.title = Localized.totalSnippets + String(dataSource.currentFRC.totalNumberOfRowsInSection(index: section))
+  let NRows = snippetsDataSource.totalNumberOfRowsInSection(index: section)
+  footer.title = Localized.totalSnippets + String(NRows)
   footer.titleColor = #colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)
-  
-//  footer.section = dataSource.currentFRC[section]
-  
   return footer
  }
  
  
  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
  {
-  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
-  let h = tableView.rowHeight
-  return dataSource.currentFRC.isHiddenSection(section: indexPath.section) ? 0 :
-       ((dataSource.currentFRC.isDisclosedCell(for: indexPath)) ? h * 2 : h)
+  let rh = tableView.rowHeight
+  let hiddenSection = snippetsDataSource.isHiddenSection(section: indexPath.section)
+  let disclosedCell = snippetsDataSource.isDisclosedCell(for: indexPath)
+  return hiddenSection ? 0 : (disclosedCell ? rh * 2 : rh)
  }
  
  
@@ -406,8 +436,9 @@ extension SnippetsViewController: UITableViewDelegate
  
  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
  {
-  let dataSource = snippetsTableView.dataSource as! SnippetsViewDataSource
-  return dataSource.currentFRC.isHiddenSection(section: section) ? 60.0 : 50.0
+  guard snippetsDataSource.searchString.isEmpty else { return 0 }
+  let hiddenSection = snippetsDataSource.isHiddenSection(section: section)
+  return hiddenSection ? 60.0 : 50.0
  }
  
  func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat
@@ -415,16 +446,17 @@ extension SnippetsViewController: UITableViewDelegate
   return 40
  }
  
- func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle
+ func tableView(_ tableView: UITableView,
+                  editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle
  {
   return .delete
  }
 
  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
  {
-  if tableView.isEditing {return}
+  if tableView.isEditing { return }
 
-  let selectedSnippet = snippetsDataSource.currentFRC[indexPath]
+  let selectedSnippet = snippetsDataSource[indexPath]
   
   switch selectedSnippet.snippetType
   {
