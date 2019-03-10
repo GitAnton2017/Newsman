@@ -59,39 +59,41 @@ class SnippetsViewController: UIViewController
     {
      get
      {
-      if let savedGroupingRaw = appSettings.first?.grouping,
-         let savedGrouping = GroupSnippets(rawValue: savedGroupingRaw)
-       {
-         currentGrouping = savedGrouping
-       }
-      
-       return currentGrouping
+       return Defaults.groupType(for: snippetType)
+//      if let savedGroupingRaw = appSettings.first?.grouping,
+//         let savedGrouping = GroupSnippets(rawValue: savedGroupingRaw)
+//       {
+//         currentGrouping = savedGrouping
+//       }
+//
+//       return currentGrouping
      }
      
      set
      {
-      if (currentGrouping != newValue)
+      if (groupType != newValue)
       {
-       currentGrouping = newValue
+         Defaults.setGroupType(groupType: newValue, for: snippetType)
+//       currentGrouping = newValue
        snippetsDataSource.groupType = newValue // fire reloadData() in DaraSource didSet obsever...
-     
-       if appSettings.isEmpty
-       {
-        var newSettings: Settings!
-        moc.persist(block:
-        {
-         newSettings = Settings(context: self.moc)
-         newSettings.grouping = self.currentGrouping.rawValue
-        })
-        {success in
-         guard success else { return }
-         self.appSettings.append(newSettings)
-        }
-       }
-       else
-       {
-        appSettings.first!.grouping = self.currentGrouping.rawValue
-       }
+//
+//       if appSettings.isEmpty
+//       {
+//        var newSettings: Settings!
+//        moc.persist(block:
+//        {
+//         newSettings = Settings(context: self.moc)
+//         newSettings.grouping = self.currentGrouping.rawValue
+//        })
+//        {success in
+//         guard success else { return }
+//         self.appSettings.append(newSettings)
+//        }
+//       }
+//       else
+//       {
+//        appSettings.first!.grouping = self.currentGrouping.rawValue
+//       }
        
       }
      }
@@ -162,7 +164,6 @@ class SnippetsViewController: UIViewController
     {
      guard snippetType != nil else { return }
     
- 
      createNewSnippet.title = createBarButtonTitle
      
      createNewSnippet.setTitleTextAttributes(
@@ -172,12 +173,10 @@ class SnippetsViewController: UIViewController
      
      snippetsDataSource.itemsType = snippetType
      snippetsDataSource.groupType = groupType // fetch with FRC...
+     let index = Defaults.searchScopeIndex(for: snippetType)
+     snippetsDataSource.searchScopeIndex = index
+     navigationItem.searchController?.searchBar.selectedScopeButtonIndex = index
      snippetsTableView.reloadData()
-     
-
-     
-
-     
     }
  
  
@@ -192,6 +191,7 @@ class SnippetsViewController: UIViewController
     override func viewDidAppear(_ animated: Bool)
     {
      super.viewDidAppear(animated)
+     self.navigationItem.searchController?.searchBar.isHidden = false
     }
  
  

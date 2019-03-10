@@ -72,11 +72,12 @@ class SnippetDates
  lazy var bofty: Date  =  {return _bofty}()
  lazy var bofny: Date  =  {return _bofny}()
  
- func update ()
+ func updateDatesWhenBecomeActive()  //update date filters bounds taking current system date
+ // when app returns from background mode and become active again!
  {
-  boftd  =   _boftd
-  bofnd  =   _bofnd
-  bofld  =   _bofld
+  boftd  =   _boftd  // the beginning of this day (today)
+  bofnd  =   _bofnd  // the beginning of the next day (+ 24h) (tomorrow)
+  bofld  =   _bofld  // the beginning of the last day (yesterday) (- 1D)
   boftw  =   _boftw
   bofnw  =   _bofnw
   boflw  =   _boflw
@@ -110,12 +111,12 @@ class SnippetDates
                                                      weekday: nil, weekdayOrdinal: nil, quarter: nil,
                                                      weekOfMonth: nil, weekOfYear: nil, yearForWeekOfYear: nil))! }
  
- var _bofny:    Date     {return calendar.date(byAdding: .year,   value:  1,         to: _bofty)! }
+ var _bofny:    Date     {return calendar.date(byAdding: .year,   value:  1,  to: _bofty)! }
  
  
  typealias DatePredicate = (title: String, predicate: (BaseSnippet) -> Bool)
  
- lazy var datePredicates : [DatePredicate] = {return predicates}()
+ lazy var datePredicates : [DatePredicate] = { predicates }()
  
  var predicates : [DatePredicate]
  {

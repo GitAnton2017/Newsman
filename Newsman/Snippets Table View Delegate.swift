@@ -162,7 +162,7 @@ extension SnippetsViewController: UITableViewDelegate
   })
   {flag in
    guard flag else { return }
-   self.snippetsDataSource.reloadSearchData()
+//   self.snippetsDataSource.reloadSearchData()
   }
  }
  
@@ -190,7 +190,7 @@ extension SnippetsViewController: UITableViewDelegate
   })
   {flag in
    guard flag else { return }
-   self.snippetsDataSource.reloadSearchData()
+   //self.snippetsDataSource.reloadSearchData()
   }
  }
  
@@ -200,7 +200,7 @@ extension SnippetsViewController: UITableViewDelegate
   moc.persist(block: { snippet.snippetName = newName })
   {flag in
    guard flag else { return }
-   self.snippetsDataSource.reloadSearchData()
+//   self.snippetsDataSource.reloadSearchData()
   }
  }
  

@@ -7,10 +7,7 @@ class DatePickerViewController: UIViewController
  
   var editedSnippet: BaseSnippet!
   {
-    didSet
-    {
-        navigationItem.title = editedSnippet.snippetName
-    }
+   didSet { navigationItem.title = editedSnippet.snippetName }
   }
     
   @IBOutlet var snippetDatePicker: UIDatePicker!
@@ -31,6 +28,8 @@ class DatePickerViewController: UIViewController
   override func viewWillDisappear(_ animated: Bool)
   {
     super.viewWillDisappear(animated)
+    guard snippetDatePicker.date != editedSnippet.snippetDate else { return }
+   
     editedSnippet.snippetDate = snippetDatePicker.date
   }
 }

@@ -285,6 +285,11 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
      
      snippet.dateIndex = BaseSnippet.snippetDates.datePredicates.first{$0.predicate(snippet)}?.title
      
+     if let date = snippet.date
+     {
+      snippet.dateFormatIndex = DateFormatters.localizedSearchString(for: date as Date)
+     }
+     
      if snippet.location == nil {snippet.snippetLocation = ""}
      
     }
@@ -469,9 +474,10 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  }
  
  
- final subscript (snippetID: String) -> BaseSnippet?
+ final subscript (snippetID: String?) -> BaseSnippet?
  {
-  let snippet = items?.first{ $0.id?.uuidString == snippetID }
+  guard let SID = snippetID else { return nil }
+  let snippet = items?.first{ $0.id?.uuidString == SID }
   snippet?.currentFRC = self
   return snippet
  }

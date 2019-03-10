@@ -21,8 +21,8 @@ extension NCSnippetsScrollProtocol
      let thisIndex = items.index(where: {$0.id == currentSnippet.id})
   {
    var index = thisIndex + direction
-   if (index > items.count - 1) {index = 0}
-   if (index < 0) {index = items.count - 1}
+   if (index > items.count - 1) { index = 0 }
+   if (index < 0) { index = items.count - 1 }
    
    let nextSnippet = items[index]
    let snippetType = SnippetType(rawValue: nextSnippet.type!)!

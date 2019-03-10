@@ -3,6 +3,15 @@ import Foundation
 
 extension TextSnippetViewController
 {
+ 
+ var snippetsVC: SnippetsViewController?
+ {
+   guard let nc = self.navigationController else { return nil }
+   let count = nc.childViewControllers.count
+   guard count == 3 else { return nil }
+   return nc.childViewControllers[count - 2] as? SnippetsViewController
+ }
+ 
  override func encodeRestorableState(with coder: NSCoder)
  {
   super.encodeRestorableState(with: coder)
@@ -15,20 +24,15 @@ extension TextSnippetViewController
   self.textSnippetRestorationID = coder.decodeObject(forKey: "photoSnippetID") as? String
 
  }
+
  
  override func applicationFinishedRestoringState()
  {
   
-  if let nc = self.navigationController,
-   let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
-   let ID = self.textSnippetRestorationID,
-   let textSnippet = snippetsVC.snippetsDataSource.currentFRC[ID] as? TextSnippet
+  if let textSnippet = snippetsVC?.snippetsDataSource[textSnippetRestorationID] as? TextSnippet
   {
-   
    self.textSnippet = textSnippet
-   self.textSnippet.currentFRC = snippetsVC.snippetsDataSource.currentFRC
    (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = textSnippet
-   
    updateTextSnippet()
    
   }

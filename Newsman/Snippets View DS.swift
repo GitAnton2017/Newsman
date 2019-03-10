@@ -6,7 +6,133 @@ import GameplayKit
 
 class SnippetsViewDataSource: NSObject, UITableViewDataSource
 {
- deinit { print("\(self.debugDescription) is destroyed)") }
+ 
+ var observers = Set<NSObject>()
+ 
+ 
+ private func clearAllNotificationObservers()
+ {
+  print (#function)
+  let center = NotificationCenter.default
+  observers.forEach { center.removeObserver($0) }
+  observers.removeAll()
+ }
+ 
+ private func addSnippetsContextObservers()
+ {
+  print (#function)
+  addSnippetsContextDeleteObserver()
+  addSnippetsContextInsertObserver()
+  addSnippetsContextUpdateObserver()
+  
+ }
+ 
+ 
+ 
+ private func configueChangeContextObserver(for changeKey: String,
+                                            handler: @escaping (Set<BaseSnippet>) -> () ) -> NSObject
+ {
+  let center = NotificationCenter.default
+  let queue = OperationQueue.main
+  
+  let observer = center.addObserver(forName: .NSManagedObjectContextObjectsDidChange, object: moc, queue: queue)
+  {[unowned self] notification in
+   if self.searchString.isEmpty { return }
+   guard let userInfo = notification.userInfo else { return }
+   guard let changed = userInfo[changeKey] as? Set<BaseSnippet> else { return }
+   handler(changed)
+  }
+  
+  return observer as! NSObject
+ }
+ 
+ private func refreshFooterView(for section: Int)
+ {
+  let footer = snippetsTableView.footerView(forSection: section) as? SnippetsTableViewFooterView
+  let NRows = totalNumberOfRowsInSection(index: section)
+  footer?.title = Localized.totalSnippets + String(NRows)
+ }
+ 
+ 
+ private func addSnippetsContextDeleteObserver()
+ {
+  print (#function)
+  let observer = configueChangeContextObserver(for: NSDeletedObjectsKey)
+  {[unowned self] deleted in
+   let searchIndexes = deleted.compactMap{ s in self.searchedItems.index{$0 === s} }.sorted(by: >)
+   searchIndexes.forEach{ self.searchedItems.remove(at: $0) }
+
+   let fetchIndexes = deleted.compactMap{ s in self.fetchedItems.index{$0 === s} }.sorted(by: >)
+   fetchIndexes.forEach{ self.fetchedItems.remove(at: $0) }
+
+   let indexPaths = searchIndexes.map{ IndexPath(row: $0, section: 0) }
+   self.snippetsTableView.performBatchUpdates(
+   {
+    self.snippetsTableView.deleteRows(at: indexPaths, with: .fade)
+   })
+   {_ in
+    self.refreshFooterView(for: 0)
+   }
+  }
+  
+  observers.insert(observer)
+ }
+ 
+ 
+ private func addSnippetsContextUpdateObserver()
+ {
+  print (#function)
+  let observer = configueChangeContextObserver(for: NSUpdatedObjectsKey)
+  {[unowned self] updated in
+   
+   let indexesToDelete = updated.compactMap
+   { s in
+    self.searchedItems.index{$0 === s && !self.evaluate(snippet: $0)}
+   }.sorted(by: >)
+   
+   let deleteIndexPaths = indexesToDelete.map{IndexPath(row: $0, section: 0)}
+   
+   indexesToDelete.forEach{ self.searchedItems.remove(at: $0) }
+   
+   let indexesToUpdate = updated.compactMap
+   { s in
+    self.searchedItems.index{$0 === s && self.evaluate(snippet: $0)}
+   }
+   
+   let updateIndexPaths = indexesToUpdate.map{IndexPath(row: $0, section: 0)}
+   
+   self.snippetsTableView.performBatchUpdates(
+   {
+    self.snippetsTableView.deleteRows(at: deleteIndexPaths, with: .fade)
+   })
+   {_ in
+    self.snippetsTableView.reloadRows(at: updateIndexPaths, with: .automatic)
+    self.refreshFooterView(for: 0)
+   }
+   
+  }
+  
+  observers.insert(observer)
+ }
+ 
+ private func addSnippetsContextInsertObserver()
+ {
+  print (#function)
+ }
+ 
+ 
+ 
+ override init ()
+ {
+  super.init()
+  addSnippetsContextObservers()
+ }
+ 
+ deinit
+ {
+  print("\(self.debugDescription) is destroyed)")
+  clearAllNotificationObservers()
+ }
 
  lazy var moc: NSManagedObjectContext =
   {
@@ -30,7 +156,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  var dateScopePredicate: NSPredicate
  {
   //return NSPredicate(value: false)
-  return NSPredicate(format: "SELF.dateSearchIndex CONTAINS[n] %@", searchString)
+  return NSPredicate(format: "SELF.dateFormatIndex CONTAINS[n] %@", searchString)
  }
  
 
@@ -101,6 +227,10 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
   
  }
 
+ var currentSearchPredicate: NSPredicate
+ {
+  return searchScopePredicates[itemsType]![searchScopeIndex]
+ }
 
 
  func configueCurrentFRC() -> SnippetsFetchController
@@ -133,7 +263,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
 
  var items: [BaseSnippet]?
  {
-  return currentFRC.items
+  return searchString.isEmpty ? currentFRC.items : searchedItems
  }
  
  
@@ -151,17 +281,29 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
 
  var searchedItems: [BaseSnippet] = []
  
- 
+ private func evaluate(snippet: BaseSnippet) -> Bool
+ {
+  switch itemsType!
+  {
+   case .text:   return currentSearchPredicate.evaluate(with: snippet as! TextSnippet)
+   case .photo:  fallthrough
+   case .video:  return currentSearchPredicate.evaluate(with: snippet as! PhotoSnippet)
+   case .audio:  break
+   case .sketch: break
+   case .report: break
+   default: break
+  }
+  
+  return false
+ }
  
  private func performSearchRequest() -> [BaseSnippet]
  {
-  let searchPredicate = searchScopePredicates[itemsType]![searchScopeIndex]
-  
   switch itemsType!
   {
-   case .text:   return (fetchedItems as! [TextSnippet]).filter{searchPredicate.evaluate(with: $0)}
+   case .text:   return (fetchedItems as! [TextSnippet]).filter{ currentSearchPredicate.evaluate(with: $0)}
    case .photo:  fallthrough
-   case .video:  return (fetchedItems as! [PhotoSnippet]).filter{searchPredicate.evaluate(with: $0)}
+   case .video:  return (fetchedItems as! [PhotoSnippet]).filter{ currentSearchPredicate.evaluate(with: $0) }
    case .audio:  break
    case .sketch: break
    case .report: break
@@ -256,6 +398,13 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  {
   guard searchString.isEmpty else { return searchedItems[indexPath.row] }
   return currentFRC[indexPath]
+ }
+ 
+ final subscript(snippetID: String?) -> BaseSnippet?
+ {
+  guard let SID = snippetID else { return nil }
+  guard searchString.isEmpty else { return searchedItems.first{$0.id?.uuidString == SID} }
+  return currentFRC[SID]
  }
 
  

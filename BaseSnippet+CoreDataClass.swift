@@ -80,6 +80,7 @@ protocol SnippetImagesPreviewProvidable: class
 
  @NSManaged private (set) var date: NSDate?
  @NSManaged var dateIndex: String?
+ @NSManaged var dateFormatIndex: String?
  
  final var snippetDate: Date
  {
@@ -88,6 +89,7 @@ protocol SnippetImagesPreviewProvidable: class
   {
    self.date = newValue as NSDate
    self.dateIndex = BaseSnippet.snippetDates.datePredicates.first{$0.predicate(self)}?.title
+   self.dateFormatIndex = DateFormatters.localizedSearchString(for: newValue)
    self[.byDateCreated] = isHiddenSection(groupType: .byDateCreated, for: self.dateIndex)
   }
  }
@@ -102,6 +104,8 @@ protocol SnippetImagesPreviewProvidable: class
   return DateFormatters.localizedSearchString(for: snippetDate)
  }
  
+ 
+ 
  @NSManaged private (set) var tag: String?
  @NSManaged var  alphaIndex: String?
  
@@ -114,7 +118,7 @@ protocol SnippetImagesPreviewProvidable: class
   }
   set
   {
-   self.tag = newValue
+   self.tag = (newValue != Localized.unnamedSnippet) ? newValue : ""
    self.alphaIndex = newValue.isEmpty ? newValue : String(newValue.first!)
    self[.alphabetically] = isHiddenSection(groupType: .alphabetically, for: self.alphaIndex)
   }

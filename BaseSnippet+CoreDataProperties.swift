@@ -19,7 +19,6 @@ extension BaseSnippet
  }
 
  @NSManaged var id: UUID?
- 
  @NSManaged private var hiddenSection: Bool
  @NSManaged var disclosedCell: Bool
  

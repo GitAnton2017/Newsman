@@ -31,6 +31,7 @@ extension SnippetsViewController: UISearchResultsUpdating, UISearchBarDelegate
   navigationItem.searchController = searchController
   searchController.searchBar.scopeButtonTitles = snippetType?.localizedSearchScopeBarTitles
   searchController.searchBar.showsScopeBar = true
+  searchController.searchBar.sizeToFit()
   searchController.searchBar.tintColor = UIColor.white
   
   
@@ -47,6 +48,7 @@ extension SnippetsViewController: UISearchResultsUpdating, UISearchBarDelegate
  func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int)
  {
   snippetsDataSource.searchScopeIndex = selectedScope
+  Defaults.setSearchScopeIndex(index: selectedScope, for: snippetType)
  }
  
  

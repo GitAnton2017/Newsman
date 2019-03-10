@@ -34,8 +34,8 @@ struct DateFormatters
  static let mr = 0...5
  static let yr = 0...4
  
- static let format = ["ddMMyyyy", "ddMMMMyy", "dMy"]
-  
+ static let format = ["ddMyy","ddMMMyy", "dMyy", "dMMyy","dMMMyy","y"]
+ 
   //dr.map{d in mr.map{m in yr.map{y in String(repeating: ["d", "M", "y"], counts: [d, m, y])}}}.joined().joined()
  
  static func localizedSearchString(for date: Date) -> String
@@ -48,7 +48,7 @@ struct DateFormatters
    return df.string(from: date)
   }
   
-  return Set(str_dates).reduce("") { $0 + " " + $1 }
+  return str_dates.reduce("") { $0 + " " + $1 }
  }
   
  

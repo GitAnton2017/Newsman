@@ -36,7 +36,7 @@
 		A71C85E91FBED660000F2DD9 /* Snippets View DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */; };
 		A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */; };
 		A71C85ED1FBEFCD1000F2DD9 /* Snippets View Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */; };
-		A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */; };
+		A71C85EF1FBF37EA000F2DD9 /* Text Snippet View Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71C85EE1FBF37EA000F2DD9 /* Text Snippet View Controller.swift */; };
 		A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */; };
 		A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */; };
 		A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */; };
@@ -53,8 +53,8 @@
 		A73BDA7921D0F62C007E0416 /* Snippets Representable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */; };
 		A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */; };
 		A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */; };
-		A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* DatePickerViewController.swift */; };
-		A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */; };
+		A7400E751FC731A2006F05DC /* Date Picker View Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* Date Picker View Controller.swift */; };
+		A7400E771FC73305006F05DC /* Priority Picker View Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* Priority Picker View Controller.swift */; };
 		A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */; };
 		A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD4920EBEECD0062AF27 /* Playback Button.swift */; };
 		A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */; };
@@ -100,13 +100,13 @@
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
 		A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D2206242090074A915 /* Zoom View CV DS.swift */; };
 		A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */; };
-		A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */; };
+		A7826E3120DBF9E400FFBBFA /* Priority Picker VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3020DBF9E400FFBBFA /* Priority Picker VC Restoration.swift */; };
 		A7826E3320DE311700FFBBFA /* Photo Snippet TF Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3220DE311700FFBBFA /* Photo Snippet TF Delegate.swift */; };
-		A7826E3520DE3FE100FFBBFA /* TextSnippet TF Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */; };
+		A7826E3520DE3FE100FFBBFA /* Text Snippet Text Field Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3420DE3FE100FFBBFA /* Text Snippet Text Field Delegate.swift */; };
 		A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */; };
 		A7826E3920DFD48F00FFBBFA /* NCPushPopAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */; };
 		A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */; };
-		A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */; };
+		A7826E5020E0F6E100FFBBFA /* Text Snippet VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E4F20E0F6E100FFBBFA /* Text Snippet VC Restoration.swift */; };
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */; };
 		A787566822213479006503D7 /* Snippets Hidden Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A787566722213479006503D7 /* Snippets Hidden Cell.swift */; };
@@ -136,6 +136,7 @@
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
 		A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D520C82611005D566A /* Layer Transitions Animator.swift */; };
 		A7CB13711FD2D5EB00AA7294 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A7CB13731FD2D5EB00AA7294 /* Localizable.strings */; };
+		A7CD1893223534B400242A01 /* Text Snippet Text View Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CD1892223534B400242A01 /* Text Snippet Text View Delegate.swift */; };
 		A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */; };
 		A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */; };
 		A7D39CF72100E21500F80CAA /* Folder Nested CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */; };
@@ -212,7 +213,7 @@
 		A71C85E81FBED660000F2DD9 /* Snippets View DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets View DS.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A71C85EA1FBED786000F2DD9 /* MainMenuItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuItems.swift; sourceTree = "<group>"; };
 		A71C85EC1FBEFCD1000F2DD9 /* Snippets View Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets View Cell.swift"; sourceTree = "<group>"; };
-		A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSnippetViewController.swift; sourceTree = "<group>"; };
+		A71C85EE1FBF37EA000F2DD9 /* Text Snippet View Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet View Controller.swift"; sourceTree = "<group>"; };
 		A71CE631213A971300497A60 /* Snippet Preview Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Preview Images Provider.swift"; sourceTree = "<group>"; };
 		A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet Preview Provider.swift"; sourceTree = "<group>"; };
 		A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extensions.swift"; sourceTree = "<group>"; };
@@ -230,8 +231,8 @@
 		A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Representable.swift"; sourceTree = "<group>"; };
 		A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A7400E741FC731A2006F05DC /* DatePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewController.swift; sourceTree = "<group>"; };
-		A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerViewController.swift; sourceTree = "<group>"; };
+		A7400E741FC731A2006F05DC /* Date Picker View Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Picker View Controller.swift"; sourceTree = "<group>"; };
+		A7400E761FC73305006F05DC /* Priority Picker View Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Priority Picker View Controller.swift"; sourceTree = "<group>"; };
 		A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets CL Delegate.swift"; sourceTree = "<group>"; };
 		A741BD4920EBEECD0062AF27 /* Playback Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Button.swift"; sourceTree = "<group>"; };
 		A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Scrub View.swift"; sourceTree = "<group>"; };
@@ -283,13 +284,13 @@
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
 		A77F74D2206242090074A915 /* Zoom View CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS.swift"; sourceTree = "<group>"; };
 		A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View D&D Delegate.swift"; sourceTree = "<group>"; };
-		A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityPickerVCRestoration.swift; sourceTree = "<group>"; };
+		A7826E3020DBF9E400FFBBFA /* Priority Picker VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Priority Picker VC Restoration.swift"; sourceTree = "<group>"; };
 		A7826E3220DE311700FFBBFA /* Photo Snippet TF Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet TF Delegate.swift"; sourceTree = "<group>"; };
-		A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextSnippet TF Delegate.swift"; sourceTree = "<group>"; };
+		A7826E3420DE3FE100FFBBFA /* Text Snippet Text Field Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet Text Field Delegate.swift"; sourceTree = "<group>"; };
 		A7826E3620DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollAnimator.swift; sourceTree = "<group>"; };
 		A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCPushPopAnimator.swift; sourceTree = "<group>"; };
 		A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollProtocol.swift; sourceTree = "<group>"; };
-		A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextSnippetVCRestoration.swift; sourceTree = "<group>"; };
+		A7826E4F20E0F6E100FFBBFA /* Text Snippet VC Restoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Text Snippet VC Restoration.swift"; sourceTree = "<group>"; };
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
 		A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D&D Delegate.swift"; sourceTree = "<group>"; };
 		A787566722213479006503D7 /* Snippets Hidden Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Hidden Cell.swift"; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 		A7CB13721FD2D5EB00AA7294 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7CB13741FD2D61200AA7294 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A7CB13751FD2D61400AA7294 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A7CD1892223534B400242A01 /* Text Snippet Text View Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Text Snippet Text View Delegate.swift"; sourceTree = "<group>"; };
 		A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Protocol (SCP).swift"; sourceTree = "<group>"; };
 		A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV Cell.swift"; sourceTree = "<group>"; };
 		A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS.swift"; sourceTree = "<group>"; };
@@ -669,10 +671,11 @@
 		A7CB136A1FD2D2AA00AA7294 /* Text Snippets */ = {
 			isa = PBXGroup;
 			children = (
-				A7826E4F20E0F6E100FFBBFA /* TextSnippetVCRestoration.swift */,
-				A71C85EE1FBF37EA000F2DD9 /* TextSnippetViewController.swift */,
+				A71C85EE1FBF37EA000F2DD9 /* Text Snippet View Controller.swift */,
 				A71CE633213AA21700497A60 /* Text Snippet Preview Provider.swift */,
-				A7826E3420DE3FE100FFBBFA /* TextSnippet TF Delegate.swift */,
+				A7826E3420DE3FE100FFBBFA /* Text Snippet Text Field Delegate.swift */,
+				A7CD1892223534B400242A01 /* Text Snippet Text View Delegate.swift */,
+				A7826E4F20E0F6E100FFBBFA /* Text Snippet VC Restoration.swift */,
 			);
 			path = "Text Snippets";
 			sourceTree = "<group>";
@@ -717,9 +720,9 @@
 		A7CB136E1FD2D35E00AA7294 /* Assesory Menus */ = {
 			isa = PBXGroup;
 			children = (
-				A7400E741FC731A2006F05DC /* DatePickerViewController.swift */,
-				A7400E761FC73305006F05DC /* PriorityPickerViewController.swift */,
-				A7826E3020DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift */,
+				A7400E741FC731A2006F05DC /* Date Picker View Controller.swift */,
+				A7400E761FC73305006F05DC /* Priority Picker View Controller.swift */,
+				A7826E3020DBF9E400FFBBFA /* Priority Picker VC Restoration.swift */,
 			);
 			name = "Assesory Menus";
 			sourceTree = "<group>";
@@ -941,7 +944,7 @@
 			files = (
 				A7B2B0812205C25F00D40008 /* Cached Image Operation.swift in Sources */,
 				A7443F05202DD7600039BE41 /* Photo MO Properties.swift in Sources */,
-				A7826E3120DBF9E400FFBBFA /* PriorityPickerVCRestoration.swift in Sources */,
+				A7826E3120DBF9E400FFBBFA /* Priority Picker VC Restoration.swift in Sources */,
 				A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
 				A73BDA7921D0F62C007E0416 /* Snippets Representable.swift in Sources */,
@@ -971,7 +974,7 @@
 				A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */,
 				A7438686219D70C3005ECACD /* AppDelegate D&D Extension.swift in Sources */,
 				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
-				A7400E771FC73305006F05DC /* PriorityPickerViewController.swift in Sources */,
+				A7400E771FC73305006F05DC /* Priority Picker View Controller.swift in Sources */,
 				A7AFE5C821F3870B00EBD4C9 /* Photo MO Manipulations.swift in Sources */,
 				A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */,
 				A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */,
@@ -989,7 +992,7 @@
 				A7021CEC2185A7D1009A5F43 /* Snippets TV Header View.swift in Sources */,
 				A7B2B0852205C5F000D40008 /* Saved Image Operation.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
-				A71C85EF1FBF37EA000F2DD9 /* TextSnippetViewController.swift in Sources */,
+				A71C85EF1FBF37EA000F2DD9 /* Text Snippet View Controller.swift in Sources */,
 				A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */,
 				A7443F06202DD7600039BE41 /* PhotoFolder MO Properties.swift in Sources */,
 				A704264F1FDA87CA000B3400 /* Photo Item Wrapper.swift in Sources */,
@@ -1028,13 +1031,13 @@
 				A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
 				A7AFE5C121F1C48900EBD4C9 /* SCP Video Extension.swift in Sources */,
-				A7826E3520DE3FE100FFBBFA /* TextSnippet TF Delegate.swift in Sources */,
+				A7826E3520DE3FE100FFBBFA /* Text Snippet Text Field Delegate.swift in Sources */,
 				A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */,
-				A7400E751FC731A2006F05DC /* DatePickerViewController.swift in Sources */,
+				A7400E751FC731A2006F05DC /* Date Picker View Controller.swift in Sources */,
 				A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
 				A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */,
-				A7826E5020E0F6E100FFBBFA /* TextSnippetVCRestoration.swift in Sources */,
+				A7826E5020E0F6E100FFBBFA /* Text Snippet VC Restoration.swift in Sources */,
 				A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */,
 				A7EB39961FE6A46A00D93E3B /* Photo MO.swift in Sources */,
 				A75DB6422215B8FD0045E9E2 /* Draggable Protocol.swift in Sources */,
@@ -1055,6 +1058,7 @@
 				A7B2B08D2205CED300D40008 /* Image Set Operation.swift in Sources */,
 				A7D83BBD220F2C460050A0CF /* Drop View Protocol.swift in Sources */,
 				A75DB6482215BAEF0045E9E2 /* Photo Items Draggable Extension.swift in Sources */,
+				A7CD1893223534B400242A01 /* Text Snippet Text View Delegate.swift in Sources */,
 				A79548F221E62B4300A37959 /* Thread Safe Map.swift in Sources */,
 				A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */,
 				A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */,
