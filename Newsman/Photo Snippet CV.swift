@@ -645,25 +645,7 @@ class PhotoSnippetCollectionView: UICollectionView
       refreshSections(sourceIndexPath: indexPath, destinationIndexPath: destIndexPath)
     }
     
-    func deletePhoto (at indexPath: IndexPath)
-    {
-     let ds = dataSource as! PhotoSnippetViewController
-     let deleted = ds.photoItems2D[indexPath.section].remove(at: indexPath.row)
-
-     deleteItems(at: [indexPath])
-     if (ds.photoItems2D[indexPath.section].count == 0)
-     {
-      ds.photoItems2D.remove(at: indexPath.section)
-      ds.sectionTitles?.remove(at: indexPath.section)
-      deleteSections([indexPath.section])
-     }
-     else if (photoGroupType == .makeGroups)
-     {
-      reloadSections([indexPath.section])
-     }
-     
-     PhotoItem.MOC.persist{deleted.deleteImages()} //persist deletion async...
-    }
+    
     
     @objc func tapCellMenuItem (gr: UITapGestureRecognizer)
     {

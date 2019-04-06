@@ -3,17 +3,22 @@ import Foundation
 import UIKit
 import GameplayKit
 
-protocol ImageContextLoadProtocol
-{
- var isLoadTaskCancelled: Bool {get set}
-}
 
-@IBDesignable class SnippetsViewCell: UITableViewCell,  ImageContextLoadProtocol
+@IBDesignable class SnippetsViewCell: UITableViewCell, DropViewProvidable, DragWaggleAnimatable
 {
+ 
+ lazy var dropView: UIView = self.setDropView(ratio: 0.75)
+ 
+ var waggleView: UIView { return self }
  
  var animate: ((TimeInterval) -> Void)?
  var transDuration = 0.0
  var animationID: UUID?
+ 
+ 
+ let snippetRowSelectedAlpha: CGFloat = 0.5
+ 
+ var _selected = false
 
  final var snippetID: String
  {
@@ -44,7 +49,6 @@ protocol ImageContextLoadProtocol
  
  final var priorityViewConstraints: [NSLayoutConstraint] = []
  
- 
  final lazy var priorityView: SnippetPriorityView =
  {
   
@@ -74,7 +78,11 @@ protocol ImageContextLoadProtocol
  
  
 
-
+ func reloadIconView()
+ {
+  print(#function)
+  loadFirstImage(size: flipperView.frame.width)
+ }
  
  weak var hostedSnippet: SnippetImagesPreviewProvidable?
  {
@@ -89,6 +97,9 @@ protocol ImageContextLoadProtocol
    snippetImage.layer.removeAllAnimations()
    animate = nil
    transDuration = 0.0
+   
+   isSnippetRowSelected = snippet.isSelected
+   isDragAnimating = snippet.isDragAnimating
    
    priorityView.priority = snippet.snippetPriority
    
@@ -108,18 +119,7 @@ protocol ImageContextLoadProtocol
   }
  }
 
- private var _stop_flag = false
- var isLoadTaskCancelled: Bool
- {
-  get
-  {
-   guard Thread.current != Thread.main else {return _stop_flag}
-   return DispatchQueue.main.sync {return _stop_flag}
-  }
-  set {DispatchQueue.main.async {[weak self] in self?._stop_flag = newValue}}
- }
-
-
+ 
  @IBOutlet var snippetTextTag: UILabel!
  @IBOutlet var snippetDateTag: UILabel!
  @IBOutlet var snippetImage: BorderedImageView!
@@ -189,16 +189,16 @@ protocol ImageContextLoadProtocol
  }()
 
 
- 
- 
 
-
+ 
  override func awakeFromNib()
  {
   super.awakeFromNib()
+  
+  configueDropInteraction()
+  configueSpringInteraction()
   snippetImage.layer.masksToBounds = true
   configueDisclosure()
-
  }
 
 
@@ -210,7 +210,7 @@ protocol ImageContextLoadProtocol
 
  func clear()
  {
-  isLoadTaskCancelled = false
+ 
   hostedSnippet = nil
   snippetImage.layer.removeAllAnimations()
   animate = nil
@@ -219,9 +219,15 @@ protocol ImageContextLoadProtocol
   imageSpinner.startAnimating()
   snippetImage.image = nil
   flipperViewBottom.constant = Normal.bottom
-
+  
+  _selected = false
+  contentView.alpha = 1
+  backgroundColor = backgroundColor?.withAlphaComponent(snippetRowSelectedAlpha)
+  
  }
 
+ 
+ 
  override func prepareForReuse()
  {
   super.prepareForReuse()
@@ -236,12 +242,16 @@ protocol ImageContextLoadProtocol
  {
   super.init(style: style, reuseIdentifier: reuseIdentifier)
  }
+ 
+ 
 
  required init?(coder aDecoder: NSCoder)
  //Must be implemented together with other initilizers of the @IBDesignable class
  {
   super.init(coder: aDecoder)
  }
+ 
+ 
 
  deinit
  {

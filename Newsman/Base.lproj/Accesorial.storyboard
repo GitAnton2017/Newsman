@@ -74,6 +74,9 @@
                                         <date key="date" timeIntervalSinceReferenceDate="533147533.74851799">
                                             <!--2017-11-23 16:32:13 +0000-->
                                         </date>
+                                        <connections>
+                                            <action selector="dateChanged:forEvent:" destination="CV9-Jr-Pyu" eventType="valueChanged" id="FhS-nf-N3y"/>
+                                        </connections>
                                     </datePicker>
                                 </subviews>
                                 <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -112,6 +115,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="home.tab.icon" width="24" height="24"/>
+        <image name="home.tab.icon" width="36" height="36"/>
     </resources>
 </document>

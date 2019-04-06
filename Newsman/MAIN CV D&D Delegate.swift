@@ -18,11 +18,12 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  {
   switch (itemsInRow, deviceType, vsc, hsc)
   {
-  case (2... , .phone, .regular, .compact),
-       (5... , .phone, .compact, .compact),
-       (6... , .phone, .compact, .regular),
-       (7... , .pad,   .regular, .regular): return true
-  default: return false
+   case (2... , .phone, .regular, .compact),
+        (5... , .phone, .compact, .compact),
+        (6... , .phone, .compact, .regular),
+        (7... , .pad,   .regular, .regular): return true
+   
+   default: return false
   }
  }
  
@@ -121,7 +122,6 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
   
  {
   print (#function, self.debugDescription, session.description)
-  
   return getDragItems(collectionView, for: session, forCellAt: indexPath)
  }
  
@@ -244,8 +244,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  {
   photoItems2D.enumerated().map{$0.offset}.sorted(by: >).forEach
   {sectionIndex in
-   let itemsCount = photoItems2D[sectionIndex].count
-   if itemsCount == 0
+   if ( photoItems2D[sectionIndex].count == 0 )
    {
     photoItems2D.remove(at: sectionIndex)
     sectionTitles?.remove(at: sectionIndex)
@@ -253,13 +252,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
    }
    else
    {
-    let kind = UICollectionElementKindSectionFooter
-    let indexPath = IndexPath(row: 0, section: sectionIndex)
-    
-    if let footer = photoCollectionView.supplementaryView(forElementKind: kind, at: indexPath) as? PhotoSectionFooter
-    {
-     footer.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") + ": \(itemsCount)"
-    }
+    updateSectionFooter(for: sectionIndex)
    }
   }
  } //func updateFolderSingleItems...
@@ -277,6 +270,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  
  
  
+ 
  func insertMovedItem (item photoItem: PhotoItemProtocol,
                        to destinationIndexPath: IndexPath,
                        completion: (()->())? = nil)
@@ -284,7 +278,6 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
 
   print (#function)
   
-  self.currentFRC?.deactivateDelegate()
   photoSnippet.managedObjectContext?.persist(block:
   {
    switch (self.photoCollectionView.photoGroupType, self.sectionTitles)
@@ -301,13 +294,42 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
    let indexPath = min(destinationIndexPath, maxSectionIndexPath)
    self.photoItems2D[destinationIndexPath.section].insert(photoItem, at: indexPath.row)
    self.photoCollectionView.insertItems(at: [indexPath])
-   self.currentFRC?.activateDelegate()
    completion?()
   }
   
  }//func insertMovedItem (item photoItem: PhotoItemProtocol...
  
- 
+ func insertSnippetItem (item snippetItem: SnippetDragItem,
+                        to destinationIndexPath: IndexPath,
+                        completion: (()->())? = nil)
+ {
+  
+  print (#function)
+  
+  guard let photoSnippet = snippetItem.snippet as? PhotoSnippet else { return }
+  let photoItems = photoSnippet.allItems
+  
+  photoSnippet.managedObjectContext?.persist(block:
+  {
+   switch (self.photoCollectionView.photoGroupType, self.sectionTitles)
+   {
+    case (.makeGroups, let titles?):
+     photoItems.forEach { $0.priorityFlag = titles[destinationIndexPath.section] }
+    default: break
+   }
+  })
+  {flag in
+   guard flag else { return }
+   let sectionCount = self.photoItems2D[destinationIndexPath.section].count
+   let maxSectionIndexPath = IndexPath(row: sectionCount, section: destinationIndexPath.section)
+   let indexPath = min(destinationIndexPath, maxSectionIndexPath)
+   let indexPaths = Array(repeating: indexPath, count: photoItems.count)
+   self.photoItems2D[destinationIndexPath.section].insert(contentsOf: photoItems, at: indexPath.row)
+   self.photoCollectionView.insertItems(at: indexPaths)
+   completion?()
+  }
+  
+ }//func insertMovedItem (item photoItem: PhotoItemProtocol...
  
  func moveUnfolderedItem( item photoItem: PhotoItemProtocol,
                           to destinationIndexPath: IndexPath,  completion: (()->())? = nil )
@@ -405,6 +427,7 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
  }//func moveUnfolderedItem(_ collectionView: UICollectionView,...
  
  
+
  
  func moveInAppItems(_ collectionView: UICollectionView,
                      performDropWith coordinator: UICollectionViewDropCoordinator,
@@ -420,16 +443,18 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
    group.notify(queue: DispatchQueue.main) { self.updateMovedItemsSections() }
   }
   
-  let draggedItems = AppDelegate.globalDragItems.filter{$0.dragSession != nil} //filter out not cancelled items!
+  let draggedItems = AppDelegate.globalDragItems.filter{ $0.dragSession != nil }
+  //filter out not cancelled items!
   
   draggedItems.forEach
   {dragItem in
-   defer { dragItem.move(to: photoSnippet, to: nil) } //finally commit underlying MO move changes in MOC.
-   dragItem.moveToDrops()
+   defer { dragItem.move(to: photoSnippet, to: nil) } //finally commit underlying MOs move changes in MOC.
    group.enter()
+   
    switch dragItem
    {
     case let photoItem as PhotoItem: //dragging PhotoItem...
+     dragItem.moveToDrops()
      switch photoItem.folder
      {
       case let photoFolder?: //if item nested in folder...
@@ -440,10 +465,17 @@ extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollection
      }
     
     case let folderItem as PhotoFolderItem: //dragging FolderItem...
+     dragItem.moveToDrops()
      moveUnfolderedItem(item: folderItem, to: destinationIndexPath) { group.leave() }
+    
+    case let snippetItem as SnippetDragItem:
+     guard snippetItem.snippet !== photoSnippet else { break } //prevent whole snippet move into itself!
+     dragItem.moveToDrops(allNestedItems: true) 
+     insertSnippetItem(item: snippetItem, to: destinationIndexPath) { group.leave() }
  
     default: break
    }
+   
   }
  }//func moveInAppItems(_ collectionView: UICollectionView...
  

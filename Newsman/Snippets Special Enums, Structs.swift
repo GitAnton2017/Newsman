@@ -42,6 +42,18 @@ extension AllCasesSelectorRepresentable
  }
 }
 
+struct Sort
+{
+ static let byDateDes =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),          ascending: false)
+ static let byTagAsc =         NSSortDescriptor(key: #keyPath(BaseSnippet.tag),           ascending: true)
+ static let byLocationAsc =    NSSortDescriptor(key: #keyPath(BaseSnippet.location),      ascending: true)
+ static let byPriorityAsc =    NSSortDescriptor(key: #keyPath(BaseSnippet.priorityIndex), ascending: true)
+ static let bySnippetTypeAsc = NSSortDescriptor(key: #keyPath(BaseSnippet.type),          ascending: true)
+ static let byAlphabetAsc =    NSSortDescriptor(key: #keyPath(BaseSnippet.alphaIndex),    ascending: true)
+ static let byDateIndexAsc =   NSSortDescriptor(key: #keyPath(BaseSnippet.dateIndex),     ascending: true)
+ static let byTextAsc =        NSSortDescriptor(key: #keyPath(TextSnippet.text),          ascending: true)
+}
+
 class SnippetDates
 {
  var calendar: Calendar {return Calendar(identifier: .gregorian)}
@@ -135,7 +147,7 @@ class SnippetDates
  
 }
 
-enum SnippetType: String, AllCasesSelectorRepresentable
+enum SnippetType: String, AllCasesSelectorRepresentable, Codable
 {
  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
  
@@ -156,7 +168,10 @@ enum SnippetType: String, AllCasesSelectorRepresentable
  //*******************************
  case undefined //error case!!!
  
- var localizedSearchScopeBarTitles: [String] { return SnippetType.searchScopeBarTitles[self]! }
+ var localizedSearchScopeBarTitles: [String]
+ {
+  return SnippetType.searchScopeBarTitles[self]!
+ }
  
  
  private static let baseScopeBarTitles: [String] = [ Localized.overallScope,
@@ -174,8 +189,42 @@ enum SnippetType: String, AllCasesSelectorRepresentable
   .sketch : baseScopeBarTitles,
   .report : baseScopeBarTitles
  ]
-
  
+ 
+ private static let baseScopeBarSortDescriptors: [[NSSortDescriptor]] =
+ [
+  [Sort.byTagAsc,      Sort.byDateDes,      Sort.byPriorityAsc,     Sort.byLocationAsc] /* ScopeIndex = 0 */,
+  [Sort.byTagAsc,      Sort.byDateDes,      Sort.byPriorityAsc,     Sort.byLocationAsc] /* ScopeIndex = 1 */,
+  [Sort.byDateDes,     Sort.byTagAsc,       Sort.byPriorityAsc,     Sort.byLocationAsc] /* ScopeIndex = 2 */,
+  [Sort.byPriorityAsc, Sort.byDateDes,      Sort.byTagAsc,          Sort.byLocationAsc] /* ScopeIndex = 3 */,
+  [Sort.byLocationAsc, Sort.byDateDes,      Sort.byTagAsc,          Sort.byPriorityAsc] /* ScopeIndex = 4 */,
+ ]
+ 
+ private static let textScopeBarSortDescriptors: [[NSSortDescriptor]] =
+  [
+   [Sort.byTagAsc,      Sort.byDateDes,      Sort.byPriorityAsc,     Sort.byLocationAsc,  Sort.byTextAsc], //0
+   [Sort.byTagAsc,      Sort.byDateDes,      Sort.byPriorityAsc,     Sort.byLocationAsc,  Sort.byTextAsc], //1
+   [Sort.byDateDes,     Sort.byTagAsc,       Sort.byPriorityAsc,     Sort.byLocationAsc,  Sort.byTextAsc], //2
+   [Sort.byPriorityAsc, Sort.byDateDes,      Sort.byTagAsc,          Sort.byLocationAsc,  Sort.byTextAsc], //3
+   [Sort.byLocationAsc, Sort.byDateDes,      Sort.byTagAsc,          Sort.byPriorityAsc,  Sort.byTextAsc], //4
+   [Sort.byTextAsc, Sort.byDateDes,      Sort.byTagAsc,          Sort.byPriorityAsc,  Sort.byLocationAsc], //5
+   
+ ]
+ 
+ private static let scopeBarSortDescriptors : [SnippetType : [[NSSortDescriptor]] ] =
+ [
+   .text   : textScopeBarSortDescriptors,
+   .photo  : baseScopeBarSortDescriptors,
+   .video  : baseScopeBarSortDescriptors,
+   .audio  : baseScopeBarSortDescriptors,
+   .sketch : baseScopeBarSortDescriptors,
+   .report : baseScopeBarSortDescriptors
+ ]
+ 
+ var scopeSearchSortDescriptors: [[NSSortDescriptor]]
+ {
+  return SnippetType.scopeBarSortDescriptors[self]!
+ }
 
 }
 

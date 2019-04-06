@@ -302,12 +302,12 @@ import GameKit
    fileprivate var keyPath: String {return "is" + rawValue}
   }
   
-  fileprivate override var isReady:        Bool {return super.isReady && state == .Ready }
-  fileprivate override var isExecuting:    Bool {return state == .Executing              }
-  fileprivate override var isFinished:     Bool {return state == .Finished               }
-  fileprivate override var isAsynchronous: Bool {return true                             }
+  override var isReady:        Bool {return super.isReady && state == .Ready }
+  override var isExecuting:    Bool {return state == .Executing              }
+  override var isFinished:     Bool {return state == .Finished               }
+  override var isAsynchronous: Bool {return true                             }
   
-  fileprivate override func start()
+  override func start()
   {
    if isCancelled
    {

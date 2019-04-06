@@ -22,7 +22,7 @@ extension PhotoSnippetViewController
     {photoItem in
      let sourceIndexPath = self.photoItemIndexPath(photoItem: photoItem)
      self.photoItems2D[sourceIndexPath!.section].remove(at: sourceIndexPath!.row)
-     photoItem.remove()
+     photoItem.removeFromDrags()
      collectionView.deleteItems(at: [sourceIndexPath!])
 
      if (collectionView.photoGroupType == .makeGroups && sourceIndexPath!.section != destinationIndexPath.section)

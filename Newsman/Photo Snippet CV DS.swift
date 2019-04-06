@@ -4,10 +4,10 @@ import UIKit
 import CoreData
 import AVKit
 
-//MARK: ============================= CV DATA MODEL EXTENSION ===================================
+
 extension PhotoSnippetViewController
-//===============================================================================================
 {
+
 //MARK: ---------------- Creating Photo Items 2D model Array ----------------
 //---------------------------------------------------------------------------
  func createPhotoItems2D() -> [[PhotoItemProtocol]]
@@ -133,45 +133,45 @@ extension PhotoSnippetViewController
  }
  
 
-func deselectSelectedItems(in collectionView: UICollectionView)
-{
- PhotoItem.MOC.persistAndWait //persist deselections in context...
- {
-  self.photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.forEach
-  {section in
-   section.element.enumerated().filter{$0.element.isSelected}.forEach
-   {row in
-    row.element.isSelected = false
-    let indexPath = IndexPath(row: row.offset, section: section.offset)
-    if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
-    {
-      cell.isPhotoItemSelected = false
-      collectionView.deselectItem(at: indexPath, animated: false)
-    }
-   }
-  }
- }
-}
- 
-func selectAllPhotoItems(in collectionView: UICollectionView)
-{
- PhotoItem.MOC.persistAndWait //persist selections in context...
- {
-  self.photoItems2D.enumerated().forEach
-  {section in
-   section.element.enumerated().forEach
-   {row in
-    row.element.isSelected = true
-    let indexPath = IndexPath(row: row.offset, section: section.offset)
-    if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
-    {
-      cell.isPhotoItemSelected = true
-      collectionView.selectItem(at: indexPath, animated: false, scrollPosition:[])
-    }
-   }
-  }
- }
-}
+//func deselectSelectedItems(in collectionView: UICollectionView)
+//{
+// PhotoItem.MOC.persistAndWait //persist deselections in context...
+// {
+//  self.photoItems2D.enumerated().filter{$0.element.lazy.first{$0.isSelected} != nil}.forEach
+//  {section in
+//   section.element.enumerated().filter{$0.element.isSelected}.forEach
+//   {row in
+//    row.element.isSelected = false
+//    let indexPath = IndexPath(row: row.offset, section: section.offset)
+//    if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+//    {
+//      cell.isPhotoItemSelected = false
+//      collectionView.deselectItem(at: indexPath, animated: false)
+//    }
+//   }
+//  }
+// }
+//}
+// 
+//func selectAllPhotoItems(in collectionView: UICollectionView)
+//{
+// PhotoItem.MOC.persistAndWait //persist selections in context...
+// {
+//  self.photoItems2D.enumerated().forEach
+//  {section in
+//   section.element.enumerated().forEach
+//   {row in
+//    row.element.isSelected = true
+//    let indexPath = IndexPath(row: row.offset, section: section.offset)
+//    if let cell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+//    {
+//      cell.isPhotoItemSelected = true
+//      collectionView.selectItem(at: indexPath, animated: false, scrollPosition:[])
+//    }
+//   }
+//  }
+// }
+//}
 
 func deleteEmptySections()
 {
@@ -278,7 +278,7 @@ func deleteSelectedPhotos()
    deletedItems.forEach{$0.deleteImages()}
   } //persist deletions in context after CV batch update...
   
-  self.photoCollectionView.reloadData()
+  //self.photoCollectionView.reloadData()
  }
  
 }
@@ -393,20 +393,19 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
       }
       else
       {
-        var movedItem = photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+        let movedItem = photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
         photoItems2D[destinationIndexPath.section].insert(movedItem, at: destinationIndexPath.row)
         let flagStr = sectionTitles![destinationIndexPath.section]
         movedItem.priorityFlag = flagStr.isEmpty ? nil : flagStr
         collectionView.reloadSections([sourceIndexPath.section, destinationIndexPath.section])
-        defer
+       
+        if photoItems2D[sourceIndexPath.section].isEmpty
         {
-         if photoItems2D[sourceIndexPath.section].isEmpty
-         {
-          sectionTitles!.remove(at: sourceIndexPath.section)
-          photoItems2D.remove(at: sourceIndexPath.section)
-          collectionView.deleteSections([sourceIndexPath.section])
-         }
+         sectionTitles!.remove(at: sourceIndexPath.section)
+         photoItems2D.remove(at: sourceIndexPath.section)
+         collectionView.deleteSections([sourceIndexPath.section])
         }
+       
       }
  }
 //MARK:-------------------------GENERATING CV SECTION HEADERS -------------------------
@@ -640,6 +639,7 @@ extension PhotoSnippetViewController: UICollectionViewDataSource
    
   }
   
+
   cell.addInteraction(cellInter)
 
   return cell

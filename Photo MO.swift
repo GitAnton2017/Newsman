@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import UIKit
 
+
 @objc(Photo) public class Photo: NSManagedObject
 {
  //Photo MO unmanaged instance properties...
@@ -43,6 +44,10 @@ import UIKit
   
   return snippetURL.appendingPathComponent(folderID).appendingPathComponent(fileName) //Photo is foldred!
  }
+ 
+ var movedInCurrentEvent: Bool = false
+ 
+ var movedURL: URL?
  
  final var dragAndDropAnimationSetForClearanceState: Bool = false
  //Photo MO internal not persisted state of animation set for delayed clearance for PhotoItem wrapper dragged

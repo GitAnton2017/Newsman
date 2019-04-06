@@ -47,7 +47,7 @@ import AVKit
      //PhotoCash.queue.maxConcurrentOperationCount = 3
      //PhotoItem.imageCache.delegate = self
   
-     registerDefaults()
+     Defaults.register()
   
      let nc = window!.rootViewController as! UINavigationController
   

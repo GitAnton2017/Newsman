@@ -10,7 +10,6 @@ import Foundation
 
 extension Draggable
 {
- 
  var isDraggable: Bool
  {
   return !(isDragAnimating || isSetForClear || isFolderDragged)
@@ -20,7 +19,7 @@ extension Draggable
  func clear (with delays: (forDragAnimating: Int, forSelected: Int), completion: (()->())? = nil)
  {
   
-  if isSetForClear {return}
+  if isSetForClear { return }
   
   print (#function, self, self.dragSession ?? "No session")
   
@@ -35,7 +34,7 @@ extension Draggable
    {
     self.isSelected = false
     self.isSetForClear = false  //unset flag after full completion
-    self.remove()
+    self.removeFromDrags()
     completion?()               //fire completion handler for additional post animation actions if any needed
    }
   }
@@ -46,27 +45,38 @@ extension Draggable
  func moveToDrops(allNestedItems flag: Bool = false)
  {
   AppDelegate.globalDragItems.removeAll{$0.hostedManagedObject === self.hostedManagedObject}
+  
   switch (self, flag)
   {
-  case     (_ , false):
-   AppDelegate.globalDropItems.append(self)
-  case let (folderItem as PhotoFolderItem, true):
-   folderItem.isSelected = false
-   folderItem.isDragAnimating = false
-   let singles = folderItem.singlePhotoItems
-   singles.forEach
+   case (_ , false): AppDelegate.globalDropItems.append(self)
+   
+   case let (folderItem as PhotoFolderItem, true ):
+    folderItem.isSelected = false
+    folderItem.isDragAnimating = false
+    let singles = folderItem.singlePhotoItems
+    singles.forEach
     {
      $0.isSelected = true
      $0.isDragAnimating = true
-   }
-   AppDelegate.globalDropItems.append(contentsOf: singles)
-  default: break
+    }
+    AppDelegate.globalDropItems.append(contentsOf: singles)
+   
+   case let (snippetItem as SnippetDragItem, true ):
+    guard let allItems = (snippetItem.snippet as? PhotoSnippet)?.allItems else { break }
+    allItems.forEach
+    {
+     $0.isSelected = true
+     $0.isDragAnimating = true
+    }
+    AppDelegate.globalDropItems.append(contentsOf: allItems)
+   
+   default: break
   }
  }
  
  
  
- func remove()
+ func removeFromDrags()
  {
   print (#function, self, self.dragSession ?? "No session")
   

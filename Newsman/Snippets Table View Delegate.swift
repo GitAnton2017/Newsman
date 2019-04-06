@@ -156,13 +156,22 @@ extension SnippetsViewController: UITableViewDelegate
  
  final func persistSnippetsPriorityChange(for snippets: [BaseSnippet], to newPriority: SnippetPriority)
  {
-  moc.persist(block:
+  moc.persist
   {
-   snippets.forEach{ $0.snippetPriority = newPriority }
-  })
-  {flag in
-   guard flag else { return }
-//   self.snippetsDataSource.reloadSearchData()
+   snippets.forEach
+   {
+    $0.snippetPriority = newPriority
+    $0.isSelected = false
+   }
+  }
+  
+ }
+ 
+ final func persistSnippetsSelection(for snippets: [BaseSnippet], to state: Bool)
+ {
+  moc.persist
+  {
+   snippets.forEach { $0.isSelected = state }
   }
  }
  
@@ -170,7 +179,7 @@ extension SnippetsViewController: UITableViewDelegate
  
  final func persistSnippetsDeletion(for snippets: [BaseSnippet])
  {
-  moc.persist(block:
+  moc.persist
   {
     for snippet in snippets
     {
@@ -187,27 +196,22 @@ extension SnippetsViewController: UITableViewDelegate
      
      self.moc.delete(snippet)
     }
-  })
-  {flag in
-   guard flag else { return }
-   //self.snippetsDataSource.reloadSearchData()
   }
+  
  }
  
  final func persistSnippetNameChange(for snippet: BaseSnippet, to newName: String)
  {
   guard newName != snippet.snippetName else { return }
-  moc.persist(block: { snippet.snippetName = newName })
-  {flag in
-   guard flag else { return }
-//   self.snippetsDataSource.reloadSearchData()
-  }
+  moc.persist{ snippet.snippetName = newName }
  }
  
  
  func changeSnippetsPriority(_ tableView: UITableView, _ indexPaths: [IndexPath], _ newPriority: SnippetPriority)
  {
    var snippets: [BaseSnippet] = []
+   var deselects: [BaseSnippet] = []
+  
    var snippetTags = ""
    var cnt = 1
   
@@ -227,9 +231,16 @@ extension SnippetsViewController: UITableViewDelegate
      snippets.append(snippet)
      cnt += 1
     }
+    else
+    {
+     deselects.append(snippet)
+    }
    }
   
+   persistSnippetsSelection(for: deselects, to: false)
+  
    if snippets.count == 0 { return }
+  
    let priorityAC = UIAlertController(title: Localized.changePriorityTitle,
                                       message: Localized.changePriorityConfirm + "\n\n" + snippetTags,
                                       preferredStyle: .alert)
@@ -452,12 +463,35 @@ extension SnippetsViewController: UITableViewDelegate
   return .delete
  }
 
+ 
+
+ func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath)
+ {
+  let deselectedSnippet = snippetsDataSource[indexPath]
+  
+  guard tableView.isEditing else { return }
+  
+  SnippetDragItem(snippet: deselectedSnippet).toggleSelection()
+  
+ }
+ 
+ 
  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
  {
-  if tableView.isEditing { return }
-
   let selectedSnippet = snippetsDataSource[indexPath]
   
+  guard tableView.isEditing else
+  {
+   editSelectedSnippet(selectedSnippet: selectedSnippet)
+   return
+  }
+  
+  SnippetDragItem(snippet: selectedSnippet).toggleSelection()
+
+ }
+ 
+ func editSelectedSnippet(selectedSnippet: BaseSnippet)
+ {
   switch selectedSnippet.snippetType
   {
    case .text:      editSnippet(with: TextSnippetViewController.self, snippetToEdit: selectedSnippet)
@@ -468,13 +502,11 @@ extension SnippetsViewController: UITableViewDelegate
    case .report:    break
    case .undefined: break
   }
-  
  }
 
  func editSnippet <T> (with _ : T.Type, snippetToEdit: BaseSnippet) where T: SnippetsRepresentable
  {
-  guard var vc = self.storyboard?.instantiateViewController(withIdentifier: T.storyBoardID) as? T else {return}
-  
+  guard let vc = self.storyboard?.instantiateViewController(withIdentifier: T.storyBoardID) as? T else {return}
   
   editedSnippet = snippetToEdit
   vc.currentSnippet = snippetToEdit

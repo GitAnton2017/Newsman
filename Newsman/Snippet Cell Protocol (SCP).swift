@@ -9,27 +9,22 @@
 
 import UIKit
 
-protocol PhotoSnippetCellProtocol: class
+protocol PhotoSnippetCellProtocol: DragWaggleAnimatable
 {
  var isPhotoItemSelected: Bool                          { get set }
  
  var hostedItem: PhotoItemProtocol?                     { get set }
  //the generic model item (folder or photo) that will be displayed by the conformer...
  
- var hostedView: UIView                      {get}
+ var hostedView: UIView                                 { get }
  
- var hostedAccessoryView: UIView?            {get}
+ var hostedAccessoryView: UIView?                       { get }
  
- var hostedViewSelectedAlpha: CGFloat        {get}
+ var hostedViewSelectedAlpha: CGFloat                   { get }
  
  func refresh(with image: UIImage?)
  
  func cancelImageOperations()
- 
- var isDragAnimating: Bool                   {get set}
- 
- func dragWaggleBegin()
- func dragWaggleEnd()
  
  func drawFlagMarker (flagColor: UIColor)
  func clearFlagMarker()
@@ -39,6 +34,7 @@ protocol PhotoSnippetCellProtocol: class
 
 extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
 {
+ var waggleView: UIView { return contentView}
  
  func updateDraggableHostingCell()
   /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
@@ -64,7 +60,7 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
                  usingSpringWithDamping: 2500,
                  initialSpringVelocity: 0,
                  options: .curveEaseInOut,
-                 animations: {self.transform = .identity},
+                 animations: { self.transform = .identity },
                  completion: completion)
  }
  

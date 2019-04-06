@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension SnippetsViewController: UISearchResultsUpdating, UISearchBarDelegate
+extension SnippetsViewController: UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate
 {
  func updateSearchResults(for searchController: UISearchController)
  {
@@ -27,6 +27,7 @@ extension SnippetsViewController: UISearchResultsUpdating, UISearchBarDelegate
   
   searchController.searchResultsUpdater = self
   searchController.searchBar.delegate = self
+  searchController.delegate = self
   
   navigationItem.searchController = searchController
   searchController.searchBar.scopeButtonTitles = snippetType?.localizedSearchScopeBarTitles
@@ -51,5 +52,16 @@ extension SnippetsViewController: UISearchResultsUpdating, UISearchBarDelegate
   Defaults.setSearchScopeIndex(index: selectedScope, for: snippetType)
  }
  
+ func searchBarTextDidBeginEditing(_ searchBar: UISearchBar)
+ {
+  guard searchBar.scopeButtonTitles == nil else { return }
+  searchBar.scopeButtonTitles = snippetType?.localizedSearchScopeBarTitles
+ }
+ 
+// func willPresentSearchController(_ searchController: UISearchController)
+// {
+//  guard searchController.searchBar.scopeButtonTitles == nil else { return }
+//  searchController.searchBar.scopeButtonTitles = snippetType?.localizedSearchScopeBarTitles
+// }
  
 }

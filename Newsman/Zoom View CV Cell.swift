@@ -34,7 +34,7 @@ class ZoomViewCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
    
    self.isDragAnimating = hosted.isDragAnimating
    
-   updateDraggableHostingCell()
+   //updateDraggableHostingCell()
   }
   
  }//weak var hostedItem: PhotoItemProtocol?...

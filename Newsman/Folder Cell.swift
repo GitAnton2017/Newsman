@@ -1,8 +1,14 @@
 import UIKit
 import Foundation
+import CoreData
 
 class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItemsDraggable, DropViewProvidable
 {
+  deinit
+  {
+   removeContextObservers()
+  }
+ 
   lazy var dropView: UIView = self.setDropView()
  
   lazy var dropDelegate: UIDropInteractionDelegate =
@@ -10,6 +16,15 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
     let dropDelegate = FolderCellDropViewDelegate(owner: self)
     return dropDelegate
   }()
+ 
+  lazy var moc: NSManagedObjectContext =
+   {
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let moc = appDelegate.persistentContainer.viewContext
+    return moc
+  }()
+ 
+  var contextChangeObservers =  Set<NSObject>()
  
   var groupTaskCount: Int = 0
 
@@ -50,6 +65,8 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
     
     self.isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
     //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
+    
+    //updateDraggableHostingCell()
     
     self.photoFolder = hosted //???
     self.groupTaskCount = 0   //???
@@ -122,11 +139,13 @@ class PhotoFolderCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItem
 
     super.awakeFromNib()
    
+    addContextObservers()
     hostedItem = nil
     _selected = false
     photoItems = nil
     photoCollectionView.alpha = 1
     contentView.alpha = 1
+   
    
     let dropper = UIDropInteraction(delegate: dropDelegate)
     dropView.addInteraction(dropper)

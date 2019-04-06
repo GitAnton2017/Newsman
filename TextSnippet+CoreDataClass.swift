@@ -12,6 +12,11 @@ import CoreData
 
 @objc(TextSnippet) public class TextSnippet: BaseSnippet, SnippetImagesPreviewProvidable
 {
+ 
+ override var fields: [String] { return super.fields + [#keyPath(TextSnippet.text)] }
+ 
+ // #keyPathes to react to changes in frc delegate...
+ 
  lazy var imageProvider: SnippetPreviewImagesProvider = {TextPreviewProvider(textSnippet: self)}()
  
  override func initStorage()

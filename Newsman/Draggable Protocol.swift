@@ -17,6 +17,7 @@ func == (lhs: Draggable?, rhs: Draggable?) -> Bool
 protocol Draggable: class
 {
  var dragSession: UIDragSession?           { get set }
+ 
  var id: UUID                              { get     }
  
  var hostedManagedObject: NSManagedObject  { get     } // ref to the MO wrapped in conformer
@@ -35,7 +36,8 @@ protocol Draggable: class
  
  var dragAnimationCancelWorkItem: DispatchWorkItem? { get set }
  
- func move(to snippet: PhotoSnippet, to photoItem: PhotoItemProtocol?)
+ func move(to snippet: BaseSnippet, to draggableItem: Draggable?)
+ 
 }
 
 

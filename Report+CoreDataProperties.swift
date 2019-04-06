@@ -13,7 +13,8 @@ import CoreData
 
 extension Report {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Report> {
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Report>
+    {
         return NSFetchRequest<Report>(entityName: "Report")
     }
 

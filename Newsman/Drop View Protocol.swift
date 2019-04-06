@@ -13,7 +13,7 @@ protocol DropViewProvidable: class, UIDropInteractionDelegate
  var dropView: UIView { get } //provides drop view lazily for Drop activities.
 }
 
-extension DropViewProvidable where Self: UICollectionViewCell
+extension DropViewProvidable where Self: UIView
 {
  func setDropView(ratio: CGFloat = 0.5) -> UIView
   {

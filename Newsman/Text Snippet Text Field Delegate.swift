@@ -11,6 +11,7 @@ extension TextSnippetViewController: UITextFieldDelegate
  func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
  {
   guard reason == .committed else { return }
+  
   guard textField.text != textSnippet.snippetName else { return }
 
   textSnippet.managedObjectContext?.persist

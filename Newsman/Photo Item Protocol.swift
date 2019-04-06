@@ -15,13 +15,15 @@ protocol PhotoItemProtocol: NSItemProviderWriting, NSItemProviderReading, Codabl
     var priorityFlag: String?          { get set }
     var url: URL                       { get     } //conformer url getter to get access to the virtual data files
  
-    var hostingCollectionViewCell: PhotoSnippetCellProtocol?  {get set}
+    var hostingCollectionViewCell: PhotoSnippetCellProtocol?  { get set }
     //weak reference to the the CV cell that will display the conformer visual video preview or photo content
  
     func deleteImages()
  
     func cancelImageOperations() //cancells all image loading backgroud operation
     func toggleSelection()
+ 
+    func deleteFromContext()
 
     
 }//protocol PhotoItemProtocol...
@@ -70,5 +72,14 @@ extension PhotoItemProtocol
 }//extension PhotoItemProtocol...
 //-------------------------------------------------------------
 //MARK: -
+
+
+protocol ImageContextLoadProtocol
+{
+ var isLoadTaskCancelled: Bool {get set}
+}
+
+
+
 
 

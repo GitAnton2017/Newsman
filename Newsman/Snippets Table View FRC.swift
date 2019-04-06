@@ -3,6 +3,8 @@ import Foundation
 import UIKit
 import CoreData
 
+
+
 final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegate
 {
  static let cacheName = "Newsman_FRC"
@@ -12,25 +14,16 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   print (self.debugDescription, "destroyed")
  }
  
- 
- private let byDate =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),          ascending: false)
- private let byTag =         NSSortDescriptor(key: #keyPath(BaseSnippet.tag),           ascending: true)
- private let byLocation =    NSSortDescriptor(key: #keyPath(BaseSnippet.location),      ascending: true)
- private let byPriority =    NSSortDescriptor(key: #keyPath(BaseSnippet.priorityIndex), ascending: true)
- private let bySnippetType = NSSortDescriptor(key: #keyPath(BaseSnippet.type),          ascending: true)
- private let byAlphabet =    NSSortDescriptor(key: #keyPath(BaseSnippet.alphaIndex),    ascending: true)
- private let byDateIndex =   NSSortDescriptor(key: #keyPath(BaseSnippet.dateIndex),     ascending: true)
- 
  private var descriptors: [NSSortDescriptor]
  {
   switch groupType
   {
-   case .plainList:      return [bySnippetType, byPriority, byDate,  byTag   ]
-   case .byLocation:     return [byLocation,    byPriority, byDate,  byTag   ]
-   case .byPriority:     return [byPriority,                byDate,  byTag   ]
-   case .bySnippetType:  return [bySnippetType, byPriority, byDate,  byTag   ]
-   case .byDateCreated:  return [byDateIndex,   byPriority, byDate,  byTag   ]
-   case .alphabetically: return [byAlphabet,    byPriority, byDate,  byTag   ]
+   case .plainList:      return [Sort.bySnippetTypeAsc, Sort.byPriorityAsc, Sort.byDateDes,  Sort.byTagAsc ]
+   case .byLocation:     return [Sort.byLocationAsc,    Sort.byPriorityAsc, Sort.byDateDes,  Sort.byTagAsc ]
+   case .byPriority:     return [Sort.byPriorityAsc,                        Sort.byDateDes,  Sort.byTagAsc ]
+   case .bySnippetType:  return [Sort.bySnippetTypeAsc, Sort.byPriorityAsc, Sort.byDateDes,  Sort.byTagAsc ]
+   case .byDateCreated:  return [Sort.byDateIndexAsc,   Sort.byPriorityAsc, Sort.byDateDes,  Sort.byTagAsc ]
+   case .alphabetically: return [Sort.byAlphabetAsc,    Sort.byPriorityAsc, Sort.byDateDes,  Sort.byTagAsc ]
   }
  }
  
@@ -79,7 +72,6 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  private typealias FRCSection = (rows: Int, frcSection: Int?, hidden: Bool)
 
  private var sectionCounters: [FRCSection] = []
-
 
  var groupType: GroupSnippets
  var predicate: NSPredicate?
@@ -182,6 +174,48 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   }
  }
  
+ func moveSnippets(at indexPaths: [IndexPath], to destination: IndexPath)
+ {
+  let destHidden = isHiddenSection(section: destination.section)
+  deactivateDelegate()
+  moc.persistAndWait(block:
+  {
+   indexPaths.forEach
+   {path in
+    let snippet = self[path]
+    snippet.snippetPriority = self.sectionPriority(for: destination.section) ?? .normal
+    snippet[self.groupType] = destHidden
+   }
+  })
+  {success in
+   guard success else { return }
+   indexPaths.forEach
+   {path in
+    self.sectionCounters[path.section].rows -= 1
+    self.sectionCounters[destination.section].rows += 1
+   }
+   
+   self.updateEmptySections()
+   self.refetch()
+   
+   
+   self.tableView.performBatchUpdates(
+   {
+    self.tableView.deleteRows(at: indexPaths, with: .fade)
+    
+//    let insert_ips = Array(repeating: destination, count: indexPaths.count)
+//    self.tableView.insertRows(at: insert_ips, with: .automatic)
+   })
+   {_ in
+    if !destHidden { self.tableView.reloadSections(IndexSet(destination), with: .automatic) }
+    self.removeEmptySections()
+    self.activateDelegate()
+   }
+
+   
+  }
+ }
+ 
  func move (from source: IndexPath, to destination: IndexPath)
  {
 
@@ -202,10 +236,10 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
 
   if isHiddenSection(section: destination.section)
   {
-   unfoldSection(section: destination.section)
-   {[weak self] in
-    self?.moveBatchUpdate(for: snippet)
-   }
+//   unfoldSection(section: destination.section)
+//   {[weak self] in
+//    self?.moveBatchUpdate(for: snippet)
+//   }
   }
   else
   {
@@ -214,34 +248,8 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
 
 
  }
- 
-// func move (from sources: [IndexPath], to destination: IndexPath)
-// {
-//
-//  deactivateDelegate()
-//  moc.persistAndWait
-//   {[unowned self] in
-//    sources.forEach {self[$0].priority = self.sectionName(for: destination.section)}
-//  }
-//  activateDelegate()
-//  sources.forEach{sectionCounters[$0.section].rows -= 1}
-//  sectionCounters[destination.section].rows += 1
-//
-//
-//
-//
-//  refetch()
-//
-//  tableView.performBatchUpdates({[weak self] in self?.tableView.reloadData()})
-//  {[weak self]_ in
-//   self?.tableView.performBatchUpdates({[weak self] in self?.removeEmptySections()})
-//   {[weak self] _ in
-//
-//   }
-//  }
-//
-// }
- 
+
+
  func refetch()
  {
   do
@@ -357,7 +365,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   return name.isEmpty ? Localized.undefinedLocationSection : name
  }
  
- private func sectionPriority (for index: Int) -> SnippetPriority?
+ func sectionPriority (for index: Int) -> SnippetPriority?
  {
   guard let name = sectionName(for: index), let pos = name.firstIndex(of: "_") else {return nil}
   return SnippetPriority(rawValue: String(name.suffix(from: pos).dropFirst()))
@@ -378,6 +386,10 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  
  
  var isFRCDelegateUpdatingCells = false
+ // this flag indicates if the the hidden rows should be taken into account in TV dataSource
+ // when TV updates originate from FRC delegate after the MOC updates
+ // if TRUE dataSource uses all MO.
+ // if FALSE uses only visible rows in other cases.
  
  final func numberOfRowsInSection(index: Int) -> Int
  {
@@ -397,16 +409,6 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   guard section < sectionCounters.count else { return true }
   return sectionCounters[section].hidden
  }
- 
-// final func isHiddenSection(predicate: (BaseSnippet) -> Bool ) -> Bool
-// {
-// 
-//  let N  = sectionCounters.count
-//  return (0..<N).contains
-//  {index in
-//   isHiddenSection(section: index) && allObjects(for: index).allSatisfy(predicate)
-//  }
-// }
  
 
  
@@ -536,7 +538,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  }
  
  
- func toggleFoldSection(section: Int, completion: ((Bool) -> ())? = nil)
+ func toggleFoldSection(section: Int, completion: ( (Bool) -> () )? = nil)
  {
   if sectionCounters.isEmpty { return }
   guard section < sectionCounters.count else { return }
@@ -546,119 +548,36 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   hidden.toggle()
   
   deactivateDelegate()
-  moc.persistAndWait(block:
-  {
-   self.setAllObjectsVisibleState(for: section, to: hidden)
-  })
+  moc.persist(block: { self.setAllObjectsVisibleState(for: section, to: hidden) })
   {flag in
-   DispatchQueue.main.async
+   guard flag else { self.activateDelegate();  return }
+   let ips = self.sectionIndexPaths(for: section)
+   if hidden
    {
-    guard flag else
-    {
-     self.activateDelegate()
-     return
-    }
-    let ips = self.sectionIndexPaths(for: section)
-    if hidden
-    {
-     self.tableView.performBatchUpdates(
-     {
-      self.tableView.deleteRows(at: ips , with: .fade)
-      //self.tableView.insertRows(at: ips , with: .automatic)
-     })
-     {_ in
-      let rect = self.tableView.rect(forSection: section)
-      self.tableView.scrollRectToVisible(rect, animated: true)
-      self.activateDelegate()
-      completion?(hidden)
-     }
-    }
-    else
-    {
-     self.tableView.performBatchUpdates(
-     {
-      //self.tableView.deleteRows(at: ips , with: .automatic)
-      self.tableView.insertRows(at: ips , with: .fade)
-     })
-     {_ in
-      self.tableView.scrollToRow(at: ips[0], at: .none, animated: true)
-      self.activateDelegate()
-      completion?(hidden)
-     }
-    }
-   }
-  }
- }
- 
- 
- func foldSection (section: Int)
- {
-//  let indexPaths = sectionIndexPaths(for: section)
-//  if indexPaths.isEmpty {return}
- 
-  if isHiddenSection(section: section)
-  {
-   reset(section: section, state: false)
-   //hiddenSections.remove(section)
-   //tableView.reloadSections([section], with: .automatic)
-   
-   tableView.reloadRows(at: sectionIndexPaths(for: section), with: .automatic)
-   sectionCells(for: section).forEach{$0.snippetImage.layer.removeAllAnimations()}
-   
-//   tableView.performBatchUpdates(nil)
-//   {[weak self] _ in
-//    self?.tableView.reloadSections([section], with: .automatic)
-//   }
-   
-  
-//   tableView.performBatchUpdates({tableView.insertRows(at: indexPaths, with: .automatic)})
-//   {_ in
-//    self.tableView.scrollToRow(at: indexPaths.first!, at: .top, animated: true)
-//   }
-  }
-  else
-  {
-   
-   //hiddenSections.insert(section)
-   
-   reset(section: section, state: true)
-   tableView.performBatchUpdates(nil)
-   {[weak self] _ in
-    self?.cancelAllOperations(for: section)
-   }
-//   tableView.performBatchUpdates({tableView.deleteRows(at: indexPaths, with: .automatic)})
-//   {_ in
-//    let rect = self.tableView.rect(forSection: section)
-//    self.tableView.scrollRectToVisible(rect, animated: true)
-//   }
-  }
-  
- }
- 
- private func unfoldSection (section: Int, with block: @escaping () -> Void)
- {
-//  let indexPaths = sectionIndexPaths(for: section)
-//  if indexPaths.isEmpty {return}
-  
-  //hiddenSections.remove(section)
-  
-  reset(section: section, state: false)
-  if let header = tableView.headerView(forSection: section) as? SnippetsTableViewHeaderView
-  {
-   header.isHiddenSection = false
-  }
-  
-//  tableView.performBatchUpdates({tableView.insertRows(at: indexPaths, with: .automatic)})
-//  {_ in
-//   block()
-//  }
-  
-    tableView.performBatchUpdates(nil)
+    self.tableView.performBatchUpdates({ self.tableView.deleteRows(at: ips , with: .fade) })
     {_ in
-     block()
+     let rect = self.tableView.rect(forSection: section)
+     self.tableView.scrollRectToVisible(rect, animated: true)
+     self.activateDelegate()
+     completion?(hidden)
     }
-
+   }
+   else
+   {
+    self.tableView.performBatchUpdates({ self.tableView.insertRows(at: ips , with: .fade) })
+    {_ in
+     if self.tableView.cellForRow(at: ips[0]) != nil
+     {
+      self.tableView.scrollToRow(at: ips[0], at: .top, animated: true)
+     }
+     self.activateDelegate()
+     completion?(hidden)
+    }
+   }
+  }
  }
+ 
+ 
  
  
  private func updateFootersTitle(for sections: [Int])
@@ -677,10 +596,26 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   return sectionCounters.enumerated().filter{$0.element.hidden}.flatMap{sectionIndexPaths(for:$0.offset)}
  }
  
+ var isHiddenRowsNeeded: Bool
+ {
+  guard moc.deletedObjects.isEmpty  else { return true }
+  guard moc.insertedObjects.isEmpty else { return true }
+  
+  let updated = moc.updatedObjects.compactMap{$0 as? BaseSnippet}
+  
+  if updated.isEmpty { return false }
+  
+  return updated.contains{ $0.isValidForFRCSortDescriptorsChanges }
+  
+ }
+ 
  private func insertHiddenRows(completion: ( () -> () )? = nil)
  {
+
+  guard isHiddenRowsNeeded else { return }
+  print(#function)
   isFRCDelegateUpdatingCells = true
-  tableView.performBatchUpdates({ tableView.insertRows(at: hiddenRowsIndexPaths, with: .none) })
+  tableView.performBatchUpdates({ tableView.insertRows(at: hiddenRowsIndexPaths, with: .automatic) })
   {_ in
    completion?()
   }
@@ -688,8 +623,10 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
  
  private func deleteHiddenRows(completion: ( () -> () )? = nil)
  {
+  guard isHiddenRowsNeeded else { return }
   isFRCDelegateUpdatingCells = false
-  tableView.performBatchUpdates({ tableView.deleteRows(at: hiddenRowsIndexPaths, with: .none) })
+  print(#function)
+  tableView.performBatchUpdates({ tableView.deleteRows(at: hiddenRowsIndexPaths, with: .fade) })
   {_ in
    completion?()
   }
@@ -701,15 +638,42 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   if isSearchMode { return }
   
   print (#function)
+  frcDidChangeSections = false
   insertHiddenRows()
   tableView.beginUpdates()
-//  isUpdatingCells = true
-//  reloadHiddenSections()
-//  tableView.reloadData()
-  
+
   
  }
  
+
+ func updateSnippetCell(at indexPath: IndexPath?)
+ {
+  guard let indexPath = indexPath else { return }
+  guard let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else { return }
+  let snippet = frc.object(at: indexPath)
+  
+  guard  snippet.isValidForChanges else { return }
+  
+  let keys = snippet.changedValuesForCurrentEvent().keys
+  
+  if keys.contains(#keyPath(BaseSnippet.tag))        { cell.snippetTextTag.text = snippet.snippetName       }
+  if keys.contains(#keyPath(BaseSnippet.date))       { cell.snippetDateTag.text = snippet.snippetDateTag    }
+  if keys.contains(#keyPath(BaseSnippet.isSelected))
+  {
+   cell.isSnippetRowSelected = snippet.isSelected
+  }
+  if keys.contains(#keyPath(BaseSnippet.isDragAnimating))
+  {
+   cell.isDragAnimating = snippet.isDragAnimating
+  }
+  if keys.contains(#keyPath(BaseSnippet.priority))   { cell.priorityView.priority = snippet.snippetPriority }
+  if keys.contains(#keyPath(PhotoSnippet.photos))    { cell.reloadIconView() }
+  if keys.contains(#keyPath(TextSnippet.text))       { cell.reloadIconView() }
+  
+ }
+ 
+ 
+ private var frcDidChangeSections = false
  
  func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>,
                  didChange anObject: Any, at indexPath: IndexPath?,
@@ -720,6 +684,9 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   
   if isSearchMode { return }
   
+  guard let snippet = anObject as? BaseSnippet else { return }
+  
+
   defer { updateSectionCounters() }
 
   switch type
@@ -728,28 +695,34 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
     guard let insertIndexPath = newIndexPath else { break }
     let section = insertIndexPath.section
     tableView.insertRows(at: [insertIndexPath], with: .fade)
+    (tableView.dataSource as? SnippetsViewDataSource)?.insertSnippet(snippet: snippet)
     updateFootersTitle(for: [section])
+   
+    print("INSERT --> ", #function)
   
-   case .update:
-    
-    guard let indexPath = indexPath, let cell = tableView.cellForRow(at: indexPath) as? SnippetsViewCell else { break }
-    cell.hostedSnippet = frc.object(at: indexPath) as? SnippetImagesPreviewProvidable
-
+   case .update: updateSnippetCell(at: indexPath)
+   
+    print("UPDATE --> ", #function)
+  
    case .delete:
     guard let deleteIndexPath = indexPath else { break }
     let section = deleteIndexPath.section
     tableView.deleteRows(at: [deleteIndexPath], with: .fade)
+    (tableView.dataSource as? SnippetsViewDataSource)?.deleteSnippet(snippet: snippet)
     updateFootersTitle(for: [section])
+   
+    print("DELETE --> " , #function)
 
    case .move:
     guard let toIndexPath = newIndexPath, let fromIndexPath = indexPath else { break }
+    guard frcDidChangeSections || toIndexPath != fromIndexPath else { break }
     let toSection = toIndexPath.section
     let  fromSection = fromIndexPath.section
     tableView.deleteRows(at: [fromIndexPath], with: .fade)
     tableView.insertRows(at: [toIndexPath],   with: .fade)
-    
-    
     updateFootersTitle(for: [toSection, fromSection])
+   
+    print("MOVE --> from: \(fromIndexPath) to: \(toIndexPath)", #function)
    
 
   }
@@ -761,9 +734,12 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
                  didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int,
                  for type: NSFetchedResultsChangeType)
  {
-//  print (#function, "section: ", sectionIndex, "type: ", type.rawValue)
+
+  print (#function)
   
   if isSearchMode { return }
+  
+  frcDidChangeSections = true
   
   defer { updateSectionCounters() }
   
@@ -785,10 +761,7 @@ final class SnippetsFetchController: NSObject, NSFetchedResultsControllerDelegat
   print (#function)
   tableView.endUpdates()
   deleteHiddenRows()
-  
-//  isUpdatingCells = false
-//  reloadHiddenSections()
-//  tableView.reloadData()
+ 
  }
 
 }

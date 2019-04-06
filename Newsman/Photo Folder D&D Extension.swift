@@ -58,12 +58,12 @@ extension PhotoFolderItem
    {flag in
     if flag
     {
-     self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
+     //self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
      // if folder dragged we update all the underlying zoom view single photo items selection state.
-     self.zoomView?.photoItems.compactMap{$0.hostingZoomedCollectionViewCell}.forEach
-      {
-       $0.isPhotoItemSelected = newValue
-     }
+//     self.zoomView?.photoItems.compactMap{$0.hostingZoomedCollectionViewCell}.forEach
+//      {
+//       $0.isPhotoItemSelected = newValue
+//     }
      self.folder.photoSnippet?.currentFRC?.activateDelegate()
     }
    }
@@ -80,7 +80,7 @@ extension PhotoFolderItem
    folder.folderedPhotos.forEach { $0.dragAndDropAnimationState = newValue }
    // if folder dragged we update all the underlying zoom view single photo items drag animation state.
    zoomView?.photoItems.compactMap{$0.hostingZoomedCollectionViewCell}.forEach
-    {
+   {
      $0.isDragAnimating = newValue
    }
   }

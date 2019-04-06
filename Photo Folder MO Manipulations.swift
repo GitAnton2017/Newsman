@@ -32,20 +32,16 @@ extension PhotoFolderItem
   }
  }
  
- final func move(to snippet: PhotoSnippet, to photoItem: PhotoItemProtocol?)
+ final func move(to snippet: BaseSnippet, to draggableItem: Draggable?)
  {
   print(#function)
-  switch photoItem
+  
+  guard let snippet = snippet as? PhotoSnippet else { return }
+  switch draggableItem
   {
-   case let folderItem as PhotoFolderItem:  //moveSinglePhotoDraggedItems()
-    folder.refolder(to: folderItem.folder)
-   
-   case nil: //moveDraggedFolder()
-    folder.move(to: snippet)
-   
-   case let photoItem as PhotoItem:  //moveSinglePhotoDraggedItems()
-    folder.merge(with: photoItem.photo)
-   
+   case nil:                                folder.move(to: snippet)               //moveDraggedFolder()
+   case let folderItem as PhotoFolderItem:  folder.refolder(to: folderItem.folder) //moveSinglePhotoDraggedItems()
+   case let photoItem as PhotoItem:         folder.merge(with: photoItem.photo)    //moveSinglePhotoDraggedItems()
    default: break
    
   }

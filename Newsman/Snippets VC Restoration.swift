@@ -39,12 +39,6 @@ extension SnippetsViewController
  override func applicationFinishedRestoringState()
  {
   updateSnippets()
-  let bar = self.navigationItem.searchController?.searchBar
-  //bar?.showsScopeBar = false
-  bar?.isHidden = true
-  bar?.scopeButtonTitles = self.snippetType?.localizedSearchScopeBarTitles
-  bar?.sizeToFit()
-  
  }
  
 }

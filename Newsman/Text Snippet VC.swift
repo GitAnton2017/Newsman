@@ -5,6 +5,7 @@ import CoreData
 
 class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, SnippetsRepresentable
 {
+ 
  @IBOutlet var saveTextButton: UIBarButtonItem!
  @IBOutlet var clearTextButton: UIBarButtonItem!
  @IBOutlet var textView: UITextView!
@@ -24,36 +25,37 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
 
  var currentSnippet: BaseSnippet
  {
-  get  { return textSnippet }
-  set  { textSnippet = newValue as? TextSnippet }
+  get { return textSnippet }
+  set { textSnippet = newValue as? TextSnippet }
  }
+ 
 
  @IBAction func itemUpBarButtonPress(_ sender: UIBarButtonItem)
  {
   saveTextSnippetData()
   moveToNextSnippet(in: -1)
  }
+ 
 
  @IBAction func itemDownBarButtonPress(_ sender: UIBarButtonItem)
  {
   saveTextSnippetData()
   moveToNextSnippet(in:  1)
  }
+ 
 
  var textSnippet: TextSnippet!
  {
   didSet { navigationItem.title = textSnippet.snippetName }
  }
 
+ 
+ 
  func saveTextSnippetData()
  {
-  if textView.isFirstResponder { textView.resignFirstResponder() }
-  if textSnippetTitle.isFirstResponder { textSnippetTitle.resignFirstResponder() }
+  guard textView.text != textSnippet.text || textSnippet.snippetName != textSnippetTitle.text else { return }
   
-  guard self.textView.text != self.textSnippet.text ||
-        self.textSnippet.snippetName != self.textSnippetTitle.text else { return }
-  
-  //proceed withcontext saving if we have real changes in one of the text fields...
+  //proceed with context saving if we have real changes in one of the text fields...
   
   textSnippet.managedObjectContext?.persist
   {
@@ -68,11 +70,15 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
   saveTextSnippetData()
  }
  
- @IBAction func clearTextButtonPress(_ sender: UIBarButtonItem) { textView.text = "" }
+ @IBAction func clearTextButtonPress(_ sender: UIBarButtonItem)
+ {
+  textView.text = ""
+ }
  
  @objc func doneButtonPressed ()
  {
-  saveTextSnippetData()
+  if textView.isFirstResponder { textView.resignFirstResponder() }
+  if textSnippetTitle.isFirstResponder { textSnippetTitle.resignFirstResponder() }
  }
  
  override func viewDidLoad()
@@ -90,11 +96,6 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
  
  }
  
- override func viewWillDisappear(_ animated: Bool)
- {
-  super.viewWillDisappear(animated)
-  saveTextSnippetData()
- }
 
  func updateDateLabel()
  {
@@ -105,6 +106,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
   navigationItem.titleView = dateLabel
  }
 
+ 
  func updateTextSnippet()
  {
   guard textSnippet != nil else {return}
@@ -112,17 +114,20 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
   textSnippetTitle.text = (textSnippet.snippetName == Localized.unnamedSnippet ? "" : textSnippet.snippetName)
  }
 
+ 
  override func viewWillAppear(_ animated: Bool)
  {
   super.viewWillAppear(animated)
   updateTextSnippet()
  }
+ 
 
  override func viewDidAppear(_ animated: Bool)
  {
   super.viewDidAppear(animated)
   updateDateLabel()
  }
+ 
  
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
  {

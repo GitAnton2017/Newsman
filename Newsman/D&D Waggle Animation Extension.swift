@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension DragWaggleAnimatable
 {
  func startWaggleAnimation()
  {
@@ -16,7 +16,7 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
   
   var slt = CATransform3DIdentity
   slt.m34 = -1.0/600
-  self.contentView.layer.superlayer!.sublayerTransform = slt
+  self.waggleView.layer.superlayer!.sublayerTransform = slt
   
   let ag = CAAnimationGroup()
   
@@ -48,18 +48,18 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
   
   ag.animations = [bc, bw, kft]
   
-  self.contentView.layer.add(ag, forKey: "waggle")
+  self.waggleView.layer.add(ag, forKey: "waggle")
  }
  
  func stopWaggleAnimation()
  {
   //print (#function)
-  self.contentView.layer.removeAnimation(forKey: "waggle")
+  self.waggleView.layer.removeAnimation(forKey: "waggle")
  }
  
  var isDragAnimating: Bool
  {
-  get {return self.contentView.layer.animation(forKey: "waggle") != nil}
+  get {return self.waggleView.layer.animation(forKey: "waggle") != nil}
   set
   {
    if newValue {dragWaggleBegin()} else {dragWaggleEnd()}

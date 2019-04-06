@@ -13,6 +13,7 @@ import UIKit
 import CoreLocation
 
 
+
 protocol SnippetImagesPreviewProvidable: class
 {
  var imageProvider: SnippetPreviewImagesProvider {get}
@@ -21,9 +22,46 @@ protocol SnippetImagesPreviewProvidable: class
 
 @objc(BaseSnippet) public class BaseSnippet: NSManagedObject
 {
+
+ var sortFields: [String]
+ //these KPs will be general for all types of Snippets and applied in TV FRC sort descriptors
+ {
+  return [#keyPath(BaseSnippet.tag),  #keyPath(BaseSnippet.priority), #keyPath(BaseSnippet.date)]
+ }
+ 
+ 
+
+ 
+ var isValidForFRCSortDescriptorsChanges: Bool
+ // if one of these KPs is changed in MOC the FRC opens and closes hidden section in updates...
+ {
+  let pairs = self.changedValuesForCurrentEvent()
+  if pairs.isEmpty { return false }
+  let keys = pairs.keys
+  return keys.contains{ sortFields.contains($0) }
+ }
+ 
+ 
+ 
+ var fields: [String] //these KPs will enforce FRC to update TV rows...
+ {
+  return sortFields + [#keyPath(BaseSnippet.isSelected), #keyPath(BaseSnippet.isDragAnimating)]
+ }
+ 
+
+ var isValidForChanges: Bool
+ // if one of these KPs is changed in MOC the FRC will update corresponding TV row ...
+ {
+  let pairs = self.changedValuesForCurrentEvent()
+  if pairs.isEmpty { return false }
+  let keys = pairs.keys
+  return keys.contains{ fields.contains($0) }
+ }
+ 
  
  struct HiddenSectionKey: Hashable
  {
+ 
   let snippetType: SnippetType
   let groupType: GroupSnippets
   let sectionName: String
@@ -34,7 +72,6 @@ protocol SnippetImagesPreviewProvidable: class
  
  final func isHiddenSection(groupType: GroupSnippets, for newValue: String? = nil) -> Bool
  {
-  
   let key = HiddenSectionKey(snippetType: snippetType, groupType: groupType, sectionName: newValue ?? "")
   
   if let hidden = BaseSnippet.hiddenSections[key] { return hidden }
@@ -84,7 +121,7 @@ protocol SnippetImagesPreviewProvidable: class
  
  final var snippetDate: Date
  {
-  get {return self.date! as Date}
+  get {return (self.date ?? NSDate()) as Date}
   set
   {
    self.date = newValue as NSDate
@@ -264,7 +301,14 @@ protocol SnippetImagesPreviewProvidable: class
   return docFolder.appendingPathComponent(self.id!.uuidString)
  }
  
+ final var dragAndDropAnimationSetForClearanceState: Bool = false
+ //Snippet MO internal not persisted state of animation set for delayed clearance of SnippetDragItem
  
+ final var dragAndDropAnimationState: Bool = false
+ //Snippet MO internal not persisted current state of SnippetDragItem animation
+
+ final var zoomedSnippetState: Bool = false
+ //Snippet MO internal not persisted current state .... reserved for future development
  
  
  

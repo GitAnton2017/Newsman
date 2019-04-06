@@ -5,6 +5,13 @@ import CoreData
 
 class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, SnippetsRepresentable
 {
+ 
+ required init?(coder aDecoder: NSCoder)
+ {
+  super.init(coder: aDecoder)
+  addContextObservers()
+ }
+ 
  var photoSnippetVC: PhotoSnippetViewController!
  {
   get { return self }
@@ -19,7 +26,8 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sn
   set { photoSnippet = newValue as? PhotoSnippet }
  }
  
- 
+ var contextChangeObservers = Set<NSObject>()
+  
  lazy var moc: NSManagedObjectContext =
  {
    let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -32,6 +40,8 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sn
  {
   didSet { currentSnippet.currentFRC = self.currentFRC }
  }
+ 
+ weak var snippetsTableView: UITableView?
  
  var currentViewController: UIViewController {return self}
  
@@ -64,10 +74,12 @@ class PhotoSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sn
  {
   didSet
   {
+   //currentFRC?.deactivateDelegate()
    photoSnippet?.nphoto = Int32(nphoto)
    photoCollectionView.visibleCells.forEach {($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
    if (!isEditingPhotos) {photoCollectionView.locateCellMenu()}
    photoCollectionView.reloadData()
+   //currentFRC?.activateDelegate()
   }
  }
  
@@ -220,9 +232,6 @@ func updateDateLabel()
  {
    super.viewWillDisappear(animated)
    photoCollectionView.visibleCells.forEach {($0 as? PhotoSnippetCellProtocol)?.cancelImageOperations()}
-   guard isEditingMode else {return}
-   savePhotoSnippetData()
-   currentFRC?.tableView.reloadData()
  }
 
     
@@ -280,6 +289,7 @@ func updateDateLabel()
     
  deinit
  {
+   removeContextObservers()
   //print ("VC DESTROYED WITH PHOTO SNIPPET \(photoSnippet?.snippetName)")
  }
     
@@ -332,8 +342,27 @@ func updateDateLabel()
  {
    allPhotosSelected.toggle()
    selectBarButton.title = allPhotosSelected ? "☆☆☆" : "★★★"
-   photoItems2D.flatMap{$0}.forEach{$0.isSelected = allPhotosSelected}
+  // photoItems2D.flatMap{$0}.forEach{$0.isSelected = allPhotosSelected}
+  
+   moc.persist
+   {
+    self.photoSnippet.allFolders.forEach { $0.isSelected = self.allPhotosSelected }
+    self.photoSnippet.allPhotos.forEach  { $0.isSelected = self.allPhotosSelected }
+   }
+  
  }
+ 
+ 
+ func deselectAllSelectedItems()
+ {
+  moc.persist
+  {
+   self.photoSnippet.selectedFolders.forEach { $0.isSelected = false }
+   self.photoSnippet.selectedPhotos.forEach  { $0.isSelected = false }
+  }
+ }
+ 
+ 
 
  
  
@@ -341,7 +370,7 @@ func updateDateLabel()
  {
    if isEditingPhotos
    {
-    deselectSelectedItems(in: photoCollectionView)
+    deselectAllSelectedItems()
     allPhotosSelected = false
     isEditingPhotos = false
     photoCollectionView.isPhotoEditing = false
@@ -440,8 +469,11 @@ func updateDateLabel()
  
  @objc func deletePhotosBarButtonPress(_ sender: UIBarButtonItem)
  {
-  deleteSelectedPhotos()
+  //deleteSelectedPhotos()
+  
+  photoSnippet.removeSelectedItems()
   togglePhotoEditingMode()
+  
  }
     
  @objc func flagPhoto (_ sender: UIBarButtonItem)

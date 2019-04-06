@@ -56,7 +56,7 @@ import CoreData
   
     func deleteImages()
     {
-     self.remove() //remove folder from drags
+     self.removeFromDrags() //remove folder from drags
      (folder.photos?.allObjects as? [Photo])?.forEach
      {photo in
       PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: photo.id!.uuidString as NSString)}
@@ -137,6 +137,25 @@ import CoreData
      catch
      {
       print("ERROR! CREATING FOLDER DIRECTORY AT PATH: \(url.path):\n \(error.localizedDescription)")
+     }
+    }
+  
+  
+    class func createNewPhotoFolderOnDisk(at url: URL, with completion: @escaping (Bool) -> ())
+    {
+     DispatchQueue.global(qos: .userInitiated).async
+     {
+      do
+      {
+       try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
+       print ("PHOTO SNIPPET NEW FOLDER SUCCESSFULLY CREATED AT PATH:\n \(url.path)")
+       completion(true)
+      }
+      catch
+      {
+       print("ERROR! CREATING FOLDER DIRECTORY AT PATH: \(url.path):\n \(error.localizedDescription)")
+       completion(false)
+      }
      }
     }
  

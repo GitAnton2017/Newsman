@@ -12,14 +12,19 @@ extension PhotoSnippetViewController: UITextFieldDelegate
 
  func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
  {
-  guard reason == .committed else {return}
-  guard let text = textField.text else {return}
-  guard text != Localized.unnamedSnippet else {return}
-  guard text != photoSnippet.snippetName else {return}
-  moc.persistAndWait {photoSnippet.snippetName = text}
+  guard reason == .committed else { return }
+  
+  guard textField.text != photoSnippet.snippetName else { return }
+  
+  photoSnippet.managedObjectContext?.persist
+  {
+   self.photoSnippet.snippetName = textField.text ?? ""
+  }
  }
  
- func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+ func textField(_ textField: UITextField,
+                  shouldChangeCharactersIn range: NSRange,
+                  replacementString string: String) -> Bool
  {
   return (textField.text?.count)! <= 50
  }

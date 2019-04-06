@@ -46,6 +46,8 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoIte
    photoIconView.alpha = hosted.isSelected ? 0.5 : 1
    
    self.isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
+   
+   //updateDraggableHostingCell()
 
    //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
   }

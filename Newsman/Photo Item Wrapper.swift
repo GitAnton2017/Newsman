@@ -645,8 +645,8 @@ class PhotoItem: NSObject, PhotoItemProtocol
 func deleteImages()
 /***************************************************************************************************************/
 {
-  PhotoItem.imageCacheDict.forEach{$0.value.removeObject(forKey: self.id.uuidString as NSString)}
-  self.remove() //remove from [Draggables]
+  PhotoItem.imageCacheDict.forEach{ $0.value.removeObject(forKey: self.id.uuidString as NSString) }
+  self.removeFromDrags() //remove from [Draggables]
   PhotoItem.deletePhotoItemFromDisk(at: url)
   PhotoItem.MOC.delete(self.photo)
  

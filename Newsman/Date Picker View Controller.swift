@@ -11,7 +11,17 @@ class DatePickerViewController: UIViewController
   }
     
   @IBOutlet var snippetDatePicker: UIDatePicker!
-    
+ 
+  @IBAction func dateChanged(_ sender: UIDatePicker, forEvent event: UIEvent)
+  {
+   guard sender.date != editedSnippet.snippetDate else { return }
+   
+   editedSnippet.managedObjectContext?.persist
+   {
+     self.editedSnippet.snippetDate = sender.date
+   }
+  }
+ 
   override func viewDidLoad()
   {
     super.viewDidLoad()
@@ -25,11 +35,5 @@ class DatePickerViewController: UIViewController
     snippetDatePicker.date = editedSnippet.snippetDate
   }
     
-  override func viewWillDisappear(_ animated: Bool)
-  {
-    super.viewWillDisappear(animated)
-    guard snippetDatePicker.date != editedSnippet.snippetDate else { return }
-   
-    editedSnippet.snippetDate = snippetDatePicker.date
-  }
+ 
 }

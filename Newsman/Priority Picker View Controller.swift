@@ -39,51 +39,47 @@ class PriorityPickerViewController: UIViewController, UIPickerViewDataSource, UI
       updateEditedSnippet()
     }
     
-    override func viewWillDisappear(_ animated: Bool)
-    {
-      super.viewWillDisappear(animated)
-    }
  
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
     {
      let selectedPriority = SnippetPriority.priorities[row]
-     guard editedSnippet.snippetPriority != selectedPriority else {return}
-     //editedSnippet.setPriority(to: selectedPriority)
      
-     editedSnippet.managedObjectContext?.persistAndWait
+     guard editedSnippet.snippetPriority != selectedPriority else { return }
+    
+     editedSnippet.managedObjectContext?.persist
      {
-       editedSnippet.snippetPriority = selectedPriority
+       self.editedSnippet.snippetPriority = selectedPriority
      }
     
     }
  
     func numberOfComponents(in pickerView: UIPickerView) -> Int
     {
-        return 1
+     return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int
     {
-        return SnippetPriority.priorities.count
+     return SnippetPriority.priorities.count
     }
  
  
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat
     {
-      return 50
+     return 50
     }
  
     func pickerView(_ pickerView: UIPickerView,
                       attributedTitleForRow row: Int,
                       forComponent component: Int) -> NSAttributedString?
     {
-      let priority = SnippetPriority.priorities[row]
-      let titleColor = SnippetPriority.priorityColorMap[priority]!
-      let fontSize: CGFloat = 50
-      let font = UIFont.italicSystemFont(ofSize: fontSize)
-      let titleAttr = [NSAttributedStringKey.font : font,  NSAttributedStringKey.foregroundColor : titleColor]
-      let tag = NSLocalizedString(priority.rawValue, comment: priority.rawValue)
-      return NSAttributedString(string: tag, attributes: titleAttr)
+     let priority = SnippetPriority.priorities[row]
+     let titleColor = SnippetPriority.priorityColorMap[priority]!
+     let fontSize: CGFloat = 50
+     let font = UIFont.italicSystemFont(ofSize: fontSize)
+     let titleAttr = [NSAttributedStringKey.font : font,  NSAttributedStringKey.foregroundColor : titleColor]
+     let tag = NSLocalizedString(priority.rawValue, comment: priority.rawValue)
+     return NSAttributedString(string: tag, attributes: titleAttr)
     }
 
     

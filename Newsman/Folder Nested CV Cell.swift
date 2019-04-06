@@ -44,7 +44,7 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProto
    self.isDragAnimating = hosted.isDragAnimating
    //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
    
-   updateDraggableHostingCell()
+   //updateDraggableHostingCell()
    /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
     property) may change due to cells updates in CVs so we have to update references to the dragged animated cells to
     animate drag clearances with the proper cells in "Draggable.clear(...)" method!  */
