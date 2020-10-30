@@ -43,19 +43,19 @@ extension SnippetsViewController: UITableViewDropDelegate, UITableViewDragDelega
   let itemsForBeginning = getDragItems(tableView, for: session, forCellAt: indexPath)
   
   //Auto cancel all dragged SnippetDragItems!
-  itemsForBeginning.compactMap{$0.localObject as? SnippetProtocol}.forEach
-  {item in
-   let autoCancelWorkItem = DispatchWorkItem
-   {
-    item.clear(with: (forDragAnimating: AppDelegate.dragAnimStopDelay,
-                      forSelected:      AppDelegate.dragUnselectDelay))
-   }
-   
-   item.dragAnimationCancelWorkItem = autoCancelWorkItem
-   let delay: DispatchTime = .now() + .seconds(AppDelegate.dragAutoCnxxDelay)
-   DispatchQueue.main.asyncAfter(deadline: delay, execute: autoCancelWorkItem)
-    
-  }
+//  itemsForBeginning.compactMap{$0.localObject as? SnippetProtocol}.forEach
+//  {item in
+//   let autoCancelWorkItem = DispatchWorkItem
+//   {
+//    item.clear(with: (forDragAnimating: AppDelegate.dragAnimStopDelay,
+//                      forSelected:      AppDelegate.dragUnselectDelay))
+//   }
+//
+//   item.dragAnimationCancelWorkItem = autoCancelWorkItem
+//   let delay: DispatchTime = .now() + .seconds(AppDelegate.dragAutoCnxxDelay)
+//   DispatchQueue.main.asyncAfter(deadline: delay, execute: autoCancelWorkItem)
+//
+//  }
   
   return itemsForBeginning
  }
@@ -95,7 +95,7 @@ extension SnippetsViewController: UITableViewDropDelegate, UITableViewDragDelega
  func tableView(_ tableView: UITableView, dropSessionDidEnd session: UIDropSession)
  {
   print (#function, self.debugDescription, session.description)
-  AppDelegate.clearAllDraggedItems()
+//  AppDelegate.clearAllDraggedItems()
   if tableView.isEditing { toggleEditMode() }
  }
  

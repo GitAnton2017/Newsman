@@ -1,54 +1,120 @@
 import UIKit
+import class RxSwift.DisposeBag
+import class Combine.AnyCancellable
 
 class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProtocol
 {
- 
- private lazy var dropper: UIDropInteraction? =
+ weak var photoSnippet: PhotoSnippet?
+ weak var photoSnippetVC: PhotoSnippetViewController?
  {
-  guard let dropDelegate = self.owner?.dropDelegate else { return nil }
-  let dropper = UIDropInteraction(delegate: dropDelegate)
-  hostedView.addInteraction(dropper)
-  return dropper
- }()
+  didSet{
+   configueInterfaceRotationSubscription()
+  }
+ }
  
+ var isDraggable: Bool { true }
+ 
+
+ var cancellables =  Set<AnyCancellable> ()
+ 
+ weak var arrowMenuSearchTag: UIAlertController?
+ weak var arrowMenuView: PointedMenuView?
+ {
+  didSet
+  {
+   guard let nestedCellMenu = arrowMenuView else { return }
+   guard let folderCell = owner else { return }
+   guard let photo = (hostedItem as? PhotoItem)?.photo else { return }
+   guard let zoomView = folderCell.photoSnippetVC?.photoCollectionView.zoomView else { return }
+   guard let zoomViewCell = zoomView.cellWithPhoto(photo: photo) else { return }
+   guard let zoomViewCellMenu = zoomViewCell.arrowMenuView else { return }
+   
+   nestedCellMenu.baseView.isMenuPanning = zoomViewCellMenu.baseView.isMenuPanning
+   
+   var zoomCellPan: AnyCancellable?
+   var nestedCellPan: AnyCancellable?
+   
+   zoomCellPan = zoomViewCellMenu
+    .publisher(for: \.baseView.isMenuPanning, options: [])
+    .print("zoomViewCellMenu")
+    .handleEvents(receiveOutput: { _ in nestedCellPan?.cancel() })
+    .assign(to:     \.baseView.isMenuPanning, on: nestedCellMenu)
+   
+    zoomCellPan?.store(in: &zoomViewCellMenu.cancellables)
+   
+    nestedCellPan = nestedCellMenu
+    .publisher(for: \.baseView.isMenuPanning, options: [])
+    .print("nestedCellMenu")
+    .handleEvents(receiveOutput: { _ in zoomCellPan?.cancel() })
+    .assign(to:     \.baseView.isMenuPanning, on: zoomViewCellMenu)
+   
+    nestedCellPan?.store(in: &nestedCellMenu.cancellables)
+   
+   zoomViewCellMenu.$menuShift.filter{$0 != .zero}.sink
+   {[weak nestedCellMenu] in
+    guard let menu = nestedCellMenu else { return }
+    menu.activitySubject.onNext(())
+    menu.move(dx: $0.x * menu.bounds.width, dy: $0.y * menu.bounds.height)
+   }.store(in: &zoomViewCellMenu.cancellables)
+   
+   nestedCellMenu.$menuShift.filter{$0 != .zero}.sink
+   {[weak zoomViewCellMenu] in
+    guard let menu = zoomViewCellMenu else { return }
+    menu.activitySubject.onNext(())
+    menu.move(dx: $0.x * menu.bounds.width, dy: $0.y * menu.bounds.height)
+   }.store(in: &nestedCellMenu.cancellables)
+   
+   zoomViewCellMenu.$menuScale.filter{$0 != .zero}.sink
+   {[weak nestedCellMenu] in
+    guard let menu = nestedCellMenu else { return }
+    menu.activitySubject.onNext(())
+    menu.baseView.transform = menu.baseView.transform.scaledBy(x: $0, y: $0)
+   }.store(in: &zoomViewCellMenu.cancellables)
+   
+   nestedCellMenu.$menuScale.filter{$0 != .zero}.sink
+   {[weak zoomViewCellMenu] in
+    guard let menu = zoomViewCellMenu else { return }
+    menu.activitySubject.onNext(())
+    menu.baseView.transform = menu.baseView.transform.scaledBy(x: $0, y: $0)
+   }.store(in: &nestedCellMenu.cancellables)
+   
+   
+   
+  }
+ }
+ 
+
+ let disposeBag = DisposeBag()
+ 
+
  
  var hostedViewSelectedAlpha: CGFloat = 0.5
  
  weak var owner: PhotoFolderCell? // weak ref to FolderCell which hosts he nested CV.
- {
-  didSet
-  {
-   guard dropper != nil else { return }
-   hostedView.isUserInteractionEnabled = owner!.isDraggable
-  }
- }
  
- var hostedView: UIView { return photoIconView }
- var hostedAccessoryView: UIView? { return spinner }
+ var hostedView: UIView { photoIconView }
+ var hostedAccessoryView: UIView? { spinner }
  
  weak var hostedItem: PhotoItemProtocol?
- //The sigle PhotoItem wrapper instance that is currently hosted and visualized by this type of UICollectionViewCell...
  {
   didSet
   {
-   guard let hosted = self.hostedItem as? PhotoItem else { return }
-  
-   
-   self.updateImage()
+   guard let hosted = hostedItem as? PhotoItem else
+   {
+    oldValue?.hostingCollectionViewCell = nil
+    cleanup()
+    return
+   }
+ 
+   updateAllCellStatesSubscriptions()
    
    hosted.hostingCollectionViewCell = self
    //weak reference to this cell that will display this PhotoItem until updated and dequed in nested CV!
    
    photoIconView.alpha = hosted.isSelected ? 0.5 : 1
    
-   self.isDragAnimating = hosted.isDragAnimating
-   //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
-   
-   //updateDraggableHostingCell()
-   /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
-    property) may change due to cells updates in CVs so we have to update references to the dragged animated cells to
-    animate drag clearances with the proper cells in "Draggable.clear(...)" method!  */
-   
+   isDragAnimating = hosted.isDragAnimating
+ 
  
   }
   
@@ -59,13 +125,14 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProto
   hostedItem?.cancelImageOperations()
  }
  
- var photoItemView: UIView {return self.contentView}
+ var photoItemView: UIView { contentView }
  
- var cellFrame: CGRect     {return self.frame}
+ var cellFrame: CGRect     { frame }
  
  private var _selected = false
  var isPhotoItemSelected: Bool
  {
+  get { _selected }
   set
   {
    _selected = newValue
@@ -73,33 +140,78 @@ class PhotoFolderCollectionViewCell: UICollectionViewCell, PhotoSnippetCellProto
    touchSpring()
   }
   
-  get {return _selected}
+  
  }
  
  @IBOutlet weak var photoIconView: UIImageView!
  @IBOutlet weak var spinner: UIActivityIndicatorView!
+ @IBOutlet weak var mainView: UIView!
+ 
+ 
+ private final func configue()
+ {
+  photoIconView.isOpaque = true
+  configueArrowMenu()
+  
+  mainView?.publisher(for: \.bounds, options: [.prior])
+   .collect(2)
+   .filter{ $0[0] != $0[1] }
+   .sink { [ weak self ] rects in
+     guard let self = self else { return }
+     guard let folderCell = self.owner else { return }
+     self.cornerRadius = folderCell.cellCornerRadius
+//     self.refreshRowPositionMarker(false)
+     if rects[1].contains(rects[0]) { self.updateImage(false) }
+   }.store(in: &cancellables)
+  
+  cleanup()
+ }
  
  override func awakeFromNib()
  {
   super.awakeFromNib()
+  configue()
+ }
+ 
 
-  
+ 
+ func cleanup()
+ {
+  dismissArrowMenu(animated: false)
   spinner.startAnimating()
-  self.hostedItem = nil
-  photoIconView.image = nil
+  //photoIconView.image = nil
+  photoIconView.alpha = 1
+  contentView.alpha = 1
+  contentView.backgroundColor = .clear
+  
+  _selected = false
+  
+  clearMainView()
+  clearFlagMarker()
+  clearRowPosition(false)
+  clearVideoDuration()
   imageRoundClip(cornerRadius: 5)
  }
  
  override func prepareForReuse()
  {
   super.prepareForReuse()
-  self.hostedItem = nil
-  spinner.startAnimating()
-  photoIconView.image = nil
-  imageRoundClip(cornerRadius: 5)
+  cleanup()
  }
  
- 
- 
+ override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
+ {
+  if let target = super.hitTest(point, with: event) { return target }
+
+  for subview in subviews.reversed()
+  {
+   let tp = convert(point, to: subview)
+   if let menuItemButton = subview.hitTest(tp, with: event) as? MenuItemButton
+   {
+    return menuItemButton
+   }
+  }
+  return nil
+ }
  
 }

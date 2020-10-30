@@ -15,7 +15,7 @@ extension PhotoFolderItem
  private func moveSinglePhotoDraggedItems()
  {
   print(#function)
-  if let index = AppDelegate.globalDragItems.index(where: {$0.hostedManagedObject === folder})
+  if let index = (AppDelegate.globalDragItems.firstIndex{$0.hostedManagedObject.objectID == folder.objectID})
   {
    AppDelegate.globalDragItems.remove(at: index)
    AppDelegate.globalDropItems.append(contentsOf: singlePhotoItems)
@@ -25,7 +25,7 @@ extension PhotoFolderItem
  private func moveDraggedFolder()
  {
   print(#function)
-  if let index = AppDelegate.globalDragItems.index(where: {$0.hostedManagedObject === folder})
+  if let index = (AppDelegate.globalDragItems.firstIndex{$0.hostedManagedObject.objectID == folder.objectID})
   {
    AppDelegate.globalDragItems.remove(at: index)
    AppDelegate.globalDropItems.append(self)
@@ -77,8 +77,11 @@ extension PhotoFolder //managed object extension
    return
   }
   
-  let folderURL = self.url
-  let photoURLs = self.folderedPhotos.map{(from: $0.url, to: destination.url.appendingPathComponent($0.ID))}
+  guard let destFolderURL = destination.url else { return }
+  guard let sourceFolderURL = self.url else { return }
+  let photoURLs = self.folderedPhotos
+   .filter{$0.ID != nil && $0.url != nil }
+   .map{(from: $0.url!, to: destFolderURL.appendingPathComponent($0.ID!))}
   
   context.persistAndWait(block:
   {
@@ -109,7 +112,7 @@ extension PhotoFolder //managed object extension
    photoURLs.forEach{PhotoItem.movePhotoItemOnDisk(from: $0.from, to: $0.to)}
    
    print ("<<<<< REMOVING EMPTIFIED FOLDER FROM DISK... >>>>>")
-   PhotoItem.deletePhotoItemFromDisk(at: folderURL)
+   PhotoItem.deletePhotoItemFromDisk(at: sourceFolderURL)
    
   }
   
@@ -117,9 +120,9 @@ extension PhotoFolder //managed object extension
   
  }
  
+ 
  final func move(to snippet: PhotoSnippet)
  {
- 
   guard self.photoSnippet !== snippet else
   {
    print (#function, "<<<Folders inside Snippet are not moved in MOC!>>>")
@@ -141,7 +144,7 @@ extension PhotoFolder //managed object extension
    return
   }
   
-  let folderURL = self.url
+  guard let sourceFolderURL = self.url else { return }
   
   context.persistAndWait(block:
   {
@@ -160,14 +163,15 @@ extension PhotoFolder //managed object extension
     return
    }
    
-   PhotoItem.movePhotoItemOnDisk(from: folderURL, to: self.url)  //move entire folder on disk
+   guard let toFolderURL = self.url else { return }
+   PhotoItem.movePhotoItemOnDisk(from: sourceFolderURL, to: toFolderURL)  //move entire folder on disk
   }
  }
  
  
  
  
- final func merge (with photo: Photo)
+ final func merge(with photo: Photo)
   //Merges <Syncronously> this PhotoFolder MO with other Photo MO in one PhotoFolder MO creating one in the current MOC!
  {
   guard let context = self.managedObjectContext else
@@ -200,7 +204,7 @@ extension PhotoFolder //managed object extension
   self.photoSnippet?.currentFRC?.deactivateDelegate()
   
   context.persistAndWait(block:       //make changes in context sync
-   {
+  {
     newFolder = PhotoFolder(context: context)
     newFolder?.id = newFolderID
     newFolder?.photoSnippet = snippet
@@ -219,7 +223,8 @@ extension PhotoFolder //managed object extension
     return
    }
    
-   PhotoFolderItem.createNewPhotoFolderOnDisk(at: newFolder!.url)
+   guard let newFolderURL = newFolder!.url else { return }
+   PhotoFolderItem.createNewPhotoFolderOnDisk(at: newFolderURL)
    
    self.refolder(to: newFolder!)
    photo.folder(to: newFolder!)

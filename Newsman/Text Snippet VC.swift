@@ -6,6 +6,13 @@ import CoreData
 class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, SnippetsRepresentable
 {
  
+ lazy var moc: NSManagedObjectContext =
+ {
+  let appDelegate = UIApplication.shared.delegate as! AppDelegate
+  let moc = appDelegate.viewContext
+  return moc
+ }()
+ 
  @IBOutlet var saveTextButton: UIBarButtonItem!
  @IBOutlet var clearTextButton: UIBarButtonItem!
  @IBOutlet var textView: UITextView!
@@ -61,7 +68,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
   {
    self.textSnippet.text = self.textView.text
    self.textSnippet.snippetName = self.textSnippetTitle.text ?? ""
-  }
+  } as Void?
   
  }
  
@@ -128,7 +135,24 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
   updateDateLabel()
  }
  
+ #if swift(>=5.1)
  
+ //new segue processing style as of iOS 13 SDK
+ 
+ @IBSegueAction func datePickerShow(coder: NSCoder, sender: Any?, segueIdentifier: String?) -> UIViewController?
+ {
+  DatePickerViewController(coder: coder, snippet: textSnippet)
+ }
+ 
+ @IBSegueAction func priorityPickerShow(coder: NSCoder, sender: Any?, segueIdentifier: String?) -> UIViewController?
+ {
+  PriorityPickerViewController(coder: coder, snippet: textSnippet)
+ }
+ 
+ #endif
+ 
+ 
+ #if swift(<5.1)
  override func prepare(for segue: UIStoryboardSegue, sender: Any?)
  {
   switch segue.identifier
@@ -140,6 +164,7 @@ class TextSnippetViewController: UIViewController, NCSnippetsScrollProtocol, Sni
    default: break
   }
  }
+ #endif
  
  
  func createKeyBoardToolBar() -> UIToolbar

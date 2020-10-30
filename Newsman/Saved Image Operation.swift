@@ -23,12 +23,12 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  
  private var cachedDepend: CachedImageOperation?
  {
-  return dependencies.compactMap{$0 as? CachedImageOperation  }.first
+  dependencies.compactMap{$0 as? CachedImageOperation  }.first
  }
  
- private var savedImageURL: URL?   {return contextDepend?.savedImageURL   }
- private var cachedImage: UIImage? {return cachedDepend?.cachedImage      }
- private var type: SnippetType?    {return contextDepend?.imageSnippetType}
+ private var savedImageURL: URL?   { contextDepend?.savedImageURL   }
+ private var cachedImage: UIImage? { cachedDepend?.cachedImage      }
+ private var type: SnippetType?    { contextDepend?.imageSnippetType}
  
  private var savedImage: UIImage?
  
@@ -38,21 +38,28 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  {
   super.init()
   
-  let cnxObserver = observe(\.isCancelled) {op, _ in op.removeAllDependencies()}
+  let cnxObserver = observe(\.isCancelled)
+  {op, _ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
   
   observers.insert(cnxObserver)
   
   let finishObserver = observe(\.isFinished)
   {op, _ in
    
-   op.removeAllDependencies()
+   
    
    DispatchQueue.main.async
    {
-     guard let curr_ind = PhotoItem.currSavedOperations.index(of: op) else {return}
+     op.removeAllDependencies()
+     op.observers.removeAll()
+    
+     guard let curr_ind = PhotoItem.currSavedOperations.firstIndex(of: op) else { return }
      PhotoItem.currSavedOperations.remove(at: curr_ind)
      
-     guard let prev_ind = PhotoItem.prevSavedOperations.index(of: op) else {return}
+     guard let prev_ind = PhotoItem.prevSavedOperations.firstIndex(of: op) else { return }
      PhotoItem.prevSavedOperations.remove(at: prev_ind)
    }
    
@@ -64,15 +71,15 @@ class SavedImageOperation: Operation, ResizeImageDataProvider
  
  override func main()
  {
-  if isCancelled {return} //if isCancelled is set to true no sence to continue!
+  if isCancelled { return } //if isCancelled is set to true no sence to continue!
   
-  guard let url = savedImageURL, type == .photo, cachedImage == nil, savedImage == nil else {return}
+  guard let url = savedImageURL, type == .photo, cachedImage == nil, savedImage == nil else { return }
   
   do
   {
    let data = try Data(contentsOf: url)
    
-   if isCancelled {return} //if isCancelled is set to true no sence to retain big image loaded from disk!
+   if isCancelled { return } //if isCancelled is set to true no sence to retain big image loaded from disk!
    
    savedImage = UIImage(data: data)
   }

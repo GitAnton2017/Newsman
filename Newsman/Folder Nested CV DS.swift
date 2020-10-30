@@ -1,51 +1,56 @@
 
 import UIKit
-import Foundation
-import AVKit
 
 extension PhotoFolderCell:  UICollectionViewDataSource
 {
+ 
  var imageSize: CGFloat
  {
-  get
-  {
-   let width = frameSize
-   //print ("width =\(width)" )
-   let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
-   let leftInset = fl.sectionInset.left
-   let rightInset = fl.sectionInset.right
-   let space = fl.minimumInteritemSpacing
-   let size = (width - leftInset - rightInset - space * CGFloat(nphoto - 1)) / CGFloat(nphoto)
-   return trunc(size)
-  }
- }
+  let width = frameSize
+  let fl = photoCollectionView.collectionViewLayout as! UICollectionViewFlowLayout
+  let leftInset = fl.sectionInset.left
+  let rightInset = fl.sectionInset.right
+  let space = fl.minimumInteritemSpacing
+  let size = (width - leftInset - rightInset - space * CGFloat(nphoto - 1)) / CGFloat(nphoto)
+  return trunc(size)
+ }//var imageSize: CGFloat...
+ 
+ 
  
  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
  {
-  return photoItems.count
- }
+  return photoItems?.count ?? 0
+ }//func collectionView(_ collectionView: UICollectionView...
  
- func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+ 
+ final var cellCornerRadius: CGFloat { ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5))) }
+ 
+ func collectionView(_ collectionView: UICollectionView,
+                       cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
  {
   
   let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoFolderCollectionViewCell",
                                                 for: indexPath) as! PhotoFolderCollectionViewCell
   
-  let photoItem = photoItems[indexPath.row]
-  
+  guard indexPath.row < (photoItems?.count ?? 0) else { return cell }
+  guard let photoItem = photoItems?[indexPath.row] else { return cell }
   cell.hostedItem = photoItem
-  
   cell.owner = self
+  cell.photoSnippetVC = self.photoSnippetVC
+  cell.photoSnippet = self.photoSnippetVC?.photoSnippet
+  cell.cornerRadius = cellCornerRadius
   
-  cell.cornerRadius = ceil(7 * (1 - 1/exp(CGFloat(nphoto) / 5)))
+  if ( collectionView.hasActiveDrag || collectionView.hasActiveDrop ) {
+   collectionView.subviews.compactMap{ $0 as? PhotoFolderCollectionViewCell }
+    .filter{ $0 !== cell && $0.hostedItem === photoItem && $0.frame == cell.frame }
+    .forEach{ $0.removeFromSuperview() }
+  }
+  
   
   return cell
- }
+  
+ }//func collectionView(_ collectionView: UICollectionView...
  
- func photoItemIndexPath(photoItem: PhotoItem) -> IndexPath?
- {
-  guard let path = photoItems.enumerated().lazy.first(where: {$0.element.id == photoItem.id}) else {return nil}
-  return IndexPath(row: path.offset, section: 0)
- }
+
  
-}
+}//extension PhotoFolderCell

@@ -8,28 +8,38 @@ extension AppDelegate
  static let dragAutoCnxxDelay: Int = 1   // in seconds of DispatchTimeInterval underlying associted value
  
  static var globalDragItems = [Draggable]()
+ {
+  didSet
+  {
+   printAllDraggedItems()
+  }
+ }
  static var globalDropItems = [Draggable]()
  
  static var globalDragDropItems: [Draggable] { return globalDragItems + globalDropItems }
  
- static func clearAllDraggedItems()
- {
- 
-  print(#function)
- 
-  globalDragDropItems.forEach
-  {
-   $0.clear(with: (forDragAnimating: dragAnimStopDelay, forSelected: dragUnselectDelay))
-  }
- }
+// static func clearAllDraggedItems()
+// {
+// 
+//  print(#function)
+// 
+//  globalDragDropItems.forEach
+//  {
+//   $0.clear(with: (forDragAnimating: dragAnimStopDelay, forSelected: dragUnselectDelay))
+//  }
+// }
  
  
  static func printAllDraggedItems()
  {
-  globalDragItems.forEach
+  print("*************************************************************************************************")
+  print("<<< THE LIST OF GLOBAL DRAG & DROP ITEMS (\(globalDragItems.count))>>> ")
+  print("*************************************************************************************************")
+  globalDragItems.enumerated().forEach
   {
-   print("DRAG ITEM ID: \($0.id) DRAG SESSION: \(String(describing: $0.dragSession)) SELECTED:\($0.isSelected) ")
+   print("[\($0.0)] DRAGGED \($0.1) ID: [\($0.1.id?.uuidString ?? "NO ID")] DRAG SESSION: [\($0.1.dragSession?.debugDescription ?? "NO DRAG SESSION")]")
   }
+  print("*************************************************************************************************")
  }
  
  

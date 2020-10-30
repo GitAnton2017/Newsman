@@ -6,339 +6,316 @@ import UIKit
 import CoreData
 import GameplayKit
 import AVKit
-
+import protocol RxSwift.Disposable
+import Combine
 
 
 //MARK: ----------------- Single Photo Managed Object Wrapper Class ----------------
 
-class PhotoItem: NSObject, PhotoItemProtocol
+final class PhotoItem: NSObject, PhotoItemProtocol
 {
-    weak var zoomView: ZoomView?
+
+ deinit
+ {
+ //  print ("PhotoItem \(String(describing: id)) destroyed ", #function)
+  cancellAllStateSubscriptions()
+ }
  
-    override func isEqual(_ object: Any?) -> Bool
-    {
-     return self.photo === (object as? PhotoItem)?.photo
-    }
+ @Published final var hostingCollectionViewCell: PhotoSnippetCellProtocol?
  
-    override var hash: Int
+ final var hostingCollectionViewCellPublisher: AnyPublisher<PhotoSnippetCellProtocol?, Never>
+ {
+  $hostingCollectionViewCell.eraseToAnyPublisher()
+ }
+ 
+ //the CV cell that is currently displaying this PhotoItem visual content
+ 
+ @Published final var hostingZoomedCollectionViewCell: ZoomViewCollectionViewCell?
+ //the cell of ZoomView CV that is currently displaying this PhotoItem visual content of zoomed PhotoFolder
+ 
+ final var cellImageUpdateSubscription                   : AnyCancellable? 
+
+ final var cellRowPositionChangeSubscription             : AnyCancellable?
+ final var cellPriorityFlagChangeSubscription            : AnyCancellable?
+ 
+ final var cellDragProceedSubscription                   : AnyCancellable?
+ final var cellDragLocationSubscription                  : AnyCancellable?
+ final var cellDropProceedSubscription                   : AnyCancellable?
+ 
+ final var cellNewItemStateSubscription                  : AnyCancellable?
+ 
+ final var zoomedCellRowPositionChangeSubscription       : AnyCancellable?
+ final var zoomedCellPriorityFlagChangeSubscription      : AnyCancellable?
+ 
+ final var zoomedCellDragProceedSubscription             : AnyCancellable?
+ final var zoomedCellDropProceedSubscription             : AnyCancellable?
+ final var zoomedCellDragLocationSubscription            : AnyCancellable?
+ 
+ 
+ var isArrowMenuShowing: Bool
+ {
+  get { photo.isArrowMenuShowing }
+  set { photo.managedObjectContext?.perform { self.photo.isArrowMenuShowing = newValue } }
+ }
+ 
+ var arrowMenuTouchPoint: CGPoint
+ {
+  get { (photo.arrowMenuTouchPoint as? CGPoint) ?? .zero }
+  set
+  {
+   photo.managedObjectContext?.perform //NO SAVE CONTEXT
+   {
+    if CGRect(x: 0, y: 0, width: 1, height: 1).insetBy(dx: 0.1, dy: 0.1).contains(newValue)
     {
-     var hasher = Hasher()
-     hasher.combine(photo)
-     return hasher.finalize()
+     self.photo.arrowMenuTouchPoint = newValue as NSValue
+     self.photo.isArrowMenuShowing = true
     }
+   }
+  }
+ } //var arrowMenuTouchPoint: CGPoint...
+ 
+ final var arrowMenuPosition: CGPoint
+ {
+  get { (photo.arrowMenuPosition as? CGPoint) ?? CGPoint(x: 0.75, y: 0.75) }
+  set { photo.managedObjectContext?.perform{ self.photo.arrowMenuPosition = newValue as NSValue} }
+ }
+ 
+ final weak var zoomView: ZoomView?
+
+ override func isEqual(_ object: Any?) -> Bool
+ {
+  photo.objectID == (object as? PhotoItem)?.photo.objectID
+ }
+
+ override var hash: Int
+ {
+  var hasher = Hasher()
+  hasher.combine(photo)
+  return hasher.finalize()
+ }
+
+
+ func cancelImageOperations() { cQ?.cancelAllOperations() }
+
+ var dragAnimationCancelWorkItem: DispatchWorkItem?
+ // the strong ref to work item responsible for cancellation of self draggable visual state.
+
+ static let videoFormatFile = ".mov"
+
+ typealias ImagesCache = NSCache<NSString, UIImage>
+
+ static var imageCacheDict = SafeMap<Int, ImagesCache>()
+
+ static let queue =
+ { () -> OperationQueue in
+   let queue = OperationQueue()
+   queue.qualityOfService = .userInitiated
+   return queue
+ }()
+
+// lazy var cQ =
+// { () -> OperationQueue in
+//  let queue = OperationQueue()
+//  queue.qualityOfService = .userInitiated
+//  return queue
+// }()
+
+ weak var cQ: OperationQueue?
+ {
+  didSet { oldValue?.cancelAllOperations() }
+ }
+
+ static let uQueue =
+ { () -> OperationQueue in
+  let queue = OperationQueue()
+  queue.qualityOfService = .utility
+  //queue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
+  return queue
+ }()
+
+ static let sQueue =
+ { () -> OperationQueue in
+  let queue = OperationQueue()
+   queue.qualityOfService = .userInitiated
+   //queue.maxConcurrentOperationCount = 10
+   //queue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
+  return queue
+ }()
+
+ static var taskCount: Int = 0
+ static let MaxTask = 40
+ //static let cvTimeOut = 1.0
+
+
+
+ static let cv = NSCondition()
+ static let dsQueue = DispatchQueue(label: "Images i/o", qos: .userInitiated)
+ static let dsGroup = DispatchGroup()
+
+
+ class var docFolder: URL
+ {
+  return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+ }
+
+ weak var dragSession: UIDragSession?
+
+ static let photoItemUTI = "photoitem.newsman"
+
+ var photo: Photo //wrapped managed object of photo
+
+ var hostedManagedObject: NSManagedObject { return photo }
+ //getter for using in Draggable protocol to get wrapped MO
+
+ var photoManagedObject: PhotoItemManagedObjectProtocol { photo }
+
+ var date: Date { photo.date! as Date}
+
+ var photoSnippet: PhotoSnippet? { photo.photoSnippet }
+ //PhotoSnippet managed object which owns this photo.
+ //Photo maneged object must have a PhotoSnippet not to be NIL otherwise photo is assumed to be deleted from MOC!
+
+ var id:   UUID?        {  photo.id   }  //UUID of this photo which must be not NIL!
+ var type: SnippetType? {  photo.type }  //Snippet type of managed object which owns this photo.
+ var url:  URL?         {  photo.url  }  //Image of video data file url on disk...
+
+ var sectionIndex: Int     { photo.sectionIndex }
+ var rowPosition:  Int     { photo.rowPosition }
+ var sectionTitle: String? { photo.sectionTitle }
 
  
-    func cancelImageOperations()
-    {
-     cQ.cancelAllOperations()
-    }
+ enum PhotoMOKeys: CodingKey
+ {
+   case photoURL
+ }
  
-    var dragAnimationCancelWorkItem: DispatchWorkItem?
-    // the strong ref to work item responsible for cancellation of self draggable visual state.
- 
-    weak var hostingCollectionViewCell: PhotoSnippetCellProtocol?
-    //the CV cell that is currently displaying this PhotoItem visual content
- 
-    weak var hostingZoomedCollectionViewCell: ZoomViewCollectionViewCell?
-    //the cell of ZoomView CV that is currently displaying this PhotoItem visual content of zoomed PhotoFolder
- 
-    static let videoFormatFile = ".mov"
- 
-    typealias ImagesCache = NSCache<NSString, UIImage>
- 
-    static var imageCacheDict = SafeMap<Int, ImagesCache>()
- 
-    static let queue =
-    { () -> OperationQueue in
-      let queue = OperationQueue()
-      queue.qualityOfService = .userInitiated
-      return queue
-    }()
- 
-    lazy var cQ =
-    { () -> OperationQueue in
-     let queue = OperationQueue()
-     queue.qualityOfService = .userInitiated
-     return queue
-    }()
- 
- 
-    static let uQueue =
-    { () -> OperationQueue in
-     let queue = OperationQueue()
-     queue.qualityOfService = .utility
-     //queue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
-     return queue
-    }()
- 
-    static let sQueue =
-    { () -> OperationQueue in
-     let queue = OperationQueue()
-      queue.qualityOfService = .userInitiated
-      //queue.maxConcurrentOperationCount = 10
-      //queue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
-     return queue
-    }()
-
-    static var taskCount: Int = 0
-    static let MaxTask = 40
-    //static let cvTimeOut = 1.0
- 
+ func encode(to encoder: Encoder) throws
+ {
+     var cont = encoder.container(keyedBy: PhotoMOKeys.self)
+     try cont.encode(url, forKey: .photoURL)
+  
+ }
 
  
-    static let cv = NSCondition()
-    static let dsQueue = DispatchQueue(label: "Images i/o", qos: .userInitiated)
-    static let dsGroup = DispatchGroup()
- 
- 
-    class var docFolder: URL {return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!}
- 
-    weak var dragSession: UIDragSession?
- 
-    static let photoItemUTI = "photoitem.newsman"
+ init(photo : Photo)
+ {
+  self.photo = photo
+  super.init()
+  configueAllStateSubscriptions()
+  
+ }
 
-    var photo: Photo //wrapped managed object of photo
- 
-    var hostedManagedObject: NSManagedObject {return photo}
-    //getter for using in Draggable protocol to get wrapped MO
- 
-    var date: Date {return self.photo.date! as Date}
- 
-    var photoSnippet: PhotoSnippet {return self.photo.photoSnippet!}
-    //PhotoSnippet managed object which owns this photo.
-    //Photo maneged object must have a PhotoSnippet not to be NIL otherwise photo is assumed to be deleted from MOC!
- 
-    var id:   UUID        {return self.photo.id!  }  //UUID of this photo which must be not NIL!
-    var type: SnippetType {return self.photo.type }  //Snippet type of managed object which owns this photo.
-    var url:  URL         {return self.photo.url  }  //Image of video data file url on disk...
- 
- 
-
-    var priorityFlag: String?
-    {
-       get {return photo.priorityFlag}
-       set {self.photo.priorityFlag = newValue}
-    }
-    
-    var priority: Int
-    {
-     get {return photo.priorityIndex}
-    }
- 
-    var position: Int16
-    {
-       get {return self.photo.position}
-       set {self.photo.position = newValue}
-    }
-    
- 
-    
-    enum PhotoMOKeys: CodingKey
-    {
-        case photoURL
-    }
-    
-    func encode(to encoder: Encoder) throws
-    {
-        var cont = encoder.container(keyedBy: PhotoMOKeys.self)
-        try cont.encode(url, forKey: .photoURL)
-        
-    }
-
-    
-    init(photo : Photo)
-    {
-      self.photo = photo
-      super.init()
-    }
- 
-    convenience required init(from decoder: Decoder) throws
-    {
-        let cont = try decoder.container(keyedBy: PhotoMOKeys.self)
-        let newPhotoURL = try cont.decode(UUID.self, forKey: .photoURL)
-        print (newPhotoURL)
-        
-        var newPhoto: Photo!
-        
-        PhotoItem.MOC.performAndWait
-        {
-            newPhoto = Photo(context: PhotoItem.MOC)
-            newPhoto.date = Date() as NSDate
-            newPhoto.isSelected = false
-            newPhoto.id = UUID()
-        }
-        
-        self.init(photo: newPhoto)
-     
-    }
- 
-    static let createNewItemQueue = DispatchQueue(label: "createNewItemQueue", qos: .utility, attributes: .concurrent)
- 
-    class func createNewPhoto (in photoSnippet: PhotoSnippet,
-                               with image: UIImage,
-                               ofRequiredSize cachedImageWidth: CGFloat,
-                               completion: @escaping (_ newPhotoItem: PhotoItem?) -> Void)
-    {
-     createNewItemQueue.async
+ convenience required init(from decoder: Decoder) throws
+ {
+     let cont = try decoder.container(keyedBy: PhotoMOKeys.self)
+     let newPhotoURL = try cont.decode(UUID.self, forKey: .photoURL)
+     print (newPhotoURL)
+  
+     var newPhoto: Photo!
+  
+     PhotoItem.MOC.performAndWait
      {
-      do
-      {
-       if let data = UIImageJPEGRepresentation(image, 0.95)
-       {
-        let newPhotoID = UUID()
-        let newPhotoURL = docFolder.appendingPathComponent(photoSnippet.id!.uuidString)
-                                   .appendingPathComponent(newPhotoID.uuidString)
-        
-        try data.write(to: newPhotoURL, options: [.atomic])
-        print ("JPEG IMAGE OF SIZE \(data.count) bytes SAVED SUCCESSFULLY AT PATH:\n\(newPhotoURL.path)")
-        
-        cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
-        
-        DispatchQueue.main.async
-        {
-         var newPhotoItem: PhotoItem? = nil
-         PhotoItem.MOC.persist(block:
-         {
-          let newPhoto = Photo(context: PhotoItem.MOC)
-          newPhoto.date = Date() as NSDate
-          newPhoto.photoSnippet = photoSnippet
-          newPhoto.isSelected = false
-          newPhoto.id = newPhotoID
-          newPhoto.position = Int16(photoSnippet.unfolderedPhotos.count + photoSnippet.allFolders.count)
-          photoSnippet.addToPhotos(newPhoto)
-          newPhotoItem = PhotoItem(photo: newPhoto)
-         }, completion:
-         {success in
-          if success
-          {
-           DispatchQueue.main.async {completion(newPhotoItem)}
-          }
-          else
-          {
-           deletePhotoItemFromDisk(at: newPhotoURL)
-           DispatchQueue.main.async {completion(nil)}
-          }
-         })
-        }
-       
-        
-       }
-       else
-       {
-         print ("UNABLE TO CREATE JPEG/PNG DATA FROM PICKED IMAGE")
-         DispatchQueue.main.async {completion(nil)}
-      
-       }
-      }
-      catch
-      {
-       print ("JPEG/PNG DATA FILE WRITE ERROR: \(error.localizedDescription)")
-       DispatchQueue.main.async {completion(nil)}
-      }
-      
+         newPhoto = Photo(context: PhotoItem.MOC)
+         newPhoto.date = Date() as NSDate
+         newPhoto.isSelected = false
+         newPhoto.id = UUID()
      }
-     
-    }
- 
-    class func createNewVideo (in photoSnippet: PhotoSnippet,
-                               from videoURL: URL,
-                               withPreviewSize previewImageWidth: CGFloat,
-                               using newVideoID: UUID,
-                               completion: @escaping (_ newVideoItem: PhotoItem?) -> Void)
-    {
-     
-    }
- 
-    convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat, newVideoID: UUID? = nil)
-    {
-      var newPhoto: Photo!
-      let newPhotoID = newVideoID ?? UUID()
-     
-      PhotoItem.cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
-        
-      PhotoItem.MOC.persistAndWait
-      {
-       newPhoto = Photo(context: PhotoItem.MOC)
-       newPhoto.date = Date() as NSDate
-       newPhoto.photoSnippet = photoSnippet
-       newPhoto.isSelected = false
-       newPhoto.id = newPhotoID
-       let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
-       newPhoto.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
-       photoSnippet.addToPhotos(newPhoto)
-      }
-        
-      self.init(photo: newPhoto)
-     
+  
+     self.init(photo: newPhoto)
+  
+ }
 
-      if (newVideoID == nil && SnippetType(rawValue: photoSnippet.type!)! == .photo)
-      {
-         do
-         {
-          if let data = UIImagePNGRepresentation(image)
-          {
-           try data.write(to: self.url, options: [.atomic])
-           print ("JPEG IMAGE OF SIZE \(data.count) bytes SAVED SUCCESSFULLY AT PATH:\n\(self.url.path)")
-          }
-         }
-         catch
-         {
-          print ("JPEG WRITE ERROR: \(error.localizedDescription)")
-         }
-       }
 
-    }
- 
-    class func renderVideoPreview (for videoURL: URL) -> UIImage?
-    {
+ convenience init(photoSnippet: PhotoSnippet, image: UIImage, cachedImageWidth: CGFloat, newVideoID: UUID? = nil)
+ {
+   var newPhoto: Photo!
+   let newPhotoID = newVideoID ?? UUID()
+  
+   PhotoItem.cacheThumbnailImage(imageID: newPhotoID.uuidString, image: image, width: Int(cachedImageWidth))
+  
+   PhotoItem.MOC.persistAndWait
+   {
+    newPhoto = Photo(context: PhotoItem.MOC)
+    newPhoto.date = Date() as NSDate
+    newPhoto.photoSnippet = photoSnippet
+    newPhoto.isSelected = false
+    newPhoto.id = newPhotoID
+    let unfolderedPhotos = (photoSnippet.photos?.allObjects as? [Photo])?.filter({$0.folder == nil})
+    newPhoto.position = Int16(unfolderedPhotos?.count ?? 0) + Int16(photoSnippet.folders?.count ?? 0)
+    photoSnippet.addToPhotos(newPhoto)
+   }
+  
+   self.init(photo: newPhoto)
+  
+
+   if (newVideoID == nil && SnippetType(rawValue: photoSnippet.type!)! == .photo)
+   {
      do
      {
-      let asset = AVURLAsset(url: videoURL, options: nil)
-      let imgGenerator = AVAssetImageGenerator(asset: asset)
-      imgGenerator.appliesPreferredTrackTransform = true
-      let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
-      let thumbnail = UIImage(cgImage: cgImage)
-      return thumbnail
-      
+      if let data = image.pngData(), let photoURL = self.url
+      {
+       try data.write(to: photoURL, options: [.atomic])
+       print ("JPEG IMAGE OF SIZE \(data.count) bytes SAVED SUCCESSFULLY AT PATH:\n\(photoURL.path)")
+      }
      }
-     catch let error
+     catch
      {
-      print("**** Error generating thumbnail from video at URL:\n \"\(videoURL.path)\"\n\(error.localizedDescription)")
-      return nil
+      print ("JPEG WRITE ERROR: \(error.localizedDescription)")
      }
-    }
- 
+   }
 
- 
-   @discardableResult class func cacheThumbnailImage(imageID: String , image: UIImage, width: Int) -> UIImage?
-   {
-     if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
-     {
-     
-      if let cache = imageCacheDict[width]
-      {
-       cache.setObject(resizedImage, forKey: imageID as NSString)
-       //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
-      }
-      else
-      {
-       let newImagesCache = ImagesCache()
-       newImagesCache.name = "(\(width) x \(width))"
-       newImagesCache.setObject(resizedImage, forKey: imageID as NSString)
-       imageCacheDict[width] = newImagesCache
-       
-       //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
-      }
-     
-      return resizedImage
+ }
+
+ class func renderVideoPreview (for videoURL: URL) -> UIImage?
+ {
+  do
+  {
+   let asset = AVURLAsset(url: videoURL, options: nil)
+   let imgGenerator = AVAssetImageGenerator(asset: asset)
+   imgGenerator.appliesPreferredTrackTransform = true
+   let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
+   let thumbnail = UIImage(cgImage: cgImage)
+   return thumbnail
    
-     }
-     else
-     {
-      print("IMAGE PROCESSING ERROR!!!!!!!")
-      return nil
-     }
-    }
+  }
+  catch let error
+  {
+   print("**** Error generating thumbnail from video at URL:\n \"\(videoURL.path)\"\n\(error.localizedDescription)")
+   return nil
+  }
+ }
+
+
+
+@discardableResult class func cacheThumbnailImage(imageID: String , image: UIImage, width: Int) -> UIImage?
+{
+  if let resizedImage = image.resized(withPercentage: CGFloat(width)/image.size.width)
+  {
+  
+   if let cache = imageCacheDict[width]
+   {
+    cache.setObject(resizedImage, forKey: imageID as NSString)
+    //print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name). SIZE\(res_img.size)"
+   }
+   else
+   {
+    let newImagesCache = ImagesCache()
+    newImagesCache.name = "(\(width) x \(width))"
+    newImagesCache.setObject(resizedImage, forKey: imageID as NSString)
+    imageCacheDict[width] = newImagesCache
+    
+    //print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE. SIZE\(res_img.size)")
+   }
+  
+   return resizedImage
+
+  }
+  else
+  {
+   print("IMAGE PROCESSING ERROR!!!!!!!")
+   return nil
+  }
+ }
  
  
  class func cacheThumbnailImage(imageID: String , image: UIImage,  width: Int,
@@ -591,9 +568,9 @@ class PhotoItem: NSObject, PhotoItemProtocol
     return
    }
    
-   let photoID = self.id
-   let photoURL = self.url
-   let type = self.type
+   guard let photoID = self.id else { return }
+   guard let photoURL = self.url else { return }
+   guard let type = self.type else { return }
     
    PhotoItem.getCachedImage(with: photoID , requiredImageWidth: requiredImageWidth, with: context, queue: queue)
    {image in
@@ -641,17 +618,6 @@ class PhotoItem: NSObject, PhotoItemProtocol
  
 //MARK: -
  
-/***************************************************************************************************************/
-func deleteImages()
-/***************************************************************************************************************/
-{
-  PhotoItem.imageCacheDict.forEach{ $0.value.removeObject(forKey: self.id.uuidString as NSString) }
-  self.removeFromDrags() //remove from [Draggables]
-  PhotoItem.deletePhotoItemFromDisk(at: url)
-  PhotoItem.MOC.delete(self.photo)
- 
-//  PhotoItem.MOC.persistAndWait {[weak self] in PhotoItem.MOC.delete(self!.photo)}
-}
 /***************************************************************************************************************/
  @discardableResult class func deletePhotoItemFromDisk (at url: URL) -> Bool
 /***************************************************************************************************************/
@@ -734,432 +700,6 @@ func deleteImages()
   }
  }
  /***************************************************************************************************************/
- 
- //MARK: -
- 
-/***************************************************************************************************************/
-@discardableResult class func movePhotos (from sourcePhotoSnippet: PhotoSnippet,
-                                          to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]
-/***************************************************************************************************************/
-{
- guard sourcePhotoSnippet !== destPhotoSnippet else {return []}
- 
- let sourceSelectedPhotos = sourcePhotoSnippet.unfolderedSelectedPhotos
- 
- guard sourceSelectedPhotos.count > 0 else {return []}
- 
- let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
- let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
- let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
- 
- sourceSelectedPhotos.forEach
- {
-   let fileName = $0.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
-   let sourcePhotoURL = sourceSnippetURL.appendingPathComponent(fileName)
-   let destPhotoURL   =   destSnippetURL.appendingPathComponent(fileName)
-  
-   movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
- }
- 
- MOC.persistAndWait
- {
-  sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
-  destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
- }
- 
- return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
- 
-}
-/***************************************************************************************************************/
-    
-//MARK: -
-
-/***************************************************************************************************************/
-@discardableResult class func unfolderPhotos (from sourcePhotoSnippet: PhotoSnippet,
-                                              to destPhotoSnippet: PhotoSnippet) -> [PhotoItem]
- /***************************************************************************************************************/
-{
- let sourceSelectedPhotos = sourcePhotoSnippet.folderedSelectedPhotos.filter{!$0.folder!.isSelected}
- 
- guard sourceSelectedPhotos.count > 0 else {return []}
- 
- MOC.persistAndWait
- {
-  let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
-  let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
-  let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
- 
-  var nextPhotoFlag = false
-  
-  for photo in sourceSelectedPhotos
-  {
-   photo.isSelected = false //!!!!!!!!!
-   
-   if (nextPhotoFlag) {nextPhotoFlag = false; continue}
-   
-   guard let photoFolder = photo.folder else
-   {
-    print("ERROR: Unable to unfolder photo! Photo has no folder in MOC")
-    continue
-   }
-   
-   let fileName = photo.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
-   let sourceFolderURL = sourceSnippetURL.appendingPathComponent(photoFolder.id!.uuidString)
-   let sourcePhotoURL = sourceFolderURL.appendingPathComponent(fileName)
-   let destPhotoURL  = destSnippetURL.appendingPathComponent(fileName)
-   
-   movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
-  
-   if let content = try? FileManager.default.contentsOfDirectory(atPath: sourceFolderURL.path), content.count == 1
-   {
-    let singleFileSourceURL = sourceFolderURL.appendingPathComponent(content.first!)
-    let singleFileDestinURL = sourceSnippetURL.appendingPathComponent(content.first!)
-    
-    movePhotoItemOnDisk(from: singleFileSourceURL, to: singleFileDestinURL)
-    
-    if let singlePhoto = (photo.folder?.photos?.allObjects as? [Photo])?.first(where:
-      {$0.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "") == content.first!})
-    {
-      photo.folder!.removeFromPhotos(singlePhoto)
-      deletePhotoItemFromDisk(at: sourceFolderURL)
-     
-      if (singlePhoto.isSelected) {nextPhotoFlag = true}
-     
-    }
-    else
-    {
-      print("ERROR: No single photo to remove from folder in MOC")
-    }
-   }
-  
-   photo.folder!.removeFromPhotos(photo)
-  
-  }
- 
-
-  if (sourcePhotoSnippet !== destPhotoSnippet)
-  {
-   sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
-   destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
-  }
-  
-  
-  sourcePhotoSnippet.removeEmptyFolders()
-  
- } //MOC.persistAndWait...{}
-  
- return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
- 
-}
-/***************************************************************************************************************/
-
-//MARK: -
- 
-/***************************************************************************************************************/
- @discardableResult class func movePhotos (from sourcePhotoSnippet: PhotoSnippet,
-                                           to destPhotoSnippetFolder: PhotoFolder) -> [PhotoItem]?
-/***************************************************************************************************************/
- {
-  let sourceSelectedPhotos = sourcePhotoSnippet.unfolderedSelectedPhotos
-  
-  guard sourceSelectedPhotos.count > 0 else {return []}
-  
-  MOC.persistAndWait
-  {
-   let destPhotoSnippet = destPhotoSnippetFolder.photoSnippet!
-   let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
-   let destSnippetURL = docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
-   let destFolderURL = destSnippetURL.appendingPathComponent(destPhotoSnippetFolder.id!.uuidString)
-   let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
-  
-   sourceSelectedPhotos.forEach
-   {photo in
-    photo.isSelected = false //!!!!!!!!!!!!
-    let fileName = photo.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
-    let sourcePhotoURL = sourceSnippetURL.appendingPathComponent(fileName)
-    let destPhotoURL   =   destFolderURL.appendingPathComponent(fileName)
-    movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
-   }
- 
-   if (sourcePhotoSnippet !== destPhotoSnippet)
-   {
-    sourcePhotoSnippet.removeFromPhotos(NSSet(array: sourceSelectedPhotos))
-    destPhotoSnippetFolder.addToPhotos(NSSet(array: sourceSelectedPhotos))
-    destPhotoSnippet.addToPhotos(NSSet(array: sourceSelectedPhotos))
-   }
-   else
-   {
-    destPhotoSnippetFolder.addToPhotos(NSSet(array: sourceSelectedPhotos))
-   }
-  }
- 
-  return sourceSelectedPhotos.map{PhotoItem(photo: $0)}
-    
-  
- }
- 
-/***************************************************************************************************************/
- 
-//MARK: -
-
-/***************************************************************************************************************/
-@discardableResult class func moveFolders (from sourcePhotoSnippet: PhotoSnippet,
-                                           to destPhotoSnippet: PhotoSnippet) -> [PhotoFolderItem]
-/***************************************************************************************************************/
-{
-  guard sourcePhotoSnippet !== destPhotoSnippet else {return []}
- 
-  let sourceSelectedFolders = sourcePhotoSnippet.selectedFolders
- 
-  guard sourceSelectedFolders.count > 0 else {return []}
- 
-  let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
-  let destSnippetURL =   docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
-
-  sourceSelectedFolders.forEach
-  {
-   let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
-   let destPhotoFolderURL   =   destSnippetURL.appendingPathComponent($0.id!.uuidString)
-   movePhotoItemOnDisk(from: sourcePhotoFolderURL, to: destPhotoFolderURL)
-  }
-
-  MOC.persistAndWait
-  {
-   sourcePhotoSnippet.removeFromFolders(NSSet(array: sourceSelectedFolders))
-   sourceSelectedFolders.forEach
-   {folder in
-    folder.isSelected = false //!!!!!!!!!!!!
-    if let folderPhotos = folder.photos?.allObjects as? [Photo]
-    {
-     sourcePhotoSnippet.removeFromPhotos(NSSet(array: folderPhotos))
-     destPhotoSnippet.addToPhotos(NSSet(array: folderPhotos))
-     folderPhotos.forEach{$0.isSelected = false} //!!!!!!!!!!!!
-    }
-   }
-   destPhotoSnippet.addToFolders(NSSet(array: sourceSelectedFolders))
-  }
-
-  return sourceSelectedFolders.map{PhotoFolderItem(folder: $0)}
-      
-
-}
-/***************************************************************************************************************/
-                
- //MARK: -
-                
-/***************************************************************************************************************/
-@discardableResult class func moveFolders (from sourcePhotoSnippet: PhotoSnippet,
-                                           to destPhotoSnippetFolder: PhotoFolder) -> [PhotoItem]
-/***************************************************************************************************************/
-{
-  let sourceSelectedFolders = sourcePhotoSnippet.selectedFolders
- 
-  guard sourceSelectedFolders.count > 0 else {return []}
- 
-  let allPhotos = sourceSelectedFolders.reduce([])
-  { (result, folder) -> [Photo] in
-   if let photos = folder.photos?.allObjects as? [Photo]
-   {
-    return result + photos
-   }
-   else
-   {
-    return result
-   }
-  }
-  let type = SnippetType(rawValue: sourcePhotoSnippet.type!)!
-  let destPhotoSnippet = destPhotoSnippetFolder.photoSnippet!
-  let sourceSnippetURL = docFolder.appendingPathComponent(sourcePhotoSnippet.id!.uuidString)
-  let destSnippetURL =  docFolder.appendingPathComponent(destPhotoSnippet.id!.uuidString)
-  let destFolderURL = destSnippetURL.appendingPathComponent(destPhotoSnippetFolder.id!.uuidString)
-  
-  allPhotos.forEach
-  {
-   let fileName = $0.id!.uuidString + (type == .video ? PhotoItem.videoFormatFile : "")
-   let sourcePhotoFolderURL = sourceSnippetURL.appendingPathComponent($0.folder!.id!.uuidString)
-   let sourcePhotoURL = sourcePhotoFolderURL.appendingPathComponent(fileName)
-   let destPhotoURL   =  destFolderURL.appendingPathComponent(fileName)
-   movePhotoItemOnDisk(from: sourcePhotoURL, to: destPhotoURL)
-   }
-  
-   sourceSelectedFolders.forEach
-   {
-    let url = sourceSnippetURL.appendingPathComponent($0.id!.uuidString)
-    deletePhotoItemFromDisk(at: url)
-   }
-  
-   MOC.persistAndWait
-   {
-    if (sourcePhotoSnippet !== destPhotoSnippet)
-    {
-     sourcePhotoSnippet.removeFromPhotos(NSSet(array: allPhotos))
-     destPhotoSnippetFolder.addToPhotos(NSSet(array: allPhotos))
-     destPhotoSnippet.addToPhotos(NSSet(array: allPhotos))
-    }
-    else
-    {
-     destPhotoSnippetFolder.addToPhotos(NSSet(array: allPhotos))
-    }
-    
-    sourceSelectedFolders.forEach
-    {folder in
-      if let folderPhotos = folder.photos?.allObjects as? [Photo]
-      {
-       folder.removeFromPhotos(NSSet(array: folderPhotos))
-      }
-     
-      MOC.delete(folder)
-    }
- 
-   }
-  
-   return allPhotos.map{PhotoItem(photo: $0)}
-   
-       
-}
- 
- 
-class func deselectSelectedItems (at sourcePhotoSnippet: PhotoSnippet)
-{
-  if let sourceSelectedPhotos = (sourcePhotoSnippet.photos?.allObjects as? [Photo])?.filter({$0.isSelected})
-  {
-   sourceSelectedPhotos.forEach {$0.isSelected = false}
-  }
-  
-  if let sourceSelectedFolders = (sourcePhotoSnippet.folders?.allObjects as? [PhotoFolder])?.filter({$0.isSelected})
-  {
-   sourceSelectedFolders.forEach {$0.isSelected = false}
-  }
-}
-
-
-
-class func getRandomImages3(for photoSnippet: PhotoSnippet, number: Int,
-                             requiredImageWidth: CGFloat,
-                             loadContext: ImageContextLoadProtocol? = nil,
-                             completion: @escaping ([UIImage]?) -> Void)
-{
- if loadContext?.isLoadTaskCancelled ?? false
- {
-  print ("Aborted getRandomImages3")
-  return
- }
-     appDelegate.persistentContainer.performBackgroundTask
-     {context in
-      
-        if loadContext?.isLoadTaskCancelled ?? false
-        {
-         print ("Aborted getRandomImages3 from BackgroundTask")
-         return
-        }
-      
-        let request: NSFetchRequest<Photo> = Photo.fetchRequest()
-        let sort = NSSortDescriptor(key: #keyPath(Photo.date), ascending: true)
-        let pred = NSPredicate(format: "%K = %@", #keyPath(Photo.photoSnippet), photoSnippet)
-        request.predicate = pred
-        request.sortDescriptors = [sort]
-        request.returnsObjectsAsFaults = false
-      
-        do
-        {
-            let photos = try context.fetch(request)
-         
-            guard photos.count > 1 else {return}
-         
-            var photoItems: [PhotoItem]
-            if (number >= photos.count)
-            {
-                photoItems = photos.map{PhotoItem(photo: $0)}
-            }
-            else
-            {
-                var indexSet = Set<Int>()
-                let arc4rnd = GKRandomDistribution(lowestValue: 0, highestValue: photos.count - 1)
-                while (indexSet.count < number) {indexSet.insert(arc4rnd.nextInt())}
-                photoItems = photos.enumerated().filter{indexSet.contains($0.offset)}.map{PhotoItem(photo: $0.element)}
-            }
-         
-//            if var ctx = loadContext {ctx.photoItems = photoItems}
-         
-            var imageSet = [UIImage]()
-         
-            //photoItems.forEach
-            for photoItem in photoItems
-            {/*photoItem in*/
-             
-              cv.lock()
-              let deadline = Date() + 2.5
-              while (taskCount >= MaxTask)
-              {
-               cv.unlock()
-               if loadContext?.isLoadTaskCancelled ?? false
-               {
-                print ("Aborted from  WAIT...")
-               // DispatchQueue.main.async{completion(nil)}
-                return
-               }
-               cv.lock()
-
-               //print ("TASK timed out Task Count \(taskCount)")
-               let flag = cv.wait(until: deadline)
-               if !flag {print ("TASK timed out Expired!!!")}
-              }
-
-              taskCount += 1
-
-              cv.unlock()
-
-             if loadContext?.isLoadTaskCancelled ?? false
-             {
-              print ("Aborted after WAIT...")
-              //DispatchQueue.main.async{completion(nil)}
-              return
-             }
-           
-             dsGroup.enter()
-             photoItem.getImageOperation(requiredImageWidth: requiredImageWidth/*, context: loadContext, queue: uQueue*/)
-             { (image) in
-              
-                 cv.lock()
-                 taskCount -= 1
-                 //print ("TASK finished Task Count \(taskCount)")
-                 if taskCount < MaxTask {cv.broadcast()}
-                 cv.unlock()
-              
-                 _ = context
-                 if let img = image {imageSet.append(img)}
-                 dsGroup.leave()
-             }
-             
-            
-            
-            }
-         
-            dsGroup.notify(queue: DispatchQueue.main)
-            {
-                print("PHOTO SNIPPET IMAGE SET LOADED: \"\(photoSnippet.snippetName)\",  COUNT - \(imageSet.count)" )
-                if imageSet.count < photoItems.count
-                {
-                 print ("Aborted in NOTIFY GROUP ...")
-                 return
-                }
-             
-                completion(imageSet)
-             
-            }
-         
-        }
-        catch
-        {
-            let e = error as NSError
-            print ("Unresolved error \(e) \(e.userInfo)")
-            DispatchQueue.main.async{completion(nil)}
-         
-        }
-      
-      
-     }
- }
 }
 
 //MARK: -

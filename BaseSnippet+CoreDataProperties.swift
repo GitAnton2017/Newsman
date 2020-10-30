@@ -19,6 +19,7 @@ extension BaseSnippet
  }
 
  @NSManaged var id: UUID?
+ // unique UUID ID of the snippets
  
  @NSManaged private var hiddenSection: Bool
  //Managed and persisted visibility (if hidden or not) state of associted cell in TV.
@@ -31,6 +32,14 @@ extension BaseSnippet
  
  @NSManaged var isDragAnimating: Bool
  //Managed and persisted visual drag & drop waggle animation state of associted cell in TV.
+ 
+ @NSManaged public var ck_metadata: NSData?
+ //Managed and persiste archived metadata of corresponding CKRecord in cloud DB after last save operation.
+ 
+ @NSManaged public var isClouded: Bool
+ //Managed and persisted state that indicates if the last MO changes are saved in cloud DB.
+ 
+
  
 
 }

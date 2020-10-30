@@ -8,13 +8,22 @@
 
 
 import UIKit
+import class RxSwift.DisposeBag
+import class Combine.AnyCancellable
+import struct Combine.AnyPublisher
 
-protocol PhotoSnippetCellProtocol: DragWaggleAnimatable
+protocol PhotoSnippetCellProtocol: DragWaggleAnimatable where Self: UICollectionViewCell
 {
+ 
+ var photoSnippetVC: PhotoSnippetViewController?        { get   set }
+ var photoSnippet: PhotoSnippet?                        { get   set }
+ 
  var isPhotoItemSelected: Bool                          { get set }
  
  var hostedItem: PhotoItemProtocol?                     { get set }
  //the generic model item (folder or photo) that will be displayed by the conformer...
+ 
+ var mainView: UIView!                                  { get }
  
  var hostedView: UIView                                 { get }
  
@@ -22,45 +31,65 @@ protocol PhotoSnippetCellProtocol: DragWaggleAnimatable
  
  var hostedViewSelectedAlpha: CGFloat                   { get }
  
- func refresh(with image: UIImage?)
+ func cleanup()
  
  func cancelImageOperations()
  
- func drawFlagMarker (flagColor: UIColor)
+ func drawFlagMarker (flagColor: UIColor?)
  func clearFlagMarker()
  func unsetFlagMarker()
+
  
+ func updateImage(_ animated: Bool)
+ 
+ func refreshFlagMarker()
+ 
+ var disposeBag: DisposeBag                             { get }
+ 
+ var cancellables: Set<AnyCancellable>                  { get set }
+ 
+ var arrowMenuView:    PointedMenuView?                 { get set }
+ 
+ func showArrowMenu(animated: Bool)
+ 
+ var arrowMenuSearchTag: UIAlertController?             { get set }
+ 
+}
+
+extension PhotoSnippetCellProtocol
+{
+ func configueInterfaceRotationSubscription()
+ {
+  guard let mainView = mainView as? PhotoSnippetCellMainView else { return }
+  photoSnippetVC?.$interfaceWillRotate.dropFirst().map{!$0}
+   .assign(to: \.animated, on: mainView.priorityFlagMarker)
+   .store(in: &cancellables)
+
+ }
 }
 
 extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
 {
- var waggleView: UIView { return contentView}
  
- func updateDraggableHostingCell()
-  /* when dragging photo items around the dragged items ([Draggables]) hosting cells (hostingCollectionViewCell weak item
-   property) may change due to cells updates in CVs (TVs) so we have to update references to the dragged animated cells to
-   animate post Drag & Drop activitity clearances with the proper cells in "Draggable.clear(...)" method! */
- {
-  AppDelegate.globalDragDropItems.compactMap{$0 as? PhotoItemProtocol}.first{$0 == hostedItem}?
-                                 .hostingCollectionViewCell = self
- }
+ 
+ var waggleView: UIView { mainView }
  
  var cornerRadius: CGFloat
  {
-  get {return contentView.layer.cornerRadius    }
-  set {contentView.layer.cornerRadius = newValue}
+  get { mainView.layer.cornerRadius            }
+  set { mainView.layer.cornerRadius = newValue }
  }
  
  
  func refreshSpring(completion: ((Bool) -> Void)? = nil)
  {
-  self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+  contentView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
   
-  UIView.animate(withDuration: 0.5, delay: 0,
-                 usingSpringWithDamping: 2500,
-                 initialSpringVelocity: 0,
+  UIView.animate(withDuration: 0.25, delay: 0,
+                 usingSpringWithDamping: 0.5,
+                 initialSpringVelocity: 10,
                  options: .curveEaseInOut,
-                 animations: { self.transform = .identity },
+                 animations: { [weak self] in self?.contentView.transform = .identity },
                  completion: completion)
  }
  
@@ -68,20 +97,23 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
  {
   
   //print (#function, self.description)
-  let animateDown = UIViewPropertyAnimator(duration: 0.1, dampingRatio: 0.95)
-  {
-   self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+  DispatchQueue.main.async { [ weak self ] in
+   guard let self = self else { return }
+   let animateDown = UIViewPropertyAnimator(duration: 0.1, dampingRatio: 0.95)
+   {
+    self.mainView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+   }
+   
+   let animateUp = UIViewPropertyAnimator(duration: 0.1, dampingRatio: 0.95)
+   {
+    self.mainView.transform = .identity
+    self.hostedView.alpha = self.isPhotoItemSelected ? self.hostedViewSelectedAlpha : 1
+   }
+   
+   animateUp  .addCompletion {_ in completion?()}
+   animateDown.addCompletion {_ in animateUp.startAnimation()}
+   animateDown.startAnimation()
   }
-  
-  let animateUp = UIViewPropertyAnimator(duration: 0.1, dampingRatio: 0.95)
-  {
-   self.transform = .identity
-   self.hostedView.alpha = self.isPhotoItemSelected ? self.hostedViewSelectedAlpha : 1
-  }
-  
-  animateUp  .addCompletion {_ in completion?()}
-  animateDown.addCompletion {_ in animateUp.startAnimation()}
-  animateDown.startAnimation()
  }
  
  
@@ -94,12 +126,19 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
   
  }
  
+ func setHighlighted(_ state: Bool )
+ {
+  guard arrowMenuView == nil else { return }
+  alpha = state ? 0.75 : 1.0
+  mainView.layer.borderWidth = state ? 2.0 : 1.0
+ }
+ 
  func imageRoundClip(cornerRadius: CGFloat)
  {
-  contentView.layer.cornerRadius = cornerRadius
-  contentView.layer.borderWidth = 1.0
-  contentView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
-  contentView.layer.masksToBounds = true
+  mainView.layer.cornerRadius = cornerRadius
+  mainView.layer.borderWidth = 1.0
+  mainView.layer.borderColor = UIColor(red: 236/255, green: 60/255, blue: 26/255, alpha: 1).cgColor
+  mainView.layer.masksToBounds = true
  }
  
 

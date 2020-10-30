@@ -8,13 +8,13 @@ extension TextSnippetViewController: UITextFieldDelegate
   self.navigationItem.title = sender.text
  }
  
- func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
+ func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason)
  {
   guard reason == .committed else { return }
   
   guard textField.text != textSnippet.snippetName else { return }
 
-  textSnippet.managedObjectContext?.persist
+  textSnippet.managedObjectContext?.perform
   {
    self.textSnippet.snippetName = textField.text ?? ""
   }

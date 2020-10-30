@@ -2,38 +2,36 @@
 import Foundation
 import UIKit
 
-class DatePickerViewController: UIViewController
+class DatePickerViewController: UIViewController, SegueActionSnipppetInitializable
 {
- 
-  var editedSnippet: BaseSnippet!
-  {
-   didSet { navigationItem.title = editedSnippet.snippetName }
-  }
-    
-  @IBOutlet var snippetDatePicker: UIDatePicker!
- 
-  @IBAction func dateChanged(_ sender: UIDatePicker, forEvent event: UIEvent)
-  {
-   guard sender.date != editedSnippet.snippetDate else { return }
+ var editedSnippet: BaseSnippet!
+ {
+  didSet { navigationItem.title = editedSnippet.snippetName }
+ }
    
-   editedSnippet.managedObjectContext?.persist
-   {
-     self.editedSnippet.snippetDate = sender.date
-   }
-  }
- 
-  override func viewDidLoad()
+ @IBOutlet var snippetDatePicker: UIDatePicker!
+
+ @IBAction func dateChanged(_ sender: UIDatePicker, forEvent event: UIEvent)
+ {
+  guard sender.date != editedSnippet.snippetDate else { return }
+  
+  editedSnippet.managedObjectContext?.perform
   {
-    super.viewDidLoad()
-    snippetDatePicker.maximumDate = Date()
-    snippetDatePicker.minimumDate = Date() - 24 * 60 * 60 * 10
+    self.editedSnippet.snippetDate = sender.date
   }
-    
-  override func viewWillAppear(_ animated: Bool)
-  {
-    super.viewWillAppear(animated)
-    snippetDatePicker.date = editedSnippet.snippetDate
-  }
-    
- 
+ }
+
+ override func viewDidLoad()
+ {
+   super.viewDidLoad()
+   snippetDatePicker.maximumDate = Date()
+   snippetDatePicker.minimumDate = Date() - 24 * 60 * 60 * 10
+ }
+   
+ override func viewWillAppear(_ animated: Bool)
+ {
+   super.viewWillAppear(animated)
+   snippetDatePicker.date = editedSnippet.snippetDate
+ }
+   
 }

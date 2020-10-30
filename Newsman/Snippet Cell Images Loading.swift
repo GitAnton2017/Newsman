@@ -22,7 +22,7 @@ extension SnippetsViewCell
   { [weak self] (images) in
    guard var images = images else {return}
    guard let cell = self else { return }
-   guard cell.hostedSnippet === snippet else { return }
+   guard cell.hostedSnippet?.objectID == snippet.objectID else { return }
    
    if let firstImage = image {images.insert(firstImage, at: 0)}
    
@@ -70,7 +70,7 @@ extension SnippetsViewCell
   snippet.imageProvider.getLatestImage(requiredImageWidth: imageSize!)
   {[weak self] (image) in
    guard let cell = self else { return }
-   guard cell.hostedSnippet === snippet else {return}
+   guard cell.hostedSnippet?.objectID == snippet.objectID else {return}
    
    cell.animateCellFistImage(firstImage: image, startDelay: .microseconds(200))
    {
@@ -89,11 +89,11 @@ extension SnippetsViewCell
   imageSpinner.startAnimating()
   
   snippet.imageProvider.getLatestImage(requiredImageWidth: newSize)
-  { [weak self] image in
+  {[weak self] image in
    guard image != nil else { return }
    guard let cell = self else { return }
    cell.imageSpinner.stopAnimating()
-   guard cell.hostedSnippet === snippet else { return }
+   guard cell.hostedSnippet?.objectID == snippet.objectID else { return }
    cell.animateCellRandomImages(size: newSize, firstLoadedImage: image, perImageDuration: 2, startDelay: 5)
   }
   

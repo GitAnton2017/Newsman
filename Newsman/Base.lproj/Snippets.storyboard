@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina5_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +18,7 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xB3-bS-U6A">
                                 <rect key="frame" x="0.0" y="686" width="414" height="50"/>
-                                <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="Newsman.red"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="6Lp-9g-sXg"/>
                                 </constraints>
@@ -34,13 +33,13 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="rbS-Qp-fEZ"/>
                                     <barButtonItem image="date.tab.icon" id="AGD-bw-tqw">
                                         <connections>
-                                            <segue destination="oAT-3i-m3u" kind="show" identifier="TextSnippetDatePicker" id="4xf-O6-s6P"/>
+                                            <segue destination="oAT-3i-m3u" kind="show" identifier="TextSnippetDatePicker" destinationCreationSelector="datePickerShowWithCoder:sender:segueIdentifier:" id="4xf-O6-s6P"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="WZ3-aq-l4k"/>
                                     <barButtonItem image="priority.tab.icon" id="TEj-ZP-OgE">
                                         <connections>
-                                            <segue destination="CgB-KJ-V9c" kind="show" identifier="TextSnippetPriorityPicker" id="U6G-5E-WPd"/>
+                                            <segue destination="CgB-KJ-V9c" kind="show" identifier="TextSnippetPriorityPicker" destinationCreationSelector="priorityPickerShowWithCoder:sender:segueIdentifier:" id="U6G-5E-WPd"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="2cx-8H-Qag"/>
@@ -52,14 +51,13 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="dVj-2e-Iay"/>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="barTintColor" red="0.92549019607843142" green="0.23529411764705882" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" name="Newsman.red"/>
                             </toolbar>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter your snippet title here..." borderStyle="roundedRect" minimumFontSize="1" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Yve-pF-Sgx">
-                                <rect key="frame" x="8" y="36" width="398" height="30"/>
+                                <rect key="frame" x="8" y="16" width="398" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="aEf-Bm-hoe"/>
                                 </constraints>
-                                <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                                 <connections>
@@ -67,14 +65,14 @@
                                 </connections>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EVW-0P-Phy">
-                                <rect key="frame" x="4" y="82" width="406" height="604"/>
+                                <rect key="frame" x="4" y="62" width="406" height="624"/>
                                 <color key="backgroundColor" red="1" green="0.93623086393478894" blue="0.92165692943164446" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="2" maxY="0.0"/>
                                 <attributedString key="attributedText">
                                     <fragment content="Enter your text snippet here!">
                                         <attributes>
                                             <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" size="20" name=".AppleSystemUIFont"/>
+                                            <font key="NSFont" metaFont="system" size="20"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" defaultTabInterval="4" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -82,7 +80,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" red="0.92549019607843142" green="0.23529411764705882" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="Newsman.red"/>
                         <constraints>
                             <constraint firstItem="R3s-1E-Gqc" firstAttribute="trailing" secondItem="EVW-0P-Phy" secondAttribute="trailing" constant="4" id="0Ra-Ql-mbL"/>
                             <constraint firstItem="R3s-1E-Gqc" firstAttribute="bottom" secondItem="EVW-0P-Phy" secondAttribute="bottom" constant="50" id="6G7-Cm-eOF"/>
@@ -141,7 +139,7 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LTL-WS-0Wd">
                                 <rect key="frame" x="0.0" y="686" width="414" height="50"/>
-                                <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="Newsman.red"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="uzc-xI-TUr"/>
                                 </constraints>
@@ -156,7 +154,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="2lM-tr-nRh"/>
                                     <barButtonItem image="date.tab.icon" id="YoK-vI-8El">
                                         <connections>
-                                            <segue destination="oAT-3i-m3u" kind="show" identifier="PhotoSnippetDatePicker" id="CdP-HO-XWj"/>
+                                            <segue destination="oAT-3i-m3u" kind="show" identifier="PhotoSnippetDatePicker" destinationCreationSelector="datePickerShowWithCoder:sender:segueIdentifier:" id="CdP-HO-XWj"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="SJr-zP-8Dc"/>
@@ -168,7 +166,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="3vW-Xm-8un"/>
                                     <barButtonItem image="priority.tab.icon" id="pLH-MV-lVe">
                                         <connections>
-                                            <segue destination="CgB-KJ-V9c" kind="show" identifier="PhotoSnippetPriorityPicker" id="yLx-ea-9QV"/>
+                                            <segue destination="CgB-KJ-V9c" kind="show" identifier="PhotoSnippetPriorityPicker" destinationCreationSelector="priorityPickerShowWithCoder:sender:segueIdentifier:" id="yLx-ea-9QV"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="AzR-KF-Luo"/>
@@ -177,17 +175,24 @@
                                             <action selector="editPhotosPress:" destination="8Mi-lh-6Iq" id="kaY-KQ-NUA"/>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="832-1R-rLO"/>
+                                    <barButtonItem title="Item" image="undo.manager.tab.icon" id="AnO-RC-s7R">
+                                        <connections>
+                                            <action selector="undoManagerPress:" destination="8Mi-lh-6Iq" id="3my-1w-woK"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="CXH-oD-Xqt"/>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" name="Newsman.red"/>
                             </toolbar>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Enter your snippet title here..." borderStyle="roundedRect" minimumFontSize="1" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="Pjr-4m-dEk">
-                                <rect key="frame" x="8" y="36" width="398" height="30"/>
+                                <rect key="frame" x="8" y="16" width="398" height="30"/>
+                                <color key="backgroundColor" red="0.87900000810623169" green="0.81553834851802531" blue="0.84672821305894874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="C7c-aZ-1Xk"/>
                                 </constraints>
-                                <nil key="textColor"/>
+                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="alert" smartDashesType="yes" smartInsertDeleteType="yes" smartQuotesType="yes"/>
                                 <connections>
@@ -195,106 +200,138 @@
                                 </connections>
                             </textField>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="fRa-jJ-dD6" customClass="PhotoSnippetCollectionView" customModule="Newsman">
-                                <rect key="frame" x="4" y="74" width="406" height="612"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" id="xIK-fT-b32">
+                                <rect key="frame" x="4" y="54" width="406" height="632"/>
+                                <color key="backgroundColor" red="1" green="0.95430239605314804" blue="0.92515924491774393" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" sectionInsetReference="safeArea" id="xIK-fT-b32">
                                     <size key="itemSize" width="100" height="100"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="2" minY="2" maxX="2" maxY="2"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoSnippetCell" id="pDB-24-B3G" customClass="PhotoSnippetCell" customModule="Newsman" customModuleProvider="target">
+                                    <collectionViewCell multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoSnippetCell" id="pDB-24-B3G" customClass="PhotoSnippetCell" customModule="Newsman" customModuleProvider="target">
                                         <rect key="frame" x="2" y="2" width="100" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="igW-oc-5iq" userLabel="Main View" customClass="PhotoSnippetCellMainView" customModule="Newsman" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                                    <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </imageView>
-                                                <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rcR-EZ-aT9">
-                                                    <rect key="frame" x="31.666666666666671" y="31.666666666666671" width="37" height="37"/>
-                                                    <color key="tintColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <color key="color" red="0.92549019610000005" green="0.23660613729999999" blue="0.1019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </activityIndicatorView>
+                                                    <subviews>
+                                                        <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ENq-06-ukX">
+                                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                        </imageView>
+                                                        <activityIndicatorView opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="rcR-EZ-aT9">
+                                                            <rect key="frame" x="40" y="40" width="20" height="20"/>
+                                                            <color key="color" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        </activityIndicatorView>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="ENq-06-ukX" firstAttribute="top" secondItem="igW-oc-5iq" secondAttribute="top" id="3Mb-LK-Dnf"/>
+                                                        <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerY" secondItem="igW-oc-5iq" secondAttribute="centerY" id="Ard-MD-tLD"/>
+                                                        <constraint firstAttribute="trailing" secondItem="ENq-06-ukX" secondAttribute="trailing" id="HQi-d7-lN6"/>
+                                                        <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerX" secondItem="igW-oc-5iq" secondAttribute="centerX" id="U0w-TR-8FN"/>
+                                                        <constraint firstItem="ENq-06-ukX" firstAttribute="leading" secondItem="igW-oc-5iq" secondAttribute="leading" id="Vix-6R-80B"/>
+                                                        <constraint firstAttribute="bottom" secondItem="ENq-06-ukX" secondAttribute="bottom" id="lNs-X9-Nmh"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="ENq-06-ukX" firstAttribute="leading" secondItem="pDB-24-B3G" secondAttribute="leading" id="DiH-EU-eHs"/>
-                                            <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerX" secondItem="pDB-24-B3G" secondAttribute="centerX" id="KZr-sE-z7K"/>
-                                            <constraint firstAttribute="bottom" secondItem="ENq-06-ukX" secondAttribute="bottom" id="SqO-Km-52O"/>
-                                            <constraint firstAttribute="trailing" secondItem="ENq-06-ukX" secondAttribute="trailing" id="Zas-sI-EcY"/>
-                                            <constraint firstItem="rcR-EZ-aT9" firstAttribute="centerY" secondItem="pDB-24-B3G" secondAttribute="centerY" id="j9C-Mr-smu"/>
-                                            <constraint firstItem="ENq-06-ukX" firstAttribute="top" secondItem="pDB-24-B3G" secondAttribute="top" id="zPY-Di-34k"/>
+                                            <constraint firstAttribute="bottom" secondItem="igW-oc-5iq" secondAttribute="bottom" id="CKC-Iv-3Ll"/>
+                                            <constraint firstItem="igW-oc-5iq" firstAttribute="top" secondItem="pDB-24-B3G" secondAttribute="top" id="kfc-WG-zCi"/>
+                                            <constraint firstItem="igW-oc-5iq" firstAttribute="leading" secondItem="pDB-24-B3G" secondAttribute="leading" id="ozF-fp-min"/>
+                                            <constraint firstAttribute="trailing" secondItem="igW-oc-5iq" secondAttribute="trailing" id="pOU-0z-bzs"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="mainView" destination="igW-oc-5iq" id="cIX-IT-dhv"/>
                                             <outlet property="photoIconView" destination="ENq-06-ukX" id="i47-2F-JdN"/>
                                             <outlet property="spinner" destination="rcR-EZ-aT9" id="Izy-HS-c0Y"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCell" id="fnI-wr-opi" customClass="PhotoFolderCell" customModule="Newsman" customModuleProvider="target">
+                                    <collectionViewCell multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCell" id="fnI-wr-opi" customClass="PhotoFolderCell" customModule="Newsman" customModuleProvider="target">
                                         <rect key="frame" x="153" y="2" width="100" height="100"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uV4-sc-8X5">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j4E-w0-K4b" userLabel="Main View" customClass="PhotoSnippetCellMainView" customModule="Newsman" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                                    <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="L7E-el-Wl0">
-                                                        <size key="itemSize" width="30" height="30"/>
-                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                        <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
-                                                    </collectionViewFlowLayout>
-                                                    <cells>
-                                                        <collectionViewCell opaque="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
-                                                            <rect key="frame" x="3" y="3" width="30" height="30"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
-                                                                <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RMg-9Z-gHf">
+                                                    <subviews>
+                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="uV4-sc-8X5">
+                                                            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                                            <color key="backgroundColor" red="1" green="0.87527647519999996" blue="0.76840191680000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="1" minimumInteritemSpacing="1" id="L7E-el-Wl0">
+                                                                <size key="itemSize" width="30" height="30"/>
+                                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                                <inset key="sectionInset" minX="3" minY="3" maxX="3" maxY="3"/>
+                                                            </collectionViewFlowLayout>
+                                                            <cells>
+                                                                <collectionViewCell multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="PhotoFolderCollectionViewCell" id="a6W-0E-cje" customClass="PhotoFolderCollectionViewCell" customModule="Newsman" customModuleProvider="target">
+                                                                    <rect key="frame" x="3" y="3" width="30" height="30"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                                                         <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                                                        <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </imageView>
-                                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                                                        <color key="color" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    </activityIndicatorView>
-                                                                </subviews>
-                                                            </view>
-                                                            <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" id="0ZL-fM-jfs"/>
-                                                                <constraint firstAttribute="trailing" secondItem="Mmv-vJ-BGZ" secondAttribute="trailing" id="LmW-El-mZy"/>
-                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="MVH-fv-Hfl"/>
-                                                                <constraint firstAttribute="bottom" secondItem="Mmv-vJ-BGZ" secondAttribute="bottom" id="OUG-7k-dDR"/>
-                                                                <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="bcB-j6-hlH"/>
-                                                                <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="eWe-00-uxs"/>
-                                                                <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="s4D-ux-Hdj"/>
-                                                                <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" id="shd-L1-jco"/>
-                                                            </constraints>
-                                                            <connections>
-                                                                <outlet property="photoIconView" destination="RMg-9Z-gHf" id="CsE-cw-0Fb"/>
-                                                                <outlet property="spinner" destination="Mmv-vJ-BGZ" id="iaF-dt-Gtl"/>
-                                                            </connections>
-                                                        </collectionViewCell>
-                                                    </cells>
-                                                </collectionView>
+                                                                        <autoresizingMask key="autoresizingMask"/>
+                                                                        <subviews>
+                                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nB2-W5-vNw" userLabel="Main View" customClass="PhotoSnippetCellMainView" customModule="Newsman" customModuleProvider="target">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                                <subviews>
+                                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RMg-9Z-gHf">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                                                    </imageView>
+                                                                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="Mmv-vJ-BGZ">
+                                                                                        <rect key="frame" x="5" y="5" width="20" height="20"/>
+                                                                                        <color key="color" red="0.90911722715736043" green="0.23294368232812146" blue="0.10468044789910597" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                                    </activityIndicatorView>
+                                                                                </subviews>
+                                                                                <constraints>
+                                                                                    <constraint firstAttribute="bottom" secondItem="RMg-9Z-gHf" secondAttribute="bottom" id="1GD-no-0yc"/>
+                                                                                    <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="centerY" secondItem="nB2-W5-vNw" secondAttribute="centerY" id="1xY-Q9-9CI"/>
+                                                                                    <constraint firstAttribute="trailing" secondItem="RMg-9Z-gHf" secondAttribute="trailing" id="Gae-8I-xwD"/>
+                                                                                    <constraint firstItem="Mmv-vJ-BGZ" firstAttribute="centerX" secondItem="nB2-W5-vNw" secondAttribute="centerX" id="IbU-ND-jPJ"/>
+                                                                                    <constraint firstItem="RMg-9Z-gHf" firstAttribute="top" secondItem="nB2-W5-vNw" secondAttribute="top" id="WEJ-hy-xXp"/>
+                                                                                    <constraint firstItem="RMg-9Z-gHf" firstAttribute="leading" secondItem="nB2-W5-vNw" secondAttribute="leading" id="szh-FU-DOt"/>
+                                                                                </constraints>
+                                                                            </view>
+                                                                        </subviews>
+                                                                    </view>
+                                                                    <constraints>
+                                                                        <constraint firstItem="nB2-W5-vNw" firstAttribute="leading" secondItem="a6W-0E-cje" secondAttribute="leading" id="2Mj-1j-Cjb"/>
+                                                                        <constraint firstItem="nB2-W5-vNw" firstAttribute="top" secondItem="a6W-0E-cje" secondAttribute="top" id="5lW-Bu-skC"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="nB2-W5-vNw" secondAttribute="bottom" id="668-fI-vpL"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="nB2-W5-vNw" secondAttribute="trailing" id="AvZ-bv-YaG"/>
+                                                                    </constraints>
+                                                                    <connections>
+                                                                        <outlet property="mainView" destination="nB2-W5-vNw" id="Pzx-Sx-Jam"/>
+                                                                        <outlet property="photoIconView" destination="RMg-9Z-gHf" id="CsE-cw-0Fb"/>
+                                                                        <outlet property="spinner" destination="Mmv-vJ-BGZ" id="iaF-dt-Gtl"/>
+                                                                    </connections>
+                                                                </collectionViewCell>
+                                                            </cells>
+                                                        </collectionView>
+                                                    </subviews>
+                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="uV4-sc-8X5" secondAttribute="bottom" id="E1h-Ox-743"/>
+                                                        <constraint firstAttribute="trailing" secondItem="uV4-sc-8X5" secondAttribute="trailing" id="Tix-2P-NkK"/>
+                                                        <constraint firstItem="uV4-sc-8X5" firstAttribute="leading" secondItem="j4E-w0-K4b" secondAttribute="leading" id="ZZ0-0h-I6Y"/>
+                                                        <constraint firstItem="uV4-sc-8X5" firstAttribute="top" secondItem="j4E-w0-K4b" secondAttribute="top" id="wZ6-s9-4wH"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="uV4-sc-8X5" secondAttribute="trailing" id="beU-JE-YBp"/>
-                                            <constraint firstItem="uV4-sc-8X5" firstAttribute="leading" secondItem="fnI-wr-opi" secondAttribute="leading" id="dgo-lB-F6G"/>
-                                            <constraint firstAttribute="bottom" secondItem="uV4-sc-8X5" secondAttribute="bottom" id="ijg-Bp-P8k"/>
-                                            <constraint firstItem="uV4-sc-8X5" firstAttribute="top" secondItem="fnI-wr-opi" secondAttribute="top" id="zPY-Vr-vMy"/>
+                                            <constraint firstAttribute="bottom" secondItem="j4E-w0-K4b" secondAttribute="bottom" id="Kre-ls-oNH"/>
+                                            <constraint firstItem="j4E-w0-K4b" firstAttribute="leading" secondItem="fnI-wr-opi" secondAttribute="leading" id="NgZ-Pa-XxD"/>
+                                            <constraint firstAttribute="trailing" secondItem="j4E-w0-K4b" secondAttribute="trailing" id="kbS-34-YYE"/>
+                                            <constraint firstItem="j4E-w0-K4b" firstAttribute="top" secondItem="fnI-wr-opi" secondAttribute="top" id="zZh-LI-YEa"/>
                                         </constraints>
                                         <connections>
+                                            <outlet property="mainView" destination="j4E-w0-K4b" id="UoE-Sb-9ec"/>
                                             <outlet property="photoCollectionView" destination="uV4-sc-8X5" id="BTH-NN-Tzu"/>
                                         </connections>
                                     </collectionViewCell>
@@ -303,39 +340,40 @@
                                     <rect key="frame" x="0.0" y="0.0" width="367" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8G-V2-vUY">
-                                            <rect key="frame" x="16" y="0.0" width="335" height="44"/>
+                                        <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" ambiguous="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N8G-V2-vUY">
+                                            <rect key="frame" x="0.0" y="0.0" width="367" height="44"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="leading" secondItem="OXL-QE-zfg" secondAttribute="leadingMargin" id="bFG-oR-XwO"/>
-                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="bottom" secondItem="OXL-QE-zfg" secondAttribute="bottomMargin" id="eF3-2Z-QuD"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="N8G-V2-vUY" secondAttribute="trailing" id="eh1-Ug-Ggy"/>
-                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="top" secondItem="OXL-QE-zfg" secondAttribute="topMargin" id="jNJ-Jz-mDa"/>
+                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="top" secondItem="OXL-QE-zfg" secondAttribute="top" id="GSh-v8-ACm"/>
+                                        <constraint firstAttribute="trailing" secondItem="N8G-V2-vUY" secondAttribute="trailing" id="HMt-SO-INe"/>
+                                        <constraint firstAttribute="bottom" secondItem="N8G-V2-vUY" secondAttribute="bottom" id="IAa-kx-RdM"/>
+                                        <constraint firstItem="N8G-V2-vUY" firstAttribute="leading" secondItem="OXL-QE-zfg" secondAttribute="leading" id="bFG-oR-XwO"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="headerLabel" destination="N8G-V2-vUY" id="NWm-yp-USp"/>
                                     </connections>
                                 </collectionReusableView>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="photoSectionFooter" id="JAm-Kh-He4" customClass="PhotoSectionFooter" customModule="Newsman" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="104" width="367" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="367" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3aI-lF-zLh">
-                                            <rect key="frame" x="16" y="0.0" width="335" height="44"/>
+                                        <label verifyAmbiguity="off" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalCompressionResistancePriority="250" verticalCompressionResistancePriority="250" ambiguous="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3aI-lF-zLh">
+                                            <rect key="frame" x="10" y="0.0" width="357" height="44"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
+                                            <size key="shadowOffset" width="1" height="1"/>
                                         </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailingMargin" secondItem="3aI-lF-zLh" secondAttribute="trailing" id="5SR-25-bdG"/>
-                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="leading" secondItem="JAm-Kh-He4" secondAttribute="leadingMargin" id="5hg-Hs-rSt"/>
-                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="bottom" secondItem="JAm-Kh-He4" secondAttribute="bottomMargin" id="AH5-Ho-8Pv"/>
-                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="top" secondItem="JAm-Kh-He4" secondAttribute="topMargin" id="Zfj-gY-ykB"/>
+                                        <constraint firstAttribute="trailing" secondItem="3aI-lF-zLh" secondAttribute="trailing" id="5SR-25-bdG"/>
+                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="top" secondItem="JAm-Kh-He4" secondAttribute="top" id="Zfj-gY-ykB"/>
+                                        <constraint firstAttribute="bottom" secondItem="3aI-lF-zLh" secondAttribute="bottom" id="evl-gR-WtJ"/>
+                                        <constraint firstItem="3aI-lF-zLh" firstAttribute="leading" secondItem="JAm-Kh-He4" secondAttribute="leading" constant="10" id="sZT-R6-lnR"/>
                                     </constraints>
                                     <connections>
                                         <outlet property="footerLabel" destination="3aI-lF-zLh" id="DhI-IK-x9d"/>
@@ -343,14 +381,15 @@
                                 </collectionReusableView>
                             </collectionView>
                             <stepper opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" highlighted="YES" selected="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" maximumValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="BrJ-Xz-Uta">
-                                <rect key="frame" x="160" y="640" width="94" height="29"/>
-                                <color key="tintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="160" y="637" width="94" height="32"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="photoScaleStepperChanged:" destination="8Mi-lh-6Iq" eventType="valueChanged" id="6Jn-YC-8Ew"/>
                                 </connections>
                             </stepper>
                         </subviews>
-                        <color key="backgroundColor" red="0.92500000000000004" green="0.23699999999999999" blue="0.10199999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="Newsman.red"/>
+                        <color key="tintColor" name="Newsman.red"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="Pjr-4m-dEk" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="8" id="433-3r-MLi"/>
@@ -360,13 +399,24 @@
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="trailing" secondItem="cYL-2S-pmF" secondAttribute="trailing" id="7kX-aA-aDQ"/>
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="bottom" secondItem="cYL-2S-pmF" secondAttribute="bottom" id="Ced-uR-aNt"/>
                             <constraint firstItem="LTL-WS-0Wd" firstAttribute="top" secondItem="fRa-jJ-dD6" secondAttribute="bottom" id="Fhb-P6-2sQ"/>
-                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="top" secondItem="BrJ-Xz-Uta" secondAttribute="bottom" constant="17" id="b6X-Ew-mz2"/>
-                            <constraint firstItem="Pjr-4m-dEk" firstAttribute="top" secondItem="cYL-2S-pmF" secondAttribute="top" constant="16" id="ebg-Wt-uDh"/>
+                            <constraint firstItem="LTL-WS-0Wd" firstAttribute="top" secondItem="BrJ-Xz-Uta" secondAttribute="bottom" constant="17" identifier="photoScaleStepperBottom" id="b6X-Ew-mz2"/>
+                            <constraint firstItem="Pjr-4m-dEk" firstAttribute="top" secondItem="cYL-2S-pmF" secondAttribute="top" constant="16" id="diB-M7-KV2" userLabel="Photo Snippet Title Text Edit Top (wC hR)"/>
+                            <constraint firstItem="Pjr-4m-dEk" firstAttribute="top" secondItem="cYL-2S-pmF" secondAttribute="top" constant="-30" id="ebg-Wt-uDh" userLabel="Photo Snippet Title Text Edit Top (wR hC)"/>
                             <constraint firstItem="cYL-2S-pmF" firstAttribute="trailing" secondItem="Pjr-4m-dEk" secondAttribute="trailing" constant="8" id="hmx-al-Ygc"/>
-                            <constraint firstItem="BrJ-Xz-Uta" firstAttribute="centerX" secondItem="dqS-dJ-g2s" secondAttribute="centerX" id="rbm-5r-LrZ"/>
+                            <constraint firstItem="BrJ-Xz-Uta" firstAttribute="centerX" secondItem="cYL-2S-pmF" secondAttribute="centerX" id="rbm-5r-LrZ"/>
                             <constraint firstItem="fRa-jJ-dD6" firstAttribute="leading" secondItem="cYL-2S-pmF" secondAttribute="leading" constant="4" id="y76-zK-6cw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="cYL-2S-pmF"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="ebg-Wt-uDh"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=compact-widthClass=regular">
+                            <mask key="constraints">
+                                <exclude reference="ebg-Wt-uDh"/>
+                            </mask>
+                        </variation>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="mTb-Hh-2mK" appends="YES" id="UKa-JI-cQE"/>
                         </connections>
@@ -395,11 +445,20 @@
                         <outlet property="datePickerBarButton" destination="YoK-vI-8El" id="BGo-AI-Drp"/>
                         <outlet property="photoCollectionView" destination="fRa-jJ-dD6" id="yjP-0c-5Y0"/>
                         <outlet property="photoScaleStepper" destination="BrJ-Xz-Uta" id="zXO-ZG-kDj"/>
+                        <outlet property="photoScaleStepperBottom" destination="b6X-Ew-mz2" id="JOD-HV-dSa"/>
                         <outlet property="photoSnippetTitle" destination="Pjr-4m-dEk" id="YO9-3l-CCz"/>
+                        <outlet property="photoSnippetTitleTextEditHeight" destination="C7c-aZ-1Xk" id="rLE-th-tZw"/>
+                        <outlet property="photoSnippetTitleTextEditLeading" destination="433-3r-MLi" id="RLs-iW-uuW"/>
+                        <outlet property="photoSnippetTitleTextEditTop" destination="diB-M7-KV2" id="YWE-Lu-Lvb"/>
+                        <outlet property="photoSnippetTitleTextEditTrailing" destination="hmx-al-Ygc" id="QzD-ti-kfP"/>
                         <outlet property="photoSnippetToolBar" destination="LTL-WS-0Wd" id="gdS-XX-Mb1"/>
+                        <outlet property="photoSnippetToolBarBottom" destination="Ced-uR-aNt" id="1Q9-LS-iXp"/>
+                        <outlet property="photoSnippetToolBarHeight" destination="uzc-xI-TUr" id="XmO-Ng-OPI"/>
+                        <outlet property="photoSnippetToolBarLeading" destination="5Qw-vp-awR" id="k5k-Dl-51M"/>
                         <outlet property="priorityPickerBarButton" destination="pLH-MV-lVe" id="lJa-6z-N4k"/>
                         <outlet property="saveBarButton" destination="7BD-Nx-M1h" id="Nwh-gx-pmz"/>
                         <outlet property="takePhotoBarButton" destination="Blf-q6-FR7" id="iCX-ch-iU1"/>
+                        <outlet property="undoManagerBarButton" destination="AnO-RC-s7R" id="RtK-u2-tLz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yTh-X9-2vj" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -410,7 +469,7 @@
                     </connections>
                 </pinchGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="-2407" y="-2053"/>
+            <point key="canvasLocation" x="-2407.2463768115945" y="-2053.5326086956525"/>
         </scene>
         <!--DatePickerVC-->
         <scene sceneID="vbF-Y0-NW9">
@@ -429,6 +488,10 @@
             <point key="canvasLocation" x="-3112" y="-1472"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="yLx-ea-9QV"/>
+        <segue reference="CdP-HO-XWj"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="clear.tab.icon" width="32" height="32"/>
         <image name="date.tab.icon" width="32" height="32"/>
@@ -439,9 +502,9 @@
         <image name="photo.tab.icon" width="32" height="32"/>
         <image name="priority.tab.icon" width="32" height="32"/>
         <image name="save.tab.icon" width="32" height="32"/>
+        <image name="undo.manager.tab.icon" width="32" height="32"/>
+        <namedColor name="Newsman.red">
+            <color red="0.84313725490196079" green="0.22352941176470589" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="U6G-5E-WPd"/>
-        <segue reference="4xf-O6-s6P"/>
-    </inferredMetricsTieBreakers>
 </document>

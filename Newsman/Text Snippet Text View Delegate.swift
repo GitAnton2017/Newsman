@@ -14,7 +14,7 @@ extension TextSnippetViewController: UITextViewDelegate
  {
   guard textView.text != textSnippet.text else { return }
   
-  textSnippet.managedObjectContext?.persist
+  textSnippet.managedObjectContext?.perform
   {
    self.textSnippet.text = self.textView.text
   }

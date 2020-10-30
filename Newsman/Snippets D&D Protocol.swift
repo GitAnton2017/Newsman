@@ -12,12 +12,12 @@ import CoreData
 
 protocol SnippetProtocol: NSItemProviderWriting, NSItemProviderReading, Codable, Draggable
 {
- var type: SnippetType              { get     }
- var location: String?              { get     }
- var snippet: BaseSnippet           { get     }
- var date: Date                     { get     }
- var priority: SnippetPriority      { get     }
- var url: URL                       { get     } //conformer url getter to get access to the virtual data files
+ var type: SnippetType?              { get     }
+ var location: String?               { get     }
+ var snippet: BaseSnippet            { get     }
+ var date: Date                      { get     }
+ var priority: SnippetPriority       { get     }
+ var url: URL?                       { get     } //conformer url getter to get access to the virtual data files
  
  func deleteAllData()
  
@@ -30,12 +30,12 @@ protocol SnippetProtocol: NSItemProviderWriting, NSItemProviderReading, Codable,
 
 func == (lhs: SnippetProtocol?, rhs: SnippetProtocol?) -> Bool
 {
- return lhs?.hostedManagedObject === rhs?.hostedManagedObject
+ lhs?.hostedManagedObject.objectID == rhs?.hostedManagedObject.objectID
 }
 
 func != (lhs: SnippetProtocol?, rhs: SnippetProtocol?) -> Bool
 {
- return lhs?.hostedManagedObject !== rhs?.hostedManagedObject
+ lhs?.hostedManagedObject.objectID != rhs?.hostedManagedObject.objectID
 }
 
 extension SnippetProtocol
@@ -54,15 +54,7 @@ extension SnippetProtocol
   }
  }
  
- static func saveContext()
- {
-  appDelegate.saveContext()
- }
- 
- static var MOC: NSManagedObjectContext
- {
-  return appDelegate.persistentContainer.viewContext
- }
+ static var MOC: NSManagedObjectContext { appDelegate.viewContext }
  
  
 }

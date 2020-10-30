@@ -14,9 +14,13 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
  
  @objc func sectionTapped(_ gr: UIGestureRecognizer)
  {
-  guard let section = sectionNumber else {return}
+  guard let section = sectionNumber else { return }
   isHiddenSection.toggle()
+  gr.isEnabled = false
   currentFRC?.toggleFoldSection(section: section)
+  {_ in
+   gr.isEnabled = true
+  }
  }
  
  override init(reuseIdentifier: String?)
@@ -37,18 +41,31 @@ class SnippetsTableViewHeaderView: SnippetsTableViewSupplemenaryView
  {
   didSet
   {
+   UIView.transition(with: titleLabel, duration: 0.3,
+                     options: [.transitionFlipFromTop, .allowUserInteraction ],
+                     animations: {[ weak self ] in
+                      guard let self = self else { return }
+                      self.titleLabel.font = UIFont.boldSystemFont(ofSize: self.isHiddenSection ? 22 : 18)
+                      self.titleLabel.textColor =
+                       self.titleLabel.textColor.withAlphaComponent(self.isHiddenSection ? 0.75 : 1.0)
+                     }, completion: nil)
    
-   titleLabel.font = UIFont.boldSystemFont(ofSize: isHiddenSection ? 22 : 18)
-   titleLabel.textColor = titleLabel.textColor.withAlphaComponent(isHiddenSection ? 0.75 : 1.0)
-   backView.backgroundColor = backView.backgroundColor?.withAlphaComponent(isHiddenSection ? 0.5 : 1.0)
    
    arrowView.transform = isHiddenSection ? .identity : .rotate90p
   
-   UIView.animate(withDuration: 0.35)
-   {[weak self] in
-    guard let view = self else {return}
-    view.arrowView.transform = view.isHiddenSection ? .rotate90p : .identity
-   }
+   let backColor = backView.backgroundColor
+   backView.backgroundColor = .newsmanRed
+   
+   UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0,
+                  options: [.curveEaseInOut, .allowUserInteraction ],
+                  animations: {[ weak self ] in
+                   guard let self = self else { return }
+                   self.arrowView.transform = self.isHiddenSection ? .rotate90p : .identity
+                   self.backView.backgroundColor = backColor?.withAlphaComponent(self.isHiddenSection ? 0.5 : 1.0)
+                  }, completion: nil
+   )
+ 
+   
 
   }
  }

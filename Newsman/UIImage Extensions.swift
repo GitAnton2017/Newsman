@@ -64,7 +64,7 @@ extension UIImage
  
     func setSquared (in view: UIView)
     {
-        view.layer.contentsGravity = kCAGravityResizeAspect
+        view.layer.contentsGravity = CALayerContentsGravity.resizeAspect
         
         if size.height > size.width
         {

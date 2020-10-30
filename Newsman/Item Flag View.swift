@@ -31,15 +31,13 @@ class FlagMarkerView: UIView
   didSet
   {
    flagLayer.fillColor = flagColor
-   //flagLayer.setNeedsDisplay()
-   self.setNeedsDisplay()
-  
+   setNeedsDisplay()
   }
  }
  
  override static var layerClass: AnyClass {return FlagLayer.self}
  
- var flagLayer: FlagLayer {return self.layer as! FlagLayer}
+ var flagLayer: FlagLayer { layer as! FlagLayer }
  
  override init(frame: CGRect)
  {

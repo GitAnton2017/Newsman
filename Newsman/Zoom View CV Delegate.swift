@@ -28,12 +28,48 @@ extension ZoomView: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
  }
 
  func collectionView(_ collectionView: UICollectionView,
+                     willDisplay cell: UICollectionViewCell,
+                     forItemAt indexPath: IndexPath)
+ {
+  guard let zoomedPhotoCell = cell as? ZoomViewCollectionViewCell else { return }
+  
+  zoomedPhotoCell.refreshCellView()
+  
+  if zoomedPhotoCell.hostedItem?.isArrowMenuShowing ?? false
+  {
+   zoomedPhotoCell.showArrowMenu(animated: false)
+  }
+  else
+  {
+   collectionView.sendSubviewToBack(zoomedPhotoCell as UIView)
+  }
+ 
+ }
+ 
+ func collectionView(_ collectionView: UICollectionView,
                        didEndDisplaying cell: UICollectionViewCell,
                        forItemAt indexPath: IndexPath)
  {
-  guard let zoomCell = cell as? ZoomViewCollectionViewCell else { return }
-  zoomCell.cancelImageOperations()
-  //(zoomCell.hostedItem as? PhotoItem)?.hostingZoomedCollectionViewCell = nil
+  guard let zoomedPhotoCell = cell as? ZoomViewCollectionViewCell else { return }
+  zoomedPhotoCell.clearMainView()
+  zoomedPhotoCell.cancelImageOperations()
+  zoomedPhotoCell.hostedItem?.isArrowMenuShowing = false
  }
+ 
+ 
+ func toggleCellSelection(_ collectionView: UICollectionView, at indexPath: IndexPath)
+ {
+  guard let vc = photoSnippetVC else { return }
+  guard vc.isEditingPhotos else {return}
+  photoItems[indexPath.row].toggleSelection()
+ }
+ 
+ func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+ {
+  toggleCellSelection(collectionView, at: indexPath)
+ }
+ 
+
+ 
  
 }

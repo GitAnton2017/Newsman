@@ -44,61 +44,102 @@
 		A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */; };
 		A71EDA692063D0E900E6AB7A /* Photo Folder Item Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA682063D0E900E6AB7A /* Photo Folder Item Wrapper.swift */; };
 		A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */; };
+		A72362E0226B1EAC00C6801F /* Photo Snippet CV DS Hs & Fs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72362DF226B1EAC00C6801F /* Photo Snippet CV DS Hs & Fs.swift */; };
+		A72732D22423D8720069F20D /* Cloud Batch Modify Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72732D12423D8720069F20D /* Cloud Batch Modify Operation.swift */; };
 		A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7298E142015E9A000A7301D /* CoreData.framework */; };
 		A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */; };
 		A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B3EAD2058419000C02B52 /* Zoom View.swift */; };
+		A72CDCB42459EEAC002761C1 /* SCP D&D States Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72CDCB32459EEAC002761C1 /* SCP D&D States Updates.swift */; };
+		A72F0D8D231FCB6B0054249D /* Undo Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0D8C231FCB6B0054249D /* Undo Manager.swift */; };
+		A72F0D8F2320104D0054249D /* Multi Target Undoable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0D8E2320104D0054249D /* Multi Target Undoable Protocol.swift */; };
+		A72F0D91232100320054249D /* Async Undo Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0D90232100320054249D /* Async Undo Manager.swift */; };
+		A72F0DA323268C230054249D /* Photo Item Undoable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0DA223268C230054249D /* Photo Item Undoable.swift */; };
+		A72F0DA523268ED50054249D /* Photo Folder Item Undoable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0DA423268ED50054249D /* Photo Folder Item Undoable.swift */; };
+		A72F0DA72328FCE80054249D /* Undo Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0DA62328FCE80054249D /* Undo Notifications.swift */; };
+		A72F0DAB233369F20054249D /* Case Selector Alert Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0DAA233369F20054249D /* Case Selector Alert Controller.swift */; };
+		A72F0DAD23336A9C0054249D /* Undo Manager Menu Action Cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72F0DAC23336A9C0054249D /* Undo Manager Menu Action Cases.swift */; };
 		A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */; };
 		A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9B1FCAFDB700207A52 /* Single Item Cell.swift */; };
 		A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */; };
-		A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */; };
+		A7304AA01FCB160C00207A52 /* Photo Snippet CV DS Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS Main.swift */; };
 		A7330F101FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */; };
+		A7339B4F24C1E09100AFE119 /* Photo Item Flag Marker View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7339B4E24C1E09100AFE119 /* Photo Item Flag Marker View.swift */; };
+		A733EDB024B1F932000E5F91 /* Publisher Unretained Assign.swift in Sources */ = {isa = PBXBuildFile; fileRef = A733EDAF24B1F932000E5F91 /* Publisher Unretained Assign.swift */; };
+		A737273D247D12E000FCE4CD /* CGPoint Math Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A737273C247D12E000FCE4CD /* CGPoint Math Extensions.swift */; };
 		A73BDA7921D0F62C007E0416 /* Snippets Representable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */; };
 		A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */; };
 		A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */; };
 		A7400E751FC731A2006F05DC /* Date Picker View Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E741FC731A2006F05DC /* Date Picker View Controller.swift */; };
 		A7400E771FC73305006F05DC /* Priority Picker View Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E761FC73305006F05DC /* Priority Picker View Controller.swift */; };
 		A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */; };
+		A7410A0524A288EE0013AE5C /* Photo Cell Async Image View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7410A0424A288EE0013AE5C /* Photo Cell Async Image View.swift */; };
 		A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD4920EBEECD0062AF27 /* Playback Button.swift */; };
 		A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */; };
 		A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BD6120EF55540062AF27 /* Playback Progress View.swift */; };
 		A7438686219D70C3005ECACD /* App Delegate D&D Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7438685219D70C3005ECACD /* App Delegate D&D Extension.swift */; };
-		A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */; };
-		A7443F01202DD3F60039BE41 /* PhotoFolder MO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFD202DD3F60039BE41 /* PhotoFolder MO.swift */; };
+		A7443F00202DD3F60039BE41 /* Photo Snippet MO Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFC202DD3F60039BE41 /* Photo Snippet MO Properties.swift */; };
+		A7443F01202DD3F60039BE41 /* Photo Folder MO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443EFD202DD3F60039BE41 /* Photo Folder MO.swift */; };
 		A7443F05202DD7600039BE41 /* Photo MO Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F03202DD7600039BE41 /* Photo MO Properties.swift */; };
-		A7443F06202DD7600039BE41 /* PhotoFolder MO Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F04202DD7600039BE41 /* PhotoFolder MO Properties.swift */; };
+		A7443F06202DD7600039BE41 /* Photo Folder MO Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F04202DD7600039BE41 /* Photo Folder MO Properties.swift */; };
 		A7443F122035D2F80039BE41 /* Folder Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F112035D2F80039BE41 /* Folder Cell.swift */; };
 		A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7443F13203881790039BE41 /* Flag Items Menu.swift */; };
 		A747B96E2240CDA800D552F8 /* Snippet Cells Selection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A747B96D2240CDA800D552F8 /* Snippet Cells Selection.swift */; };
 		A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A748D8B420F4CD5500DA190A /* Play Icon View.swift */; };
-		A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */; };
+		A74B66F424975EAB00EC4FDB /* @Capsulated.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74B66F324975EAB00EC4FDB /* @Capsulated.swift */; };
+		A74B66F62499E35E00EC4FDB /* @Masked.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74B66F52499E35E00EC4FDB /* @Masked.swift */; };
+		A74E1ABB24657A200011DD2B /* UIView Decorations Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74E1ABA24657A200011DD2B /* UIView Decorations Wrapper.swift */; };
+		A75033FF2433526E004A320F /* App Delegate MOC Saver ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75033FE2433526E004A320F /* App Delegate MOC Saver ext.swift */; };
+		A75117F21FE6E5880009F03C /* Photo Snippet MO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F01FE6E5880009F03C /* Photo Snippet MO.swift */; };
 		A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75117F41FF656590009F03C /* Photo Snippet CV.swift */; };
 		A751FC4C218C7FD20088D9C5 /* CG Affine Transform Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */; };
 		A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */; };
+		A7533B1F24AF44A200530473 /* Content Draggable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7533B1E24AF44A200530473 /* Content Draggable Protocol.swift */; };
+		A7533B2624AF48F700530473 /* Snippet Items Draggable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7533B2524AF48F700530473 /* Snippet Items Draggable Protocol.swift */; };
+		A7533B2824AF498200530473 /* Photo Item Cell Drop Providable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7533B2724AF498200530473 /* Photo Item Cell Drop Providable.swift */; };
+		A7533B2A24AF49C600530473 /* Collection View Drag Item Providable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7533B2924AF49C600530473 /* Collection View Drag Item Providable.swift */; };
+		A7533B3224B0420600530473 /* NewsmanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7533B3124B0420600530473 /* NewsmanTests.swift */; };
+		A7533B3A24B046DA00530473 /* FOLDER Nested CV D & D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7533B3924B046DA00530473 /* FOLDER Nested CV D & D Delegate.swift */; };
 		A75489891FBC4F2900359C0C /* App Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489881FBC4F2900359C0C /* App Delegate.swift */; };
 		A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A754898A1FBC4F2900359C0C /* MainViewController.swift */; };
 		A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */; };
 		A75489931FBC4F2900359C0C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A75489921FBC4F2900359C0C /* Assets.xcassets */; };
-		A75489A11FBC4F2900359C0C /* NewsmanTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489A01FBC4F2900359C0C /* NewsmanTests.swift */; };
-		A75489AC1FBC4F2900359C0C /* NewsmanUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489AB1FBC4F2900359C0C /* NewsmanUITests.swift */; };
 		A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BB1FBC620300359C0C /* MainViewCell.swift */; };
 		A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75489BD1FBC649000359C0C /* MainViewDataSource.swift */; };
+		A755338B24912B23003907E5 /* App Appearance Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = A755338A24912B23003907E5 /* App Appearance Setup.swift */; };
+		A757D26D238D372400427BEE /* MOC Observable Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D26C238D372400427BEE /* MOC Observable Wrapper.swift */; };
+		A757D26F238E889500427BEE /* MO Obsevable Attributes Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D26E238E889500427BEE /* MO Obsevable Attributes Protocol.swift */; };
+		A757D272238FCC4500427BEE /* Photo DMOP RxSwift Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D271238FCC4500427BEE /* Photo DMOP RxSwift Ext.swift */; };
+		A757D274238FCC5800427BEE /* Photo DMOP Combine Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D273238FCC5800427BEE /* Photo DMOP Combine Ext.swift */; };
+		A757D279238FD0B000427BEE /* Photo Folder DMOP RxSwift Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D278238FD0B000427BEE /* Photo Folder DMOP RxSwift Ext.swift */; };
+		A757D27B238FD60100427BEE /* Photo MO Deletion (RxSwift).swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D27A238FD60100427BEE /* Photo MO Deletion (RxSwift).swift */; };
+		A757D27D238FD61800427BEE /* Photo MO Deletion (Combine).swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D27C238FD61800427BEE /* Photo MO Deletion (Combine).swift */; };
+		A757D2832397BA9B00427BEE /* Photo Folder MO Deletion (RxSwift).swift in Sources */ = {isa = PBXBuildFile; fileRef = A757D2822397BA9B00427BEE /* Photo Folder MO Deletion (RxSwift).swift */; };
 		A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */; };
 		A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */; };
 		A75DB63E2215B68B0045E9E2 /* Photo Item D&D Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB63D2215B68B0045E9E2 /* Photo Item D&D Extension.swift */; };
 		A75DB6402215B7980045E9E2 /* Photo Folder D&D Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB63F2215B7980045E9E2 /* Photo Folder D&D Extension.swift */; };
 		A75DB6422215B8FD0045E9E2 /* Draggable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB6412215B8FD0045E9E2 /* Draggable Protocol.swift */; };
 		A75DB6442215B9790045E9E2 /* Draggable Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB6432215B9790045E9E2 /* Draggable Extension.swift */; };
-		A75DB6462215BA320045E9E2 /* Photo Items Draggable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB6452215BA320045E9E2 /* Photo Items Draggable Protocol.swift */; };
 		A75DB6482215BAEF0045E9E2 /* Photo Items Draggable Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB6472215BAEF0045E9E2 /* Photo Items Draggable Extension.swift */; };
 		A75DB64B2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75DB64A2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift */; };
-		A75F903E2258DC8E001DBF8C /* Photo Snippet Items Delete.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75F903D2258DC8E001DBF8C /* Photo Snippet Items Delete.swift */; };
+		A75F903E2258DC8E001DBF8C /* Photo Snippet Child Items Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75F903D2258DC8E001DBF8C /* Photo Snippet Child Items Deletion.swift */; };
 		A7660E40222676DA00F845E8 /* Snippet Cell Images Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7660E3F222676DA00F845E8 /* Snippet Cell Images Loading.swift */; };
 		A7660E422226781000F845E8 /* Snippet Cells Disclosure.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7660E412226781000F845E8 /* Snippet Cells Disclosure.swift */; };
 		A7660E4422267BF700F845E8 /* Snippet Cell CA Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7660E4322267BF700F845E8 /* Snippet Cell CA Delegate.swift */; };
+		A767986E22DCDA4B00DEAF1B /* Zoom View CV DS Inside Moves.swift in Sources */ = {isa = PBXBuildFile; fileRef = A767986D22DCDA4B00DEAF1B /* Zoom View CV DS Inside Moves.swift */; };
+		A767987022DCE87200DEAF1B /* Folder Nested CV DS Inside Moves.swift in Sources */ = {isa = PBXBuildFile; fileRef = A767986F22DCE87200DEAF1B /* Folder Nested CV DS Inside Moves.swift */; };
+		A767987222DE0A4800DEAF1B /* Photo Snippet MO RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A767987122DE0A4800DEAF1B /* Photo Snippet MO RX.swift */; };
+		A767987422E0A12C00DEAF1B /* File Manager Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A767987322E0A12C00DEAF1B /* File Manager Helpers.swift */; };
 		A768ED6B21883AAD006AED31 /* Accesorial.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6921883AAD006AED31 /* Accesorial.storyboard */; };
 		A768ED6E21883AC9006AED31 /* MediaViewControllers.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6C21883AC9006AED31 /* MediaViewControllers.storyboard */; };
 		A768ED7121883B41006AED31 /* Snippets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A768ED6F21883B41006AED31 /* Snippets.storyboard */; };
 		A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76A2824212AD0610094AA5F /* Photo Item Operations.swift */; };
+		A76B38D724177A140073F04D /* CKRecord Convertable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76B38D624177A140073F04D /* CKRecord Convertable.swift */; };
+		A76B38DB24178E730073F04D /* App Cloud Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76B38DA24178E730073F04D /* App Cloud Data.swift */; };
+		A76B38DD24191E0D0073F04D /* Core Data Secure Transformers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76B38DC24191E0D0073F04D /* Core Data Secure Transformers.swift */; };
+		A77424B0244374AD006FB973 /* Collection Wrappers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77424AF244374AD006FB973 /* Collection Wrappers.swift */; };
+		A7750C1E22E7140C007C1562 /* MO Operations Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7750C1D22E7140C007C1562 /* MO Operations Types.swift */; };
+		A7750C2022E71ABB007C1562 /* MO Operations Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7750C1F22E71ABB007C1562 /* MO Operations Errors.swift */; };
 		A77BB205218D9A97000F2E85 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A77BB203218D9A97000F2E85 /* Main.storyboard */; };
 		A77C73912194392D00E1C57F /* Snippet Bar Rating View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77C73902194392D00E1C57F /* Snippet Bar Rating View.swift */; };
 		A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */; };
@@ -114,6 +155,11 @@
 		A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */; };
 		A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */; };
 		A787566822213479006503D7 /* Snippets Hidden Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A787566722213479006503D7 /* Snippets Hidden Cell.swift */; };
+		A78A97D122B3A403007435F8 /* Photo Folder MO RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78A97D022B3A403007435F8 /* Photo Folder MO RX.swift */; };
+		A78B3B01244B134E0031B24E /* Photo Snippet MO Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78B3B00244B134E0031B24E /* Photo Snippet MO Deletion.swift */; };
+		A78B3B03244B14F50031B24E /* Photo Snippet DMOP (RxSwift).swift in Sources */ = {isa = PBXBuildFile; fileRef = A78B3B02244B14F50031B24E /* Photo Snippet DMOP (RxSwift).swift */; };
+		A78B3B0524503C200031B24E /* D & D Subject States.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78B3B0424503C200031B24E /* D & D Subject States.swift */; };
+		A78B3B07245042AC0031B24E /* D & D Drop States Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78B3B06245042AC0031B24E /* D & D Drop States Observation.swift */; };
 		A78C2EC0224669950005CFE4 /* Snippet Drop View Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C2EBF224669950005CFE4 /* Snippet Drop View Delegate.swift */; };
 		A78C2EC2224677C00005CFE4 /* Snippet Cell Drop Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C2EC1224677C00005CFE4 /* Snippet Cell Drop Interaction.swift */; };
 		A78C2EC42246783E0005CFE4 /* Snippet Cell Spring Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C2EC32246783E0005CFE4 /* Snippet Cell Spring Interaction.swift */; };
@@ -122,12 +168,24 @@
 		A78C2ECA224BCCF40005CFE4 /* Photo Snippet CV DS RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C2EC9224BCCF40005CFE4 /* Photo Snippet CV DS RX.swift */; };
 		A78C2ECC224CAB640005CFE4 /* Photo MO RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78C2ECB224CAB640005CFE4 /* Photo MO RX.swift */; };
 		A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */; };
+		A791ECAD241393FD00606E92 /* MOC Observable from VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791ECAC241393FD00606E92 /* MOC Observable from VC.swift */; };
+		A791ECAF2413964C00606E92 /* MOC Savable by VC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791ECAE2413964C00606E92 /* MOC Savable by VC.swift */; };
+		A791ECB12413B6ED00606E92 /* CL Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791ECB02413B6ED00606E92 /* CL Wrapper.swift */; };
 		A79548F221E62B4300A37959 /* Thread Safe Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F121E62B4300A37959 /* Thread Safe Map.swift */; };
 		A79548F421E7812A00A37959 /* D&D Waggle Animation Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F321E7812A00A37959 /* D&D Waggle Animation Extension.swift */; };
 		A79548F621EC98AC00A37959 /* Single Cell D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79548F521EC98AC00A37959 /* Single Cell D&D Delegate.swift */; };
+		A797B0012373181800A88892 /* Photo MO Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A797B0002373181800A88892 /* Photo MO Deletion.swift */; };
+		A797B0032373188A00A88892 /* Deletable MO Protocol (DMOP).swift in Sources */ = {isa = PBXBuildFile; fileRef = A797B0022373188A00A88892 /* Deletable MO Protocol (DMOP).swift */; };
+		A797B00623731B2800A88892 /* Photo Folder MO Deletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = A797B00523731B2800A88892 /* Photo Folder MO Deletion.swift */; };
+		A79CAD03246039CC003E606F /* CV Cell D & D Delegate Base Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79CAD02246039CC003E606F /* CV Cell D & D Delegate Base Class.swift */; };
 		A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */; };
+		A7A3B6382452C17900B1E371 /* Photo Snippet Cell Main View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A3B6372452C17900B1E371 /* Photo Snippet Cell Main View.swift */; };
+		A7A3B63A2454307F00B1E371 /* BASE CV D & D Delegate Class.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A3B6392454307F00B1E371 /* BASE CV D & D Delegate Class.swift */; };
+		A7A3B63C2454429600B1E371 /* MAIN CV D & D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A3B63B2454429600B1E371 /* MAIN CV D & D Delegate.swift */; };
+		A7A58EC42285891C000F0593 /* Photo Item Digital Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A58EC32285891C000F0593 /* Photo Item Digital Marker.swift */; };
 		A7A72E4C21F622DD003AA849 /* Photo Folder MO Manipulations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */; };
 		A7A97232217074100061AA07 /* Global Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A97231217074100061AA07 /* Global Formatters.swift */; };
+		A7AAE438233E0AED00A0E2C2 /* View Pointed Pop-Up Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AAE437233E0AED00A0E2C2 /* View Pointed Pop-Up Menu.swift */; };
 		A7AFE5C121F1C48900EBD4C9 /* SCP Video Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C021F1C48900EBD4C9 /* SCP Video Extension.swift */; };
 		A7AFE5C321F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */; };
 		A7AFE5C521F1C7A500EBD4C9 /* SCP Image Load Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */; };
@@ -142,6 +200,33 @@
 		A7B2B0892205CBB600D40008 /* Thumbnail Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B0882205CBB600D40008 /* Thumbnail Image Operation.swift */; };
 		A7B2B08B2205CD2700D40008 /* Resize Image Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B08A2205CD2700D40008 /* Resize Image Operation.swift */; };
 		A7B2B08D2205CED300D40008 /* Image Set Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2B08C2205CED300D40008 /* Image Set Operation.swift */; };
+		A7B463FD2292AAFB0018D7F5 /* Photo Item Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B463FC2292AAFB0018D7F5 /* Photo Item Position.swift */; };
+		A7B463FF22940FBF0018D7F5 /* Photo Snippet CV DS Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B463FE22940FBF0018D7F5 /* Photo Snippet CV DS Helpers.swift */; };
+		A7B464012294130E0018D7F5 /* Photo Snippet CV DS Single Items.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B464002294130E0018D7F5 /* Photo Snippet CV DS Single Items.swift */; };
+		A7BD9F5124363C1B00CBB9F8 /* Cloud Batch Delete Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F5024363C1B00CBB9F8 /* Cloud Batch Delete Operation.swift */; };
+		A7BD9F53243701D800CBB9F8 /* Base Batch Cloud Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F52243701D800CBB9F8 /* Base Batch Cloud Operation.swift */; };
+		A7BD9F552437348C00CBB9F8 /* App Cloud Data Saver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F542437348C00CBB9F8 /* App Cloud Data Saver.swift */; };
+		A7BD9F572437353D00CBB9F8 /* App Cloud Data Deleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F562437353D00CBB9F8 /* App Cloud Data Deleter.swift */; };
+		A7BD9F59243738E200CBB9F8 /* Batch Operation Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F58243738E200CBB9F8 /* Batch Operation Dependencies.swift */; };
+		A7BD9F5B2438742600CBB9F8 /* Publisher Unique.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F5A2438742600CBB9F8 /* Publisher Unique.swift */; };
+		A7BD9F5D243A3CEF00CBB9F8 /* File Manager Helpers RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F5C243A3CEF00CBB9F8 /* File Manager Helpers RX.swift */; };
+		A7BD9F5F243A400D00CBB9F8 /* File Manager Helpers Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F5E243A400D00CBB9F8 /* File Manager Helpers Combine.swift */; };
+		A7BD9F61243A45E300CBB9F8 /* Core Data Helpers RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F60243A45E300CBB9F8 /* Core Data Helpers RX.swift */; };
+		A7BD9F63243A478800CBB9F8 /* Core Data Helpers Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F62243A478800CBB9F8 /* Core Data Helpers Combine.swift */; };
+		A7BD9F65243A484F00CBB9F8 /* Dispatch Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F64243A484F00CBB9F8 /* Dispatch Helpers.swift */; };
+		A7BD9F67243A48D500CBB9F8 /* Animation Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BD9F66243A48D500CBB9F8 /* Animation Helpers.swift */; };
+		A7BFBD4F22F36A9F00C29FFE /* Photo MO Fully RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD4E22F36A9F00C29FFE /* Photo MO Fully RX.swift */; };
+		A7BFBD5122F36B0000C29FFE /* Photo Folder MO Fully RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD5022F36B0000C29FFE /* Photo Folder MO Fully RX.swift */; };
+		A7BFBD5322F36B6C00C29FFE /* Photo Snippet MO Fully RX.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD5222F36B6C00C29FFE /* Photo Snippet MO Fully RX.swift */; };
+		A7BFBD5522F36C2F00C29FFE /* Photo MO Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD5422F36C2F00C29FFE /* Photo MO Notifications.swift */; };
+		A7BFBD5722F36C7B00C29FFE /* Photo Folder MO Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD5622F36C7B00C29FFE /* Photo Folder MO Notifications.swift */; };
+		A7BFBD5922F36CCC00C29FFE /* Photo Snippet MO Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD5822F36CCC00C29FFE /* Photo Snippet MO Notifications.swift */; };
+		A7BFBD5B22F988DD00C29FFE /* Draggable Hashable Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BFBD5A22F988DD00C29FFE /* Draggable Hashable Wrapper.swift */; };
+		A7C4940222FD67AE0042800F /* MO Context Undo Manager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C4940122FD67AE0042800F /* MO Context Undo Manager.swift */; };
+		A7C494062302BED60042800F /* Photo Folder MO Undoable Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C494052302BED60042800F /* Photo Folder MO Undoable Properties.swift */; };
+		A7C494082302C9DB0042800F /* Photo Snippet MO Undoable Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C494072302C9DB0042800F /* Photo Snippet MO Undoable Properties.swift */; };
+		A7C4940A2304487B0042800F /* Photo Item Pop-Up Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C494092304487B0042800F /* Photo Item Pop-Up Menu.swift */; };
+		A7C4940C230686CD0042800F /* Photo Snippet CV Pop-Up Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C4940B230686CD0042800F /* Photo Snippet CV Pop-Up Menu.swift */; };
 		A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */; };
 		A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */; };
 		A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */; };
@@ -153,22 +238,64 @@
 		A7CD189B223A544B00242A01 /* Snippets D&D Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CD189A223A544B00242A01 /* Snippets D&D Protocol.swift */; };
 		A7CD189D223A61CE00242A01 /* Snippets D&D Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CD189C223A61CE00242A01 /* Snippets D&D Item Provider.swift */; };
 		A7CD189F223CE9D200242A01 /* D&D Waggle Animation Protocol .swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CD189E223CE9D200242A01 /* D&D Waggle Animation Protocol .swift */; };
+		A7CDC6EB231E6C4600C85A38 /* Undo Operation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CDC6EA231E6C4600C85A38 /* Undo Operation.swift */; };
+		A7CFB87F228837B900EC2289 /* Photo Item Digital Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CFB87E228837B900EC2289 /* Photo Item Digital Label.swift */; };
+		A7CFB883228AAB7200EC2289 /* Photo Item Rendered DigiTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7CFB882228AAB7200EC2289 /* Photo Item Rendered DigiTag.swift */; };
+		A7D020BD247ED40F007CBE19 /* Running Arrow View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D020BC247ED40F007CBE19 /* Running Arrow View.swift */; };
 		A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */; };
 		A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */; };
 		A7D39CF72100E21500F80CAA /* Folder Nested CV DS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */; };
 		A7D39CFA2100E3A000F80CAA /* Folder Nested CV Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CF92100E3A000F80CAA /* Folder Nested CV Delegate.swift */; };
 		A7D39CFC2100EF3700F80CAA /* Item Flag View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D39CFB2100EF3700F80CAA /* Item Flag View.swift */; };
+		A7D672D42386684F007B3C93 /* Segue Action Snippet Initializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D672D32386684F007B3C93 /* Segue Action Snippet Initializable.swift */; };
+		A7D743FF226B58C200C6A645 /* Photo Snippet CV DS Grouping.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D743FE226B58C200C6A645 /* Photo Snippet CV DS Grouping.swift */; };
+		A7D74404226B5D8800C6A645 /* Photo Snippet CV DS Insertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D74403226B5D8800C6A645 /* Photo Snippet CV DS Insertions.swift */; };
+		A7D744062271B44D00C6A645 /* Photo MO Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D744052271B44D00C6A645 /* Photo MO Protocol.swift */; };
+		A7D7442E2279E0E600C6A645 /* SCP Row Position Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7442D2279E0E600C6A645 /* SCP Row Position Extension.swift */; };
+		A7D74430227C350A00C6A645 /* Photo Item Creation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D7442F227C350A00C6A645 /* Photo Item Creation.swift */; };
+		A7D74432227D6AD300C6A645 /* Photo Snippet CV DS Moves.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D74431227D6AD300C6A645 /* Photo Snippet CV DS Moves.swift */; };
+		A7D74434227D6DEA00C6A645 /* Photo Snippet CV DS Deletions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D74433227D6DEA00C6A645 /* Photo Snippet CV DS Deletions.swift */; };
 		A7D83BBD220F2C460050A0CF /* Drop View Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D83BBC220F2C460050A0CF /* Drop View Protocol.swift */; };
 		A7D83BBF220F35E20050A0CF /* Folder Cell D&D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D83BBE220F35E20050A0CF /* Folder Cell D&D Delegate.swift */; };
-		A7D93C6A206D3743007891ED /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D93C69206D3743007891ED /* Helpers.swift */; };
+		A7D93C6A206D3743007891ED /* Core Data Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D93C69206D3743007891ED /* Core Data Helpers.swift */; };
 		A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */; };
 		A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */; };
 		A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7DD7D8D20A4517E00572A25 /* CloudKit.framework */; };
+		A7E193C4234C5C7800E15C49 /* Pointed Menu View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193C3234C5C7800E15C49 /* Pointed Menu View.swift */; };
+		A7E193C6234C5D2C00E15C49 /* Menu Base View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193C5234C5D2C00E15C49 /* Menu Base View.swift */; };
+		A7E193C8234C5DE600E15C49 /* Menu Item Button Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193C7234C5DE600E15C49 /* Menu Item Button Base.swift */; };
+		A7E193CA234C5E3B00E15C49 /* Menu Arrow View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193C9234C5E3B00E15C49 /* Menu Arrow View.swift */; };
+		A7E193CC234C64C800E15C49 /* Menu Base View Inner CV.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193CB234C64C800E15C49 /* Menu Base View Inner CV.swift */; };
+		A7E193CE234C673100E15C49 /* Image Menu Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193CD234C673100E15C49 /* Image Menu Button.swift */; };
+		A7E193D0234C67CA00E15C49 /* Draw Flag Menu Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193CF234C67CA00E15C49 /* Draw Flag Menu Button.swift */; };
+		A7E193D4234DC8CF00E15C49 /* SCP Arrow Pop-up Menu Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E193D3234DC8CF00E15C49 /* SCP Arrow Pop-up Menu Extension.swift */; };
+		A7E3EF19247416E400580F36 /* Decoratable Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF18247416E400580F36 /* Decoratable Protocol.swift */; };
+		A7E3EF1B2474178100580F36 /* Decorations Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF1A2474178100580F36 /* Decorations Enum.swift */; };
+		A7E3EF1D24741A2300580F36 /* @Bordered.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF1C24741A2300580F36 /* @Bordered.swift */; };
+		A7E3EF1F24741B9D00580F36 /* Decorated View Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF1E24741B9D00580F36 /* Decorated View Notifications.swift */; };
+		A7E3EF21247421DF00580F36 /* @Filled.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF20247421DF00580F36 /* @Filled.swift */; };
+		A7E3EF23247421F500580F36 /* @Rounded.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF22247421F500580F36 /* @Rounded.swift */; };
+		A7E3EF382475173600580F36 /* @WeakWrapped.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF372475173500580F36 /* @WeakWrapped.swift */; };
+		A7E3EF3A24752C1400580F36 /* @Constrained.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF3924752C1400580F36 /* @Constrained.swift */; };
+		A7E3EF3C24752CF100580F36 /* Constraints Anchors Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF3B24752CF100580F36 /* Constraints Anchors Enum.swift */; };
+		A7E3EF3E2475616E00580F36 /* UIView methods swizzling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF3D2475616E00580F36 /* UIView methods swizzling.swift */; };
+		A7E3EF402476751400580F36 /* @Rotated.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3EF3F2476751400580F36 /* @Rotated.swift */; };
+		A7E683812477B935009E046C /* @Translated.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E683802477B935009E046C /* @Translated.swift */; };
+		A7E683832477B946009E046C /* @Scaled.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E683822477B946009E046C /* @Scaled.swift */; };
+		A7E683852477B954009E046C /* @Transformed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E683842477B954009E046C /* @Transformed.swift */; };
+		A7E6838724780518009E046C /* @Framed.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E6838624780518009E046C /* @Framed.swift */; };
 		A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */; };
+		A7E8396F229843490090E6AA /* Folder Nested CV DS Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E8396E229843490090E6AA /* Folder Nested CV DS Helpers.swift */; };
+		A7E83971229844DE0090E6AA /* Folder Nested CV DS Deletions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E83970229844DE0090E6AA /* Folder Nested CV DS Deletions.swift */; };
+		A7E839732298458D0090E6AA /* Folder Nested CV DS Insertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E839722298458D0090E6AA /* Folder Nested CV DS Insertions.swift */; };
+		A7E8397522999E280090E6AA /* Zoom View CV DS Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E8397422999E280090E6AA /* Zoom View CV DS Helpers.swift */; };
+		A7E839772299A0AB0090E6AA /* Zoom View CV DS Deletions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E839762299A0AB0090E6AA /* Zoom View CV DS Deletions.swift */; };
+		A7E83979229BCC980090E6AA /* Zoom View CV DS Insertions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E83978229BCC980090E6AA /* Zoom View CV DS Insertions.swift */; };
 		A7EB39961FE6A46A00D93E3B /* Photo MO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EB39941FE6A46A00D93E3B /* Photo MO.swift */; };
 		A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */; };
 		A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */; };
 		A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */; };
+		A7EDD21624570B95006B2817 /* ZOOM View CV D & D Delegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EDD21524570B95006B2817 /* ZOOM View CV D & D Delegate.swift */; };
 		A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EF606120EA1CB500FD09A7 /* Video Player View.swift */; };
 		A7FA2DEE218ECF7E00A2EE8D /* Snippet Cell Animators.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */; };
 		A7FAFFEE20F6294900C5B21D /* Duration Stamp View.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FAFFED20F6294900C5B21D /* Duration Stamp View.swift */; };
@@ -176,14 +303,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A754899D1FBC4F2900359C0C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A754897D1FBC4F2900359C0C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A75489841FBC4F2900359C0C;
-			remoteInfo = Newsman;
-		};
-		A75489A81FBC4F2900359C0C /* PBXContainerItemProxy */ = {
+		A7533B3424B0420600530473 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A754897D1FBC4F2900359C0C /* Project object */;
 			proxyType = 1;
@@ -240,68 +360,111 @@
 		A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage Extensions.swift"; sourceTree = "<group>"; };
 		A71EDA682063D0E900E6AB7A /* Photo Folder Item Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo Folder Item Wrapper.swift"; path = "Newsman/Photo Folder Item Wrapper.swift"; sourceTree = "<group>"; };
 		A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV D&D Delegate.swift"; sourceTree = "<group>"; };
+		A72362DF226B1EAC00C6801F /* Photo Snippet CV DS Hs & Fs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Hs & Fs.swift"; sourceTree = "<group>"; };
+		A72732D12423D8720069F20D /* Cloud Batch Modify Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cloud Batch Modify Operation.swift"; sourceTree = "<group>"; };
 		A7298E142015E9A000A7301D /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		A72B3EAB205838C700C02B52 /* Zoom View CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Cell.swift"; sourceTree = "<group>"; };
 		A72B3EAD2058419000C02B52 /* Zoom View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View.swift"; sourceTree = "<group>"; };
+		A72CDCB32459EEAC002761C1 /* SCP D&D States Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP D&D States Updates.swift"; sourceTree = "<group>"; };
+		A72F0D8C231FCB6B0054249D /* Undo Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Undo Manager.swift"; sourceTree = "<group>"; };
+		A72F0D8E2320104D0054249D /* Multi Target Undoable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Multi Target Undoable Protocol.swift"; sourceTree = "<group>"; };
+		A72F0D90232100320054249D /* Async Undo Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Async Undo Manager.swift"; sourceTree = "<group>"; };
+		A72F0DA223268C230054249D /* Photo Item Undoable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Undoable.swift"; sourceTree = "<group>"; };
+		A72F0DA423268ED50054249D /* Photo Folder Item Undoable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder Item Undoable.swift"; sourceTree = "<group>"; };
+		A72F0DA62328FCE80054249D /* Undo Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Undo Notifications.swift"; sourceTree = "<group>"; };
+		A72F0DAA233369F20054249D /* Case Selector Alert Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Case Selector Alert Controller.swift"; sourceTree = "<group>"; };
+		A72F0DAC23336A9C0054249D /* Undo Manager Menu Action Cases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Undo Manager Menu Action Cases.swift"; sourceTree = "<group>"; };
 		A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC.swift"; sourceTree = "<group>"; };
 		A7304A9B1FCAFDB700207A52 /* Single Item Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Single Item Cell.swift"; sourceTree = "<group>"; };
 		A7304A9D1FCB0DFD00207A52 /* Photo Picker Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Picker Delegate.swift"; sourceTree = "<group>"; };
-		A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS.swift"; sourceTree = "<group>"; };
-		A7317B072015EA4100C8836A /* Newsman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Newsman.entitlements; sourceTree = "<group>"; };
+		A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Main.swift"; sourceTree = "<group>"; };
 		A7330F0F1FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Table View Delegate.swift"; sourceTree = "<group>"; };
+		A7339B4E24C1E09100AFE119 /* Photo Item Flag Marker View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Flag Marker View.swift"; sourceTree = "<group>"; };
+		A733EDAF24B1F932000E5F91 /* Publisher Unretained Assign.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher Unretained Assign.swift"; sourceTree = "<group>"; };
+		A737273C247D12E000FCE4CD /* CGPoint Math Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint Math Extensions.swift"; sourceTree = "<group>"; };
 		A73BDA7821D0F62C007E0416 /* Snippets Representable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Representable.swift"; sourceTree = "<group>"; };
 		A7400E5D1FC6A37B006F05DC /* Settings+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A7400E5E1FC6A37B006F05DC /* Settings+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Settings+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A7400E741FC731A2006F05DC /* Date Picker View Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date Picker View Controller.swift"; sourceTree = "<group>"; };
 		A7400E761FC73305006F05DC /* Priority Picker View Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Priority Picker View Controller.swift"; sourceTree = "<group>"; };
 		A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets CL Delegate.swift"; sourceTree = "<group>"; };
+		A7410A0424A288EE0013AE5C /* Photo Cell Async Image View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Cell Async Image View.swift"; sourceTree = "<group>"; };
 		A741BD4920EBEECD0062AF27 /* Playback Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Button.swift"; sourceTree = "<group>"; };
 		A741BD5F20EE32F80062AF27 /* Video Scrub View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Scrub View.swift"; sourceTree = "<group>"; };
 		A741BD6120EF55540062AF27 /* Playback Progress View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Playback Progress View.swift"; sourceTree = "<group>"; };
 		A7438685219D70C3005ECACD /* App Delegate D&D Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Delegate D&D Extension.swift"; sourceTree = "<group>"; };
-		A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A7443EFD202DD3F60039BE41 /* PhotoFolder MO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder MO.swift"; sourceTree = "<group>"; };
+		A7443EFC202DD3F60039BE41 /* Photo Snippet MO Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO Properties.swift"; sourceTree = "<group>"; };
+		A7443EFD202DD3F60039BE41 /* Photo Folder MO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO.swift"; sourceTree = "<group>"; };
 		A7443F03202DD7600039BE41 /* Photo MO Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Properties.swift"; sourceTree = "<group>"; };
-		A7443F04202DD7600039BE41 /* PhotoFolder MO Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoFolder MO Properties.swift"; sourceTree = "<group>"; };
+		A7443F04202DD7600039BE41 /* Photo Folder MO Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Properties.swift"; sourceTree = "<group>"; };
 		A7443F112035D2F80039BE41 /* Folder Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Cell.swift"; sourceTree = "<group>"; };
 		A7443F13203881790039BE41 /* Flag Items Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Flag Items Menu.swift"; sourceTree = "<group>"; };
 		A747B96D2240CDA800D552F8 /* Snippet Cells Selection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cells Selection.swift"; sourceTree = "<group>"; };
 		A748D8B420F4CD5500DA190A /* Play Icon View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Play Icon View.swift"; sourceTree = "<group>"; };
-		A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoSnippet+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A74B66F324975EAB00EC4FDB /* @Capsulated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Capsulated.swift"; sourceTree = "<group>"; };
+		A74B66F52499E35E00EC4FDB /* @Masked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Masked.swift"; sourceTree = "<group>"; };
+		A74E1ABA24657A200011DD2B /* UIView Decorations Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView Decorations Wrapper.swift"; sourceTree = "<group>"; };
+		A75033FE2433526E004A320F /* App Delegate MOC Saver ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Delegate MOC Saver ext.swift"; sourceTree = "<group>"; };
+		A75117F01FE6E5880009F03C /* Photo Snippet MO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO.swift"; sourceTree = "<group>"; };
 		A75117F41FF656590009F03C /* Photo Snippet CV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV.swift"; sourceTree = "<group>"; };
 		A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CG Affine Transform Extension.swift"; sourceTree = "<group>"; };
 		A752514F2146D31E00022F42 /* Snippets Table View FRC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Table View FRC.swift"; sourceTree = "<group>"; };
+		A7533B1E24AF44A200530473 /* Content Draggable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Content Draggable Protocol.swift"; sourceTree = "<group>"; };
+		A7533B2524AF48F700530473 /* Snippet Items Draggable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Items Draggable Protocol.swift"; sourceTree = "<group>"; };
+		A7533B2724AF498200530473 /* Photo Item Cell Drop Providable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Cell Drop Providable.swift"; sourceTree = "<group>"; };
+		A7533B2924AF49C600530473 /* Collection View Drag Item Providable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection View Drag Item Providable.swift"; sourceTree = "<group>"; };
+		A7533B2F24B0420500530473 /* NewsmanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewsmanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7533B3124B0420600530473 /* NewsmanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsmanTests.swift; sourceTree = "<group>"; };
+		A7533B3324B0420600530473 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7533B3924B046DA00530473 /* FOLDER Nested CV D & D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FOLDER Nested CV D & D Delegate.swift"; sourceTree = "<group>"; };
 		A75489851FBC4F2900359C0C /* Newsman.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Newsman.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489881FBC4F2900359C0C /* App Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Delegate.swift"; sourceTree = "<group>"; };
 		A754898A1FBC4F2900359C0C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A75489901FBC4F2900359C0C /* Newsman.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Newsman.xcdatamodel; sourceTree = "<group>"; };
 		A75489921FBC4F2900359C0C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A75489971FBC4F2900359C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A754899C1FBC4F2900359C0C /* NewsmanTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewsmanTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489A01FBC4F2900359C0C /* NewsmanTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsmanTests.swift; sourceTree = "<group>"; };
 		A75489A21FBC4F2900359C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A75489A71FBC4F2900359C0C /* NewsmanUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NewsmanUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A75489AB1FBC4F2900359C0C /* NewsmanUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsmanUITests.swift; sourceTree = "<group>"; };
 		A75489AD1FBC4F2900359C0C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A75489BB1FBC620300359C0C /* MainViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewCell.swift; sourceTree = "<group>"; };
 		A75489BD1FBC649000359C0C /* MainViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewDataSource.swift; sourceTree = "<group>"; };
+		A755338A24912B23003907E5 /* App Appearance Setup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Appearance Setup.swift"; sourceTree = "<group>"; };
+		A757D26C238D372400427BEE /* MOC Observable Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOC Observable Wrapper.swift"; sourceTree = "<group>"; };
+		A757D26E238E889500427BEE /* MO Obsevable Attributes Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MO Obsevable Attributes Protocol.swift"; sourceTree = "<group>"; };
+		A757D271238FCC4500427BEE /* Photo DMOP RxSwift Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo DMOP RxSwift Ext.swift"; sourceTree = "<group>"; };
+		A757D273238FCC5800427BEE /* Photo DMOP Combine Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo DMOP Combine Ext.swift"; sourceTree = "<group>"; };
+		A757D278238FD0B000427BEE /* Photo Folder DMOP RxSwift Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder DMOP RxSwift Ext.swift"; sourceTree = "<group>"; };
+		A757D27A238FD60100427BEE /* Photo MO Deletion (RxSwift).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Deletion (RxSwift).swift"; sourceTree = "<group>"; };
+		A757D27C238FD61800427BEE /* Photo MO Deletion (Combine).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Deletion (Combine).swift"; sourceTree = "<group>"; };
+		A757D2822397BA9B00427BEE /* Photo Folder MO Deletion (RxSwift).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Deletion (RxSwift).swift"; sourceTree = "<group>"; };
 		A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateVCRestoration.swift; sourceTree = "<group>"; };
 		A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet VC Restoration.swift"; sourceTree = "<group>"; };
 		A75DB63D2215B68B0045E9E2 /* Photo Item D&D Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item D&D Extension.swift"; sourceTree = "<group>"; };
 		A75DB63F2215B7980045E9E2 /* Photo Folder D&D Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder D&D Extension.swift"; sourceTree = "<group>"; };
 		A75DB6412215B8FD0045E9E2 /* Draggable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Draggable Protocol.swift"; sourceTree = "<group>"; };
 		A75DB6432215B9790045E9E2 /* Draggable Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Draggable Extension.swift"; sourceTree = "<group>"; };
-		A75DB6452215BA320045E9E2 /* Photo Items Draggable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Items Draggable Protocol.swift"; sourceTree = "<group>"; };
 		A75DB6472215BAEF0045E9E2 /* Photo Items Draggable Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Items Draggable Extension.swift"; sourceTree = "<group>"; };
 		A75DB64A2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Cell CV D&D Delegate.swift"; sourceTree = "<group>"; };
-		A75F903D2258DC8E001DBF8C /* Photo Snippet Items Delete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Items Delete.swift"; sourceTree = "<group>"; };
+		A75F903D2258DC8E001DBF8C /* Photo Snippet Child Items Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Child Items Deletion.swift"; sourceTree = "<group>"; };
 		A7660E3F222676DA00F845E8 /* Snippet Cell Images Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Images Loading.swift"; sourceTree = "<group>"; };
 		A7660E412226781000F845E8 /* Snippet Cells Disclosure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cells Disclosure.swift"; sourceTree = "<group>"; };
 		A7660E4322267BF700F845E8 /* Snippet Cell CA Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell CA Delegate.swift"; sourceTree = "<group>"; };
+		A767986D22DCDA4B00DEAF1B /* Zoom View CV DS Inside Moves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS Inside Moves.swift"; sourceTree = "<group>"; };
+		A767986F22DCE87200DEAF1B /* Folder Nested CV DS Inside Moves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS Inside Moves.swift"; sourceTree = "<group>"; };
+		A767987122DE0A4800DEAF1B /* Photo Snippet MO RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO RX.swift"; sourceTree = "<group>"; };
+		A767987322E0A12C00DEAF1B /* File Manager Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File Manager Helpers.swift"; sourceTree = "<group>"; };
 		A768ED6A21883AAD006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Accesorial.storyboard; sourceTree = "<group>"; };
 		A768ED6D21883AC9006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MediaViewControllers.storyboard; sourceTree = "<group>"; };
 		A768ED7021883B41006AED31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Snippets.storyboard; sourceTree = "<group>"; };
 		A76A2824212AD0610094AA5F /* Photo Item Operations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Operations.swift"; sourceTree = "<group>"; };
+		A76B38B02416640A0073F04D /* Newsman.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Newsman.entitlements; sourceTree = "<group>"; };
+		A76B38D624177A140073F04D /* CKRecord Convertable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord Convertable.swift"; sourceTree = "<group>"; };
+		A76B38DA24178E730073F04D /* App Cloud Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Cloud Data.swift"; sourceTree = "<group>"; };
+		A76B38DC24191E0D0073F04D /* Core Data Secure Transformers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core Data Secure Transformers.swift"; sourceTree = "<group>"; };
+		A77424AF244374AD006FB973 /* Collection Wrappers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection Wrappers.swift"; sourceTree = "<group>"; };
+		A7750C1D22E7140C007C1562 /* MO Operations Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MO Operations Types.swift"; sourceTree = "<group>"; };
+		A7750C1F22E71ABB007C1562 /* MO Operations Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MO Operations Errors.swift"; sourceTree = "<group>"; };
 		A77BB204218D9A97000F2E85 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A77C73902194392D00E1C57F /* Snippet Bar Rating View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Bar Rating View.swift"; sourceTree = "<group>"; };
 		A77F74D0206241600074A915 /* Zoom View CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV Delegate.swift"; sourceTree = "<group>"; };
@@ -315,8 +478,13 @@
 		A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCSnippetsScrollProtocol.swift; sourceTree = "<group>"; };
 		A7826E4F20E0F6E100FFBBFA /* Text Snippet VC Restoration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Text Snippet VC Restoration.swift"; sourceTree = "<group>"; };
 		A7826E5120E2618100FFBBFA /* Video Shooting VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC.swift"; sourceTree = "<group>"; };
-		A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D&D Delegate.swift"; sourceTree = "<group>"; };
+		A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D&D Delegate.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		A787566722213479006503D7 /* Snippets Hidden Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets Hidden Cell.swift"; sourceTree = "<group>"; };
+		A78A97D022B3A403007435F8 /* Photo Folder MO RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO RX.swift"; sourceTree = "<group>"; };
+		A78B3B00244B134E0031B24E /* Photo Snippet MO Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO Deletion.swift"; sourceTree = "<group>"; };
+		A78B3B02244B14F50031B24E /* Photo Snippet DMOP (RxSwift).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet DMOP (RxSwift).swift"; sourceTree = "<group>"; };
+		A78B3B0424503C200031B24E /* D & D Subject States.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "D & D Subject States.swift"; sourceTree = "<group>"; };
+		A78B3B06245042AC0031B24E /* D & D Drop States Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "D & D Drop States Observation.swift"; sourceTree = "<group>"; };
 		A78C2EBF224669950005CFE4 /* Snippet Drop View Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Drop View Delegate.swift"; sourceTree = "<group>"; };
 		A78C2EC1224677C00005CFE4 /* Snippet Cell Drop Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Drop Interaction.swift"; sourceTree = "<group>"; };
 		A78C2EC32246783E0005CFE4 /* Snippet Cell Spring Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Spring Interaction.swift"; sourceTree = "<group>"; };
@@ -325,12 +493,24 @@
 		A78C2EC9224BCCF40005CFE4 /* Photo Snippet CV DS RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS RX.swift"; sourceTree = "<group>"; };
 		A78C2ECB224CAB640005CFE4 /* Photo MO RX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Photo MO RX.swift"; sourceTree = "<group>"; };
 		A78D9B5B213289290095EEFB /* Photo Snippet Images Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Images Provider.swift"; sourceTree = "<group>"; };
+		A791ECAC241393FD00606E92 /* MOC Observable from VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOC Observable from VC.swift"; sourceTree = "<group>"; };
+		A791ECAE2413964C00606E92 /* MOC Savable by VC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MOC Savable by VC.swift"; sourceTree = "<group>"; };
+		A791ECB02413B6ED00606E92 /* CL Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CL Wrapper.swift"; sourceTree = "<group>"; };
 		A79548F121E62B4300A37959 /* Thread Safe Map.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thread Safe Map.swift"; sourceTree = "<group>"; };
 		A79548F321E7812A00A37959 /* D&D Waggle Animation Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "D&D Waggle Animation Extension.swift"; sourceTree = "<group>"; };
 		A79548F521EC98AC00A37959 /* Single Cell D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Single Cell D&D Delegate.swift"; sourceTree = "<group>"; };
+		A797B0002373181800A88892 /* Photo MO Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Deletion.swift"; sourceTree = "<group>"; };
+		A797B0022373188A00A88892 /* Deletable MO Protocol (DMOP).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Deletable MO Protocol (DMOP).swift"; sourceTree = "<group>"; };
+		A797B00523731B2800A88892 /* Photo Folder MO Deletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Deletion.swift"; sourceTree = "<group>"; };
+		A79CAD02246039CC003E606F /* CV Cell D & D Delegate Base Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CV Cell D & D Delegate Base Class.swift"; sourceTree = "<group>"; };
 		A7A15EAF21907B1F009877F4 /* Snippet Image View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Image View.swift"; sourceTree = "<group>"; };
+		A7A3B6372452C17900B1E371 /* Photo Snippet Cell Main View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet Cell Main View.swift"; sourceTree = "<group>"; };
+		A7A3B6392454307F00B1E371 /* BASE CV D & D Delegate Class.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BASE CV D & D Delegate Class.swift"; sourceTree = "<group>"; };
+		A7A3B63B2454429600B1E371 /* MAIN CV D & D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MAIN CV D & D Delegate.swift"; sourceTree = "<group>"; };
+		A7A58EC32285891C000F0593 /* Photo Item Digital Marker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Digital Marker.swift"; sourceTree = "<group>"; };
 		A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Manipulations.swift"; sourceTree = "<group>"; };
 		A7A97231217074100061AA07 /* Global Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Global Formatters.swift"; sourceTree = "<group>"; };
+		A7AAE437233E0AED00A0E2C2 /* View Pointed Pop-Up Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View Pointed Pop-Up Menu.swift"; sourceTree = "<group>"; };
 		A7AFE5C021F1C48900EBD4C9 /* SCP Video Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Video Extension.swift"; sourceTree = "<group>"; };
 		A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Flag Markers Extension.swift"; sourceTree = "<group>"; };
 		A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Image Load Extension.swift"; sourceTree = "<group>"; };
@@ -345,6 +525,33 @@
 		A7B2B0882205CBB600D40008 /* Thumbnail Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Thumbnail Image Operation.swift"; sourceTree = "<group>"; };
 		A7B2B08A2205CD2700D40008 /* Resize Image Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Resize Image Operation.swift"; sourceTree = "<group>"; };
 		A7B2B08C2205CED300D40008 /* Image Set Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image Set Operation.swift"; sourceTree = "<group>"; };
+		A7B463FC2292AAFB0018D7F5 /* Photo Item Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Position.swift"; sourceTree = "<group>"; };
+		A7B463FE22940FBF0018D7F5 /* Photo Snippet CV DS Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Helpers.swift"; sourceTree = "<group>"; };
+		A7B464002294130E0018D7F5 /* Photo Snippet CV DS Single Items.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Single Items.swift"; sourceTree = "<group>"; };
+		A7BD9F5024363C1B00CBB9F8 /* Cloud Batch Delete Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Cloud Batch Delete Operation.swift"; sourceTree = "<group>"; };
+		A7BD9F52243701D800CBB9F8 /* Base Batch Cloud Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base Batch Cloud Operation.swift"; sourceTree = "<group>"; };
+		A7BD9F542437348C00CBB9F8 /* App Cloud Data Saver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Cloud Data Saver.swift"; sourceTree = "<group>"; };
+		A7BD9F562437353D00CBB9F8 /* App Cloud Data Deleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App Cloud Data Deleter.swift"; sourceTree = "<group>"; };
+		A7BD9F58243738E200CBB9F8 /* Batch Operation Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Batch Operation Dependencies.swift"; sourceTree = "<group>"; };
+		A7BD9F5A2438742600CBB9F8 /* Publisher Unique.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher Unique.swift"; sourceTree = "<group>"; };
+		A7BD9F5C243A3CEF00CBB9F8 /* File Manager Helpers RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File Manager Helpers RX.swift"; sourceTree = "<group>"; };
+		A7BD9F5E243A400D00CBB9F8 /* File Manager Helpers Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File Manager Helpers Combine.swift"; sourceTree = "<group>"; };
+		A7BD9F60243A45E300CBB9F8 /* Core Data Helpers RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core Data Helpers RX.swift"; sourceTree = "<group>"; };
+		A7BD9F62243A478800CBB9F8 /* Core Data Helpers Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core Data Helpers Combine.swift"; sourceTree = "<group>"; };
+		A7BD9F64243A484F00CBB9F8 /* Dispatch Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dispatch Helpers.swift"; sourceTree = "<group>"; };
+		A7BD9F66243A48D500CBB9F8 /* Animation Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Animation Helpers.swift"; sourceTree = "<group>"; };
+		A7BFBD4E22F36A9F00C29FFE /* Photo MO Fully RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Fully RX.swift"; sourceTree = "<group>"; };
+		A7BFBD5022F36B0000C29FFE /* Photo Folder MO Fully RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Fully RX.swift"; sourceTree = "<group>"; };
+		A7BFBD5222F36B6C00C29FFE /* Photo Snippet MO Fully RX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO Fully RX.swift"; sourceTree = "<group>"; };
+		A7BFBD5422F36C2F00C29FFE /* Photo MO Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Notifications.swift"; sourceTree = "<group>"; };
+		A7BFBD5622F36C7B00C29FFE /* Photo Folder MO Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Notifications.swift"; sourceTree = "<group>"; };
+		A7BFBD5822F36CCC00C29FFE /* Photo Snippet MO Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO Notifications.swift"; sourceTree = "<group>"; };
+		A7BFBD5A22F988DD00C29FFE /* Draggable Hashable Wrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Draggable Hashable Wrapper.swift"; sourceTree = "<group>"; };
+		A7C4940122FD67AE0042800F /* MO Context Undo Manager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MO Context Undo Manager.swift"; sourceTree = "<group>"; };
+		A7C494052302BED60042800F /* Photo Folder MO Undoable Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Folder MO Undoable Properties.swift"; sourceTree = "<group>"; };
+		A7C494072302C9DB0042800F /* Photo Snippet MO Undoable Properties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet MO Undoable Properties.swift"; sourceTree = "<group>"; };
+		A7C494092304487B0042800F /* Photo Item Pop-Up Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Pop-Up Menu.swift"; sourceTree = "<group>"; };
+		A7C4940B230686CD0042800F /* Photo Snippet CV Pop-Up Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV Pop-Up Menu.swift"; sourceTree = "<group>"; };
 		A7C6A7CE20C8201C005D566A /* Spring Door Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Spring Door Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D020C820BE005D566A /* Rotation Fade Scale Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rotation Fade Scale Animator.swift"; sourceTree = "<group>"; };
 		A7C6A7D320C82346005D566A /* Corner Slide Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Corner Slide Animator.swift"; sourceTree = "<group>"; };
@@ -358,22 +565,64 @@
 		A7CD189A223A544B00242A01 /* Snippets D&D Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Protocol.swift"; sourceTree = "<group>"; };
 		A7CD189C223A61CE00242A01 /* Snippets D&D Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippets D&D Item Provider.swift"; sourceTree = "<group>"; };
 		A7CD189E223CE9D200242A01 /* D&D Waggle Animation Protocol .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "D&D Waggle Animation Protocol .swift"; sourceTree = "<group>"; };
+		A7CDC6EA231E6C4600C85A38 /* Undo Operation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Undo Operation.swift"; sourceTree = "<group>"; };
+		A7CFB87E228837B900EC2289 /* Photo Item Digital Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Digital Label.swift"; sourceTree = "<group>"; };
+		A7CFB882228AAB7200EC2289 /* Photo Item Rendered DigiTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Rendered DigiTag.swift"; sourceTree = "<group>"; };
+		A7D020BC247ED40F007CBE19 /* Running Arrow View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Running Arrow View.swift"; sourceTree = "<group>"; };
 		A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Protocol (SCP).swift"; sourceTree = "<group>"; };
 		A7D39CF42100DF7F00F80CAA /* Folder Nested CV Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV Cell.swift"; sourceTree = "<group>"; };
 		A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS.swift"; sourceTree = "<group>"; };
 		A7D39CF92100E3A000F80CAA /* Folder Nested CV Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV Delegate.swift"; sourceTree = "<group>"; };
 		A7D39CFB2100EF3700F80CAA /* Item Flag View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Item Flag View.swift"; sourceTree = "<group>"; };
+		A7D672D32386684F007B3C93 /* Segue Action Snippet Initializable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Segue Action Snippet Initializable.swift"; sourceTree = SOURCE_ROOT; };
+		A7D743FE226B58C200C6A645 /* Photo Snippet CV DS Grouping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Grouping.swift"; sourceTree = "<group>"; };
+		A7D74403226B5D8800C6A645 /* Photo Snippet CV DS Insertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Insertions.swift"; sourceTree = "<group>"; };
+		A7D744052271B44D00C6A645 /* Photo MO Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO Protocol.swift"; sourceTree = "<group>"; };
+		A7D7442D2279E0E600C6A645 /* SCP Row Position Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Row Position Extension.swift"; sourceTree = "<group>"; };
+		A7D7442F227C350A00C6A645 /* Photo Item Creation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Item Creation.swift"; sourceTree = "<group>"; };
+		A7D74431227D6AD300C6A645 /* Photo Snippet CV DS Moves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Moves.swift"; sourceTree = "<group>"; };
+		A7D74433227D6DEA00C6A645 /* Photo Snippet CV DS Deletions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Snippet CV DS Deletions.swift"; sourceTree = "<group>"; };
 		A7D83BBC220F2C460050A0CF /* Drop View Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Drop View Protocol.swift"; sourceTree = "<group>"; };
 		A7D83BBE220F35E20050A0CF /* Folder Cell D&D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Cell D&D Delegate.swift"; sourceTree = "<group>"; };
-		A7D93C69206D3743007891ED /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		A7D93C69206D3743007891ED /* Core Data Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Core Data Helpers.swift"; sourceTree = "<group>"; };
 		A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo Drop Item Provider.swift"; sourceTree = "<group>"; };
 		A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Photo Item Protocol.swift"; path = "Newsman/Photo Item Protocol.swift"; sourceTree = "<group>"; };
 		A7DD7D8D20A4517E00572A25 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		A7E193C3234C5C7800E15C49 /* Pointed Menu View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pointed Menu View.swift"; sourceTree = "<group>"; };
+		A7E193C5234C5D2C00E15C49 /* Menu Base View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Menu Base View.swift"; sourceTree = "<group>"; };
+		A7E193C7234C5DE600E15C49 /* Menu Item Button Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Menu Item Button Base.swift"; sourceTree = "<group>"; };
+		A7E193C9234C5E3B00E15C49 /* Menu Arrow View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Menu Arrow View.swift"; sourceTree = "<group>"; };
+		A7E193CB234C64C800E15C49 /* Menu Base View Inner CV.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Menu Base View Inner CV.swift"; sourceTree = "<group>"; };
+		A7E193CD234C673100E15C49 /* Image Menu Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image Menu Button.swift"; sourceTree = "<group>"; };
+		A7E193CF234C67CA00E15C49 /* Draw Flag Menu Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Draw Flag Menu Button.swift"; sourceTree = "<group>"; };
+		A7E193D3234DC8CF00E15C49 /* SCP Arrow Pop-up Menu Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SCP Arrow Pop-up Menu Extension.swift"; sourceTree = "<group>"; };
+		A7E3EF18247416E400580F36 /* Decoratable Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decoratable Protocol.swift"; sourceTree = "<group>"; };
+		A7E3EF1A2474178100580F36 /* Decorations Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decorations Enum.swift"; sourceTree = "<group>"; };
+		A7E3EF1C24741A2300580F36 /* @Bordered.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Bordered.swift"; sourceTree = "<group>"; };
+		A7E3EF1E24741B9D00580F36 /* Decorated View Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decorated View Notifications.swift"; sourceTree = "<group>"; };
+		A7E3EF20247421DF00580F36 /* @Filled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Filled.swift"; sourceTree = "<group>"; };
+		A7E3EF22247421F500580F36 /* @Rounded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Rounded.swift"; sourceTree = "<group>"; };
+		A7E3EF372475173500580F36 /* @WeakWrapped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@WeakWrapped.swift"; sourceTree = "<group>"; };
+		A7E3EF3924752C1400580F36 /* @Constrained.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Constrained.swift"; sourceTree = "<group>"; };
+		A7E3EF3B24752CF100580F36 /* Constraints Anchors Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Constraints Anchors Enum.swift"; sourceTree = "<group>"; };
+		A7E3EF3D2475616E00580F36 /* UIView methods swizzling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView methods swizzling.swift"; sourceTree = "<group>"; };
+		A7E3EF3F2476751400580F36 /* @Rotated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Rotated.swift"; sourceTree = "<group>"; };
+		A7E683802477B935009E046C /* @Translated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Translated.swift"; sourceTree = "<group>"; };
+		A7E683822477B946009E046C /* @Scaled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Scaled.swift"; sourceTree = "<group>"; };
+		A7E683842477B954009E046C /* @Transformed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Transformed.swift"; sourceTree = "<group>"; };
+		A7E6838624780518009E046C /* @Framed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "@Framed.swift"; sourceTree = "<group>"; };
 		A7E6985120E389CC00BA5B1E /* Video Shooting VC Restoration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Shooting VC Restoration.swift"; sourceTree = "<group>"; };
+		A7E8396E229843490090E6AA /* Folder Nested CV DS Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS Helpers.swift"; sourceTree = "<group>"; };
+		A7E83970229844DE0090E6AA /* Folder Nested CV DS Deletions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS Deletions.swift"; sourceTree = "<group>"; };
+		A7E839722298458D0090E6AA /* Folder Nested CV DS Insertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Folder Nested CV DS Insertions.swift"; sourceTree = "<group>"; };
+		A7E8397422999E280090E6AA /* Zoom View CV DS Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS Helpers.swift"; sourceTree = "<group>"; };
+		A7E839762299A0AB0090E6AA /* Zoom View CV DS Deletions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS Deletions.swift"; sourceTree = "<group>"; };
+		A7E83978229BCC980090E6AA /* Zoom View CV DS Insertions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Zoom View CV DS Insertions.swift"; sourceTree = "<group>"; };
 		A7EB39941FE6A46A00D93E3B /* Photo MO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo MO.swift"; sourceTree = "<group>"; };
 		A7EC89FC20AAEB4E0030D280 /* NCTransitionAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionAnimation.swift; sourceTree = "<group>"; };
 		A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NCTransitionsDelegate.swift; sourceTree = "<group>"; };
 		A7EC8A0020B0A2B90030D280 /* VC Transitions Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VC Transitions Delegate.swift"; sourceTree = "<group>"; };
+		A7EDD21524570B95006B2817 /* ZOOM View CV D & D Delegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ZOOM View CV D & D Delegate.swift"; sourceTree = "<group>"; };
 		A7EF606120EA1CB500FD09A7 /* Video Player View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Video Player View.swift"; sourceTree = "<group>"; };
 		A7FA2DED218ECF7E00A2EE8D /* Snippet Cell Animators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Snippet Cell Animators.swift"; sourceTree = "<group>"; };
 		A7FAFFED20F6294900C5B21D /* Duration Stamp View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Duration Stamp View.swift"; sourceTree = "<group>"; };
@@ -381,6 +630,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A7533B2C24B0420500530473 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A75489821FBC4F2900359C0C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -388,20 +644,6 @@
 				A7298E152015E9A000A7301D /* CoreData.framework in Frameworks */,
 				A7DD7D8E20A4517E00572A25 /* CloudKit.framework in Frameworks */,
 				56933824BC885D327E1E43F2 /* Pods_Newsman.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A75489991FBC4F2900359C0C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A75489A41FBC4F2900359C0C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,8 +662,14 @@
 		A71C85D21FBE228F000F2DD9 /* Core Data Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A7CDC6E9231E6C1300C85A38 /* Distributed Undo Manager */,
 				A754898F1FBC4F2900359C0C /* Newsman.xcdatamodeld */,
-				A7D93C69206D3743007891ED /* Helpers.swift */,
+				A7BD9F64243A484F00CBB9F8 /* Dispatch Helpers.swift */,
+				A7BD9F66243A48D500CBB9F8 /* Animation Helpers.swift */,
+				A7BD9F69243A4ADC00CBB9F8 /* File Manager Helpers */,
+				A7BD9F68243A4AB700CBB9F8 /* Core Data Helpers */,
+				A75033FE2433526E004A320F /* App Delegate MOC Saver ext.swift */,
+				A797B00423731A0400A88892 /* General */,
 				A7443F07202DDB7E0039BE41 /* Photo */,
 				A7443F08202DDBCF0039BE41 /* PhotoFolder */,
 				A7443F09202DDC130039BE41 /* PhotoSnippet */,
@@ -446,6 +694,35 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A72D6754244B121400FB75AA /* DELETE */ = {
+			isa = PBXGroup;
+			children = (
+				A75F903D2258DC8E001DBF8C /* Photo Snippet Child Items Deletion.swift */,
+				A78B3B00244B134E0031B24E /* Photo Snippet MO Deletion.swift */,
+				A78B3B02244B14F50031B24E /* Photo Snippet DMOP (RxSwift).swift */,
+			);
+			name = DELETE;
+			sourceTree = "<group>";
+		};
+		A7339B5024C1ED0300AFE119 /* CELL MAIN VIEW */ = {
+			isa = PBXGroup;
+			children = (
+				A7A3B6372452C17900B1E371 /* Photo Snippet Cell Main View.swift */,
+				A7CFB882228AAB7200EC2289 /* Photo Item Rendered DigiTag.swift */,
+				A7339B4E24C1E09100AFE119 /* Photo Item Flag Marker View.swift */,
+			);
+			name = "CELL MAIN VIEW";
+			sourceTree = "<group>";
+		};
+		A733EDAE24B1F878000E5F91 /* COMBINE EXT */ = {
+			isa = PBXGroup;
+			children = (
+				A7BD9F5A2438742600CBB9F8 /* Publisher Unique.swift */,
+				A733EDAF24B1F932000E5F91 /* Publisher Unretained Assign.swift */,
+			);
+			name = "COMBINE EXT";
+			sourceTree = "<group>";
+		};
 		A741BD4B20ECEDDC0062AF27 /* VIDEO PROCESSING */ = {
 			isa = PBXGroup;
 			children = (
@@ -464,12 +741,17 @@
 		A7443F07202DDB7E0039BE41 /* Photo */ = {
 			isa = PBXGroup;
 			children = (
+				A757D270238FCBB600427BEE /* DELETE */,
 				A7EB39941FE6A46A00D93E3B /* Photo MO.swift */,
-				A7443F03202DD7600039BE41 /* Photo MO Properties.swift */,
 				A704264E1FDA87CA000B3400 /* Photo Item Wrapper.swift */,
-				A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */,
+				A7443F03202DD7600039BE41 /* Photo MO Properties.swift */,
 				A78C2ECB224CAB640005CFE4 /* Photo MO RX.swift */,
-				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
+				A7BFBD5422F36C2F00C29FFE /* Photo MO Notifications.swift */,
+				A7BFBD4E22F36A9F00C29FFE /* Photo MO Fully RX.swift */,
+				A7AFE5C721F3870B00EBD4C9 /* Photo MO Manipulations.swift */,
+				A7B463FC2292AAFB0018D7F5 /* Photo Item Position.swift */,
+				A7D7442F227C350A00C6A645 /* Photo Item Creation.swift */,
+				A72F0DA223268C230054249D /* Photo Item Undoable.swift */,
 			);
 			name = Photo;
 			sourceTree = "<group>";
@@ -477,10 +759,16 @@
 		A7443F08202DDBCF0039BE41 /* PhotoFolder */ = {
 			isa = PBXGroup;
 			children = (
-				A7443EFD202DD3F60039BE41 /* PhotoFolder MO.swift */,
-				A7443F04202DD7600039BE41 /* PhotoFolder MO Properties.swift */,
-				A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */,
+				A757D277238FD05500427BEE /* DELETE */,
+				A7443EFD202DD3F60039BE41 /* Photo Folder MO.swift */,
 				A71EDA682063D0E900E6AB7A /* Photo Folder Item Wrapper.swift */,
+				A7443F04202DD7600039BE41 /* Photo Folder MO Properties.swift */,
+				A78A97D022B3A403007435F8 /* Photo Folder MO RX.swift */,
+				A7BFBD5622F36C7B00C29FFE /* Photo Folder MO Notifications.swift */,
+				A7BFBD5022F36B0000C29FFE /* Photo Folder MO Fully RX.swift */,
+				A7C494052302BED60042800F /* Photo Folder MO Undoable Properties.swift */,
+				A7A72E4B21F622DD003AA849 /* Photo Folder MO Manipulations.swift */,
+				A72F0DA423268ED50054249D /* Photo Folder Item Undoable.swift */,
 			);
 			name = PhotoFolder;
 			sourceTree = "<group>";
@@ -488,9 +776,13 @@
 		A7443F09202DDC130039BE41 /* PhotoSnippet */ = {
 			isa = PBXGroup;
 			children = (
-				A75117F01FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift */,
-				A75F903D2258DC8E001DBF8C /* Photo Snippet Items Delete.swift */,
-				A7443EFC202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift */,
+				A72D6754244B121400FB75AA /* DELETE */,
+				A767987122DE0A4800DEAF1B /* Photo Snippet MO RX.swift */,
+				A7BFBD5822F36CCC00C29FFE /* Photo Snippet MO Notifications.swift */,
+				A7BFBD5222F36B6C00C29FFE /* Photo Snippet MO Fully RX.swift */,
+				A75117F01FE6E5880009F03C /* Photo Snippet MO.swift */,
+				A7443EFC202DD3F60039BE41 /* Photo Snippet MO Properties.swift */,
+				A7C494072302C9DB0042800F /* Photo Snippet MO Undoable Properties.swift */,
 				A78C2EC52248DC620005CFE4 /* Photo Snippet MO Manipulations.swift */,
 			);
 			name = PhotoSnippet;
@@ -559,15 +851,38 @@
 			name = VideoSnippet;
 			sourceTree = "<group>";
 		};
+		A7533B2224AF45CF00530473 /* PROTOCOLS */ = {
+			isa = PBXGroup;
+			children = (
+				A7533B1E24AF44A200530473 /* Content Draggable Protocol.swift */,
+				A7533B2524AF48F700530473 /* Snippet Items Draggable Protocol.swift */,
+				A7533B2724AF498200530473 /* Photo Item Cell Drop Providable.swift */,
+				A7533B2924AF49C600530473 /* Collection View Drag Item Providable.swift */,
+			);
+			name = PROTOCOLS;
+			sourceTree = "<group>";
+		};
+		A7533B3024B0420600530473 /* NewsmanTests */ = {
+			isa = PBXGroup;
+			children = (
+				A7533B3124B0420600530473 /* NewsmanTests.swift */,
+				A7533B3324B0420600530473 /* Info.plist */,
+			);
+			path = NewsmanTests;
+			sourceTree = "<group>";
+		};
 		A754897C1FBC4F2900359C0C = {
 			isa = PBXGroup;
 			children = (
 				A7CB13731FD2D5EB00AA7294 /* Localizable.strings */,
 				A711C0EC2181C40A0025C973 /* Localized Global Strings.swift */,
+				A733EDAE24B1F878000E5F91 /* COMBINE EXT */,
+				A76B38D5241773130073F04D /* iCloud Data Classes */,
 				A71C85D21FBE228F000F2DD9 /* Core Data Classes */,
 				A75489871FBC4F2900359C0C /* Newsman */,
 				A754899F1FBC4F2900359C0C /* NewsmanTests */,
 				A75489AA1FBC4F2900359C0C /* NewsmanUITests */,
+				A7533B3024B0420600530473 /* NewsmanTests */,
 				A75489861FBC4F2900359C0C /* Products */,
 				A7298E132015E99F00A7301D /* Frameworks */,
 				4C62EAF34D185886BAA87F46 /* Pods */,
@@ -579,8 +894,7 @@
 			isa = PBXGroup;
 			children = (
 				A75489851FBC4F2900359C0C /* Newsman.app */,
-				A754899C1FBC4F2900359C0C /* NewsmanTests.xctest */,
-				A75489A71FBC4F2900359C0C /* NewsmanUITests.xctest */,
+				A7533B2F24B0420500530473 /* NewsmanTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -588,10 +902,11 @@
 		A75489871FBC4F2900359C0C /* Newsman */ = {
 			isa = PBXGroup;
 			children = (
+				A76B38B02416640A0073F04D /* Newsman.entitlements */,
 				A75489921FBC4F2900359C0C /* Assets.xcassets */,
+				A755338A24912B23003907E5 /* App Appearance Setup.swift */,
 				A7DC081A214538EE00DD94E8 /* StoryBoards */,
 				A75489971FBC4F2900359C0C /* Info.plist */,
-				A7317B072015EA4100C8836A /* Newsman.entitlements */,
 				A78C2EBD224661100005CFE4 /* GENERAL >>> */,
 				A78C2EB822465F2E0005CFE4 /* APP MAIN MENU >>> */,
 				A7CB136E1FD2D35E00AA7294 /* Assesory Menus */,
@@ -621,15 +936,42 @@
 			path = NewsmanUITests;
 			sourceTree = "<group>";
 		};
+		A757D270238FCBB600427BEE /* DELETE */ = {
+			isa = PBXGroup;
+			children = (
+				A797B0002373181800A88892 /* Photo MO Deletion.swift */,
+				A757D271238FCC4500427BEE /* Photo DMOP RxSwift Ext.swift */,
+				A757D273238FCC5800427BEE /* Photo DMOP Combine Ext.swift */,
+				A757D27A238FD60100427BEE /* Photo MO Deletion (RxSwift).swift */,
+				A757D27C238FD61800427BEE /* Photo MO Deletion (Combine).swift */,
+			);
+			name = DELETE;
+			sourceTree = "<group>";
+		};
+		A757D277238FD05500427BEE /* DELETE */ = {
+			isa = PBXGroup;
+			children = (
+				A797B00523731B2800A88892 /* Photo Folder MO Deletion.swift */,
+				A757D278238FD0B000427BEE /* Photo Folder DMOP RxSwift Ext.swift */,
+				A757D2822397BA9B00427BEE /* Photo Folder MO Deletion (RxSwift).swift */,
+			);
+			name = DELETE;
+			sourceTree = "<group>";
+		};
 		A75DB6492215BFA70045E9E2 /* DELEGATES */ = {
 			isa = PBXGroup;
 			children = (
-				A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */,
-				A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */,
+				A79CAD0124603015003E606F /* old D & D */,
+				A78B3B0424503C200031B24E /* D & D Subject States.swift */,
+				A78B3B06245042AC0031B24E /* D & D Drop States Observation.swift */,
+				A7A3B6392454307F00B1E371 /* BASE CV D & D Delegate Class.swift */,
+				A7A3B63B2454429600B1E371 /* MAIN CV D & D Delegate.swift */,
+				A7EDD21524570B95006B2817 /* ZOOM View CV D & D Delegate.swift */,
+				A7533B3924B046DA00530473 /* FOLDER Nested CV D & D Delegate.swift */,
+				A79CAD02246039CC003E606F /* CV Cell D & D Delegate Base Class.swift */,
 				A79548F521EC98AC00A37959 /* Single Cell D&D Delegate.swift */,
 				A7D83BBE220F35E20050A0CF /* Folder Cell D&D Delegate.swift */,
 				A77F74D42062446C0074A915 /* Zoom View D&D Delegate.swift */,
-				A75DB64A2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift */,
 			);
 			name = DELEGATES;
 			sourceTree = "<group>";
@@ -648,6 +990,21 @@
 				A7660E4322267BF700F845E8 /* Snippet Cell CA Delegate.swift */,
 			);
 			name = "SNIPPET CELL";
+			sourceTree = "<group>";
+		};
+		A76B38D5241773130073F04D /* iCloud Data Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A76B38D624177A140073F04D /* CKRecord Convertable.swift */,
+				A76B38DA24178E730073F04D /* App Cloud Data.swift */,
+				A7BD9F542437348C00CBB9F8 /* App Cloud Data Saver.swift */,
+				A7BD9F562437353D00CBB9F8 /* App Cloud Data Deleter.swift */,
+				A7BD9F52243701D800CBB9F8 /* Base Batch Cloud Operation.swift */,
+				A7BD9F58243738E200CBB9F8 /* Batch Operation Dependencies.swift */,
+				A72732D12423D8720069F20D /* Cloud Batch Modify Operation.swift */,
+				A7BD9F5024363C1B00CBB9F8 /* Cloud Batch Delete Operation.swift */,
+			);
+			name = "iCloud Data Classes";
 			sourceTree = "<group>";
 		};
 		A78C2EB822465F2E0005CFE4 /* APP MAIN MENU >>> */ = {
@@ -676,10 +1033,13 @@
 		A78C2EBD224661100005CFE4 /* GENERAL >>> */ = {
 			isa = PBXGroup;
 			children = (
+				A7E3EF17247416A100580F36 /* DECORATED VIEWS */,
+				A7E193C2234C5C4B00E15C49 /* POP-UP MENU */,
 				A78C2EBE224664900005CFE4 /* DRAG & DROP ACTIVITIES */,
 				A7C6A7D220C822AD005D566A /* VC Custom Transitions */,
 				A75489881FBC4F2900359C0C /* App Delegate.swift */,
 				A751FC4B218C7FD20088D9C5 /* CG Affine Transform Extension.swift */,
+				A737273C247D12E000FCE4CD /* CGPoint Math Extensions.swift */,
 				A7A97231217074100061AA07 /* Global Formatters.swift */,
 				A79548F121E62B4300A37959 /* Thread Safe Map.swift */,
 				A75C0A3020DBAF6D009929B8 /* AppDelegateVCRestoration.swift */,
@@ -689,6 +1049,8 @@
 				A7826E3820DFD48F00FFBBFA /* NCPushPopAnimator.swift */,
 				A7EC89FE20AAF0B50030D280 /* NCTransitionsDelegate.swift */,
 				A7826E4D20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift */,
+				A72F0DAA233369F20054249D /* Case Selector Alert Controller.swift */,
+				A7AAE437233E0AED00A0E2C2 /* View Pointed Pop-Up Menu.swift */,
 			);
 			name = "GENERAL >>>";
 			sourceTree = "<group>";
@@ -700,19 +1062,56 @@
 				A7CD189E223CE9D200242A01 /* D&D Waggle Animation Protocol .swift */,
 				A79548F321E7812A00A37959 /* D&D Waggle Animation Extension.swift */,
 				A75DB6432215B9790045E9E2 /* Draggable Extension.swift */,
+				A7BFBD5A22F988DD00C29FFE /* Draggable Hashable Wrapper.swift */,
 				A75DB6412215B8FD0045E9E2 /* Draggable Protocol.swift */,
 				A7D83BBC220F2C460050A0CF /* Drop View Protocol.swift */,
 			);
 			name = "DRAG & DROP ACTIVITIES";
 			sourceTree = "<group>";
 		};
+		A797B00423731A0400A88892 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				A7DA008C204AB664002C3BA6 /* Photo Item Protocol.swift */,
+				A76B38DC24191E0D0073F04D /* Core Data Secure Transformers.swift */,
+				A757D26C238D372400427BEE /* MOC Observable Wrapper.swift */,
+				A757D26E238E889500427BEE /* MO Obsevable Attributes Protocol.swift */,
+				A7D744052271B44D00C6A645 /* Photo MO Protocol.swift */,
+				A797B0022373188A00A88892 /* Deletable MO Protocol (DMOP).swift */,
+				A7C4940122FD67AE0042800F /* MO Context Undo Manager.swift */,
+				A7750C1F22E71ABB007C1562 /* MO Operations Errors.swift */,
+				A7750C1D22E7140C007C1562 /* MO Operations Types.swift */,
+				A791ECAC241393FD00606E92 /* MOC Observable from VC.swift */,
+				A791ECAE2413964C00606E92 /* MOC Savable by VC.swift */,
+			);
+			name = General;
+			sourceTree = "<group>";
+		};
+		A79CAD0124603015003E606F /* old D & D */ = {
+			isa = PBXGroup;
+			children = (
+				A783361E2201F6AD00297BAB /* MAIN CV D&D Delegate.swift */,
+				A71EDA6A2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift */,
+				A75DB64A2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift */,
+			);
+			name = "old D & D";
+			sourceTree = "<group>";
+		};
 		A7AFE5C621F1C7C800EBD4C9 /* Snippet Cell Protocol */ = {
 			isa = PBXGroup;
 			children = (
 				A7D39CF12100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift */,
+				A7339B5024C1ED0300AFE119 /* CELL MAIN VIEW */,
+				A7D020BC247ED40F007CBE19 /* Running Arrow View.swift */,
 				A7AFE5C421F1C7A500EBD4C9 /* SCP Image Load Extension.swift */,
+				A7410A0424A288EE0013AE5C /* Photo Cell Async Image View.swift */,
 				A7AFE5C021F1C48900EBD4C9 /* SCP Video Extension.swift */,
 				A7AFE5C221F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift */,
+				A7D7442D2279E0E600C6A645 /* SCP Row Position Extension.swift */,
+				A7E193D3234DC8CF00E15C49 /* SCP Arrow Pop-up Menu Extension.swift */,
+				A72CDCB32459EEAC002761C1 /* SCP D&D States Updates.swift */,
+				A7A58EC32285891C000F0593 /* Photo Item Digital Marker.swift */,
+				A7CFB87E228837B900EC2289 /* Photo Item Digital Label.swift */,
 			);
 			name = "Snippet Cell Protocol";
 			sourceTree = "<group>";
@@ -735,6 +1134,27 @@
 			name = "Photo Operations";
 			sourceTree = "<group>";
 		};
+		A7BD9F68243A4AB700CBB9F8 /* Core Data Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A7BD9F62243A478800CBB9F8 /* Core Data Helpers Combine.swift */,
+				A77424AF244374AD006FB973 /* Collection Wrappers.swift */,
+				A7BD9F60243A45E300CBB9F8 /* Core Data Helpers RX.swift */,
+				A7D93C69206D3743007891ED /* Core Data Helpers.swift */,
+			);
+			name = "Core Data Helpers";
+			sourceTree = "<group>";
+		};
+		A7BD9F69243A4ADC00CBB9F8 /* File Manager Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A767987322E0A12C00DEAF1B /* File Manager Helpers.swift */,
+				A7BD9F5C243A3CEF00CBB9F8 /* File Manager Helpers RX.swift */,
+				A7BD9F5E243A400D00CBB9F8 /* File Manager Helpers Combine.swift */,
+			);
+			name = "File Manager Helpers";
+			sourceTree = "<group>";
+		};
 		A7C6A7D220C822AD005D566A /* VC Custom Transitions */ = {
 			isa = PBXGroup;
 			children = (
@@ -752,11 +1172,13 @@
 			children = (
 				A7B2B07B2205BE5600D40008 /* Photo Operations */,
 				A7304A991FCAF9E400207A52 /* Photo Snippet VC.swift */,
-				A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */,
+				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
 				A72B3EAD2058419000C02B52 /* Zoom View.swift */,
+				A711C0F0218318800025C973 /* Photo Snippet Special Enums.swift */,
 				A78C2EC7224B87B80005CFE4 /* Photo Items Observable.swift */,
 				A71EDA662063D00D00E6AB7A /* UIImage Extensions.swift */,
-				A75117F41FF656590009F03C /* Photo Snippet CV.swift */,
+				A7C4940B230686CD0042800F /* Photo Snippet CV Pop-Up Menu.swift */,
+				A7C494092304487B0042800F /* Photo Item Pop-Up Menu.swift */,
 				A75C0A3220DBC802009929B8 /* Photo Snippet VC Restoration.swift */,
 				A7DA008A204AB518002C3BA6 /* Photo Drop Item Provider.swift */,
 				A7443F13203881790039BE41 /* Flag Items Menu.swift */,
@@ -794,6 +1216,7 @@
 				A7CD189A223A544B00242A01 /* Snippets D&D Protocol.swift */,
 				A78C2EBF224669950005CFE4 /* Snippet Drop View Delegate.swift */,
 				A7400E781FC96C3E006F05DC /* Snippets CL Delegate.swift */,
+				A791ECB02413B6ED00606E92 /* CL Wrapper.swift */,
 			);
 			name = "SNIPPETS MENU >>>";
 			sourceTree = "<group>";
@@ -801,11 +1224,25 @@
 		A7CB136E1FD2D35E00AA7294 /* Assesory Menus */ = {
 			isa = PBXGroup;
 			children = (
+				A7D672D32386684F007B3C93 /* Segue Action Snippet Initializable.swift */,
 				A7400E741FC731A2006F05DC /* Date Picker View Controller.swift */,
 				A7400E761FC73305006F05DC /* Priority Picker View Controller.swift */,
 				A7826E3020DBF9E400FFBBFA /* Priority Picker VC Restoration.swift */,
 			);
 			name = "Assesory Menus";
+			sourceTree = "<group>";
+		};
+		A7CDC6E9231E6C1300C85A38 /* Distributed Undo Manager */ = {
+			isa = PBXGroup;
+			children = (
+				A7CDC6EA231E6C4600C85A38 /* Undo Operation.swift */,
+				A72F0DAC23336A9C0054249D /* Undo Manager Menu Action Cases.swift */,
+				A72F0D8C231FCB6B0054249D /* Undo Manager.swift */,
+				A72F0D90232100320054249D /* Async Undo Manager.swift */,
+				A72F0DA62328FCE80054249D /* Undo Notifications.swift */,
+				A72F0D8E2320104D0054249D /* Multi Target Undoable Protocol.swift */,
+			);
+			name = "Distributed Undo Manager";
 			sourceTree = "<group>";
 		};
 		A7D39CEF2100C31100F80CAA /* CV Cells */ = {
@@ -823,11 +1260,11 @@
 		A7D39CF02100C35500F80CAA /* Drag & Drop */ = {
 			isa = PBXGroup;
 			children = (
+				A7533B2224AF45CF00530473 /* PROTOCOLS */,
 				A75DB6492215BFA70045E9E2 /* DELEGATES */,
 				A75DB63D2215B68B0045E9E2 /* Photo Item D&D Extension.swift */,
 				A75DB63F2215B7980045E9E2 /* Photo Folder D&D Extension.swift */,
 				A75DB6472215BAEF0045E9E2 /* Photo Items Draggable Extension.swift */,
-				A75DB6452215BA320045E9E2 /* Photo Items Draggable Protocol.swift */,
 				A71715C7201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift */,
 			);
 			name = "Drag & Drop";
@@ -836,12 +1273,9 @@
 		A7D39CF32100D27900F80CAA /* CV Data Sources */ = {
 			isa = PBXGroup;
 			children = (
-				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS.swift */,
-				A78C2EC9224BCCF40005CFE4 /* Photo Snippet CV DS RX.swift */,
-				A77F74D2206242090074A915 /* Zoom View CV DS.swift */,
-				A71EA103225904C2000DF0AA /* Zoom View CV DS RX.swift */,
-				A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */,
-				A7FC5974225507CB00926A4E /* Folder Nested CV DS RX.swift */,
+				A7D74402226B597A00C6A645 /* Folder Nested CV DS */,
+				A7D74401226B594D00C6A645 /* Zoom View CV DS */,
+				A7D74400226B58EC00C6A645 /* Photo Snippet CV DS */,
 			);
 			name = "CV Data Sources";
 			sourceTree = "<group>";
@@ -858,6 +1292,48 @@
 			name = Delegates;
 			sourceTree = "<group>";
 		};
+		A7D74400226B58EC00C6A645 /* Photo Snippet CV DS */ = {
+			isa = PBXGroup;
+			children = (
+				A7304A9F1FCB160C00207A52 /* Photo Snippet CV DS Main.swift */,
+				A7B463FE22940FBF0018D7F5 /* Photo Snippet CV DS Helpers.swift */,
+				A78C2EC9224BCCF40005CFE4 /* Photo Snippet CV DS RX.swift */,
+				A72362DF226B1EAC00C6801F /* Photo Snippet CV DS Hs & Fs.swift */,
+				A7B464002294130E0018D7F5 /* Photo Snippet CV DS Single Items.swift */,
+				A7D743FE226B58C200C6A645 /* Photo Snippet CV DS Grouping.swift */,
+				A7D74403226B5D8800C6A645 /* Photo Snippet CV DS Insertions.swift */,
+				A7D74431227D6AD300C6A645 /* Photo Snippet CV DS Moves.swift */,
+				A7D74433227D6DEA00C6A645 /* Photo Snippet CV DS Deletions.swift */,
+			);
+			name = "Photo Snippet CV DS";
+			sourceTree = "<group>";
+		};
+		A7D74401226B594D00C6A645 /* Zoom View CV DS */ = {
+			isa = PBXGroup;
+			children = (
+				A77F74D2206242090074A915 /* Zoom View CV DS.swift */,
+				A7E8397422999E280090E6AA /* Zoom View CV DS Helpers.swift */,
+				A71EA103225904C2000DF0AA /* Zoom View CV DS RX.swift */,
+				A7E839762299A0AB0090E6AA /* Zoom View CV DS Deletions.swift */,
+				A767986D22DCDA4B00DEAF1B /* Zoom View CV DS Inside Moves.swift */,
+				A7E83978229BCC980090E6AA /* Zoom View CV DS Insertions.swift */,
+			);
+			name = "Zoom View CV DS";
+			sourceTree = "<group>";
+		};
+		A7D74402226B597A00C6A645 /* Folder Nested CV DS */ = {
+			isa = PBXGroup;
+			children = (
+				A7D39CF62100E21500F80CAA /* Folder Nested CV DS.swift */,
+				A7FC5974225507CB00926A4E /* Folder Nested CV DS RX.swift */,
+				A767986F22DCE87200DEAF1B /* Folder Nested CV DS Inside Moves.swift */,
+				A7E839722298458D0090E6AA /* Folder Nested CV DS Insertions.swift */,
+				A7E8396E229843490090E6AA /* Folder Nested CV DS Helpers.swift */,
+				A7E83970229844DE0090E6AA /* Folder Nested CV DS Deletions.swift */,
+			);
+			name = "Folder Nested CV DS";
+			sourceTree = "<group>";
+		};
 		A7DC081A214538EE00DD94E8 /* StoryBoards */ = {
 			isa = PBXGroup;
 			children = (
@@ -870,9 +1346,66 @@
 			name = StoryBoards;
 			sourceTree = "<group>";
 		};
+		A7E193C2234C5C4B00E15C49 /* POP-UP MENU */ = {
+			isa = PBXGroup;
+			children = (
+				A7E193C3234C5C7800E15C49 /* Pointed Menu View.swift */,
+				A7E193C5234C5D2C00E15C49 /* Menu Base View.swift */,
+				A7E193C7234C5DE600E15C49 /* Menu Item Button Base.swift */,
+				A7E193CF234C67CA00E15C49 /* Draw Flag Menu Button.swift */,
+				A7E193CD234C673100E15C49 /* Image Menu Button.swift */,
+				A7E193C9234C5E3B00E15C49 /* Menu Arrow View.swift */,
+				A7E193CB234C64C800E15C49 /* Menu Base View Inner CV.swift */,
+			);
+			name = "POP-UP MENU";
+			sourceTree = "<group>";
+		};
+		A7E3EF17247416A100580F36 /* DECORATED VIEWS */ = {
+			isa = PBXGroup;
+			children = (
+				A7E3EF1A2474178100580F36 /* Decorations Enum.swift */,
+				A7E3EF18247416E400580F36 /* Decoratable Protocol.swift */,
+				A7E3EF3B24752CF100580F36 /* Constraints Anchors Enum.swift */,
+				A7E3EF3D2475616E00580F36 /* UIView methods swizzling.swift */,
+				A7E3EF1E24741B9D00580F36 /* Decorated View Notifications.swift */,
+				A7E3EF3924752C1400580F36 /* @Constrained.swift */,
+				A7E3EF372475173500580F36 /* @WeakWrapped.swift */,
+				A7E3EF1C24741A2300580F36 /* @Bordered.swift */,
+				A7E6838624780518009E046C /* @Framed.swift */,
+				A7E3EF3F2476751400580F36 /* @Rotated.swift */,
+				A7E683802477B935009E046C /* @Translated.swift */,
+				A7E683822477B946009E046C /* @Scaled.swift */,
+				A7E683842477B954009E046C /* @Transformed.swift */,
+				A7E3EF20247421DF00580F36 /* @Filled.swift */,
+				A7E3EF22247421F500580F36 /* @Rounded.swift */,
+				A74B66F324975EAB00EC4FDB /* @Capsulated.swift */,
+				A74B66F52499E35E00EC4FDB /* @Masked.swift */,
+				A74E1ABA24657A200011DD2B /* UIView Decorations Wrapper.swift */,
+			);
+			name = "DECORATED VIEWS";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A7533B2E24B0420500530473 /* NewsmanTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7533B3624B0420600530473 /* Build configuration list for PBXNativeTarget "NewsmanTests" */;
+			buildPhases = (
+				A7533B2B24B0420500530473 /* Sources */,
+				A7533B2C24B0420500530473 /* Frameworks */,
+				A7533B2D24B0420500530473 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7533B3524B0420600530473 /* PBXTargetDependency */,
+			);
+			name = NewsmanTests;
+			productName = NewsmanTests;
+			productReference = A7533B2F24B0420500530473 /* NewsmanTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		A75489841FBC4F2900359C0C /* Newsman */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A75489B01FBC4F2900359C0C /* Build configuration list for PBXNativeTarget "Newsman" */;
@@ -881,7 +1414,7 @@
 				A75489811FBC4F2900359C0C /* Sources */,
 				A75489821FBC4F2900359C0C /* Frameworks */,
 				A75489831FBC4F2900359C0C /* Resources */,
-				B0512172A563534274C4A464 /* [CP] Embed Pods Frameworks */,
+				8D2CCC877A9A6B194ACD98DD /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -892,55 +1425,24 @@
 			productReference = A75489851FBC4F2900359C0C /* Newsman.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A754899B1FBC4F2900359C0C /* NewsmanTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A75489B31FBC4F2900359C0C /* Build configuration list for PBXNativeTarget "NewsmanTests" */;
-			buildPhases = (
-				A75489981FBC4F2900359C0C /* Sources */,
-				A75489991FBC4F2900359C0C /* Frameworks */,
-				A754899A1FBC4F2900359C0C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A754899E1FBC4F2900359C0C /* PBXTargetDependency */,
-			);
-			name = NewsmanTests;
-			productName = NewsmanTests;
-			productReference = A754899C1FBC4F2900359C0C /* NewsmanTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		A75489A61FBC4F2900359C0C /* NewsmanUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A75489B61FBC4F2900359C0C /* Build configuration list for PBXNativeTarget "NewsmanUITests" */;
-			buildPhases = (
-				A75489A31FBC4F2900359C0C /* Sources */,
-				A75489A41FBC4F2900359C0C /* Frameworks */,
-				A75489A51FBC4F2900359C0C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A75489A91FBC4F2900359C0C /* PBXTargetDependency */,
-			);
-			name = NewsmanUITests;
-			productName = NewsmanUITests;
-			productReference = A75489A71FBC4F2900359C0C /* NewsmanUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		A754897D1FBC4F2900359C0C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0910;
-				LastUpgradeCheck = 0930;
+				LastSwiftUpdateCheck = 1150;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = Anton2016;
 				TargetAttributes = {
+					A7533B2E24B0420500530473 = {
+						CreatedOnToolsVersion = 11.5;
+						ProvisioningStyle = Automatic;
+						TestTargetID = A75489841FBC4F2900359C0C;
+					};
 					A75489841FBC4F2900359C0C = {
 						CreatedOnToolsVersion = 9.1;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -950,16 +1452,6 @@
 								enabled = 1;
 							};
 						};
-					};
-					A754899B1FBC4F2900359C0C = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = A75489841FBC4F2900359C0C;
-					};
-					A75489A61FBC4F2900359C0C = {
-						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
-						TestTargetID = A75489841FBC4F2900359C0C;
 					};
 				};
 			};
@@ -981,13 +1473,19 @@
 			projectRoot = "";
 			targets = (
 				A75489841FBC4F2900359C0C /* Newsman */,
-				A754899B1FBC4F2900359C0C /* NewsmanTests */,
-				A75489A61FBC4F2900359C0C /* NewsmanUITests */,
+				A7533B2E24B0420500530473 /* NewsmanTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A7533B2D24B0420500530473 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A75489831FBC4F2900359C0C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1002,40 +1500,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A754899A1FBC4F2900359C0C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A75489A51FBC4F2900359C0C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		B0512172A563534274C4A464 /* [CP] Embed Pods Frameworks */ = {
+		8D2CCC877A9A6B194ACD98DD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Newsman/Pods-Newsman-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
+				"${BUILT_PRODUCTS_DIR}/RxGesture/RxGesture.framework",
+				"${BUILT_PRODUCTS_DIR}/RxRelay/RxRelay.framework",
 				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxGesture.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxRelay.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1068,6 +1552,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A7533B2B24B0420500530473 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7533B3224B0420600530473 /* NewsmanTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A75489811FBC4F2900359C0C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1075,188 +1567,295 @@
 				A78C2EC8224B87B80005CFE4 /* Photo Items Observable.swift in Sources */,
 				A7B2B0812205C25F00D40008 /* Cached Image Operation.swift in Sources */,
 				A7443F05202DD7600039BE41 /* Photo MO Properties.swift in Sources */,
+				A7533B2A24AF49C600530473 /* Collection View Drag Item Providable.swift in Sources */,
 				A71EA104225904C2000DF0AA /* Zoom View CV DS RX.swift in Sources */,
 				A7826E3120DBF9E400FFBBFA /* Priority Picker VC Restoration.swift in Sources */,
+				A72F0DA523268ED50054249D /* Photo Folder Item Undoable.swift in Sources */,
 				A7A15EB021907B1F009877F4 /* Snippet Image View.swift in Sources */,
 				A71715DD2024E8BA00112FFF /* Snippets D&D Delegate.swift in Sources */,
 				A73BDA7921D0F62C007E0416 /* Snippets Representable.swift in Sources */,
+				A7E193C8234C5DE600E15C49 /* Menu Item Button Base.swift in Sources */,
 				A71C85E71FBED634000F2DD9 /* ALL SNIPPETS VC.swift in Sources */,
 				A7FAFFEE20F6294900C5B21D /* Duration Stamp View.swift in Sources */,
 				A75C0A3320DBC802009929B8 /* Photo Snippet VC Restoration.swift in Sources */,
 				A75DB6402215B7980045E9E2 /* Photo Folder D&D Extension.swift in Sources */,
+				A78B3B0524503C200031B24E /* D & D Subject States.swift in Sources */,
+				A7E3EF3E2475616E00580F36 /* UIView methods swizzling.swift in Sources */,
 				A7B2B0892205CBB600D40008 /* Thumbnail Image Operation.swift in Sources */,
 				A71C85B81FBE0D52000F2DD9 /* BaseSnippet+CoreDataProperties.swift in Sources */,
+				A7B463FD2292AAFB0018D7F5 /* Photo Item Position.swift in Sources */,
 				A75C0A3120DBAF6D009929B8 /* AppDelegateVCRestoration.swift in Sources */,
+				A78B3B03244B14F50031B24E /* Photo Snippet DMOP (RxSwift).swift in Sources */,
+				A7C4940C230686CD0042800F /* Photo Snippet CV Pop-Up Menu.swift in Sources */,
+				A757D26D238D372400427BEE /* MOC Observable Wrapper.swift in Sources */,
+				A7E83979229BCC980090E6AA /* Zoom View CV DS Insertions.swift in Sources */,
 				A71C85EB1FBED786000F2DD9 /* MainMenuItems.swift in Sources */,
 				A75DB6442215B9790045E9E2 /* Draggable Extension.swift in Sources */,
+				A7E193CE234C673100E15C49 /* Image Menu Button.swift in Sources */,
 				A78C2ECA224BCCF40005CFE4 /* Photo Snippet CV DS RX.swift in Sources */,
+				A7E193D4234DC8CF00E15C49 /* SCP Arrow Pop-up Menu Extension.swift in Sources */,
 				A77F74D52062446C0074A915 /* Zoom View D&D Delegate.swift in Sources */,
+				A7750C2022E71ABB007C1562 /* MO Operations Errors.swift in Sources */,
 				A7EC89FD20AAEB4E0030D280 /* NCTransitionAnimation.swift in Sources */,
+				A74B66F62499E35E00EC4FDB /* @Masked.swift in Sources */,
 				A71C85BC1FBE192D000F2DD9 /* TextSnippet+CoreDataProperties.swift in Sources */,
 				A7A97232217074100061AA07 /* Global Formatters.swift in Sources */,
 				A71C85CA1FBE19F3000F2DD9 /* VideoSnippet+CoreDataProperties.swift in Sources */,
+				A72362E0226B1EAC00C6801F /* Photo Snippet CV DS Hs & Fs.swift in Sources */,
+				A74B66F424975EAB00EC4FDB /* @Capsulated.swift in Sources */,
+				A757D27D238FD61800427BEE /* Photo MO Deletion (Combine).swift in Sources */,
+				A7E193CA234C5E3B00E15C49 /* Menu Arrow View.swift in Sources */,
 				A7330F101FC09FCB00D8EBC9 /* Snippets Table View Delegate.swift in Sources */,
+				A7D743FF226B58C200C6A645 /* Photo Snippet CV DS Grouping.swift in Sources */,
 				A7FA2DEE218ECF7E00A2EE8D /* Snippet Cell Animators.swift in Sources */,
+				A7533B1F24AF44A200530473 /* Content Draggable Protocol.swift in Sources */,
 				A70B2AA520DA9FED003AD4B5 /* Snippets VC Restoration.swift in Sources */,
 				A754898B1FBC4F2900359C0C /* MainViewController.swift in Sources */,
-				A7443F00202DD3F60039BE41 /* PhotoSnippet+CoreDataProperties.swift in Sources */,
+				A7EDD21624570B95006B2817 /* ZOOM View CV D & D Delegate.swift in Sources */,
+				A791ECAD241393FD00606E92 /* MOC Observable from VC.swift in Sources */,
+				A7443F00202DD3F60039BE41 /* Photo Snippet MO Properties.swift in Sources */,
+				A7533B2624AF48F700530473 /* Snippet Items Draggable Protocol.swift in Sources */,
+				A7D7442E2279E0E600C6A645 /* SCP Row Position Extension.swift in Sources */,
 				A7826E3320DE311700FFBBFA /* Photo Snippet TF Delegate.swift in Sources */,
 				A7826E4E20E0ED4F00FFBBFA /* NCSnippetsScrollProtocol.swift in Sources */,
+				A757D27B238FD60100427BEE /* Photo MO Deletion (RxSwift).swift in Sources */,
 				A71CE634213AA21700497A60 /* Text Snippet Preview Provider.swift in Sources */,
 				A7D39CF72100E21500F80CAA /* Folder Nested CV DS.swift in Sources */,
+				A7E3EF19247416E400580F36 /* Decoratable Protocol.swift in Sources */,
 				A7E6985220E389CC00BA5B1E /* Video Shooting VC Restoration.swift in Sources */,
 				A7438686219D70C3005ECACD /* App Delegate D&D Extension.swift in Sources */,
+				A7E6838724780518009E046C /* @Framed.swift in Sources */,
+				A72F0DAD23336A9C0054249D /* Undo Manager Menu Action Cases.swift in Sources */,
 				A7304A9A1FCAF9E400207A52 /* Photo Snippet VC.swift in Sources */,
+				A7BFBD5322F36B6C00C29FFE /* Photo Snippet MO Fully RX.swift in Sources */,
 				A7400E771FC73305006F05DC /* Priority Picker View Controller.swift in Sources */,
 				A7AFE5C821F3870B00EBD4C9 /* Photo MO Manipulations.swift in Sources */,
 				A711C0ED2181C40A0025C973 /* Localized Global Strings.swift in Sources */,
 				A75117F51FF656590009F03C /* Photo Snippet CV.swift in Sources */,
 				A75489BE1FBC649000359C0C /* MainViewDataSource.swift in Sources */,
+				A7E683852477B954009E046C /* @Transformed.swift in Sources */,
+				A7C4940222FD67AE0042800F /* MO Context Undo Manager.swift in Sources */,
+				A72732D22423D8720069F20D /* Cloud Batch Modify Operation.swift in Sources */,
 				A7826E3920DFD48F00FFBBFA /* NCPushPopAnimator.swift in Sources */,
+				A7E193CC234C64C800E15C49 /* Menu Base View Inner CV.swift in Sources */,
+				A7E193D0234C67CA00E15C49 /* Draw Flag Menu Button.swift in Sources */,
 				A7443F122035D2F80039BE41 /* Folder Cell.swift in Sources */,
+				A72F0DAB233369F20054249D /* Case Selector Alert Controller.swift in Sources */,
+				A7E3EF402476751400580F36 /* @Rotated.swift in Sources */,
 				A7CD189B223A544B00242A01 /* Snippets D&D Protocol.swift in Sources */,
 				A71EDA6B2063D44800E6AB7A /* Zoom View CV D&D Delegate.swift in Sources */,
 				A71C85B71FBE0D52000F2DD9 /* BaseSnippet+CoreDataClass.swift in Sources */,
+				A7533B3A24B046DA00530473 /* FOLDER Nested CV D & D Delegate.swift in Sources */,
+				A7BD9F65243A484F00CBB9F8 /* Dispatch Helpers.swift in Sources */,
 				A7A72E4C21F622DD003AA849 /* Photo Folder MO Manipulations.swift in Sources */,
 				A7826E5220E2618100FFBBFA /* Video Shooting VC.swift in Sources */,
+				A76B38D724177A140073F04D /* CKRecord Convertable.swift in Sources */,
+				A79CAD03246039CC003E606F /* CV Cell D & D Delegate Base Class.swift in Sources */,
 				A7660E4422267BF700F845E8 /* Snippet Cell CA Delegate.swift in Sources */,
 				A7304A9E1FCB0DFD00207A52 /* Photo Picker Delegate.swift in Sources */,
+				A791ECAF2413964C00606E92 /* MOC Savable by VC.swift in Sources */,
 				A77F74D3206242090074A915 /* Zoom View CV DS.swift in Sources */,
+				A7E3EF1D24741A2300580F36 /* @Bordered.swift in Sources */,
 				A75DB63E2215B68B0045E9E2 /* Photo Item D&D Extension.swift in Sources */,
+				A7BFBD5522F36C2F00C29FFE /* Photo MO Notifications.swift in Sources */,
 				A7021CEC2185A7D1009A5F43 /* Snippets TV Header View.swift in Sources */,
 				A7B2B0852205C5F000D40008 /* Saved Image Operation.swift in Sources */,
 				A71C85C01FBE1972000F2DD9 /* Report+CoreDataProperties.swift in Sources */,
+				A757D26F238E889500427BEE /* MO Obsevable Attributes Protocol.swift in Sources */,
 				A71C85EF1FBF37EA000F2DD9 /* Text Snippet VC.swift in Sources */,
 				A711C0E3217C86040025C973 /* AudioSnippet+CoreDataProperties.swift in Sources */,
-				A7443F06202DD7600039BE41 /* PhotoFolder MO Properties.swift in Sources */,
+				A7443F06202DD7600039BE41 /* Photo Folder MO Properties.swift in Sources */,
 				A704264F1FDA87CA000B3400 /* Photo Item Wrapper.swift in Sources */,
+				A767986E22DCDA4B00DEAF1B /* Zoom View CV DS Inside Moves.swift in Sources */,
 				A7660E40222676DA00F845E8 /* Snippet Cell Images Loading.swift in Sources */,
+				A797B0032373188A00A88892 /* Deletable MO Protocol (DMOP).swift in Sources */,
 				A7443F14203881790039BE41 /* Flag Items Menu.swift in Sources */,
 				A741BD4A20EBEECD0062AF27 /* Playback Button.swift in Sources */,
 				A7DA008D204AB664002C3BA6 /* Photo Item Protocol.swift in Sources */,
+				A7E193C4234C5C7800E15C49 /* Pointed Menu View.swift in Sources */,
 				A741BD6220EF55540062AF27 /* Playback Progress View.swift in Sources */,
+				A7410A0524A288EE0013AE5C /* Photo Cell Async Image View.swift in Sources */,
+				A733EDB024B1F932000E5F91 /* Publisher Unretained Assign.swift in Sources */,
 				A7CD1895223A43BC00242A01 /* User Defaults.swift in Sources */,
+				A767987422E0A12C00DEAF1B /* File Manager Helpers.swift in Sources */,
 				A7EC8A0120B0A2B90030D280 /* VC Transitions Delegate.swift in Sources */,
 				A748D8B520F4CD5500DA190A /* Play Icon View.swift in Sources */,
 				A7400E601FC6A37B006F05DC /* Settings+CoreDataProperties.swift in Sources */,
+				A7CFB883228AAB7200EC2289 /* Photo Item Rendered DigiTag.swift in Sources */,
 				A7C6A7D420C82346005D566A /* Corner Slide Animator.swift in Sources */,
+				A767987222DE0A4800DEAF1B /* Photo Snippet MO RX.swift in Sources */,
+				A7E193C6234C5D2C00E15C49 /* Menu Base View.swift in Sources */,
 				A71C85C91FBE19F3000F2DD9 /* VideoSnippet+CoreDataClass.swift in Sources */,
+				A7C494082302C9DB0042800F /* Photo Snippet MO Undoable Properties.swift in Sources */,
+				A7B464012294130E0018D7F5 /* Photo Snippet CV DS Single Items.swift in Sources */,
 				A77C73912194392D00E1C57F /* Snippet Bar Rating View.swift in Sources */,
 				A7021CF021863227009A5F43 /* Snippets TV Supplemetary Views.swift in Sources */,
 				A7EC89FF20AAF0B50030D280 /* NCTransitionsDelegate.swift in Sources */,
 				A7D83BBF220F35E20050A0CF /* Folder Cell D&D Delegate.swift in Sources */,
+				A7E839772299A0AB0090E6AA /* Zoom View CV DS Deletions.swift in Sources */,
+				A76B38DD24191E0D0073F04D /* Core Data Secure Transformers.swift in Sources */,
+				A72F0D8F2320104D0054249D /* Multi Target Undoable Protocol.swift in Sources */,
 				A75489BC1FBC620300359C0C /* MainViewCell.swift in Sources */,
 				A7AFE5C521F1C7A500EBD4C9 /* SCP Image Load Extension.swift in Sources */,
+				A7E3EF21247421DF00580F36 /* @Filled.swift in Sources */,
 				A78C2EC62248DC620005CFE4 /* Photo Snippet MO Manipulations.swift in Sources */,
 				A71C85CE1FBE19F3000F2DD9 /* SketchSnippet+CoreDataProperties.swift in Sources */,
+				A7339B4F24C1E09100AFE119 /* Photo Item Flag Marker View.swift in Sources */,
 				A7400E791FC96C3E006F05DC /* Snippets CL Delegate.swift in Sources */,
+				A7D744062271B44D00C6A645 /* Photo MO Protocol.swift in Sources */,
+				A767987022DCE87200DEAF1B /* Folder Nested CV DS Inside Moves.swift in Sources */,
+				A76B38DB24178E730073F04D /* App Cloud Data.swift in Sources */,
+				A7BD9F63243A478800CBB9F8 /* Core Data Helpers Combine.swift in Sources */,
 				A7021CEE2185A92F009A5F43 /* Snippets TV Footer View.swift in Sources */,
-				A75F903E2258DC8E001DBF8C /* Photo Snippet Items Delete.swift in Sources */,
+				A75F903E2258DC8E001DBF8C /* Photo Snippet Child Items Deletion.swift in Sources */,
+				A7E3EF23247421F500580F36 /* @Rounded.swift in Sources */,
+				A7BD9F572437353D00CBB9F8 /* App Cloud Data Deleter.swift in Sources */,
+				A7E8397522999E280090E6AA /* Zoom View CV DS Helpers.swift in Sources */,
+				A7D020BD247ED40F007CBE19 /* Running Arrow View.swift in Sources */,
+				A7A3B63A2454307F00B1E371 /* BASE CV D & D Delegate Class.swift in Sources */,
 				A75489911FBC4F2900359C0C /* Newsman.xcdatamodeld in Sources */,
 				A711C0F1218318800025C973 /* Photo Snippet Special Enums.swift in Sources */,
+				A72F0DA323268C230054249D /* Photo Item Undoable.swift in Sources */,
 				A7FC5975225507CB00926A4E /* Folder Nested CV DS RX.swift in Sources */,
-				A7304AA01FCB160C00207A52 /* Photo Snippet CV DS.swift in Sources */,
+				A7304AA01FCB160C00207A52 /* Photo Snippet CV DS Main.swift in Sources */,
 				A7C6A7D620C82611005D566A /* Layer Transitions Animator.swift in Sources */,
-				A75117F21FE6E5880009F03C /* PhotoSnippet+CoreDataClass.swift in Sources */,
+				A75117F21FE6E5880009F03C /* Photo Snippet MO.swift in Sources */,
 				A7B2B0832205C2F100D40008 /* Operation Provider Protocols.swift in Sources */,
+				A7BFBD5922F36CCC00C29FFE /* Photo Snippet MO Notifications.swift in Sources */,
+				A78B3B01244B134E0031B24E /* Photo Snippet MO Deletion.swift in Sources */,
+				A757D279238FD0B000427BEE /* Photo Folder DMOP RxSwift Ext.swift in Sources */,
 				A78D9B5C213289290095EEFB /* Photo Snippet Images Provider.swift in Sources */,
+				A7BFBD5B22F988DD00C29FFE /* Draggable Hashable Wrapper.swift in Sources */,
 				A7D39CFA2100E3A000F80CAA /* Folder Nested CV Delegate.swift in Sources */,
 				A75251502146D31E00022F42 /* Snippets Table View FRC.swift in Sources */,
+				A78A97D122B3A403007435F8 /* Photo Folder MO RX.swift in Sources */,
+				A7BFBD5722F36C7B00C29FFE /* Photo Folder MO Notifications.swift in Sources */,
 				A7B2B07F2205BF5500D40008 /* Context Operation.swift in Sources */,
+				A7E83971229844DE0090E6AA /* Folder Nested CV DS Deletions.swift in Sources */,
 				A7826E3720DFD45D00FFBBFA /* NCSnippetsScrollAnimator.swift in Sources */,
+				A72F0D91232100320054249D /* Async Undo Manager.swift in Sources */,
+				A7CFB87F228837B900EC2289 /* Photo Item Digital Label.swift in Sources */,
 				A787566822213479006503D7 /* Snippets Hidden Cell.swift in Sources */,
 				A711C0EB2180779E0025C973 /* Snippets Factory.swift in Sources */,
+				A7BD9F5B2438742600CBB9F8 /* Publisher Unique.swift in Sources */,
+				A7D74430227C350A00C6A645 /* Photo Item Creation.swift in Sources */,
+				A7BD9F61243A45E300CBB9F8 /* Core Data Helpers RX.swift in Sources */,
+				A757D274238FCC5800427BEE /* Photo DMOP Combine Ext.swift in Sources */,
+				A737273D247D12E000FCE4CD /* CGPoint Math Extensions.swift in Sources */,
 				A7D39CF52100DF7F00F80CAA /* Folder Nested CV Cell.swift in Sources */,
 				A7018EF31FCF32C500E9ADAF /* Photo Snippet CV Delegate.swift in Sources */,
 				A7AFE5C121F1C48900EBD4C9 /* SCP Video Extension.swift in Sources */,
+				A7E3EF3A24752C1400580F36 /* @Constrained.swift in Sources */,
+				A7E839732298458D0090E6AA /* Folder Nested CV DS Insertions.swift in Sources */,
 				A78C2ECC224CAB640005CFE4 /* Photo MO RX.swift in Sources */,
+				A7CDC6EB231E6C4600C85A38 /* Undo Operation.swift in Sources */,
+				A7E683812477B935009E046C /* @Translated.swift in Sources */,
+				A7BD9F59243738E200CBB9F8 /* Batch Operation Dependencies.swift in Sources */,
 				A7CD1899223A51D500242A01 /* Snippets D&D Draggable.swift in Sources */,
+				A7533B2824AF498200530473 /* Photo Item Cell Drop Providable.swift in Sources */,
 				A7826E3520DE3FE100FFBBFA /* Text Snippet Text Field Delegate.swift in Sources */,
 				A7C6A7D120C820BE005D566A /* Rotation Fade Scale Animator.swift in Sources */,
+				A7BD9F5D243A3CEF00CBB9F8 /* File Manager Helpers RX.swift in Sources */,
 				A7400E751FC731A2006F05DC /* Date Picker View Controller.swift in Sources */,
 				A7EF606220EA1CB500FD09A7 /* Video Player View.swift in Sources */,
+				A7D74404226B5D8800C6A645 /* Photo Snippet CV DS Insertions.swift in Sources */,
+				A7BD9F53243701D800CBB9F8 /* Base Batch Cloud Operation.swift in Sources */,
+				A7E3EF1F24741B9D00580F36 /* Decorated View Notifications.swift in Sources */,
 				A71C85CB1FBE19F3000F2DD9 /* AudioSnippet+CoreDataClass.swift in Sources */,
 				A741BD6020EE32F80062AF27 /* Video Scrub View.swift in Sources */,
+				A7BD9F5124363C1B00CBB9F8 /* Cloud Batch Delete Operation.swift in Sources */,
 				A7826E5020E0F6E100FFBBFA /* Text Snippet VC Restoration.swift in Sources */,
 				A783361F2201F6AD00297BAB /* MAIN CV D&D Delegate.swift in Sources */,
 				A78C2EC2224677C00005CFE4 /* Snippet Cell Drop Interaction.swift in Sources */,
+				A791ECB12413B6ED00606E92 /* CL Wrapper.swift in Sources */,
 				A7EB39961FE6A46A00D93E3B /* Photo MO.swift in Sources */,
 				A75DB6422215B8FD0045E9E2 /* Draggable Protocol.swift in Sources */,
 				A7D39CF22100C5AC00F80CAA /* Snippet Cell Protocol (SCP).swift in Sources */,
+				A7BFBD4F22F36A9F00C29FFE /* Photo MO Fully RX.swift in Sources */,
+				A7E3EF3C24752CF100580F36 /* Constraints Anchors Enum.swift in Sources */,
+				A797B0012373181800A88892 /* Photo MO Deletion.swift in Sources */,
+				A78B3B07245042AC0031B24E /* D & D Drop States Observation.swift in Sources */,
 				A71EDA692063D0E900E6AB7A /* Photo Folder Item Wrapper.swift in Sources */,
+				A72F0DA72328FCE80054249D /* Undo Notifications.swift in Sources */,
+				A74E1ABB24657A200011DD2B /* UIView Decorations Wrapper.swift in Sources */,
 				A7400E5F1FC6A37B006F05DC /* Settings+CoreDataClass.swift in Sources */,
 				A7B2B07D2205BEC400D40008 /* Remove Dependencies Extension.swift in Sources */,
 				A7C6A7CF20C8201C005D566A /* Spring Door Animator.swift in Sources */,
 				A7D39CFC2100EF3700F80CAA /* Item Flag View.swift in Sources */,
 				A72B3EAC205838C700C02B52 /* Zoom View CV Cell.swift in Sources */,
 				A7AFE5C321F1C57E00EBD4C9 /* SCP Flag Markers Extension.swift in Sources */,
+				A75033FF2433526E004A320F /* App Delegate MOC Saver ext.swift in Sources */,
+				A7E8396F229843490090E6AA /* Folder Nested CV DS Helpers.swift in Sources */,
 				A77F74D1206241600074A915 /* Zoom View CV Delegate.swift in Sources */,
 				A71C85BB1FBE192D000F2DD9 /* TextSnippet+CoreDataClass.swift in Sources */,
 				A7B0954F2229A06E0089BC9A /* Snippets Search Controller.swift in Sources */,
-				A7D93C6A206D3743007891ED /* Helpers.swift in Sources */,
+				A7D93C6A206D3743007891ED /* Core Data Helpers.swift in Sources */,
 				A79548F421E7812A00A37959 /* D&D Waggle Animation Extension.swift in Sources */,
 				A71C85ED1FBEFCD1000F2DD9 /* Snippets View Cell.swift in Sources */,
 				A7CD189F223CE9D200242A01 /* D&D Waggle Animation Protocol .swift in Sources */,
+				A7B463FF22940FBF0018D7F5 /* Photo Snippet CV DS Helpers.swift in Sources */,
+				A7D74432227D6AD300C6A645 /* Photo Snippet CV DS Moves.swift in Sources */,
 				A7B2B08D2205CED300D40008 /* Image Set Operation.swift in Sources */,
+				A7BD9F67243A48D500CBB9F8 /* Animation Helpers.swift in Sources */,
+				A7E3EF1B2474178100580F36 /* Decorations Enum.swift in Sources */,
+				A7C494062302BED60042800F /* Photo Folder MO Undoable Properties.swift in Sources */,
 				A7CD189D223A61CE00242A01 /* Snippets D&D Item Provider.swift in Sources */,
 				A7D83BBD220F2C460050A0CF /* Drop View Protocol.swift in Sources */,
 				A75DB6482215BAEF0045E9E2 /* Photo Items Draggable Extension.swift in Sources */,
 				A7CD1893223534B400242A01 /* Text Snippet Text View Delegate.swift in Sources */,
 				A79548F221E62B4300A37959 /* Thread Safe Map.swift in Sources */,
+				A757D2832397BA9B00427BEE /* Photo Folder MO Deletion (RxSwift).swift in Sources */,
+				A7AAE438233E0AED00A0E2C2 /* View Pointed Pop-Up Menu.swift in Sources */,
 				A71715C8201F86BA00112FFF /* Photo Snippet CV D&D Delegate.swift in Sources */,
 				A76A2825212AD0620094AA5F /* Photo Item Operations.swift in Sources */,
-				A7443F01202DD3F60039BE41 /* PhotoFolder MO.swift in Sources */,
+				A7C4940A2304487B0042800F /* Photo Item Pop-Up Menu.swift in Sources */,
+				A77424B0244374AD006FB973 /* Collection Wrappers.swift in Sources */,
+				A7A58EC42285891C000F0593 /* Photo Item Digital Marker.swift in Sources */,
+				A7443F01202DD3F60039BE41 /* Photo Folder MO.swift in Sources */,
+				A72F0D8D231FCB6B0054249D /* Undo Manager.swift in Sources */,
+				A7E3EF382475173600580F36 /* @WeakWrapped.swift in Sources */,
+				A7D672D42386684F007B3C93 /* Segue Action Snippet Initializable.swift in Sources */,
 				A79548F621EC98AC00A37959 /* Single Cell D&D Delegate.swift in Sources */,
 				A72B3EAE2058419000C02B52 /* Zoom View.swift in Sources */,
 				A78C2EC0224669950005CFE4 /* Snippet Drop View Delegate.swift in Sources */,
+				A7BFBD5122F36B0000C29FFE /* Photo Folder MO Fully RX.swift in Sources */,
+				A7D74434227D6DEA00C6A645 /* Photo Snippet CV DS Deletions.swift in Sources */,
+				A797B00623731B2800A88892 /* Photo Folder MO Deletion.swift in Sources */,
+				A755338B24912B23003907E5 /* App Appearance Setup.swift in Sources */,
 				A75489891FBC4F2900359C0C /* App Delegate.swift in Sources */,
 				A71C85E91FBED660000F2DD9 /* Snippets TV DS.swift in Sources */,
 				A71EDA672063D00D00E6AB7A /* UIImage Extensions.swift in Sources */,
 				A71C85BF1FBE1972000F2DD9 /* Report+CoreDataClass.swift in Sources */,
 				A747B96E2240CDA800D552F8 /* Snippet Cells Selection.swift in Sources */,
 				A7B2B0872205CAFD00D40008 /* Render Video Preview Operation.swift in Sources */,
+				A72CDCB42459EEAC002761C1 /* SCP D&D States Updates.swift in Sources */,
+				A7BD9F552437348C00CBB9F8 /* App Cloud Data Saver.swift in Sources */,
 				A7304A9C1FCAFDB700207A52 /* Single Item Cell.swift in Sources */,
+				A7A3B6382452C17900B1E371 /* Photo Snippet Cell Main View.swift in Sources */,
 				A78C2EC42246783E0005CFE4 /* Snippet Cell Spring Interaction.swift in Sources */,
+				A7BD9F5F243A400D00CBB9F8 /* File Manager Helpers Combine.swift in Sources */,
 				A7DA008B204AB518002C3BA6 /* Photo Drop Item Provider.swift in Sources */,
 				A7660E422226781000F845E8 /* Snippet Cells Disclosure.swift in Sources */,
-				A75DB6462215BA320045E9E2 /* Photo Items Draggable Protocol.swift in Sources */,
 				A71CE632213A971300497A60 /* Snippet Preview Images Provider.swift in Sources */,
 				A71C85CD1FBE19F3000F2DD9 /* SketchSnippet+CoreDataClass.swift in Sources */,
+				A7E683832477B946009E046C /* @Scaled.swift in Sources */,
 				A75DB64B2215C0880045E9E2 /* Folder Cell CV D&D Delegate.swift in Sources */,
 				A7B2B08B2205CD2700D40008 /* Resize Image Operation.swift in Sources */,
+				A7A3B63C2454429600B1E371 /* MAIN CV D & D Delegate.swift in Sources */,
+				A7750C1E22E7140C007C1562 /* MO Operations Types.swift in Sources */,
 				A751FC4C218C7FD20088D9C5 /* CG Affine Transform Extension.swift in Sources */,
 				A711C0EF2183167C0025C973 /* Snippets Special Enums, Structs.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A75489981FBC4F2900359C0C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A75489A11FBC4F2900359C0C /* NewsmanTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A75489A31FBC4F2900359C0C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A75489AC1FBC4F2900359C0C /* NewsmanUITests.swift in Sources */,
+				A757D272238FCC4500427BEE /* Photo DMOP RxSwift Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A754899E1FBC4F2900359C0C /* PBXTargetDependency */ = {
+		A7533B3524B0420600530473 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A75489841FBC4F2900359C0C /* Newsman */;
-			targetProxy = A754899D1FBC4F2900359C0C /* PBXContainerItemProxy */;
-		};
-		A75489A91FBC4F2900359C0C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A75489841FBC4F2900359C0C /* Newsman */;
-			targetProxy = A75489A81FBC4F2900359C0C /* PBXContainerItemProxy */;
+			targetProxy = A7533B3424B0420600530473 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1324,6 +1923,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A7533B3724B0420600530473 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = TFWJVRR5ZT;
+				INFOPLIST_FILE = NewsmanTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = exp.NewsmanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Newsman.app/Newsman";
+			};
+			name = Debug;
+		};
+		A7533B3824B0420600530473 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TFWJVRR5ZT;
+				INFOPLIST_FILE = NewsmanTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = exp.NewsmanTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Newsman.app/Newsman";
+			};
+			name = Release;
+		};
 		A75489AE1FBC4F2900359C0C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1350,6 +1989,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1375,7 +2015,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1410,6 +2050,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1421,6 +2062,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -1429,7 +2071,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -1447,12 +2089,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
 				INFOPLIST_FILE = Newsman/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = exp.Newsman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1464,87 +2106,32 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Newsman/Newsman.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TFWJVRR5ZT;
 				INFOPLIST_FILE = Newsman/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = exp.Newsman;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		A75489B41FBC4F2900359C0C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TFWJVRR5ZT;
-				INFOPLIST_FILE = NewsmanTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = exp.NewsmanTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Newsman.app/Newsman";
-			};
-			name = Debug;
-		};
-		A75489B51FBC4F2900359C0C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TFWJVRR5ZT;
-				INFOPLIST_FILE = NewsmanTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = exp.NewsmanTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Newsman.app/Newsman";
-			};
-			name = Release;
-		};
-		A75489B71FBC4F2900359C0C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TFWJVRR5ZT;
-				INFOPLIST_FILE = NewsmanUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = exp.NewsmanUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Newsman;
-			};
-			name = Debug;
-		};
-		A75489B81FBC4F2900359C0C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = TFWJVRR5ZT;
-				INFOPLIST_FILE = NewsmanUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = exp.NewsmanUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Newsman;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A7533B3624B0420600530473 /* Build configuration list for PBXNativeTarget "NewsmanTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7533B3724B0420600530473 /* Debug */,
+				A7533B3824B0420600530473 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		A75489801FBC4F2900359C0C /* Build configuration list for PBXProject "Newsman" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1559,24 +2146,6 @@
 			buildConfigurations = (
 				A75489B11FBC4F2900359C0C /* Debug */,
 				A75489B21FBC4F2900359C0C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		A75489B31FBC4F2900359C0C /* Build configuration list for PBXNativeTarget "NewsmanTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A75489B41FBC4F2900359C0C /* Debug */,
-				A75489B51FBC4F2900359C0C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		A75489B61FBC4F2900359C0C /* Build configuration list for PBXNativeTarget "NewsmanUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A75489B71FBC4F2900359C0C /* Debug */,
-				A75489B81FBC4F2900359C0C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

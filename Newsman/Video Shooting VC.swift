@@ -27,7 +27,7 @@ extension PhotoSnippetViewController: AVCaptureFileOutputRecordingDelegate
                                cachedImageWidth: self.imageSize,
                                newVideoID: self.photoSnippetVideoID)
   
-   self.insertNewPhotoItem(newPhotoItem)
+   insertNewPhotoItem(newPhotoItem, with: BatchAnimationOptions.withSmallJump(0.3))
  }
  
  func showVideoShootingController ()
@@ -39,6 +39,8 @@ extension PhotoSnippetViewController: AVCaptureFileOutputRecordingDelegate
    return
   }
   videoVC.videoSnippetID = photoSnippet.id!.uuidString
+  videoVC.modalPresentationStyle = .fullScreen
+ 
   videoVC.transitioningDelegate = imagePickerTransitionDelegate
   self.present(videoVC, animated: true)
  }
@@ -113,20 +115,21 @@ class VideoShootingViewController: UIViewController
  {
   switch AVCaptureDevice.authorizationStatus(for: .audio)
   {
-  case .authorized:
-    print ("***** Audio Status is authorized *****")
-    configueShootingSession ()
-  case .notDetermined:
-   AVCaptureDevice.requestAccess(for: .audio)
-   { granted in
-    if granted
-    {
-     print ("***** Audio Status was not detemined and now is authorized *****")
-     self.configueShootingSession ()
+   case .authorized:
+     print ("***** Audio Status is authorized *****")
+     configueShootingSession ()
+   case .notDetermined:
+    AVCaptureDevice.requestAccess(for: .audio)
+    { granted in
+     if granted
+     {
+      print ("***** Audio Status was not detemined and now is authorized *****")
+      self.configueShootingSession ()
+     }
     }
-   }
-  case .denied: return
-  case .restricted: return
+   
+   default: return
+  
   }
  }
  
@@ -147,8 +150,7 @@ class VideoShootingViewController: UIViewController
     }
    }
    
-   case .denied: return
-   case .restricted: return
+   default: return
   }
  }
  

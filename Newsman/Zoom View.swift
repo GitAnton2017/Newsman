@@ -3,9 +3,14 @@ import Foundation
 import UIKit
 import AVKit
 import CoreData
+import RxSwift
 
-class ZoomView: UIView
+class ZoomView: UIView, PhotoManagedObjectsContextChangeObservable, UIGestureRecognizerDelegate
 {
+ var isDropPerformed = false
+ var ddPublish = PublishSubject<Void>()
+ let disposeBag = DisposeBag()
+ 
  var photoItems: [PhotoItem]!
  var nphoto: Int = 3
  var swipeGR: UISwipeGestureRecognizer!
@@ -17,14 +22,13 @@ class ZoomView: UIView
  var maxZoomRatio: CGFloat = 5.0
  var minPinchVelocity: CGFloat = 0.15
  var removingZoomView = false
-
-
+ 
  var contextChangeObservers = Set<NSObject>()
 
  lazy var moc: NSManagedObjectContext =
   {
    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-   let moc = appDelegate.persistentContainer.viewContext
+   let moc = appDelegate.viewContext
    return moc
  }()
 
@@ -33,10 +37,14 @@ class ZoomView: UIView
    let dropDelegate = SingleCellZoomViewDropDelegate(owner: self)
    return dropDelegate
  }()
+ 
+ 
 
  @objc dynamic var playerView: PlayerView?
 
  weak var photoSnippetVC: PhotoSnippetViewController!
+ 
+ var photoSnippet: PhotoSnippet! { photoSnippetVC.photoSnippet }
 
  weak var zoomedPhotoItem: PhotoItemProtocol?
  {
@@ -68,30 +76,36 @@ class ZoomView: UIView
 
  var isShowingCV: Bool
  {
-     for sv in subviews
-     {
-         if let _ = sv as? UICollectionView {return true}
-     }
-  
-     return false
+  for sv in subviews { if let _ = sv as? UICollectionView { return true } }
+  return false
  }
 
  var isShowingIV: Bool
  {
-     for sv in subviews
-     {
-         if let _ = sv as? UIImageView {return true}
-     }
-  
-     return false
+  for sv in subviews { if let _ = sv as? UIImageView { return true} }
+  return false
  }
 
+ override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool
+ {
+  guard gestureRecognizer.name == "ZoomViewPinch" else { return true }
+  guard gestureRecognizer.numberOfTouches == 2 else { return true }
+   
+  let tp1 = gestureRecognizer.location(ofTouch: 0, in: self)
+  let tp2 = gestureRecognizer.location(ofTouch: 1, in: self)
+  
+  return !(hitTest(tp1, with: nil) is MenuBaseView) &&
+         !(hitTest(tp2, with: nil) is MenuBaseView) &&
+         !(hitTest(tp1, with: nil) is MenuItemButton) &&
+         !(hitTest(tp2, with: nil) is MenuItemButton)
+ }
 
  init()
  {
   super.init(frame: CGRect.zero)
 
   addContextObservers()
+  //(UIApplication.shared.delegate as! AppDelegate).dragAndDropDelegatesStatesSubject.onNext(.initial)
   
   swipeGR = UISwipeGestureRecognizer(target: self, action: #selector(zoomViewSwipe))
   swipeGR.name = "ZoomViewCloseSwipe"
@@ -105,6 +119,7 @@ class ZoomView: UIView
 
   pinchGR = UIPinchGestureRecognizer(target: self, action: #selector(zoomViewPinch))
   pinchGR.name = "ZoomViewPinch"
+  pinchGR.delegate = self
   self.addGestureRecognizer(pinchGR)
 
   layer.cornerRadius = 10.0
@@ -213,13 +228,10 @@ class ZoomView: UIView
 
  func stopSpinner()
  {
-   for sv in subviews
-   {
-     if let spinner = sv as? UIActivityIndicatorView
-     {
-       spinner.stopAnimating()
-     }
-   }
+  for sv in subviews
+  {
+   if let spinner = sv as? UIActivityIndicatorView { spinner.stopAnimating() }
+  }
  }
 
  func getVideoAspectRatio(asset: AVURLAsset, vtrack: AVAssetTrack)
@@ -229,19 +241,19 @@ class ZoomView: UIView
 
  func getAssetTracks(asset: AVURLAsset)
  {
-   let vtrack = asset.tracks(withMediaType: .video).first!
-   let ratio = #keyPath(AVAssetTrack.naturalSize)
-   vtrack.loadValuesAsynchronously(forKeys: [ratio])
+  let vtrack = asset.tracks(withMediaType: .video).first!
+  let ratio = #keyPath(AVAssetTrack.naturalSize)
+  vtrack.loadValuesAsynchronously(forKeys: [ratio])
+  {
+   let status = asset.statusOfValue(forKey: ratio, error: nil)
+   if (status == .loaded)
    {
-    let status = asset.statusOfValue(forKey: ratio, error: nil)
-    if (status == .loaded)
-    {
-     DispatchQueue.main.async
-     {[unowned self] in
-      self.getVideoAspectRatio(asset: asset, vtrack: vtrack)
-     }
+    DispatchQueue.main.async
+    {[unowned self] in
+     self.getVideoAspectRatio(asset: asset, vtrack: vtrack)
     }
    }
+  }
  }
 
  func loadAssetTracks(asset: AVURLAsset)
@@ -282,7 +294,6 @@ class ZoomView: UIView
   {
    stopSpinner()
 
-   
    UIView.transition(with: self,
                      duration: 1.0,
                      options: [.transitionCrossDissolve, .curveEaseInOut],
@@ -302,7 +313,7 @@ class ZoomView: UIView
   mainView.addSubview(self)
   setRectConstraints(to: mainView)
   
-  let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+  let spinner = UIActivityIndicatorView(style: .large)
   spinner.hidesWhenStopped = true
   self.addSubview(spinner)
   setConstraints(of: spinner)
@@ -315,94 +326,93 @@ class ZoomView: UIView
 
  func openWithIV (in mainView: UIView) -> UIImageView
  {
-  
-   for sv in subviews
-   {
-     if let iv = sv as? UIImageView {return iv}
-   }
-  
-   subviews.forEach{$0.removeFromSuperview()}
-  
-   mainView.addSubview(self)
-   setConstraints(to: mainView)
-   let iv = UIImageView()
-  
-   let spinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-   spinner.hidesWhenStopped = true
-   self.addSubview(spinner)
-   spinner.startAnimating()
-  
+  for sv in subviews { if let iv = sv as? UIImageView { return iv } }
+ 
+  subviews.forEach{ $0.removeFromSuperview() }
+ 
+  mainView.addSubview(self)
+  setConstraints(to: mainView)
+  let iv = UIImageView()
+ 
+  let spinner = UIActivityIndicatorView(style: .large)
+  spinner.hidesWhenStopped = true
+  self.addSubview(spinner)
+  spinner.startAnimating()
+ 
+  self.addSubview(iv)
+  setConstraints(of: iv)
+  setConstraints(of: spinner)
+ 
+  let dropper = UIDropInteraction(delegate: dropDelegate)
+  addInteraction(dropper)
+ 
+  if (presentSubview != nil) {changeAnim(to: iv)}
+  else
+  {
    self.addSubview(iv)
    setConstraints(of: iv)
-   setConstraints(of: spinner)
-  
-  
-   let dropper = UIDropInteraction(delegate: dropDelegate)
-   addInteraction(dropper)
-  
-   if (presentSubview != nil) {changeAnim(to: iv)}
-   else
-   {
-    self.addSubview(iv)
-    setConstraints(of: iv)
-    openAnim()
-   }
-  
-   presentSubview = iv
-   return iv
+   openAnim()
+  }
+ 
+  presentSubview = iv
+  return iv
   
  }
 
+ var dragAndDropDelegate: ZoomViewCollectionViewDragAndDropDelegate?
+ 
  func openWithCV (in mainView: UIView) -> UICollectionView
  {
-   for sv in subviews
-   {
-    if let cv = sv as? UICollectionView {return cv}
-   }
+  for sv in subviews { if let cv = sv as? UICollectionView { return cv } }
+ 
+  subviews.forEach{ $0.removeFromSuperview() }
+ 
+  interactions.removeAll()
+ 
+  mainView.addSubview(self)
+  setConstraints(to: mainView)
+  let cv_lo = UICollectionViewFlowLayout()
+ 
+  let ins = layer.borderWidth + 2
+  cv_lo.sectionInset = UIEdgeInsets.init(top: ins, left: ins, bottom: ins, right: ins)
+  cv_lo.minimumInteritemSpacing = 2
+  cv_lo.minimumLineSpacing = 2
+ 
+  let cv = UICollectionView(frame: bounds, collectionViewLayout: cv_lo)
+ 
+  cv.delegate = self
+  cv.dataSource = self
+  cv.allowsMultipleSelection = false //<didDeselect> will be called automaticaly if implemented in delegate!
+  cv.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
+  cv.dragInteractionEnabled = true
   
-   subviews.forEach{$0.removeFromSuperview()}
+  //D&D Delegate object must be retained strongly first-off!
+  dragAndDropDelegate = ZoomViewCollectionViewDragAndDropDelegate(zoomView: self)
+  cv.dropDelegate = dragAndDropDelegate
+  cv.dragDelegate = dragAndDropDelegate
   
-   interactions.removeAll()
-  
-   mainView.addSubview(self)
-   setConstraints(to: mainView)
-   let cv_lo = UICollectionViewFlowLayout()
-  
-   let ins = layer.borderWidth + 2
-   cv_lo.sectionInset = UIEdgeInsetsMake(ins, ins, ins, ins)
-   cv_lo.minimumInteritemSpacing = 2
-   cv_lo.minimumLineSpacing = 2
-  
-   let cv = UICollectionView(frame: bounds, collectionViewLayout: cv_lo)
-  
-   cv.delegate = self
-   cv.dataSource = self
-   cv.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
-   cv.dragInteractionEnabled = true
-   cv.dropDelegate = self
-   cv.dragDelegate = self
-   cv.contentInsetAdjustmentBehavior = .never //!!!
-  // Constants indicating how safe area insets are added to the adjusted content inset.
-  // .automatic - Automatically adjust the scroll view insets.
-  // .scrollableAxes - Adjust the insets only in the scrollable directions.
-  // .never - Do not adjust the scroll view insets.
-  // .always -Always include the safe area insets in the content adjustment.
-  
-  
-   let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)
-   cv.register(cellNib, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
+  cv.contentInsetAdjustmentBehavior = .never //!!!
+ // Constants indicating how safe area insets are added to the adjusted content inset.
+ // .automatic - Automatically adjust the scroll view insets.
+ // .scrollableAxes - Adjust the insets only in the scrollable directions.
+ // .never - Do not adjust the scroll view insets.
+ // .always -Always include the safe area insets in the content adjustment.
+ 
+ 
+  let cellNib = UINib(nibName: "ZoomCollectionViewCell", bundle: nil)
+  cv.register(cellNib, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
    //cv.register(ZoomViewCollectionViewCell.self, forCellWithReuseIdentifier: "ZoomCollectionViewCell")
-  
-   if (presentSubview != nil) {changeAnim(to: cv)}
-   else
-   {
-    self.addSubview(cv)
-    setConstraints(of: cv)
-    openAnim()
-   }
-  
-   presentSubview = cv
-   return cv
+ 
+  if (presentSubview != nil) {changeAnim(to: cv)}
+  else
+  {
+   self.addSubview(cv)
+   setConstraints(of: cv)
+   openAnim()
+  }
+ 
+  presentSubview = cv
+  return cv
  }
 
  @objc func zoomViewPinch (_ gr: UIPinchGestureRecognizer)

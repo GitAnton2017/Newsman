@@ -6,45 +6,67 @@
 //  Copyright © 2019 Anton2016. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension Draggable
 {
+ 
+ var isFoldered: Bool
+ {
+  guard let photoItem = self as? PhotoItem else { return false }
+  return photoItem.isFoldered
+ }
+
+ 
  var isDraggable: Bool
  {
-  return !(isDragAnimating || isSetForClear || isFolderDragged)
- }
- 
- 
- func clear (with delays: (forDragAnimating: Int, forSelected: Int), completion: (()->())? = nil)
- {
-  
-  if isSetForClear { return }
-  
-  print (#function, self, self.dragSession ?? "No session")
-  
-  dragAnimationCancelWorkItem = nil
-  
-  isSetForClear = true //this flag is set when clear block is about to fire to avoid multiple calls of clear()
-  
-  DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delays.forDragAnimating))
+  if (AppDelegate.globalDragItems.contains{ $0.hostedManagedObject.objectID == hostedManagedObject.objectID })
   {
-   self.isDragAnimating = false
-   DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delays.forSelected))
-   {
-    self.isSelected = false
-    self.isSetForClear = false  //unset flag after full completion
-    self.removeFromDrags()
-    completion?()               //fire completion handler for additional post animation actions if any needed
-   }
+   return false
+  }
+  
+  switch self
+  {
+   case let photoItem as PhotoItem:
+    return !(photoItem.photo.folder?.isDragAnimating ?? false)
+   case let folderItem as PhotoFolderItem:
+    return !(folderItem.folder.folderedPhotos.contains{ $0.isDragAnimating })
+   default:
+    return true
   }
  }
+ 
+ 
+// func clear (with delays: (forDragAnimating: Int, forSelected: Int), completion: ( () ->() )? = nil)
+// {
+//  
+//  if isSetForClear { return }
+//  
+//  removeFromDrags()
+//  
+//  print (#function, self, self.dragSession ?? "No session")
+//  
+//  dragAnimationCancelWorkItem = nil
+//  
+//  isSetForClear = true //this flag is set when clear block is about to fire to avoid multiple calls of clear()
+//  
+//  DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delays.forDragAnimating))
+//  {
+//   self.isSetForClear = false  //unset flag after full completion
+//   self.isDragAnimating = false
+//   DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(delays.forSelected))
+//   {
+//    self.isSelected = false
+//    completion?()               //fire completion handler for additional post animation actions if any needed
+//   }
+//  }
+// }
  
  
  
  func moveToDrops(allNestedItems flag: Bool = false)
  {
-  AppDelegate.globalDragItems.removeAll{$0.hostedManagedObject === self.hostedManagedObject}
+  AppDelegate.globalDragItems.removeAll{$0.hostedManagedObject.objectID == hostedManagedObject.objectID}
   
   switch (self, flag)
   {
@@ -74,17 +96,44 @@ extension Draggable
   }
  }
  
+ func dispose()
+ {
+  print (#function, self, self.dragSession ?? "No session")
+  
+  dragStateSubscription?.dispose()
+  dragProceedSubscription?.dispose()
+  dragStateSubscription = nil
+  dragProceedSubscription = nil
+  
+ }
  
+ func clear()
+ {
+  print (#function, self, self.dragSession ?? "No session")
+  isSelected = false
+  isDragAnimating = false
+  isDragProceeding = false
+  isDropProceeding = false
+  dispose()
+ }
+ 
+ func terminate()
+ {
+  print (#function, self, self.dragSession ?? "No session")
+  clear()
+  removeFromDrags()
+  (UIApplication.shared.delegate as! AppDelegate).dragAndDropDelegatesStatesSubject.onNext(.initial)
+ }
  
  func removeFromDrags()
  {
   print (#function, self, self.dragSession ?? "No session")
   
   //remove drag item from drags personally if found...
-  AppDelegate.globalDragItems.removeAll{$0.hostedManagedObject === self.hostedManagedObject}
+  AppDelegate.globalDragItems.removeAll{$0.hostedManagedObject === self.hostedManagedObject }
   
   //remove drag item from drops personally if found...
-  AppDelegate.globalDropItems.removeAll{$0.hostedManagedObject === self.hostedManagedObject}
+  //AppDelegate.globalDropItems.removeAll{$0.hostedManagedObject === self.hostedManagedObject }
  }
  
  

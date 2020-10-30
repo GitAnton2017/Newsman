@@ -29,7 +29,7 @@ extension DragWaggleAnimatable
   bw.toValue = 1.25
   
   let kft = CAKeyframeAnimation(keyPath: #keyPath(CALayer.transform))
-  kft.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+  kft.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
   kft.values =
    [
     CATransform3DMakeScale(0.98, 0.98, 1),
@@ -39,8 +39,8 @@ extension DragWaggleAnimatable
     CATransform3DMakeScale(1.02, 1.02, 1)
   ]
   
-  kft.calculationMode = kCAAnimationCubic
-  kft.rotationMode = kCAAnimationRotateAuto
+  kft.calculationMode = CAAnimationCalculationMode.cubic
+  kft.rotationMode = CAAnimationRotationMode.rotateAuto
   
   ag.duration = 0.35
   ag.autoreverses = true
@@ -48,34 +48,79 @@ extension DragWaggleAnimatable
   
   ag.animations = [bc, bw, kft]
   
-  self.waggleView.layer.add(ag, forKey: "waggle")
+  waggleView.layer.add(ag, forKey: "waggle")
  }
  
  func stopWaggleAnimation()
  {
   //print (#function)
-  self.waggleView.layer.removeAnimation(forKey: "waggle")
+  waggleView.layer.removeAnimation(forKey: "waggle")
  }
  
  var isDragAnimating: Bool
  {
-  get {return self.waggleView.layer.animation(forKey: "waggle") != nil}
+  get { waggleView.layer.animation(forKey: "waggle") != nil}
   set
   {
-   if newValue {dragWaggleBegin()} else {dragWaggleEnd()}
+   if newValue
+   {dragWaggleBegin()
+    
+   } else
+   {
+    dragWaggleEnd()
+    
+   }
   }
  }
  
  func dragWaggleBegin()
  {
-  //print (#function)
+  if let folderCell = self as? PhotoFolderCell
+  {
+   let tag = folderCell.childrenCounterTagView
+   UIView.transition(with: tag,
+    duration: 0.5,
+    options: [.transitionCrossDissolve], animations:
+    {
+     tag.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+     tag.isHidden = true
+    }, completion: {_ in
+     folderCell.startWaggleAnimation()
+     folderCell.hostedCells.forEach{ $0.dragWaggleBegin() } //add-on...
+   })
+
+   return
+  }
+  
   startWaggleAnimation()
  }
  
  func dragWaggleEnd()
  {
   //print (#function)
+  
+  if let folderCell = self as? PhotoFolderCell
+  {
+    let tag = folderCell.childrenCounterTagView
+    UIView.transition(with: tag,
+     duration: 0.5,
+     options: [.transitionCrossDissolve], animations:
+     {
+      tag.isHidden = false
+      tag.transform = .identity
+     },
+     completion: {_ in
+      folderCell.stopWaggleAnimation()
+      folderCell.hostedCells.forEach{ $0.dragWaggleEnd() } //add-on...
+    })
+
+    return
+   }
+   
   stopWaggleAnimation()
  }
  
 }
+
+
+

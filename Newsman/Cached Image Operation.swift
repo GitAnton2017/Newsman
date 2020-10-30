@@ -10,19 +10,17 @@ import UIKit
 
 class CachedImageOperation: Operation, ResizeImageDataProvider
 {
- var imageToResize: UIImage? {return outputImage}
+ var imageToResize: UIImage? { outputImage }
  
  private var contextDepend: CachedImageDataProvider?
  {
-  get
-  {
-   return dependencies.compactMap{$0 as? CachedImageDataProvider}.first
-  }
+  dependencies.compactMap{$0 as? CachedImageDataProvider}.first
  }
  
- private var cachedImageID: UUID? {return contextDepend?.cachedImageID}
+ private var cachedImageID: UUID? { contextDepend?.cachedImageID }
  
  var cachedImage: UIImage?
+ 
  private var outputImage: UIImage?
  
  private var width: Int
@@ -37,32 +35,37 @@ class CachedImageOperation: Operation, ResizeImageDataProvider
   
   super.init()
   
-  let cnxObserver = observe(\.isCancelled) {op,_ in op.removeAllDependencies()}
+  let cnxObserver = observe(\.isCancelled)
+  {op,_ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
   
+  let finObserver = observe(\.isFinished)
+  {op,_ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  observers.insert(finObserver)
   observers.insert(cnxObserver)
   
  }
  
  override func main()
  {
-  if isCancelled {return} //if isCancelled is set to true no sence to continue!
-  
-  guard cachedImage == nil, let ID = cachedImageID?.uuidString else {return}
+  if isCancelled { return } //if isCancelled is set to true no sence to continue!
+  guard cachedImage == nil, let ID = cachedImageID?.uuidString else { return }
   
   cachedImage = PhotoItem.imageCacheDict[width]?.object(forKey: ID as NSString)
   
-  if isCancelled {return} //if isCancelled is set to true no sence to continue
+  if isCancelled { return } //if isCancelled is set to true no sence to continue
   
-  guard cachedImage == nil else {return}
+  guard cachedImage == nil else { return }
+  let caches = PhotoItem.imageCacheDict.filter { $0.key > width && $0.value.object(forKey: ID as NSString) != nil }
+  let cache = caches.min(by: { $0.key < $1.key })?.value
   
-  let caches = PhotoItem.imageCacheDict.filter
-  {
-   $0.key > width && $0.value.object(forKey: ID as NSString) != nil
-  }
-  
-  let cache = caches.min(by: {$0.key < $1.key})?.value
-  
-  if isCancelled {return}
+  if isCancelled { return }
   
   cachedImage = cache?.object(forKey: ID as NSString)
   outputImage = cachedImage

@@ -42,7 +42,7 @@ class SpringDoorAnimator: NSObject, UIViewControllerAnimatedTransitioning, Custo
  
   let containerView = transitionContext.containerView
   let toView = transitionContext.view(forKey: .to)!
-  let fromView = transitionContext.view(forKey: .from)!
+  let fromView = transitionContext.view(forKey: .from)
   
   let toVC = transitionContext.viewController(forKey: .to)!
   let toViewFinalFrame = transitionContext.finalFrame(for: toVC)
@@ -77,7 +77,7 @@ class SpringDoorAnimator: NSObject, UIViewControllerAnimatedTransitioning, Custo
   animGroup.animations =  [fadeAnim, rotateAnim]
   animGroup.duration = duration
   
-  animGroup.fillMode = kCAFillModeForwards
+  animGroup.fillMode = CAMediaTimingFillMode.forwards
   animGroup.isRemovedOnCompletion = false
   
   containerView.addSubview(toView)
@@ -86,14 +86,16 @@ class SpringDoorAnimator: NSObject, UIViewControllerAnimatedTransitioning, Custo
   if (presenting)
   {
    
-   toView.layer.position = CGPoint(x: toView.layer.position.x , y: toView.layer.position.y - toView.layer.bounds.height/2)
+   toView.layer.position = CGPoint(x: toView.layer.position.x ,
+                                   y: toView.layer.position.y - toView.layer.bounds.height/2)
+   
    toView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.0)
    toView.layer.add(animGroup, forKey: "animGroup")
   }
   else
   {
-   containerView.bringSubview(toFront: fromView)
-   fromView.layer.add(animGroup, forKey: "animGroup")
+   containerView.bringSubviewToFront(fromView!)
+   fromView!.layer.add(animGroup, forKey: "animGroup")
 
   }
   
@@ -112,7 +114,8 @@ class SpringDoorAnimator: NSObject, UIViewControllerAnimatedTransitioning, Custo
    {
     let fromView = context.view(forKey: .from)!
     fromView.layer.removeAnimation(forKey: "animGroup")
-    fromView.layer.position = CGPoint(x: fromView.layer.position.x , y: fromView.layer.position.y + fromView.layer.bounds.height/2)
+    fromView.layer.position = CGPoint(x: fromView.layer.position.x ,
+                                      y: fromView.layer.position.y + fromView.layer.bounds.height/2)
     fromView.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
    }
   }

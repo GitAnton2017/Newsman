@@ -2,54 +2,90 @@ import UIKit
 import Foundation
 import AVKit
 
-class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoItemsDraggable, DropViewProvidable
-{
- var isDraggable: Bool { return true }
+import class RxSwift.DisposeBag
+import Combine
+
+class PhotoSnippetCell: UICollectionViewCell,
+                        PhotoSnippetCellProtocol,                 
+                        DropViewProvidable,
+                        SnippetItemsDraggable
  
- lazy var dropView: UIView = self.setDropView()
+{
+
+ 
+ //deinit { print ("SINGLE ITEM CELL IS DESTROYED \(self)") }
+ 
+ static let menuLongPressName = "ArrowMenuLongPress"
+ 
+ @objc dynamic weak var arrowMenuView: PointedMenuView?
+ 
+ 
+ weak var arrowMenuSearchTag: UIAlertController?
+ 
+ var cancellables =  Set<AnyCancellable> ()
+ 
+ let disposeBag = DisposeBag()
+ 
+ var isDraggable: Bool { true }
+ 
+ lazy var dropView: UIView = setDropView()
  
  lazy var dropDelegate: UIDropInteractionDelegate =
- {
-  let dropDelegate = SingleCellDropViewDelegate(owner: self)
+ {[ weak self ] in
+  let dropDelegate = SingleCellDropViewDelegate(ownerCell: self)
   return dropDelegate
  }()
  
 
- var hostedView: UIView {return photoIconView}
- var hostedAccessoryView: UIView? {return spinner}
+ var hostedView: UIView           { photoIconView }
+ var hostedAccessoryView: UIView? { spinner       }
 
- weak var photoSnippet: PhotoSnippet!
- weak var photoSnippetVC: PhotoSnippetViewController!
+ weak var photoSnippet: PhotoSnippet?
+ 
+ weak var photoSnippetVC: PhotoSnippetViewController?
+ {
+  didSet
+  {
+   dropView.isHidden = isContentDraggable
+   configueInterfaceRotationSubscription()
+  }
+ }
  
  @IBOutlet weak var photoIconView: UIImageView!        //hosted photo UIImageView...
  @IBOutlet weak var spinner: UIActivityIndicatorView!
+ @IBOutlet weak var mainView: UIView!
  
- func cancelImageOperations()
- {
-  hostedItem?.cancelImageOperations()
- }
-
+ 
+ 
+ func cancelImageOperations() { hostedItem?.cancelImageOperations() }
+ 
+ var rowPositionSubscription: AnyCancellable?
+ 
  weak var hostedItem: PhotoItemProtocol?
  //The sigle PhotoItem that is currently hosted and visualized by this type of UICollectionViewCell...
  {
   didSet
   {
-   guard let hosted = self.hostedItem as? PhotoItem else { return }
-   
-   hosted.hostingCollectionViewCell = self
-   //weak reference to this cell that will display this PhotoItem...
-   
-   hosted.zoomView?.dropDelegate.owner = self
+   guard let hosted = hostedItem as? PhotoItem else
+   {
+    oldValue?.hostingCollectionViewCell = nil
+    cleanup()
+    return
+   }
   
-   updateImage()
    
+   hosted.hostingCollectionViewCell = self //weak reference to this cell that will display this PhotoItem...
+   
+   updateAllCellStatesSubscriptions()
+   
+   
+   
+   hosted.zoomView?.dropDelegate.ownerCell = self
+ 
    photoIconView.alpha = hosted.isSelected ? 0.5 : 1
    
-   self.isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
+   isDragAnimating = hosted.isDragAnimating //|| hosted.isDropAnimating
    
-   //updateDraggableHostingCell()
-
-   //if cell drag waggle animation deleted and hosted item is in selected state recover animation...
   }
   
  }//weak var hostedItem: PhotoItemProtocol?...
@@ -58,6 +94,7 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoIte
  
  
  private var _selected = false
+ 
  var isPhotoItemSelected: Bool
  {
    set
@@ -67,49 +104,85 @@ class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol, PhotoIte
     touchSpring()
    }
   
-   get {return _selected}
+   get { _selected }
+ }
+ 
+ final func cleanup()
+ {
+  dismissArrowMenu(animated: false)
+  spinner.startAnimating()
+  //photoIconView.image = nil
+  photoIconView.alpha = 1
+  contentView.alpha = 1
+  contentView.backgroundColor = .clear
+  
+  _selected = false
+  
+  clearMainView()
+  clearFlagMarker()
+  clearVideoDuration()
+  clearRowPosition(false)
+  hidePlayIcon()
+  imageRoundClip(cornerRadius: 10)
+ }
+ 
+ 
+ final private func configue()
+ {
+ 
+  photoIconView.isOpaque = true
+  configueArrowMenu()
+  
+  let dropper = UIDropInteraction(delegate: dropDelegate)
+  dropView.addInteraction(dropper)
+  
+  
+  mainView?.publisher(for: \.bounds, options: [.prior])
+   .collect(2)
+   .filter{ $0[0] != $0[1] }
+   .sink {[ weak self ] rects in
+     guard let self = self else { return }
+     guard let photoSnippetVC = self.photoSnippetVC else { return }
+     self.dropView.isHidden = self.isContentDraggable
+     self.cornerRadius = photoSnippetVC.cellCornerRadius
+     if rects[1].contains(rects[0]) { self.updateImage(false) }
+     
+  }.store(in: &cancellables)
+  
+  cleanup()
  }
  
  override func awakeFromNib()
  {
   super.awakeFromNib()
-  
-  self.hostedItem = nil
-  
-  _selected = false
-  
-  let dropper = UIDropInteraction(delegate: dropDelegate)
-  dropView.addInteraction(dropper)
-  
-  spinner.startAnimating()
-  photoIconView.image = nil
-  photoIconView.alpha = 1
-  contentView.alpha = 1
-  clearFlagMarker()
-  clearVideoDuration()
-  hidePlayIcon()
-  imageRoundClip(cornerRadius: 10)
-  
+  configue()
+
  }
  
  override func prepareForReuse()
  {
   super.prepareForReuse()
-  
-//  self.hostedItem = nil
-  spinner.startAnimating()
-  photoIconView.image = nil
-  photoIconView.alpha = 1
-  contentView.alpha = 1
-  _selected = false
-  clearFlagMarker()
-  clearVideoDuration()
-  hidePlayIcon()
-  imageRoundClip(cornerRadius: 10)
-  
+  cleanup()
  }
  
+ override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
+ {
+  if let target = super.hitTest(point, with: event) { return target }
+
+  for subview in subviews.reversed()
+  {
+   let tp = convert(point, to: subview)
+   if let menuItemButton = subview.hitTest(tp, with: event) as? MenuItemButton
+   {
+    return menuItemButton
+   }
+  }
+  return nil
+ }
  
 }//class PhotoSnippetCell: UICollectionViewCell, PhotoSnippetCellProtocol...
+
+
+
 
 

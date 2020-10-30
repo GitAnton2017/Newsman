@@ -8,426 +8,919 @@
 
 import Foundation
 import CoreData
+import RxSwift
 
-
-enum PhotoItemMovedKey: String, Hashable
-{
- case destPhoto
- case destFolder
- case destSnippet
- case position
-}
-
-extension Notification.Name
-{
- static let photoItemDidRefolder = Notification.Name(rawValue: "photoItemDidRefolder")
- static let photoItemDidUnfolder = Notification.Name(rawValue: "photoItemDidUnfolder")
- static let photoItemDidFolder =   Notification.Name(rawValue: "photoItemDidFolder"  )
- static let photoItemDidMove =     Notification.Name(rawValue: "photoItemDidMove")
- static let photoItemDidMerge =    Notification.Name(rawValue: "photoItemDidMerge")
-}
-
-struct PhotoItemPosition
-{
- let sectionName: String?
- let row: Int16
- let sectionKeyPath: String?
- 
- init(sectionName: String, row: Int16, for sectionKeyPath: String)
- {
-  self.sectionName = sectionName
-  self.sectionKeyPath = sectionKeyPath
-  self.row = row
- }
- 
- 
- init(_ row: Int16)
- {
-  self.sectionName = nil
-  self.sectionKeyPath = nil
-  self.row = row
- }
-}
 
 extension PhotoItem
 {
-
-//Moves wrapped Photo MO asyncronously to the destination PhotoSnippet MO and to photo item as specified.
- 
- final func move(to snippet: PhotoSnippet, to photoItem: PhotoItemProtocol?,
-                 to position: PhotoItemPosition,  completion: ( () -> () )? = nil)
+//**************************************************************************************************************
+//Moves wrapped Photo MO asyncronously to the destination item that conforms to Draggable protocol
+ final func move(to snippet: BaseSnippet, to photoItem: Draggable?,
+                 to position: PhotoItemPosition?, completion: ( () -> () )? = nil )
+//**************************************************************************************************************
  {
-  switch (snippet === photoSnippet, self.folder, photoItem)
-  {
-   case let (true, _?,  destFolder as PhotoFolderItem):
-    photo.refolder(to: destFolder.folder, to: position.row)
-    {
-     let userInfo: [PhotoItemMovedKey: Any] = [.destFolder : destFolder, .position : position]
-     NotificationCenter.default.post(name: .photoItemDidRefolder, object: self, userInfo: userInfo)
-     completion?()
-    }
-   
-   case     (true, _?,  nil        ):
-    photo.unfolder(to: position)
-    {
-     let userInfo: [PhotoItemMovedKey: Any] = [ .position : position]
-     NotificationCenter.default.post(name: .photoItemDidUnfolder, object: self, userInfo: userInfo)
-     completion?()
-    }
-   
-   case let (true, nil, destFolder as PhotoFolderItem):
-    photo.folder(to: destFolder.folder, to: position.row)
-    {
-     let userInfo: [PhotoItemMovedKey: Any] = [.destFolder : destFolder, .position : position]
-     NotificationCenter.default.post(name: .photoItemDidFolder, object: self, userInfo: userInfo)
-     completion?()
-    }
-   
-   case  (true, nil, nil):
-    photo.move(to: position)
-    {
-     let userInfo: [PhotoItemMovedKey: Any] = [.position : position]
-     NotificationCenter.default.post(name: .photoItemDidMove, object: self, userInfo: userInfo)
-     completion?()
-    }
-
-   case let (false, _,  destFolder as PhotoFolderItem?):
-    photo.move(to: snippet, to: destFolder?.folder,  to: position)
-    {
-     let userInfo: [PhotoItemMovedKey: Any] = [.destSnippet : snippet, .destFolder : destFolder as Any,
-                                               .position : position]
+  print (#function)
   
-     NotificationCenter.default.post(name: .photoItemDidMove, object: self, userInfo: userInfo)
-     completion?()
-    }
+  let contextResultHandler: (Result<Notification, ContextError>) -> () =
+  {result in
+   switch result
+   {
+    case .success(let notification): NotificationCenter.default.post(notification)
+    case .failure(let error):        error.log()
+   }
+   completion?()
+  }
+ 
+  guard let destSnippet = snippet as? PhotoSnippet else { return }
+  
+  MAIN_SWITCH: switch (self.folder, photoItem, position)
+  {
+   // <<<<< ------ REFOLDER (.photoItemDidRefolder) -------- >>>>>
+   case let ( sourceFolder?,  destFolder as PhotoFolderItem, position? )
+    where sourceFolder !== destFolder.folder:
+     photo.refolder(to: destFolder.folder, to: position, with: contextResultHandler)
    
-   case let (_ ,  _ , destPhoto as PhotoItem):
-    photo.merge(in: snippet, with: destPhoto.photo, into: position)
+   // <<<<< ------ UNFOLDER (.photoItemDidUnfolder) -------- >>>>>
+   case let ( _?,  nil, position? ):
+     photo.unfolder(to: destSnippet, to: position, with: contextResultHandler)
+ 
+   // <<<<< ------ FOLDER (.photoItemDidFolder) -------  >>>>>
+   case let ( nil, destFolder as PhotoFolderItem, position? ):
+    photo.folder(to: destFolder.folder, to: position, with: contextResultHandler)
+  
+   // <<<<< ------ MOVE BETWEEN SNIPPETS (.photoItemDidMove) -------  >>>>>
+   case let ( nil, nil, position? ):
+    switch destSnippet.photoGroupType
     {
-     let userInfo: [PhotoItemMovedKey: Any] = [.destSnippet : snippet, .destPhoto : destPhoto,.position : position]
-     NotificationCenter.default.post(name: .photoItemDidMerge, object: self, userInfo: userInfo)
-     completion?()
+     case .typeGroups
+      where position.sectionName != PhotoItemsTypes.allPhotos.rawValue: completion?()
+      break MAIN_SWITCH
+     
+     case .makeGroups:
+      photo.isDragMoved = true
+     
+     default: break
     }
+    
+    photo.move(to: destSnippet, to: position, with: contextResultHandler)
    
+   // <<<<< ------ MOVE INSIDE FOLDER (.foldredPhotoDidMove) -------  >>>>>
+   case let ( sourceFolder?, destFolder as PhotoFolderItem, position? )
+    where sourceFolder.objectID == destFolder.folder.objectID:
+     photo.moveInsideFolder(to: position, with: contextResultHandler)
+   
+   
+   // <<<<< ------ MERGE WITH PHOTO (.photoItemDidMerge) -------  >>>>>
+   case let (_ , destPhoto as PhotoItem, nil):
+    photo.merge(with: destPhoto.photo, with: contextResultHandler)
    
    default: break
-  }
- }
+  }//MAIN_SWITCH: switch ...
+  
+ }//final func move....
+//**************************************************************************************************************
  
-}
+ 
+}//extension PhotoItem...
+//**************************************************************************************************************
+
+
+
 
 
 
 extension Photo
 {
- final func folder(to destination: PhotoFolder, to position: Int16, with completion: ( () -> () )? = nil)
- //Puts <Asyncronously> unfoldered photo managed object into the destionation folder of the same PhotoSnippet.
+//***********************************  FOLDER (.photoItemDidFolder) ********************************************
+ final func folder(to destFolder: PhotoFolder,
+                   to destFolderPosition: PhotoItemPosition,
+                   with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+/* Moves async unfoldered photo into the destionation folder and
+   into specified row position in destination folder. */
  {
-  
-  guard let context = self.managedObjectContext else
+  guard self.isDeleted == false else
   {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
+   completion(.failure(.isDeleted(object: self, entity: .photo, operation: .folder)))
    return
   }
   
-  let fromURL = self.url
-  context.persist(block:   //make changes in context async
-  {
-   destination.addToPhotos(self)
-   self.position = position
-  })
-  {persisted in
-   guard persisted else { return }
-   
-   PhotoItem.movePhotoItemOnDisk(from: fromURL, to: self.url)
-   {moved in
-    guard moved else { return }
-    completion?()
-   }
-
-  }
- }
- 
- 
-
- 
- final func refolder(to destination: PhotoFolder, to position: Int16, with completion: ( () -> () )? = nil)
-  //Puts <Asyncronously> foldered photo managed object into the destionation new folder of the same PhotoSnippet.
-  //if source folder has 1 Photo after this MOC operation the single Photo is unfoldred into this PhotoSnippet.
-  //Empty source folder is to be deleted from current MOC!
- {
   guard let context = self.managedObjectContext else
   {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
+   completion(.failure(.noContext(object: self, entity: .photo, operation: .folder)))
+   return
+  }
+  
+  guard destFolder.isDeleted == false else
+  {
+   completion(.failure(.isDeleted(object: destFolder, entity: .destPhotoFolder, operation: .folder)))
+   return
+  }
+  
+  guard destFolder.managedObjectContext != nil else
+  {
+   completion(.failure(.noContext(object: destFolder, entity: .destPhotoFolder, operation: .folder)))
+   return
+  }
+  
+  if let folder = self.folder, folder === destFolder
+  {
+   completion(.failure(.inFolder(object: self, folder: folder, entity: .photo, operation: .folder)))
+   return
+  }
+  
+  guard let sourceSnippet = self.photoSnippet else //take the source snippet ref before move!!!
+  {
+   completion(.failure(.noSnippet(object: self, entity: .photo, operation: .folder)))
+   return
+  }
+  
+  guard let destSnippet = destFolder.photoSnippet else //take the dest snippet ref before move!!!
+  {
+   completion(.failure(.noSnippet(object: destFolder, entity: .photoFolder, operation: .folder)))
+   return
+  }
+  
+  guard let photoSourceURL = self.url else  //take photo source URL before move with context!
+  {
+   completion(.failure(.noURL(object: self, entity: .photoFolder, operation: .folder)))
+   return
+  }
+  
+  let userInfo: [PhotoItemMovedKey: Any] = [.destFolder: destFolder]
+  NotificationCenter.default.post(name: .photoItemWillFolder, object: self, userInfo: userInfo)
+  
+  let sourceSnippetPosition = self.getPhotoItemPosition(for: sourceSnippet.photoGroupType)
+  //take old position of photo for undo/redo events set-up...
+  
+  let unfolderOp = undoer.registerUndo(named: "FOLDER: [\(id?.uuidString ?? "")]", with: [self, destFolder])
+  {[weak self] completion in
+   self?.unfolder(to: sourceSnippet, to: sourceSnippetPosition)
+   {result in
+    defer { completion() }
+    switch result
+    {
+     case .success(let notification): NotificationCenter.default.post(notification)
+     case .failure(let error):        error.log()
+    }
+   }
+  }
+  
+ 
+  let unfolderToken = NotificationCenter.default.addObserver(forName: .photoItemWillUnfolder,
+                                                             object: self,
+                                                             queue: .main)
+  {[weak unfolderOp, weak destFolder] notification in
+   guard let op = unfolderOp, let destFolder = destFolder else { return }
+   if op.isExecuted { return }
+   guard notification.name == .photoItemWillUnfolder else { return }
+   guard let photo = notification.object as? Photo else { return }
+   if photo.undoer.isLastOperation(op) { return }
+   guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
+   guard let sourceFolder = userInfo[.sourceFolder] as? PhotoFolder else { return }
+   guard sourceFolder.objectID == destFolder.objectID else { return }
+
+   op.isExecuted = true
+   op.undo?.isExecuted = false //redo
+   op.redo?.isExecuted = false //undo
+
+
+   print ("<<<<<< SKIPPED >>>>>>: [\(op.name ?? "Unnamed")] for target: [\(String(describing: photo.ID))]")
+  }
+
+  undoOperationsTokens.insert(unfolderToken as! NSObject)
+
+  let folderToken = NotificationCenter.default.addObserver(forName: .photoItemWillFolder, object: self, queue: .main)
+  {[weak unfolderOp, weak destFolder] notification in
+   guard let op = unfolderOp, let destFolder = destFolder else { return }
+   if !op.isExecuted { return }
+   guard notification.name == .photoItemWillFolder else { return }
+   guard let photo = notification.object as? Photo else { return }
+   if photo.undoer.isLastOperation(op) { return }
+   guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
+   guard let df = userInfo[.destFolder] as? PhotoFolder else { return }
+   guard df.objectID == destFolder.objectID else { return }
+
+   op.isExecuted = false
+   op.undo?.isExecuted = true //redo
+   op.redo?.isExecuted = true //undo
+
+   print ("<<<<<< UNSKIPPED >>>>>>: [\(op.name ?? "Unnamed")] for target: [\(String(describing: photo.ID))]")
+  }
+
+  undoOperationsTokens.insert(folderToken as! NSObject)
+  
+ 
+  var dfp = destFolderPosition
+  
+  context.performChanges(block:                 //make changes in context async... NO SAVE CONTEXT!!
+  {
+   self.shiftRowPositionsBeforeDelete()         //shift left (-1) all positions as if we delete photo undoably...
+   destFolder.addToPhotos(self)                 //move photo to destination folder...
+  
+   if ( destSnippet !== sourceSnippet )         //if we have different snippets!
+   {
+    sourceSnippet.removeFromPhotos(self)        //delete photo from old snippet ...
+    destSnippet.addToPhotos(self)               //insert photo to new one ...
+   
+   }
+   
+   
+   dfp.row = min(dfp.row, destFolder.count - 1) 
+   self.photoItemPosition = dfp                  //set new row position in folder undoably...
+   self.shiftFolderedRight()                    //shift right (+1) other foldered row positions undoably...
+  
+   
+  })
+  {result  in
+   guard case .success = result else { return }
+   
+   guard let photoDestURL = self.url else
+   {
+    completion(.failure(.noURL(object: self, entity: .photoFolder, operation: .folder)))
+    return
+   }
+   
+   FileManager.moveItemOnDisk(from: photoSourceURL, to: photoDestURL)
+   {result in
+    DispatchQueue.main.async
+    {
+     switch result
+     {
+      case .success: //success(VOID)
+    
+       //prepare <.photoItemDidFolder> notfication to be posted to subscribers:
+       //PhotoSnippetViewController .moveToFolder(after notification: Notification)...
+       //PhotoFolderCell            .moveToFolder(after notification: Notification)...
+       //ZoomView                   .moveToFolder(after notification: Notification)...
+       
+       guard (self.isDeleted == false && self.ID != nil && self.url != nil) else
+       {
+        print ("<<< PHOTO MOVE SUCCESS WARNING >>> PHOTO IS INVALID AFTER MOVE!")
+        break
+       }
+       
+       guard (destFolder.isDeleted == false && destFolder.ID != nil && destFolder.url != nil) else
+       {
+        print ("<<< PHOTO MOVE SUCCESS WARNING >>> PHOTO DESTINATION FOLDER IS INVALID AFTER MOVE!")
+        break
+       }
+       
+       let userInfo: [PhotoItemMovedKey: Any] = [.destFolder: destFolder, .position: dfp]
+       completion(.success(Notification(name: .photoItemDidFolder, object: self, userInfo: userInfo)))
+      
+  
+      case .failure(let error):
+       completion(.failure(.dataFileMoveFailure(to: photoDestURL, object: self,
+                                                entity: .photo, operation: .folder,
+                                                description: error.localizedDescription)))
+      
+     }//switch result...
+    }//DispatchQueue.main.async...
+   }//FileManager.moveItemOnDisk...
+  }//{persisted in...
+ }//final func folder(to destination...
+ //**************************************************************************************************************
+ 
+ 
+ 
+ 
+//**************************************************************************************************************
+ final func moveOnDisk(from sourceFolder: PhotoFolder,
+                       from photoSourceURL: URL, to photoDestURL: URL,
+                       with notification: Notification) -> Result<Notification, ContextError>
+//**************************************************************************************************************
+ {
+  switch FileManager.moveItemOnDisk(from: photoSourceURL, to: photoDestURL) as Result<Void, Error>//sync move...
+  {
+   case .success: //success(Void) of FileManager...
+    if ( sourceFolder.isEmpty ) { sourceFolder.delete() }
+    else if ( sourceFolder.count == 1 )
+    {
+     sourceFolder.processSinglePhoto {result in
+      switch result
+      {
+       case .success(let singlePhoto):
+        NotificationCenter.default.post(name: .singleItemDidUnfolder, object: singlePhoto)
+       
+       case .failure(let error): error.log() //otherwise log an error message...
+      }
+     }
+    }//if sourceFolder.isEmpty...
+   
+    return .success(notification)
+   
+   case .failure(let error):
+    return .failure(.dataFileMoveFailure(to: photoDestURL, object: self,
+                                        entity: .photo, operation: .refolder,
+                                        description: error.localizedDescription))
+   
+  }//switch result...
+ }//final func moveOnDisk...
+//**************************************************************************************************************
+ 
+ 
+ 
+ 
+//**************************************************************************************************************
+ final func moveOnDisk(from sourceFolder: PhotoFolder,
+                       from photoSourceURL: URL, to photoDestURL: URL,
+                       with notification: Notification,
+                       with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+ {
+  let moveFileResultHandler: ( Result <Void, Error>, (() -> ())? ) -> () =
+  {result, finalSuccessAction in
+   switch result
+   {
+   case .success:
+    completion(.success(notification))
+    DispatchQueue.main.async { finalSuccessAction?() }
+    
+   case .failure(let error):
+    completion(.failure(.dataFileMoveFailure(to: photoDestURL, object: self,
+                                             entity: .photo, operation: .unfolder,
+                                             description: error.localizedDescription)))
+    
+   }//switch result...
+  }
+  
+  switch sourceFolder.count //take foldered photos count sync here...
+  {
+   case 0: //we have empty folder in context and one photo left to move on disk...
+    FileManager.moveItemOnDisk(from: photoSourceURL, to: photoDestURL)
+    {result in
+     moveFileResultHandler(result){ sourceFolder.delete() }
+    }
+   
+   case 1:
+    let result: Result<Void, Error> = FileManager.moveItemOnDisk(from: photoSourceURL, to: photoDestURL)
+    moveFileResultHandler(result)
+    {
+     sourceFolder.processSinglePhoto
+     {result in
+      switch result
+      {
+       case .success(let singlePhoto):
+        NotificationCenter.default.post(name: .singleItemDidUnfolder, object: singlePhoto)
+   
+       case .failure(let error): error.log() //otherwise log an error message...
+      }
+     }//sourceFolder.processSinglePhoto...
+    }
+   
+   
+   default:
+    FileManager.moveItemOnDisk(from: photoSourceURL, to: photoDestURL)
+    {result in
+     moveFileResultHandler(result, nil)
+    }
+   
+  }//switch sourceFolder.count...
+    
+ }//final func moveOnDisk(from sourceFolder
+//**************************************************************************************************************
+ 
+ 
+ 
+
+ 
+//********************************** REFOLDER (.photoItemDidRefolder) ******************************************
+ final func refolder(to destFolder: PhotoFolder,
+                     to destFolderPosition: PhotoItemPosition,
+                     with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+  /* Moves async foldered photo to the destionation folder.
+   If source folder has 1 Photo after this operation the single photo is unfoldered into its photo snippet.
+   Empty source folder is deleted. */
+ {
+  
+  guard self.isDeleted == false else
+  {
+   completion(.failure(.isDeleted(object: self, entity: .photo, operation: .refolder)))
+   return
+  }
+  
+  guard let context = self.managedObjectContext else
+  {
+   completion(.failure(.noContext(object: self, entity: .photo, operation: .refolder)))
+   return
+  }
+  
+  guard let sourceSnippet = self.photoSnippet else //take the source snippet ref before move!!!
+  {
+   completion(.failure(.noSnippet(object: self, entity: .photo, operation: .refolder)))
+   return
+  }
+  
+  guard destFolder.isDeleted == false else
+  {
+   completion(.failure(.isDeleted(object: destFolder, entity: .destPhotoFolder, operation: .refolder)))
+   return
+  }
+  
+  guard destFolder.managedObjectContext != nil else
+  {
+   completion(.failure(.noContext(object: destFolder, entity: .destPhotoFolder, operation: .refolder)))
+   return
+  }
+  
+  guard let destSnippet = destFolder.photoSnippet else //take the dest snippet ref before move!!!
+  {
+   completion(.failure(.noSnippet(object: destFolder, entity: .photoFolder, operation: .refolder)))
    return
   }
   
   guard let sourceFolder = self.folder else //Photo must be foldered at this stage!
   {
-   print(#function, terminator: ">>> ")
-   print ("<<<PHOTO PRECONDITION FAILURE>>>. PHOTO REFOLDER ERROR. THIS PHOTO IS NOT FOLDERED YET!")
+   completion(.failure(.noFolder(object: self, entity: .photo, operation: .refolder)))
    return
   }
   
-  guard sourceFolder !== destination else { return } //Photo must be foldered into different source folder!!!
+  guard sourceFolder !== destFolder else { return } //Photo must be in different source folder!!!
   
-  let fromURL = self.url
-  context.persist(block: //make changes in context async
+  guard let photoSourceURL = self.url else //take photo source URL before move!
   {
-    destination.addToPhotos(self)
-    self.position = position
-    sourceFolder.removeFromPhotos(self)
-  })
-  {persisted in
-   guard persisted else { return }
-   PhotoItem.movePhotoItemOnDisk(from: fromURL, to: self.url)
-   {moved in
-    guard moved else { return }
-    self.updateSourceFolder(sourceFolder: sourceFolder)
-    {updated in
-     guard updated else { return }
-     completion?()
-    }
+   completion(.failure(.noURL(object: self, entity: .photo, operation: .refolder)))
+   return
+  }
+  
+  context.performChanges(block:   //make changes in context async.
+  {
+   self.shiftFolderedLeft()              // shift row positions left (-1) in source folder...
+   destFolder.addToPhotos(self)          // move photo to new folder...
    
+   if ( destSnippet !== sourceSnippet )  // if we have different snippets...
+   {
+    sourceSnippet.removeFromPhotos(self) // delete photo from old snippet ...
+    destSnippet.addToPhotos(self)        // insert photo to new one ...
    }
    
-  }
- }
- 
- 
+   sourceFolder.removeFromPhotos(self)          // remove from old folder undoably...
+   self.photoItemPosition = destFolderPosition  // set new row position in new folder ...
+   self.shiftFolderedRight()                    // shift row positions right (+1) in new folder...
+    
+  })
+  {result in
+   
+   guard  case .success = result else { return }
+   
+   guard let photoDestURL = self.url else //generate moved photo new dest URL...
+   {
+    completion(.failure(.noURL(object: self, entity: .photo, operation: .refolder)))
+    return
+   }
+   
+   //prepare <.photoItemDidRefolder> notfication to be posted to subscribers:
+   //PhotoFolderCell .moveBetweenFolders(after notification: Notification)...
+   //ZoomView        .moveBetweenFolders(after notification: Notification)...
+   
+   let userInfo: [PhotoItemMovedKey: Any] = [.sourceFolder : sourceFolder,
+                                             .destFolder   : destFolder,
+                                             .position     : destFolderPosition]
+   
+   let notify = Notification(name: .photoItemDidRefolder, object: self, userInfo: userInfo)
+   
+   completion(self.moveOnDisk(from: sourceFolder, from: photoSourceURL, to: photoDestURL, with: notify))
+   
+  }//{persisted in
+ }//final func refolder(to destination...
+//**************************************************************************************************************
+
 
  
- private func updateSourceFolder(sourceFolder: PhotoFolder, with handler: @escaping (Bool) -> () )
-  //Updates <Asyncronously> source folder so that the single Photo is unfoldred into this PhotoSnippet.
-  //Empty source folder is to be deleted from current MOC!
+ 
+ 
+//********************************** UNFOLDER (.photoItemDidUNfolder) ******************************************
+ final func unfolder(to destSnippet: PhotoSnippet,
+                     to destSnippetPosition: PhotoItemPosition,
+                     with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+ /* Moves async photo to destSnippet to destSnippetPosition from current folder.
+ If photo folder has only 1 photo after the move the single one is unfoldered into its snippet.
+ Empty source folder is deleted. */
  {
-  guard let context = self.managedObjectContext else
+  guard self.isDeleted == false else
   {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
+   completion(.failure(.isDeleted(object: self, entity: .photo, operation: .refolder)))
    return
   }
- 
-  let sourceFolderURL = sourceFolder.url //Make copy of PhotoFolder URL to be updated...
-  let sourceFolderID = sourceFolder.id?.uuidString ?? "<NO ID>"
-  
-  switch sourceFolder.count
-  {
-   case 0:
-    print(#function, terminator: ">>> ")
-    print ("<<<ERROR! EMPTY FOLDER UNEXPECTED HERE: \"\(sourceFolderID)\">>>")
-   
-   case 1:
-    //if source folder has 1 Photo after this MOC operation the single Photo is unfoldred into this PhotoSnippet.
-    let singlePhoto = sourceFolder.folderedPhotos.first!
-    let singlePhotoFromURL = singlePhoto.url
-    context.persist(block: //make changes in context async
-    {
-     sourceFolder.removeFromPhotos(singlePhoto)
-     singlePhoto.position = sourceFolder.position
-     self.managedObjectContext?.delete(sourceFolder)
-    })
-    {persisted in
-     guard persisted else { handler(false); return }
-     
-     PhotoItem.movePhotoItemOnDisk(from: singlePhotoFromURL, to: singlePhoto.url)
-     {moved in
-      guard moved else { handler(false); return }
-      PhotoItem.deletePhotoItemFromDisk(at: sourceFolderURL, completion: handler)
-     }
-    }
-   
-   default: break // Successful completion here by default!
-  }
- }
- 
- 
- 
- 
- 
- final func unfolder(to itemPosition: PhotoItemPosition, with completion: ( () -> () )? = nil)
-  //Moves <Asyncronously> Photo MO into current PhotoSnippet from current folder.
-  //if source folder has 1 Photo after this MOC operation the single Photo is unfoldred into this PhotoSnippet.
-  //Empty source folder is to be deleted from current MOC!
- {
   
   guard let context = self.managedObjectContext else
   {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
+   completion(.failure(.noContext(object: self, entity: .photo, operation: .unfolder)))
+   return
+  }
+  
+  guard let sourceSnippet = self.photoSnippet else //take the source snippet ref before move!!!
+  {
+   completion(.failure(.noSnippet(object: self, entity: .photo, operation: .unfolder)))
    return
   }
   
   guard let sourceFolder = self.folder else
   {
-   print(#function, terminator: ">>> ")
-   print ("<<<PRECONDITION FAILURE>>> PHOTO UNFOLDER ERROR. THIS PHOTO IS NOT FOLDERED YET!")
+   completion(.failure(.noFolder(object: self, entity: .photo, operation: .unfolder)))
    return
   }
   
-
-  let fromURL = self.url //Make copy of Photo MO URL before moving...
-  
-  context.persist(block: //make changes in context async
+  guard let photoSourceURL = self.url else //Make copy of Photo MO URL before moving!
   {
-   sourceFolder.removeFromPhotos(self)
-   if let key = itemPosition.sectionKeyPath { self.setValue(itemPosition.sectionName, forKey: key) }
-   self.position = itemPosition.row
-  })
-  {persisted in
-   guard persisted else { return }
-   PhotoItem.movePhotoItemOnDisk(from: fromURL, to: self.url)
-   {moved in
-    guard moved else { return }
-    self.updateSourceFolder(sourceFolder: sourceFolder)
-    {updated in
-     guard updated else { return }
-     completion?()
+   completion(.failure(.noURL(object: self, entity: .photo, operation: .unfolder)))
+   return
+  }
+  
+  let userInfo: [PhotoItemMovedKey: Any] = [.sourceFolder: sourceFolder]
+  NotificationCenter.default.post(name: .photoItemWillUnfolder, object: self, userInfo: userInfo)
+ 
+  let sourceFolderPosition = self.getPhotoItemPosition(for: .manually)
+  //take old position of photo for undo/redo events set-up...
+  
+  let folderOp = undoer.registerUndo(named: "UNFOLDER: [\(id?.uuidString ?? "")]", with: [self, sourceFolder])
+  {[weak self] completion in
+   self?.folder(to: sourceFolder, to: sourceFolderPosition)
+   {result in
+    defer { completion() }
+    switch result
+    {
+     case .success(let notification): NotificationCenter.default.post(notification)
+     case .failure(let error):        error.log()
     }
-    
    }
- 
   }
- }
- 
+  
+  let folderToken = NotificationCenter.default.addObserver(forName: .photoItemWillFolder,
+                                                           object: self,
+                                                           queue: .main)
+  {[weak folderOp, weak sourceFolder] notification in
+   guard let op = folderOp, let sourceFolder = sourceFolder else { return }
+   if op.isExecuted { return }
+   guard notification.name == .photoItemWillFolder else { return }
+   guard let photo = notification.object as? Photo else { return }
+   if photo.undoer.isLastOperation(op) { return }
+   guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
+   guard let destFolder = userInfo[.destFolder] as? PhotoFolder else { return }
+   guard sourceFolder.objectID == destFolder.objectID else { return }
 
- 
- final func move(to snippet: PhotoSnippet, to folder: PhotoFolder?,
-                 to itemPosition: PhotoItemPosition, with completion: ( () -> () )? = nil)
- //Moves ASYNC Photo MO from arbitrary PhotoSnippet and folder into snippet and folder.
- {
-  
-  guard let context = self.managedObjectContext else
-  {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
-   return
+   op.isExecuted = true
+   op.undo?.isExecuted = false //redo
+   op.redo?.isExecuted = false //undo
+
+   print ("<<<<<< SKIPPED >>>>>>: [\(op.name ?? "Unnamed")] for target: [\(String(describing: photo.ID))]")
   }
+
+  undoOperationsTokens.insert(folderToken as! NSObject)
+
+  let unfolderToken = NotificationCenter.default.addObserver(forName: .photoItemWillUnfolder,
+                                                             object: self,
+                                                             queue: .main)
+  {[weak folderOp, weak sourceFolder] notification in
+   guard let op = folderOp, let sourceFolder = sourceFolder else { return }
+   if !op.isExecuted { return }
+   guard notification.name == .photoItemWillUnfolder else { return }
+   guard let photo = notification.object as? Photo else { return }
+   if photo.undoer.isLastOperation(op) { return }
+   guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
+   guard let sf = userInfo[.sourceFolder] as? PhotoFolder else { return }
+   guard sourceFolder.objectID == sf.objectID else { return }
+
+   op.isExecuted = false
+   op.undo?.isExecuted = true //redo
+   op.redo?.isExecuted = true //undo
+
+
+   print ("<<<<<< UNSKIPPED >>>>>>: [\(op.name ?? "Unnamed")] for target: [\(String(describing: photo.ID))]")
+  }
+
+  undoOperationsTokens.insert(unfolderToken as! NSObject)
   
-  let sourceFolder = self.folder //take reference to source folder before moving...
+  var dsp = destSnippetPosition
   
-  let fromURL = self.url //Make copy of Photo MO URL before moving...
-  
-  context.persist(block: //make changes in context async
+  context.performChanges(block:     //make changes in context async.
   {
-   sourceFolder?.removeFromPhotos(self)
-   self.photoSnippet?.removeFromPhotos(self)
-   snippet.addToPhotos(self)
-   folder?.addToPhotos(self)
-   if let key = itemPosition.sectionKeyPath { self.setValue(itemPosition.sectionName, forKey: key) }
-   self.position = itemPosition.row
-  })
-  {persisted in
-   guard persisted else { return }
+   // if we have different snippet to unfolder into we move photo between snippets as well!
+   if ( destSnippet !== sourceSnippet )
+   {
+    self.shiftRowPositionsBeforeDelete() 
+    sourceFolder.removeFromPhotos(self)
+    sourceSnippet.removeFromPhotos(self)         // delete photo from old snippet
+    destSnippet.addToPhotos(self)                // insert photo to new one
+    self.setMovedPhotoRowPositions()
+   }
+   else
+   {
+    self.setUnfolderingPhotoRowPositions()        // set up all positions for all positioned group types
+    sourceFolder.removeFromPhotos(self)           // remove from source folder
+   }
    
-   PhotoItem.movePhotoItemOnDisk(from: fromURL, to: self.url)
-   {moved in
-    guard moved else { return }
-    guard sourceFolder != nil else { completion?(); return }
-    self.updateSourceFolder(sourceFolder: sourceFolder!)
-    {updated in
-     guard updated else { return }
-     completion?()
-    }
-    
-   }
-
-  }
- }
- 
- final func move(to itemPosition: PhotoItemPosition, with completion: ( () -> () )? = nil)
-  //Moves ASYNC unfoldered Photo MO whithin its own Photo snippet.
- {
-  
-  guard let context = self.managedObjectContext else
-  {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
-   return
-  }
-  context.persist(block: //make changes in context async
-  {
-   if let key = itemPosition.sectionKeyPath { self.setValue(itemPosition.sectionName, forKey: key) }
-   self.position = itemPosition.row
+   
+   let sectionCount = destSnippet.numberOfphotoObjects(with: dsp.sectionName) - 1
+   dsp.row = min(dsp.row, sectionCount)
+   self.photoItemPosition = dsp                   // set new row postion and section
+   self.shiftRowPositionsRight()                  // move positions right after insert
+   
   })
-  {persisted in
-   guard persisted else { return }
-   completion?()
-  }
- }
+  {result in
+   
+   guard case .success = result else { return }
+   
+   guard let photoDestURL = self.url else //generate moved photo new dest URL...
+   {
+    completion(.failure(.noURL(object: self, entity: .photo, operation: .unfolder)))
+    return
+   }
+   
+   //prepare <.photoItemDidUnfolder> notfication to be posted to subscribers:
+   //PhotoSnippetViewController .moveFromFolder(after notification: Notification)...
+   //PhotoFolderCell            .moveFromFolder(after notification: Notification)...
+   //ZoomView                   .moveFromFolder(after notification: Notification)...
+   
+   let userInfo: [PhotoItemMovedKey: Any] = [.sourceFolder: sourceFolder, .position: dsp]
+   let notify = Notification(name: .photoItemDidUnfolder, object: self, userInfo: userInfo)
+   let result = self.moveOnDisk(from: sourceFolder, from: photoSourceURL,to: photoDestURL, with: notify)
+   completion(result)
+   
+  }//{persisted in
+  
+ }//final func unfolder(to itemPosition: PhotoItemPosition,...
+//**************************************************************************************************************
+
  
- final func merge (in snippet: PhotoSnippet, with photo: Photo,
-                   into position: PhotoItemPosition, with completion: (() -> ())? = nil)
-  //Merges <Syncronously> this Photo MO with other Photo MO in one PhotoFolder MO creating one in the current MOC!
+
+ 
+//************************************** MOVE (.photoItemDidMove) **********************************************
+ final func move(to destSnippet: PhotoSnippet,
+                 to destSnippetPosition: PhotoItemPosition,
+                 with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+ /* Moves async unfoldered photo from arbitrary source snippet into detination snippet.
+ If destination snippet is the same as the source snippet (===) the method moves inside snippet */
+
  {
-  guard let context = self.managedObjectContext else
+  guard self.isDeleted == false else
   {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
+   completion(.failure(.isDeleted(object: self, entity: .photo, operation: .move)))
    return
   }
   
-  guard self !== photo else {return} //prevent merging with itself!!!
-  
-  // if destination photo is already contained in some folder we move self into this folder and return in each case...
-  
-  switch (snippet === self.photoSnippet, self.folder, photo.folder)
+  guard let context = self.managedObjectContext else
   {
-   case let (false, _ ,  destinationFolder?):
-    move(to: snippet, to: destinationFolder,
-         to: PhotoItemPosition(Int16(destinationFolder.count)), with: completion)
-    return
-   case let (true,  _?,  destinationFolder?):
-    refolder (to: destinationFolder, to: Int16(destinationFolder.count), with: completion)
-    return
-   case let (true,  nil, destinationFolder?):
-    folder   (to: destinationFolder, to: Int16(destinationFolder.count), with: completion)
-    return
-   default: break //continue merging into new folder....
+   completion(.failure(.noContext(object: self, entity: .photo, operation: .move)))
+   return
   }
   
-  //otherwise we create new empty folder and move self and destination into it
+  guard destSnippet.isDeleted == false  else
+  {
+   completion(.failure(.isDeleted(object: destSnippet, entity: .destPhotoSnippet, operation: .move)))
+   return
+  }
+  
+  guard destSnippet.managedObjectContext != nil  else
+  {
+   completion(.failure(.isDeleted(object: destSnippet, entity: .destPhotoSnippet, operation: .move)))
+   return
+  }
+  
+  guard  let sourceSnippet = self.photoSnippet else //take the source snippet ref before move!!!
+  {
+   completion(.failure(.noSnippet(object: self, entity: .photo, operation: .move)))
+   return
+  }
+  
+  guard let photoSourceURL = self.url else //Make copy of Photo MO URL before moving...
+  {
+   completion(.failure(.noURL(object: self, entity: .photo, operation: .move)))
+   return
+  }
+  
+  
+  context.performChanges(block:  //make changes in context async.
+  {
+   if ( sourceSnippet !== destSnippet )   // if we move between different snippets...
+   {
+    self.shiftRowPositionsBeforeDelete()      // 1 - shift left as for deleted from snippet
+    sourceSnippet.removeFromPhotos(self)      // 2 - remove photo from source snippet
+    destSnippet.addToPhotos(self)             // 3 - add to destination snippet
+    self.setMovedPhotoRowPositions()          // 4 - set up moved photo all positions in new snippet
+   }
+   else
+   {
+    self.shiftRowPositionsLeft() // otherwise just shift left row positions for current groupType
+   }
+   
+   self.photoItemPosition = destSnippetPosition // 5 - set new photo position and section title if any
+   self.shiftRowPositionsRight()                // 6 - shift row positions right (+1)
+   
+  })
+  {result in
+   
+   guard  case .success = result else { return }
+   
+   //prepare <.photoItemDidMove> notfication to be posted to subscribers:
+   //PhotoSnippetViewController .moveItem(after notification: Notification)...
+   
+   let userInfo: [PhotoItemMovedKey: Any] = [.sourceSnippet: sourceSnippet, .position: destSnippetPosition]
+   let moveNotify = Notification(name: .photoItemDidMove, object: self, userInfo: userInfo)
+   
+   guard sourceSnippet !== destSnippet else //same snippet???
+   {
+    completion(.success(moveNotify))
+    return // do not move file on disk and just return here.
+   }
+   
+   // proceed with moving photo *.JPG file on disk...
+   guard let photoDestURL = self.url else //generate new photo dest url...
+   {
+    completion(.failure(.noURL(object: self, entity: .photo, operation: .move)))
+    return
+   }
+   
+   FileManager.moveItemOnDisk(from: photoSourceURL, to: photoDestURL)
+   {result in
+    switch result
+    {
+     case .success:
+      guard (self.isDeleted == false && self.ID != nil && self.url != nil) else
+      {
+       print ("<<< PHOTO MOVE SUCCESS WARNING >>> PHOTO IS INVALID AFTER MOVE!")
+       break
+      }
+      
+      guard (destSnippet.isDeleted == false && destSnippet.id != nil && destSnippet.url != nil) else
+      {
+       print ("<<< PHOTO MOVE SUCCESS WARNING >>> PHOTO DESTINATION FOLDER IS INVALID AFTER MOVE!")
+       break
+      }
+      
+      completion(.success(moveNotify))
+     
+     case .failure(let error):
+      completion(.failure(.dataFileMoveFailure(to: photoDestURL,
+                                               object: self,
+                                               entity: .photo,
+                                               operation: .folder,
+                                               description: error.localizedDescription)))
+     
+    }//switch result...
+   }//FileManager.moveItemOnDisk.
+  }//{persisted in
+ }//final func move(to destSnippet...
+//**************************************************************************************************************
+ 
+ 
+ 
+ 
+//****************************** MOVE INSIDE FOLDER (.folderedPhotoDidMove)  ***********************************
+ final func moveInsideFolder(to destPosition: PhotoItemPosition,
+                             with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+ /* Moves foldered photo async inside its own folder */
+ {
+  guard self.isDeleted == false else
+  {
+   completion(.failure(.isDeleted(object: self, entity: .photo, operation: .moveInside)))
+   return
+  }
+  
+  guard let context = self.managedObjectContext else
+  {
+   completion(.failure(.noContext(object: self, entity: .photo, operation: .moveInside)))
+   return
+  }
+  
+  context.performChanges(block:  //make changes in context async...
+  {
+   self.shiftFolderedLeft()
+   self.photoItemPosition = destPosition
+   self.shiftFolderedRight()
+  })
+  {result in
+   guard case .success = result else { return }
+  
+   //prepare <.folderedPhotoDidMove> notfication to be posted to subscribers:
+   //PhotoFolderCell .moveInsideFolder(after notification: Notification)...
+   //ZoomView        .moveInsideFolder(after notification: Notification)...
+   
+   let userInfo: [PhotoItemMovedKey: Any] = [ .position : destPosition ]
+   completion(.success(Notification(name: .folderedPhotoDidMove, object: self, userInfo: userInfo)))
+  }
+ }//final func moveInsideFolder...
+ 
+ 
+ 
+//************************************** MERGE (.photoItemDidMerge) ********************************************
+ final func merge(with destPhoto: Photo,
+                  with completion: @escaping (Result<Notification, ContextError>) -> () )
+//**************************************************************************************************************
+ /* Merges async self with destPhoto in one PhotoFolder MO creating one in the current MOC. */
+ {
+  
+  guard self !== destPhoto else { return } //prevent merging with itself!!!
+  
+  guard self.isDeleted == false else
+  {
+   completion(.failure(.isDeleted(object: self, entity: .photo, operation: .mergeWith)))
+   return
+  }
+  
+  guard destPhoto.isDeleted == false else
+  {
+   completion(.failure(.isDeleted(object: destPhoto, entity: .destPhoto, operation: .mergeWith)))
+   return
+  }
+  
+  guard destPhoto.managedObjectContext != nil  else
+  {
+   completion(.failure(.noContext(object: destPhoto, entity: .destPhoto, operation: .mergeWith)))
+   return
+  }
+  
+  guard let context = self.managedObjectContext else
+  {
+   completion(.failure(.noContext(object: self, entity: .photo, operation: .mergeWith)))
+   return
+  }
+ 
+ 
   let newFolderID = UUID()
   var newFolder: PhotoFolder?
   
-  context.persist(block:       //make changes in context async
+  context.performChanges(block:  //make changes in context async.
   {
-    newFolder = PhotoFolder(context: context)
-    newFolder?.id = newFolderID
-    newFolder?.photoSnippet = snippet
-    newFolder?.date = Date() as NSDate
-    newFolder?.isSelected = false
-    newFolder?.position = photo.position          //fix new Folder Position at Photo position
-    if let key = position.sectionKeyPath
+   newFolder = PhotoFolder(context: context)
+   newFolder?.id = newFolderID
+   newFolder?.recordName = newFolderID.uuidString
+   newFolder?.photoSnippet = destPhoto.photoSnippet
+   newFolder?.date = Date() as NSDate
+   newFolder?.isSelected = false
+   newFolder?.photos = NSSet()
+   
+   GroupPhotos.rowPositioned.forEach //setting new merged folder row positions
+   {type in
+    if type.isFixedPositioned //if fixed positioned sections we take position == section count for group type
     {
-     let value = photo.value(forKey: key)
-     newFolder?.setValue(value, forKey: key)
-     //fix new Folder section flag at Photo section
+     let title = newFolder?.sectionTitle(for: type)
+     let row = newFolder?.otherUnfoldered(for: type).count ?? 0
+     let kp = type.sectionKeyPath
+     let newFolderPosition = PhotoItemPosition(sectionName: title, row: row, for: kp)
+     newFolder?.setPhotoItemPosition(newPosition: newFolderPosition , for: type)
     }
-    newFolder?.photos = NSSet()
-    
+    else // otherwise set position == dest photo position for group type
+    {
+     let destPhotoPosition = destPhoto.getPhotoItemPosition(for: type)
+     newFolder?.setPhotoItemPosition(newPosition: destPhotoPosition , for: type)
+     newFolder?.shiftRowPositionsRight(for: type)
+    }
+   }
   })
-  {persisted in
-   guard persisted else
+  {result in
+   guard case .success = result else { return }
+   
+   guard let newFolderURL = newFolder!.url else
    {
-    print(#function, terminator: ">>> ")
-    print("ERROR CREATING FOLDER IN MOC: \(self.managedObjectContext?.description ?? "Undefined") MO: \(self.description)")
+    completion(.failure(.noURL(object: newFolder!, entity: .photo, operation: .mergeWith)))
     return
    }
    
-   PhotoFolderItem.createNewPhotoFolderOnDisk(at: newFolder!.url)
-   {created in
-    guard created else { return }
-    
-    photo.folder(to: newFolder!, to: 0)
+   FileManager.createDirectoryOnDisk(at: newFolderURL) { result in
+    switch result
     {
-     switch (snippet === self.photoSnippet, self.folder)
-     {
-      case (true,  _?)  :  self.refolder (to: newFolder!, to: 0, with: completion)
-      case (true, nil)  :  self.folder   (to: newFolder!, to: 0, with: completion)
-      case (false,  _)  :  self.move(to: snippet, to: newFolder,
-                                     to: PhotoItemPosition(0), with: completion)
-     }
-    }
-   }
-  }
-  
- } //final func merge (async)
+     case .success:
+      /* In some particular cases for instance we drag multiple photos into <.allFolders> section
+       (Photo Snippet current group type is set to <.typeGroups>) we have to merge photos into new folder with first photo dragged in this set of draggable items and this first photo (destPhoto here) dragged item may be foldered in some other folder, so we select context method (folder/refolder) based on this fact for destPhoto as well as the case with self (photo) below here...  */
+      (destPhoto.folder == nil ? destPhoto.folder : destPhoto.refolder)(newFolder!, .zero) { result in
+       switch result
+       {
+        case .success(let notification):
+         NotificationCenter.default.post(notification)
+         (self.folder == nil ? self.folder : self.refolder)(newFolder!, .zero)
+         {result in
+          switch result
+          {
+           case .success(let notification):
+            NotificationCenter.default.post(notification)
+            completion(.success(Notification(name: .photoItemDidMerge, object: newFolder!, userInfo: nil)))
+           
+           case .failure(let error): completion(.failure(error))
+          }//switch result...
+         }//(self.folder == nil ? self.folder : self.refolder)...
+        
+        case .failure(let error): completion(.failure(error))
+       }//switch result...
+      }//destPhoto.folder(to: newFolder!, to: .zero)...
+     
+     case .failure(let error):
+      completion(.failure(.dataFolderCreateFailure(at: newFolderURL,
+                                                   object: self,
+                                                   entity: .photo,
+                                                   operation: .mergeWith,
+                                                   description: error.localizedDescription)))
+    }//switch result...
+   }//FileManager.createDirectoryOnDisk...
+  }//{persisted in...
+ }//final func merge (async)
+//**************************************************************************************************************
  
  
 } //Photo Managed Object extension...
+//**************************************************************************************************************

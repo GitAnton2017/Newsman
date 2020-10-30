@@ -7,72 +7,97 @@
 //
 
 import UIKit
+import struct Combine.AnyPublisher
 
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension PhotoItemProtocol where Self: PhotoItem
 {
-
- func updateImage()
+ var requiredImageWidth: CGFloat
  {
-  guard let hosted = self.hostedItem as? PhotoItem else { return }
-  
-  hosted.getImageOperation(requiredImageWidth:  frame.width)
-  {[weak hosted, weak self] (image) in
-   
-   guard let cell = self else { return }
-   guard let photoItem = cell.hostedItem as? PhotoItem else { return }
-   guard hosted == photoItem  else { return }
-   // we capture hosted weakly by completion closure and use overloaded == operator
-   // to check if hosted item is change while we processed required image async...
-   
-   (cell.hostedAccessoryView as? UIActivityIndicatorView)?.stopAnimating()
-   
-   cell.refresh(with: image)
-
+  switch (hostingCollectionViewCell, hostingZoomedCollectionViewCell)
+  {
+   case let (_ ,  zoomedCell?)  : return zoomedCell.frame.width
+   case let (singleCell?, nil)  : return singleCell.frame.width
+   default: return 0
   }
  }
  
- func refresh(with image: UIImage? = nil)
+ 
+ var imagePublisher: AnyPublisher<UIImage, Never>
  {
+  getImagePublisher(requiredImageWidth: requiredImageWidth)
+   .compactMap{$0}
+   .subscribe(on: DispatchQueue.global(qos: .userInitiated))
+   .receive(on: DispatchQueue.main)
+   .eraseToAnyPublisher()
+ }
+}
+
+extension PhotoItemProtocol where Self: PhotoFolderItem
+{
+ var folderHostingCell: PhotoFolderCell? { hostingCollectionViewCell as? PhotoFolderCell }
+ var requiredImageWidth: CGFloat { folderHostingCell?.frameSize ?? 0 }
+ var imagesInRow: Int { folderHostingCell?.nphoto ?? 0 }
+ var imageCornerRadius: CGFloat { ceil(7 * (1 - 1/exp(CGFloat(imagesInRow) / 5))) }
+ 
+ var imagePublisher: AnyPublisher<UIImage, Never>
+ {
+  getFolderGridPreviewPublisher(folderSize: requiredImageWidth,
+                                imagesInRow: imagesInRow,
+                                imageCornerRadius: imageCornerRadius)
+   .subscribe(on: DispatchQueue.global(qos: .userInitiated))
+   .receive(on: DispatchQueue.main)
+   .handleEvents(receiveOutput: { [ weak self ] _ in self?.folderHostingCell?.reloadFolderCell()})
+   .eraseToAnyPublisher()
+ }
+}
+
+extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+{
+ func refreshCellView(_ animated: Bool = true)
+ {
+  //refreshRowPositionMarker()
+  //refreshFlagMarker(
+  refreshVideoMarkers()
+  updateImage(animated)
   
-  switch (self, hostedItem, hostedView, hostedAccessoryView)
-  {
-   case let (_, is PhotoItem, photoIconView as UIImageView, spinner as UIActivityIndicatorView):
-    
-   guard let image = image else
+
+ 
+ }
+  
+ func updateImage(_ animated: Bool = true)
+ {
+  guard let hostedBefore = self.hostedItem  else { return }
+  
+  hostedBefore.cellImageUpdateSubscription = hostedBefore.imagePublisher.sink
+  { [ weak hostedBefore, weak self ] image in
+   guard let self = self else { return }
+   guard let hostedAfter = self.hostedItem  else { return }
+   guard hostedBefore === hostedAfter  else { return }
+   
+   if let snipper = self.hostedAccessoryView as? UIActivityIndicatorView
    {
-//    print ("<<<<<<<<<<UPDATED MORE...>>>>>>>>>>")
-    spinner.startAnimating()
-    updateImage()
-    return
+    snipper.stopAnimating()
    }
    
-    UIView.transition(with: photoIconView, duration: 0.5,
-                      options: .transitionCrossDissolve,
-                      animations:{photoIconView.image = image},
-                      completion:
-                      {_ in
-                       self.refreshFlagMarker()
-                       self.refreshVideoMarkers()
-                       self.refreshSpring()
-                       {_ in
-                        if let folderCell = (self as? PhotoFolderCollectionViewCell)?.owner
-                        {
-                         folderCell.groupTaskCount += 1
-                         if folderCell.groupTaskCount == folderCell.photoCollectionView.visibleCells.count
-                         {
-                          folderCell.groupTaskCount = 0
-                          folderCell.refresh()
-                         }
-                        }
-                        
-                       }
-                      })
-  
+   guard let imageView = self.hostedView as? UIImageView else { return }
    
-    default: break
+   if animated && self is PhotoFolderCell == false 
+   {
+    let duration = (imageView.image == nil) ? 0.05 : 1.25
+    
+    UIView.transition(with: imageView,
+                      duration: duration ,
+                      options: [.transitionCrossDissolve, .curveEaseInOut],
+                      animations: { imageView.image = image })
+   }
+   else
+   {
+    imageView.image = image
+   }
+   
+  }
+ }
+ 
 
-  }//switch (self, hostedItem, hostedView, hostedAccessoryView)...
- }//func refresh(with image: UIImage?)...
- 
- 
 }//extension PhotoSnippetCellProtocol where Self: UICollectionViewCell...
+

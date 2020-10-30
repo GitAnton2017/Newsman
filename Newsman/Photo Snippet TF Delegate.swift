@@ -10,16 +10,17 @@ extension PhotoSnippetViewController: UITextFieldDelegate
   self.navigationItem.title = sender.text
  }
 
- func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason)
+ func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason)
  {
   guard reason == .committed else { return }
   
   guard textField.text != photoSnippet.snippetName else { return }
   
-  photoSnippet.managedObjectContext?.persist
+  
+  photoSnippet.managedObjectContext?.perform
   {
    self.photoSnippet.snippetName = textField.text ?? ""
-  }
+  } 
  }
  
  func textField(_ textField: UITextField,

@@ -68,13 +68,15 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
   print (#function)
   let observer = configueChangeContextObserver(for: NSDeletedObjectsKey)
   {[unowned self] deleted in
-   let searchIndexes = deleted.compactMap{ s in self.searchedItems.index{$0 === s} }.sorted(by: >)
+   let searchIndexes = deleted.compactMap
+   { s in self.searchedItems.firstIndex{$0.objectID == s.objectID} }.sorted(by: >)
    //delete them in row index descending order to keep up deletion integrity
    
    searchIndexes.forEach{ self.searchedItems.remove(at: $0) }
 
    //remove MOs that deleted from current MOC from fetchedItems as well!
-   let fetchIndexes = deleted.compactMap{ s in self.fetchedItems.index{$0 === s} }.sorted(by: >)
+   let fetchIndexes = deleted
+    .compactMap{ s in self.fetchedItems.firstIndex{$0.objectID == s.objectID} }.sorted(by: >)
    fetchIndexes.forEach{ self.fetchedItems.remove(at: $0) }
 
    let indexPaths = searchIndexes.map{ IndexPath(row: $0, section: 0) }
@@ -105,7 +107,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
   let moves = searchedItems.enumerated().map
   {pair -> (from: IndexPath, to: IndexPath) in
    let from_ip = IndexPath(row: pair.offset, section: 0)
-   let index = sortedToUpdate.index{ $0 === pair.element }
+   let index = sortedToUpdate.firstIndex{ $0.objectID == pair.element.objectID }
    let to_ip = IndexPath(row: index!, section: 0)
    return (from: from_ip, to: to_ip)
   }
@@ -130,7 +132,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
    //filter out all updated all MOs contained in this searchedItems that do not satisfy current predicates
    let indexesToDelete = updated.compactMap
    { s in
-    self.searchedItems.index{$0 === s && !self.evaluate(snippet: $0)}
+    self.searchedItems.firstIndex{$0 === s && !self.evaluate(snippet: $0)}
    }.sorted(by: >) //delete them in row index descending order to keep up model integrity
    
    let deleteIndexPaths = indexesToDelete.map{IndexPath(row: $0, section: 0)}
@@ -146,7 +148,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
    let insertIndexPaths = Array<IndexPath>(repeating: .zero, count: objectsToInsert.count)
    
    // then we  prepare indexPathes for MOs to update their data fields
-   let indexesToUpdate = evaluatedObjects.compactMap{ s in self.searchedItems.index {$0 === s} }
+   let indexesToUpdate = evaluatedObjects.compactMap{ s in self.searchedItems.firstIndex {$0 === s} }
    let updateIndexPaths = indexesToUpdate.map{IndexPath(row: $0, section: 0)}
    
    self.updateSnippetCells(at: updateIndexPaths) //updates visual fields in corresponding TV cells
@@ -245,7 +247,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  lazy var moc: NSManagedObjectContext =
   {
    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-   let moc = appDelegate.persistentContainer.viewContext
+   let moc = appDelegate.viewContext
    return moc
  }()
 
@@ -351,10 +353,12 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  {
 
   let predicate = NSPredicate(format: "%K = %@", #keyPath(BaseSnippet.type), itemsType.rawValue)
-  return SnippetsFetchController(with: snippetsTableView,
-                                 groupType: groupType,
-                                 using: predicate,
-                                 in: moc, snippetType: itemsType)
+  let sfc = SnippetsFetchController(with: snippetsTableView,
+                                    groupType: groupType,
+                                    using: predicate,
+                                    in: moc, snippetType: itemsType)
+  sfc.snippetsVC = snippetsVC
+  return sfc
 
  }
 
@@ -370,6 +374,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
                                     using: predicate,
                                     in: moc, snippetType: itemsType)
   sfc.ignoreHiddenSections = true
+  sfc.snippetsVC = snippetsVC
   return sfc
   
  }
@@ -402,7 +407,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  func deleteSnippet(snippet: BaseSnippet)
  {
   guard isFetched else { return }
-  guard let index = fetchedItems.index(where: {$0 === snippet}) else { return }
+  guard let index = fetchedItems.firstIndex(where: {$0 === snippet}) else { return }
   fetchedItems.remove(at: index)
  }
 
@@ -556,7 +561,7 @@ class SnippetsViewDataSource: NSObject, UITableViewDataSource
  final subscript(snippet: BaseSnippet) -> IndexPath?
  {
   if searchString.isEmpty { return currentFRC[snippet] }
-  guard let row = searchedItems.index(of: snippet) else { return nil }
+  guard let row = searchedItems.firstIndex(of: snippet) else { return nil }
   return IndexPath(row: row, section: 0)
   
  }

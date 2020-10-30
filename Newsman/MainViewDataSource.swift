@@ -34,12 +34,12 @@ class MainViewDataSource: NSObject, UICollectionViewDataSource
     
      switch (kind)
      {
-      case UICollectionElementKindSectionHeader:
+      case UICollectionView.elementKindSectionHeader:
        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "MainViewHeader", for: indexPath) as! MainViewHeader
        view.headerText.text = NSLocalizedString("Welcome back to NEWSMAN!", comment: "Main menu welcome message header")
        return view
         
-      case UICollectionElementKindSectionFooter:
+      case UICollectionView.elementKindSectionFooter:
        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "MainViewFooter", for: indexPath) as! MainViewFooter
        view.footerText.text = NSLocalizedString("Copyright 2017 (c)", comment: "Main menu footer copyright message")
        return view

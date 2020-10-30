@@ -53,29 +53,27 @@ extension PhotoFolderItem
              var imageSet: [UIImage] = []
              singlePhotoItems.forEach
              {photoItem in
-                    do
-                    {
-                        print("******************************************************************************")
-                        print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM PHOTO FOLDER URL : \n \(url.path)...")
-                        print("******************************************************************************")
-                        
-                        let data = try Data(contentsOf: photoItem.url)
-                        if let image = UIImage(data: data, scale: 1)
-                        {
-                          imageSet.append(image)
-                        }
-                
-                        
-                    }
-                    catch
-                    {
-                        print("******************************************************************************")
-                        print("ERROR OCCURED WHEN READING IMAGE DATA FROM PHOTO FOLDER URL!\n\(error.localizedDescription)")
-                        print("******************************************************************************")
-                        completionHandler(nil, error)
-                        return
-                        
-                    } //do-try-catch...
+              do
+              {
+               guard let photoItemURL = photoItem.url else { return }
+               print("****************************************************************************************")
+               print("ATTEMPT OF READING IMAGE FOR DRAG & DROP FROM PHOTO FOLDER URL:\n\(photoItemURL.path)")
+               print("****************************************************************************************")
+               
+      
+               let data = try Data(contentsOf: photoItemURL)
+               if let image = UIImage(data: data, scale: 1) { imageSet.append(image) }
+          
+              }
+              catch
+              {
+                  print("******************************************************************************")
+                  print("ERROR OCCURED WHEN READING IMAGE DATA FROM PHOTO FOLDER URL!\n\(error.localizedDescription)")
+                  print("******************************************************************************")
+                  completionHandler(nil, error)
+                  return
+                  
+              } //do-try-catch...
                 
                 
              }
@@ -193,20 +191,21 @@ extension PhotoItem
             
            do
            {
-               print("******************************************************************************")
-               print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM URL : \n \(url.path)...")
-               print("******************************************************************************")
-            
-               let data = try Data(contentsOf: self.url)
-               completionHandler(data, nil)
+            guard let photoURL = self.url else { break }
+            print("******************************************************************************")
+            print ("ATTEMPT OF READING IMAGE FOR DRAG AND DROP FROM URL : \n \(photoURL.path)...")
+            print("******************************************************************************")
+         
+            let data = try Data(contentsOf: photoURL)
+            completionHandler(data, nil)
             
            }
            catch
            {
-               print("******************************************************************************")
-               print("ERROR OCCURED WHEN READING IMAGE DATA FOR DRAG AND DROP FROM URL!\n\(error.localizedDescription)")
-               print("******************************************************************************")
-               completionHandler(nil, error)
+            print("******************************************************************************")
+            print("ERROR OCCURED WHEN READING IMAGE DATA FOR DRAG AND DROP FROM URL!\n\(error.localizedDescription)")
+            print("******************************************************************************")
+            completionHandler(nil, error)
             
            } //do-try-catch...
            

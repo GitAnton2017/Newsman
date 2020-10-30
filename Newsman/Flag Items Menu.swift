@@ -119,51 +119,54 @@ extension PhotoSnippetViewController
    {
     case "flagLayer"?:
      let flagColor = (buttonLayer as! FlagItemLayer).flagColor
-     let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
-     if (photoCollectionView.photoGroupType != .makeGroups)
-     {
-      PhotoItem.MOC.persistAndWait
-      {
-       self.photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
-       {item in
-        item.element.priorityFlag = flagStr //Photo MO change operation to be persisted here!!
-        let indexPath = IndexPath(row: item.offset, section: 0)
-        if let cell = self.photoCollectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
-        {
-         cell.drawFlagMarker(flagColor: flagColor!)
-        }
-       }
-      }
-     }
-     else
-     {
-       flagGroupedSelectedPhotos(with: flagStr)
-     }
-     
+     photoSnippet.flagSelectedObjects(with: flagColor)
+//     let flagStr = PhotoPriorityFlags.priorityColorMap.first(where: {$0.value == flagColor})?.key.rawValue
+//     if (photoCollectionView.photoGroupType != .makeGroups)
+//     {
+//      PhotoItem.MOC.persistAndWait
+//      {
+//       self.photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
+//       {item in
+//        item.element.priorityFlag = flagStr //Photo MO change operation to be persisted here!!
+//        let indexPath = IndexPath(row: item.offset, section: 0)
+//        if let cell = self.photoCollectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+//        {
+//         cell.drawFlagMarker(flagColor: flagColor!)
+//        }
+//       }
+//      }
+//     }
+//     else
+//     {
+//       flagGroupedSelectedPhotos(with: flagStr)
+//     }
+//
      togglePhotoEditingMode()
      closeMenuAni()
     
     
     case "unflagLayer"?:
-     if (photoCollectionView.photoGroupType != .makeGroups)
-     {
-      PhotoItem.MOC.persistAndWait
-      {
-       self.photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
-       {item in
-        item.element.priorityFlag = nil //Photo MO change operation to be persisted here!!
-        let indexPath = IndexPath(row: item.offset, section: 0)
-        if let cell = self.photoCollectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
-        {
-          cell.unsetFlagMarker()
-        }
-       }
-      }
-     }
-     else
-     {
-       flagGroupedSelectedPhotos(with: nil)
-     }
+     photoSnippet.flagSelectedObjects(with: nil)
+     
+//     if (photoCollectionView.photoGroupType != .makeGroups)
+//     {
+//      PhotoItem.MOC.persistAndWait
+//      {
+//       self.photoItems2D[0].enumerated().filter({$0.element.isSelected}).forEach
+//       {item in
+//        item.element.priorityFlag = nil //Photo MO change operation to be persisted here!!
+//        let indexPath = IndexPath(row: item.offset, section: 0)
+//        if let cell = self.photoCollectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol
+//        {
+//          cell.unsetFlagMarker()
+//        }
+//       }
+//      }
+//     }
+//     else
+//     {
+//       flagGroupedSelectedPhotos(with: nil)
+//     }
      
      togglePhotoEditingMode()
      closeMenuAni()

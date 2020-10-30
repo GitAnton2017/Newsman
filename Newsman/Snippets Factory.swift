@@ -3,6 +3,52 @@ import Foundation
 import UIKit
 import CoreData
 import CoreLocation
+import RxSwift
+
+
+extension SnippetsViewController
+{
+ func snippetCreator<S>(with _ : S.Type, _ T: BaseSnippet.Type, snippetType: SnippetType) -> Single<BaseSnippet>
+  where S: SnippetsRepresentable
+ {
+  $currentLocation.flatMap {snippetLocation -> Single<BaseSnippet> in
+    Single<BaseSnippet>.create
+    {promise in
+     var newSnippet: BaseSnippet!
+     self.moc.persist({
+      newSnippet = T.init(context: self.moc)
+      let newSnippetID = UUID()
+      newSnippet.id = newSnippetID
+      newSnippet.snippetType = snippetType
+      newSnippet.snippetStatus = .new
+     
+      newSnippet.currentFRC = self.snippetsDataSource.currentFRC
+     
+      newSnippet.snippetDate = Date()
+      newSnippet.snippetName = ""
+      newSnippet.snippetPriority = .normal
+      newSnippet.snippetCoordinates = self.currentLocation
+      newSnippet.snippetLocation = snippetLocation
+     
+      newSnippet.initStorage()
+     })
+     {
+       switch $0
+       {
+        case  .success():          promise (.success(newSnippet))
+        case  .failure(let error): promise (.error(error))
+       }
+     }
+     
+     return Disposables.create()
+    }.do(onSuccess: { self.editSnippet(with: S.self, snippetToEdit: $0) })
+  }
+  
+  
+ }
+}
+
+
 
 extension SnippetsViewController
 {
@@ -10,34 +56,45 @@ extension SnippetsViewController
  where S: SnippetsRepresentable
  {
   var newSnippet: BaseSnippet!
-  moc.persistAndWait(block:
+  var disposable: Disposable?
+  
+  moc.performChanges(block:
   {
-    newSnippet = T.init(context: moc)
-    let newSnippetID = UUID()
-    newSnippet.id = newSnippetID
-    newSnippet.snippetType = snippetType
-    newSnippet.snippetStatus = .new
+   newSnippet = T.init(context: self.moc)
+   let newSnippetID = UUID()
+   newSnippet.id = newSnippetID
+   newSnippet.recordName = newSnippetID.uuidString
+   newSnippet.snippetType = snippetType
+   newSnippet.snippetStatus = .new
+  
+   newSnippet.currentFRC = self.snippetsDataSource.currentFRC
+  
+   newSnippet.snippetDate = Date()
+   newSnippet.snippetName = ""
+   newSnippet.snippetPriority = .normal
+   newSnippet.snippetCoordinates = self.snippetLocation
+   newSnippet.snippetLocation = ""
+  
+   newSnippet.initStorage()
    
-    newSnippet.currentFRC = snippetsDataSource.currentFRC
+//    getLocationString
+//    {location in
+//      print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR \(snippetType)")
+//      self.moc.persist{newSnippet.snippetLocation = location} as Void
+//    }
    
-    newSnippet.snippetDate = Date()
-    newSnippet.snippetName = ""
-    newSnippet.snippetPriority = .normal
-    newSnippet.snippetCoordinates = snippetLocation
-    newSnippet.snippetLocation = ""
-   
-    newSnippet.initStorage()
-   
-    getLocationString
-    {location in
-      print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR \(snippetType)")
-      self.moc.persist{newSnippet.snippetLocation = location}
-    }
+   disposable = self.$currentLocation.subscribe(onSuccess:
+   {location in
+    defer { disposable?.dispose() }
+    print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR \(snippetType)")
+    self.moc.perform { newSnippet.snippetLocation = location }
+   },
+   onError:{_ in disposable?.dispose()})
     
    
   })
-  {flag in
-   guard flag else { return }
+  {result in
+   guard case .success() = result  else { return }
    self.editSnippet(with: S.self, snippetToEdit: newSnippet)
   }
   
@@ -60,7 +117,7 @@ extension SnippetsViewController
     getLocationString
     {location in
       print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR NEW TEXT SNIPPET")
-      self.moc.persist{newTextSnippet.snippetLocation = location}
+      self.moc.persist{newTextSnippet.snippetLocation = location} as Void
     }
     
     editSnippet(with: TextSnippetViewController.self, snippetToEdit: newTextSnippet)
@@ -97,7 +154,7 @@ extension SnippetsViewController
     getLocationString
     {location in
       print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR PHOTO SNIPPET")
-      self.moc.persist{newPhotoSnippet.snippetLocation = location}
+      self.moc.persist{newPhotoSnippet.snippetLocation = location} as Void
     }
     
     editSnippet(with: PhotoSnippetViewController.self, snippetToEdit: newPhotoSnippet)
@@ -137,7 +194,7 @@ extension SnippetsViewController
     getLocationString
      {location in
       print ("GEOCODER LOCATION STRING \"\(location ?? "Unknown")\" READY FOR VIDEO SNIPPET")
-      self.moc.persist{newVideoSnippet.snippetLocation = location}
+      self.moc.persist{ newVideoSnippet.snippetLocation = location } as Void
     }
     
     editSnippet(with: PhotoSnippetViewController.self, snippetToEdit: newVideoSnippet)

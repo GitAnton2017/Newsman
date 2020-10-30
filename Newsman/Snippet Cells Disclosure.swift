@@ -129,11 +129,12 @@ extension SnippetsViewCell
   currentFRC?.deactivateDelegate()
   moc.persist(block: {snippet.disclosedCell.toggle()})
   {flag in
-   self.currentFRC?.activateDelegate()
    guard flag else { return }
-   self.refreshRowHeight(with: snippet.disclosedCell)
-   {
-    completion?()
+   DispatchQueue.main.async
+   {[ weak self ] in
+    guard let self = self else { return }
+    self.currentFRC?.activateDelegate()
+    self.refreshRowHeight(with: snippet.disclosedCell) { completion?() }
    }
   }
  }
@@ -165,14 +166,15 @@ extension SnippetsViewCell
  final func configueDisclosure()
  {
   
-  let rs: CGFloat = 22.0
+  let rs: CGFloat = 10
   let a = bounds.size.height
-  let size = CGSize(width: a, height: a)
+  let size = CGSize(width: a * 0.5, height: a * 0.5)
+  let r: CGFloat = 2.6
   let rect = CGRect(origin: .zero, size: size)
   
   let b = UIButton(frame: rect)
   
-  b.imageEdgeInsets = UIEdgeInsets(top: a / 3, left: a / 3 + rs, bottom: a / 3, right: a / 3 - rs)
+  b.imageEdgeInsets = UIEdgeInsets(top: a / r, left: a / r + rs, bottom: a / r, right: a / r - rs)
   b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1), and: size), for: .normal)
   b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1), and: size), for: .highlighted)
   b.setImage(getDisclosureImage(of: #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1), and: size), for: .focused)
@@ -181,6 +183,7 @@ extension SnippetsViewCell
   
   b.sizeToFit()
   accessoryView = b
+  accessoryView?.backgroundColor = .clear
  }
 
 }

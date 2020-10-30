@@ -12,7 +12,7 @@ protocol DragWaggleAnimatable: class
 {
  var isDragAnimating: Bool  { get set }
  var waggleView: UIView { get  }
- func dragWaggleBegin()
- func dragWaggleEnd()
+ //func dragWaggleBegin()
+ //func dragWaggleEnd()
  
 }

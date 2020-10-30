@@ -76,7 +76,7 @@ extension SnippetsViewCell
   layer.borderWidth = 1.0
   layer.borderColor = #colorLiteral(red: 1, green: 0.9294556831, blue: 0.9573842366, alpha: 1)
   backgroundColor = backgroundColor?.withAlphaComponent(0.5)
-  AppDelegate.clearAllDraggedItems()
+//  AppDelegate.clearAllDraggedItems()
   //clear Global Drags Array with delayed unselection and removing drag animation from all hosted cells in drag items
  }//func dropInteraction(_ interaction:...
  

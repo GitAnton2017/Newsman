@@ -9,497 +9,449 @@
 import Foundation
 import CoreData
 import UIKit
+import RxSwift
 
 
-extension PhotoSnippetViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate, PhotoItemsDraggable
-{
+//extension PhotoSnippetViewController: UICollectionViewDragDelegate,
+//                                      UICollectionViewDropDelegate,
+//                                      //PhotoItemsDraggable//, DragAndDropStatesObservation
+//{
+//
+//// var isDraggable: Bool
+//// {
+////  switch (itemsInRow, deviceType, vsc, hsc)
+////  {
+////   case (2... , .phone, .regular, .compact),
+////        (5... , .phone, .compact, .compact),
+////        (6... , .phone, .compact, .regular),
+////        (7... , .pad,   .regular, .regular): return true
+////
+////   default: return false
+////  }
+//// }//var isDraggable: Bool...
+//
+// //D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
+// {
+//  print (#function, session.description, session.items.count)
+//  //ddDelegateSubject.onNext(.begin)
+//  //  AppDelegate.clearAllDragAnimationCancelWorkItems()
+//
+// }//func collectionView(_ collectionView...
+//
+//
+// //D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
+// {
+//  print (#function, session.description)
+//  //ddDelegateSubject.onNext(.end)
+//  //AppDelegate.clearAllDraggedItems()
+// }//func collectionView(_ collectionView: UICollectionView...
+//
+//
+// //D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
+// {
+//  defer { isDropPerformed = false }
+//
+//  print (#function, session.description)
+////  if isDropPerformed { return }
+//  //AppDelegate.clearAllDraggedItems()
+//
+//
+//
+//
+// }//func collectionView(_ collectionView: UICollectionView...
+//
+//
+// //D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView,
+//                     itemsForBeginning session: UIDragSession,
+//                     at indexPath: IndexPath) -> [UIDragItem]
+//
+// {
+//  return dragItemsForBeginning(in: collectionView, for: session, at: indexPath)
+// }
+//
+//
+// //D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView,
+//                     itemsForAddingTo session: UIDragSession,
+//                     at indexPath: IndexPath, point: CGPoint) -> [UIDragItem]
+//
+// {
+//  print (#function, session.description)
+//  return getDragItems(collectionView, for: session, forCellAt: indexPath)
+// }
+//
+//
+// //D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView,
+//                     dropSessionDidUpdate session: UIDropSession,
+//                     withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
+//
+// {
+//
+//  //ddDelegateSubject.onNext(.proceed(location: session.location(in: collectionView)))
+//
+//  if (session.localDragSession != nil)
+//  {
+//   return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
+//  }
+//  else
+//  {
+//   return UICollectionViewDropProposal(operation: .copy , intent: .insertAtDestinationIndexPath)
+//  }
+//
+// }//func collectionView(_ collectionView: UICollectionView
+//
+//
+//
+////D&D DELEGATE METHOD
+// func collectionView(_ collectionView: UICollectionView,
+//                      performDropWith coordinator: UICollectionViewDropCoordinator)
+//
+// {
+//  performDrop(in: collectionView, with: coordinator)
+// }//func collectionView(_ collectionView: UICollectionView, performDropWith...
+//
+//
+//
+//
+// func copyPhotosFromSideApp (_ collectionView: UICollectionView,
+//                             performDropWith coordinator: UICollectionViewDropCoordinator,
+//                             at destinationIndexPath: IndexPath)
+//
+// {
+//  PhotoItem.MOC.persistAndWait
+//  {
+//   for item in coordinator.items
+//   {
+//    let dragItem = item.dragItem
+//    guard dragItem.itemProvider.canLoadObject(ofClass: UIImage.self) else {continue}
+//
+//    let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath,
+//                                                      reuseIdentifier: "PhotoSnippetCell")
+//
+//    let placeholderContext = coordinator.drop(dragItem, to: placeholder)
+//    dragItem.itemProvider.loadObject(ofClass: UIImage.self)
+//    {[weak self] item, error in
+//     OperationQueue.main.addOperation
+//      {
+//       guard let image = item as? UIImage else
+//       {
+//        placeholderContext.deletePlaceholder()
+//        return
+//       }
+//       placeholderContext.commitInsertion
+//        {indexPath in
+//         let newPhotoItem = PhotoItem(photoSnippet: (self?.photoSnippet)!,
+//                                      image: image,
+//                                      cachedImageWidth: (self?.imageSize)!)
+//
+//         if let flagStrs = self?.sectionTitles
+//         {
+//          newPhotoItem.photo.priorityFlag = flagStrs[indexPath.section]
+//         }
+//
+//         self?.photoItems2D[indexPath.section].insert(newPhotoItem, at: indexPath.row)
+//       }
+//     }
+//    }
+//   }
+//  }
+// }//func copyPhotosFromSideApp (_ collectionView: UICollectionView...
+//
+//
+// func isDragOverlayedByArrowMenu (_ collectionView: UICollectionView,
+//                                    forCellAt indexPath: IndexPath) -> Bool
+// {
+//  guard
+//   let dragCell = collectionView.cellForItem(at: indexPath) as? PhotoSnippetCellProtocol,
+//   let visibleCells = collectionView.visibleCells as? [PhotoSnippetCellProtocol],
+//   let menuView = visibleCells.first(where: {$0.arrowMenuView != nil})?.arrowMenuView?.baseView
+//  else { return false }
+//
+//  let menuRect = collectionView.convert(menuView.bounds, from: menuView)
+//
+//  return dragCell.frame.intersects(menuRect)
+// }
+//
+// func getDragItems (_ collectionView: UICollectionView,
+//                    for session: UIDragSession,
+//                    forCellAt indexPath: IndexPath) -> [UIDragItem]
+//
+// {
+//
+//  print (#function, session.description)
+//
+//  if isDragOverlayedByArrowMenu(collectionView, forCellAt: indexPath) { return [] }
+//
+//  guard collectionView.cellForItem(at: indexPath) != nil else { return [] }
+//
+//  let dragged = photoItems2D[indexPath.section][indexPath.row]
+//
+//  guard dragged.isDraggable else { return [] } //check up if it is really eligible for drags...
+//
+//  let itemProvider = NSItemProvider()
+//  let dragItem = UIDragItem(itemProvider: itemProvider)
+//  dragged.dragSession = session
+//  dragItem.localObject = dragged
+//  //ddDelegateSubject.onNext(.flock(dragItem: dragged))
+//
+//  return [dragItem]
+//
+// }//func getDragItems (_ collectionView: UICollectionView...
+//
+//
+//
+// func dragItemsForBeginning(in collectionView: UICollectionView, for session: UIDragSession,
+//                            at indexPath: IndexPath) -> [UIDragItem]
+// {
+//  print (#function, session.description)
+//
+//  guard isDraggable else { return [] }
+//  let itemsForBeginning = getDragItems(collectionView, for: session, forCellAt: indexPath)
+//  return itemsForBeginning
+//
+// } //func dragItemsForBeginning(in collectionView: UICollectionView...
+//
+//
+//
+// func dragEventsCount(of draggedItems: [Draggable] ) -> Int
+// {
+//  let folders = draggedItems.compactMap{($0.hostedManagedObject as? Photo)?.folder}
+//
+//  return Set(folders).map { folder  -> Int in
+//   switch (folder.count - folder.folderedPhotos.filter{$0.isDragAnimating}.count)
+//   {
+//    case 0:  return 1
+//    case 1:  return 2
+//    default: return 0
+//   }
+//  }.reduce(0, +) + draggedItems.count
+//
+// }//func dragEventsCount(of draggedItems: [Draggable] ) ...
+//
+//
+//
+// func moveInAppItemsRx(_ collectionView: UICollectionView,
+//                       performDropWith coordinator: UICollectionViewDropCoordinator,
+//                       to destinationIndexPath: IndexPath)
+//
+// {
+//  print (#function)
+//
+//  let group = DispatchGroup()
+//
+//  let draggedItems = AppDelegate.globalDragItems.filter{ $0.dragSession != nil }//active drags only!
+//
+//  var count = dragEventsCount(of: draggedItems)
+//
+//  defer
+//  {
+//   print ("<<<< Event Count - \(count) >>>>" )
+//
+////   ddPublish.debug()
+////            .elementAt(count - 1)
+////            .observeOn(MainScheduler.instance)
+////            .subscribe(onNext: {[weak self] _ in self?.repositionItemsIfNeeded(after: 1) })
+////            .disposed(by: disposeBag)
+//  }
+//
+//
+//  let position = photoItemPosition(for: destinationIndexPath)
+//  let photoDragItems = draggedItems.filter{$0 is PhotoItem}
+//  let folderDragItems = draggedItems.filter{ $0 is PhotoFolderItem }
+//
+//  if (photoSnippet.photoGroupType == .typeGroups &&
+//      position.sectionName == PhotoItemsTypes.allPhotos.rawValue)
+//  {
+//   count += folderDragItems.count
+//  }//if (photoSnippet.photoGroupType ...
+//
+//  if (photoDragItems.count > 1 &&
+//      photoSnippet.photoGroupType == .typeGroups &&
+//      position.sectionName == PhotoItemsTypes.allFolders.rawValue)
+//  {
+//   count -= photoDragItems.filter{ $0.isFoldered }.count
+//   count += 1
+//
+//   let destPhotoItem = photoDragItems.first as! PhotoItem
+//
+//   group.performBatchTask(batch: photoDragItems[1...1], asyncTask:
+//   {
+//    $0.move(to: photoSnippet, to: destPhotoItem, to: nil, completion: $1)
+//   })
+//   {
+//    guard let newFolder = destPhotoItem.folder.map({PhotoFolderItem(folder: $0)}) else { return }
+//
+//    group.performBatchTask(batch: photoDragItems[2...], asyncTask:
+//    {
+//     $0.move(to: self.photoSnippet, to: newFolder, to: .zero, completion: $1)
+//    })
+//    {
+//     group.performBatchTask(batch: folderDragItems, asyncTask:
+//     {
+//      $0.move(to: self.photoSnippet, to: nil, to: position, completion: $1)
+//     })
+//    }
+//   }
+//  }//if (photoDragItems.count > 1 &&...
+//  else
+//  {
+//   group.performBatchTask(batch: draggedItems, asyncTask:
+//   {
+//    $0.move(to: photoSnippet, to: nil, to: position, completion: $1)
+//   })
+//  }//if (photoDragItems.count > 1 &&...
+//
+// }//func moveInAppItemsRx(_ collectionView:...
+//
+// func moveInAppItemsFullyRx(_ collectionView: UICollectionView,
+//                              performDropWith coordinator: UICollectionViewDropCoordinator,
+//                              to destinationIndexPath: IndexPath)
+//
+// {
+//  print (#function)
+//
+//  let draggedItems = AppDelegate.globalDragItems.filter{ $0.dragSession != nil }//active drags only!
+//
+//  var draggedWrappedItems = Set(draggedItems.map{ DraggableWrapper($0) })
+//
+//  var count = dragEventsCount(of: draggedItems)
+//
+////  defer {
+////   ddPublish
+////    .debug(" <<< DRAGGED COUNT PUBLISHER (\(count))>>>")
+////    .elementAt(count - 1) // terminates & disposed after receive count of elements!
+////    .observeOn(MainScheduler.instance)
+////    .subscribe(onNext: { [weak self] _ in self?.repositionItemsIfNeeded(after: 1) })
+////    .disposed(by: disposeBag)
+////  }
+//
+//
+//  let position = photoItemPosition(for: destinationIndexPath)
+//  let photoDragItems = draggedItems.filter{$0 is PhotoItem}
+//  let folderDragItems = draggedItems.filter{ $0 is PhotoFolderItem }
+//
+//
+//  if ( photoSnippet.photoGroupType == .typeGroups &&
+//       position.sectionName == PhotoItemsTypes.allPhotos.rawValue ) { count += folderDragItems.count }
+//
+//  if photoDragItems.count > 1 &&
+//   photoSnippet.photoGroupType == .typeGroups &&
+//   position.sectionName == PhotoItemsTypes.allFolders.rawValue
+//  {
+//   count -= photoDragItems.filter{ $0.isFoldered }.count
+//   count += 1
+//
+//   let firstPhotoDragged = draggedItems.first{$0 is PhotoItem} as! PhotoItem
+//   let secondPhotoDragged = draggedItems.first{$0 is PhotoItem && $0 !== firstPhotoDragged} as! PhotoItem
+//
+//   var thenObsSeqMake: ( (Set<DraggableWrapper>) -> Observable<Draggable> )!
+//
+//   thenObsSeqMake = {[unowned self] wrapped -> Observable<Draggable> in
+//    let draggedItems = wrapped.map{$0.wrapped}
+//    return Observable<Draggable>.from(draggedItems)
+//     .filter { $0 !== firstPhotoDragged && $0 !== secondPhotoDragged }
+//     .flatMap { dragged -> Observable<Draggable> in
+//       switch dragged
+//       {
+//        case let photoItem as PhotoItem:
+//         guard let newFolder = firstPhotoDragged.folder.map({PhotoFolderItem(folder: $0)}) else { return .empty() }
+//         return photoItem.move(to: self.photoSnippet, to: newFolder, to: .zero)
+//
+//        case let photoFolderItem as PhotoFolderItem:
+//         return photoFolderItem.move(to: self.photoSnippet, to: nil, to: position)
+//
+//        default: return .empty()
+//       }//switch dragged...
+//     }//.flatMap...
+//     .observeOn(MainScheduler.instance)
+//     .do(onNext: { draggedWrappedItems.remove(DraggableWrapper($0)) })
+//     .catchError { error -> Observable<Draggable> in
+//      if case let DraggableError.moveError(dragged, contextError) = error
+//      {
+//       draggedWrappedItems.remove(DraggableWrapper(dragged))
+//       contextError.log()
+//       return thenObsSeqMake(draggedWrappedItems)
+//      }
+//      else
+//      {
+//       return .empty()
+//      }
+//    }
+//   }
+//
+//   secondPhotoDragged.move(to: self.photoSnippet, to: firstPhotoDragged, to: nil)
+//    .catchError{ _ in .empty() }
+//    .ignoreElements()
+//    .andThen(thenObsSeqMake(draggedWrappedItems))
+//    .observeOn(MainScheduler.instance)
+//    .debug("<<< DROP ITEMS WITH FOLDERING PUBLISHER >>>")
+//    .subscribe()
+//    .disposed(by: disposeBag)
+//
+//  }
+//  else
+//  {
+//   var dragObsSeqMake: ( (Set<DraggableWrapper>) -> Observable<Draggable> )!
+//   dragObsSeqMake = {[unowned self]  wrapped -> Observable<Draggable> in
+//    let draggedItems = wrapped.map{$0.wrapped}
+//    return Observable<Draggable>.from(draggedItems)
+//     .flatMap { $0.move(to: self.photoSnippet, to: nil, to: position) }
+//     .observeOn(MainScheduler.instance)
+//     .do(onNext: { draggedWrappedItems.remove(DraggableWrapper($0)) })
+//     .catchError {error -> Observable<Draggable> in
+//      if case let DraggableError.moveError(dragged, contextError) = error
+//      {
+//       draggedWrappedItems.remove(DraggableWrapper(dragged))
+//       contextError.log()
+//       return dragObsSeqMake(draggedWrappedItems)
+//      }
+//      else
+//      {
+//       return .empty()
+//      }
+//    }
+//   }
+//
+//   dragObsSeqMake(draggedWrappedItems)
+//    .observeOn(MainScheduler.instance)
+//    .debug("<<< DROP ITEMS PUBLISHER >>>")
+//    .subscribe()
+//    .disposed(by: disposeBag)
+//
+//  }//if photoDragItems.count > 1 &&...
+//
+// }//func moveInAppItemsFullyRx(_ collectionView:...
+//
+//
+// func performDrop(in collectionView: UICollectionView, with coordinator: UICollectionViewDropCoordinator)
+// {
+//  print (#function, coordinator.session)
+//
+//  //ddDelegateSubject.onNext(.drop)
+// // isDropPerformed = true
+//
+//  let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath.zero
+//
+//  switch (coordinator.proposal.operation)
+//  {
+//   case .move: // moveInAppItemsRx      (collectionView, performDropWith: coordinator, to: destinationIndexPath)
+//    moveInAppItemsFullyRx (collectionView, performDropWith: coordinator, to: destinationIndexPath)
+//   case .copy: break
+//    //copyPhotosFromSideApp (collectionView, performDropWith: coordinator, at: destinationIndexPath)
+//   default: break
+//  }
+//
+// }//func performDrop(in collectionView: UICollectionView...
+//
+//
+//
+//}
 
- var isDraggable: Bool
- {
-  switch (itemsInRow, deviceType, vsc, hsc)
-  {
-   case (2... , .phone, .regular, .compact),
-        (5... , .phone, .compact, .compact),
-        (6... , .phone, .compact, .regular),
-        (7... , .pad,   .regular, .regular): return true
-   
-   default: return false
-  }
- }
- 
- 
- func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession)
- {
-  print (#function, self.debugDescription, session.description, session.items.count)
-  AppDelegate.clearAllDragAnimationCancelWorkItems()
-  
- }
- 
 
- func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession)
- {
-  print (#function, self.debugDescription, session.description)
- }
- 
- 
- 
- func collectionView(_ collectionView: UICollectionView, dropSessionDidEnd session: UIDropSession)
- {
-  print (#function, self.debugDescription, session.description)
-  AppDelegate.clearAllDraggedItems()
- }
- 
- 
- func getDragItems (_ collectionView: UICollectionView,
-                    for session: UIDragSession,
-                    forCellAt indexPath: IndexPath) -> [UIDragItem]
-  
- {
-  
-  print (#function, self.debugDescription, session.description)
-  
-  guard collectionView.cellForItem(at: indexPath) != nil else { return [] }
-  
-  let dragged = photoItems2D[indexPath.section][indexPath.row]
-  
-  guard dragged.isDraggable else { return [] } //check up if it is really eligible for drags...
-  
-  let itemProvider = NSItemProvider(object: dragged)
-  let dragItem = UIDragItem(itemProvider: itemProvider)
-  
-  AppDelegate.globalDragItems.append(dragged) //if all OK put it in drags first...
-  dragged.isSelected = true                   //make selected in MOC
-  dragged.isDragAnimating = true              //start drag animation of associated view
-  dragged.dragSession = session
-  dragItem.localObject = dragged
-  
-  AppDelegate.printAllDraggedItems()
- 
-  return [dragItem]
-  
- }
- 
- 
- 
- 
- func collectionView(_ collectionView: UICollectionView,
-                     itemsForBeginning session: UIDragSession,
-                     at indexPath: IndexPath) -> [UIDragItem]
-  
- {
-  print (#function, self.debugDescription, session.description)
-  
-  guard isDraggable else { return [] }
-  
-  let itemsForBeginning = getDragItems(collectionView, for: session, forCellAt: indexPath)
-  
-  //Auto cancel all dragged PhotoFolderItems and PhotoItems as PhotoItemProtocol!
-  itemsForBeginning.compactMap{$0.localObject as? PhotoItemProtocol}.forEach
-  {item in
-   let autoCancelWorkItem = DispatchWorkItem
-   {
-    item.clear(with: (forDragAnimating: AppDelegate.dragAnimStopDelay,
-                      forSelected:      AppDelegate.dragUnselectDelay))
-   }
-    
-   item.dragAnimationCancelWorkItem = autoCancelWorkItem
-   let delay: DispatchTime = .now() + .seconds(AppDelegate.dragAutoCnxxDelay)
-   DispatchQueue.main.asyncAfter(deadline: delay, execute: autoCancelWorkItem)
-    
-  }
-  
-  return itemsForBeginning
-  
- }
- 
- 
- 
- 
- 
- func collectionView(_ collectionView: UICollectionView,
-                     itemsForAddingTo session: UIDragSession,
-                     at indexPath: IndexPath, point: CGPoint) -> [UIDragItem]
-  
- {
-  print (#function, self.debugDescription, session.description)
-  return getDragItems(collectionView, for: session, forCellAt: indexPath)
- }
- 
- 
- 
- func collectionView(_ collectionView: UICollectionView,
-                     dropSessionDidUpdate session: UIDropSession,
-                     withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
-  
- {
-  if session.localDragSession != nil
-  {
-   return UICollectionViewDropProposal(operation: .move, intent: .insertIntoDestinationIndexPath)
-  }
-  else
-  {
-   return UICollectionViewDropProposal(operation: .copy , intent: .insertAtDestinationIndexPath)
-  }
- }
- 
- 
- func copyPhotosFromSideApp (_ collectionView: UICollectionView,
-                             performDropWith coordinator: UICollectionViewDropCoordinator,
-                             at destinationIndexPath: IndexPath)
- 
- {
-  PhotoItem.MOC.persistAndWait
-  {
-    for item in coordinator.items
-    {
-     let dragItem = item.dragItem
-     guard dragItem.itemProvider.canLoadObject(ofClass: UIImage.self) else {continue}
-     let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "PhotoSnippetCell")
-     let placeholderContext = coordinator.drop(dragItem, to: placeholder)
-     dragItem.itemProvider.loadObject(ofClass: UIImage.self)
-     {[weak self] item, error in
-      OperationQueue.main.addOperation
-       {
-        guard let image = item as? UIImage else
-        {
-         placeholderContext.deletePlaceholder()
-         return
-        }
-        placeholderContext.commitInsertion
-         {indexPath in
-          let newPhotoItem = PhotoItem(photoSnippet: (self?.photoSnippet)!, image: image, cachedImageWidth:(self?.imageSize)!)
-          if let flagStrs = self?.sectionTitles
-          {
-           newPhotoItem.photo.priorityFlag = flagStrs[indexPath.section]
-          }
-          self?.photoItems2D[indexPath.section].insert(newPhotoItem, at: indexPath.row)
-        }
-      }
-     }
-    }
-  }
- }//func copyPhotosFromSideApp (_ collectionView: UICollectionView...
- 
- 
- 
- 
- func insertSingleFolderItem(item singlePhotoItem: PhotoItem)
- {
-  var singleItemSection: Int?
-  
-  defer //finally insert single item of deleted folder into proper CV section...
-  {
-   let rowCount = self.photoItems2D[singleItemSection!].count
-   let singleItemIndexPath = IndexPath(row: rowCount, section: singleItemSection!)
-   self.photoItems2D[singleItemSection!].insert(singlePhotoItem, at: rowCount)
-   self.photoCollectionView.insertItems(at: [singleItemIndexPath])
-  }
-  
-  switch (photoCollectionView.photoGroupType, sectionTitles)
-  {
-   case (.makeGroups, let titles?):
-    singleItemSection = titles.index{$0 == singlePhotoItem.priorityFlag ?? ""}
-    
-    if singleItemSection == nil
-    {
-     singleItemSection = self.photoItems2D.filter
-     {section in
-      self.photoSnippet.ascending ? (section.first?.priority ?? -1) < singlePhotoItem.priority:
-                                    (section.first?.priority ?? -1) > singlePhotoItem.priority
-     }.count
-     
-     self.photoItems2D.insert([], at: singleItemSection!)
-     self.sectionTitles?.insert(singlePhotoItem.priorityFlag ?? "", at: singleItemSection!)
-     self.photoCollectionView.insertSections([singleItemSection!])
-   }
-   
-   default: singleItemSection = 0 //if no grouping by sections we insert finally into 0 section!
-  }
-  
- } //func insertSingleFolderItem...
- 
- 
- 
- 
- func updateFolderSingleItems()
- {
-  switch (photoCollectionView.photoGroupType, sectionTitles)
-  {
-   case ( .makeGroups,  let titles? ):
-    self.photoItems2D.enumerated().map
-    {s in s.1.compactMap{$0 as? PhotoItem}.filter{$0.priorityFlag ?? "" != titles[s.0]}}.flatMap{$0}.forEach
-    {singleItem in
-     guard let indexPath = self.photoItemIndexPath(photoItem: singleItem) else {return}
-     self.photoItems2D[indexPath.section].remove(at: indexPath.row)
-     self.photoCollectionView.deleteItems(at: [indexPath])
-     self.insertSingleFolderItem(item: singleItem)
-    }
-   
-   default: break
-  }
-  
- }//func updateFolderSingleItems...
- 
- func updateEmptySectionsAndFooters()
- {
-  photoItems2D.enumerated().map{$0.offset}.sorted(by: >).forEach
-  {sectionIndex in
-   if ( photoItems2D[sectionIndex].count == 0 )
-   {
-    photoItems2D.remove(at: sectionIndex)
-    sectionTitles?.remove(at: sectionIndex)
-    photoCollectionView.deleteSections([sectionIndex])
-   }
-   else
-   {
-    updateSectionFooter(for: sectionIndex)
-   }
-  }
- } //func updateFolderSingleItems...
- 
- 
- 
- 
- func updateMovedItemsSections()
- {
-   print (#function)
-  
-   updateFolderSingleItems()
-   updateEmptySectionsAndFooters()
- } //func updateMovedItemsSections...
- 
- 
- 
- 
- func insertMovedItem (item photoItem: PhotoItemProtocol,
-                       to destinationIndexPath: IndexPath,
-                       completion: (()->())? = nil)
- {
 
-  print (#function)
-  
-  photoSnippet.managedObjectContext?.persist(block:
-  {
-   switch (self.photoCollectionView.photoGroupType, self.sectionTitles)
-   {
-    case (.makeGroups, let titles?): photoItem.priorityFlag = titles[destinationIndexPath.section]
-    default: break
-   }
-   
-  })
-  {flag in
-   guard flag else {return}
-   let sectionCount = self.photoItems2D[destinationIndexPath.section].count
-   let maxSectionIndexPath = IndexPath(row: sectionCount, section: destinationIndexPath.section)
-   let indexPath = min(destinationIndexPath, maxSectionIndexPath)
-   self.photoItems2D[destinationIndexPath.section].insert(photoItem, at: indexPath.row)
-   self.photoCollectionView.insertItems(at: [indexPath])
-   completion?()
-  }
-  
- }//func insertMovedItem (item photoItem: PhotoItemProtocol...
- 
- func insertSnippetItem (item snippetItem: SnippetDragItem,
-                        to destinationIndexPath: IndexPath,
-                        completion: (()->())? = nil)
- {
-  
-  print (#function)
-  
-  guard let photoSnippet = snippetItem.snippet as? PhotoSnippet else { return }
-  let photoItems = photoSnippet.allItems
-  
-  photoSnippet.managedObjectContext?.persist(block:
-  {
-   switch (self.photoCollectionView.photoGroupType, self.sectionTitles)
-   {
-    case (.makeGroups, let titles?):
-     photoItems.forEach { $0.priorityFlag = titles[destinationIndexPath.section] }
-    default: break
-   }
-  })
-  {flag in
-   guard flag else { return }
-   let sectionCount = self.photoItems2D[destinationIndexPath.section].count
-   let maxSectionIndexPath = IndexPath(row: sectionCount, section: destinationIndexPath.section)
-   let indexPath = min(destinationIndexPath, maxSectionIndexPath)
-   let indexPaths = Array(repeating: indexPath, count: photoItems.count)
-   self.photoItems2D[destinationIndexPath.section].insert(contentsOf: photoItems, at: indexPath.row)
-   self.photoCollectionView.insertItems(at: indexPaths)
-   completion?()
-  }
-  
- }//func insertMovedItem (item photoItem: PhotoItemProtocol...
- 
- func moveUnfolderedItem( item photoItem: PhotoItemProtocol,
-                          to destinationIndexPath: IndexPath,  completion: (()->())? = nil )
- 
-  
- {
-  print (#function)
-  
-  defer //finally insert dragged item into the main CV async with completion...
-  {
-   insertMovedItem(item: photoItem, to: destinationIndexPath){ completion?() }
-  }
-  
-  guard let sourceIndexPath = self.photoItemIndexPath(photoItem: photoItem) else {return}
-  //inner item in this photo snippet
 
-  self.photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-  self.photoCollectionView.deleteItems(at: [sourceIndexPath])
-
-  //if zoomView is open during the drop showing zoomed-in single source PhotoItem we remove it from screen
-  guard let zoomView = photoCollectionView.zoomView else { return }
-  guard zoomView.zoomedPhotoItem?.hostedManagedObject === photoItem.hostedManagedObject else { return }
-  zoomView.removeZoomView()
- 
-
- }//func moveUnfolderedItem(_ collectionView: UICollectionView,...
- 
-
- 
- 
- func moveFolderedItem(  item photoItem: PhotoItem,
-                         from photoFolder: PhotoFolder,
-                         to destinationIndexPath: IndexPath, completion: (()->())? = nil )
- {
-  print (#function)
-  
-  var singleSection: Int?
-  
-  defer //finally insert dragged async with completion...
-  {
-   insertMovedItem(item: photoItem, to: destinationIndexPath){ completion?() }
-  }
- 
-  let proxyFolderItem = PhotoFolderItem(folder: photoFolder) //Create proxy folder to check if belongs to this snippet
-  
-  //Dragged PhotoItem wrapping Photo MO is owned by the PhotoSnippet of this PhotoItems2D...
-  guard let folderIndexPath = self.photoItemIndexPath(photoItem: proxyFolderItem) else {return}
-  
-  switch photoFolder.count
-  {
-   case 0...1: break //error folder with 1 or 0 elements inside!
-   case 2:
-    
-    let singlePhoto = photoFolder.folderedPhotos.first{$0 !== photoItem.photo}
-    let singlePhotoItem = PhotoItem(photo: singlePhoto!)
-    
-    defer
-    {
-     self.photoItems2D[folderIndexPath.section][folderIndexPath.row] = singlePhotoItem
-     self.photoCollectionView.reloadItems(at: [folderIndexPath])
-    }
-    
-    //if zoomView is open during the drop showing zoomed-in source PhotoFolder we turn it into the single photo item IV.
-    guard let zoomView = photoCollectionView.zoomView else                   { break }
-    guard zoomView.zoomedPhotoItem?.hostedManagedObject === photoFolder else { break }
-    zoomView.zoomedPhotoItem = singlePhotoItem
-    
-    let iv = zoomView.openWithIV(in: self.view)
-    singlePhotoItem.getImageOperation(requiredImageWidth: zoomView.zoomSize)
-    {image in
-     zoomView.stopSpinner()
-     iv.image = image
-    }
-   
-   default:
-    
-    if let folderCell = self.photoCollectionView.cellForItem(at: folderIndexPath) as? PhotoFolderCell,
-       let cellIndexPath = folderCell.photoItemIndexPath(photoItem: photoItem)
-       //Dragged PhotoItem Folder Cell is visible in the PhotoSnippet CV, upadate FolderCell CV
-    {
-     folderCell.photoItems.remove(at: cellIndexPath.row)
-     folderCell.photoCollectionView.deleteItems(at: [cellIndexPath])
-    }
-    
-    //if zoomView is open during the drop showing zoomed in source PhotoFolder we remove dragged item from Zoom CV
-    guard let zoomView = self.photoCollectionView.zoomView else                          { break }
-    guard zoomView.zoomedPhotoItem?.hostedManagedObject === photoFolder else             { break }
-    guard let zoomCellIndexPath = zoomView.photoItemIndexPath(photoItem: photoItem) else { break }
-    
-    zoomView.photoItems.remove(at: zoomCellIndexPath.row)
-    (zoomView.presentSubview as? UICollectionView)?.deleteItems(at: [zoomCellIndexPath])
-   
-  }
-  
- }//func moveUnfolderedItem(_ collectionView: UICollectionView,...
- 
- 
-
- 
- func moveInAppItems(_ collectionView: UICollectionView,
-                     performDropWith coordinator: UICollectionViewDropCoordinator,
-                     to destinationIndexPath: IndexPath)
-  
- {
-  print (#function)
-  
-  let group = DispatchGroup()
-  
-  defer //finally update sections after all commited drops in case of sectioned items...
-  {
-   group.notify(queue: DispatchQueue.main) { self.updateMovedItemsSections() }
-  }
-  
-  let draggedItems = AppDelegate.globalDragItems.filter{ $0.dragSession != nil }
-  //filter out not cancelled items!
-  
-  draggedItems.forEach
-  {dragItem in
-   defer { dragItem.move(to: photoSnippet, to: nil) } //finally commit underlying MOs move changes in MOC.
-   group.enter()
-   
-   switch dragItem
-   {
-    case let photoItem as PhotoItem: //dragging PhotoItem...
-     dragItem.moveToDrops()
-     switch photoItem.folder
-     {
-      case let photoFolder?: //if item nested in folder...
-       moveFolderedItem(item: photoItem, from: photoFolder, to: destinationIndexPath) { group.leave() }
-      
-      case nil: //if not nested...
-       moveUnfolderedItem(item: photoItem, to: destinationIndexPath) { group.leave() }
-     }
-    
-    case let folderItem as PhotoFolderItem: //dragging FolderItem...
-     dragItem.moveToDrops()
-     moveUnfolderedItem(item: folderItem, to: destinationIndexPath) { group.leave() }
-    
-    case let snippetItem as SnippetDragItem:
-     guard snippetItem.snippet !== photoSnippet else { break } //prevent whole snippet move into itself!
-     dragItem.moveToDrops(allNestedItems: true) 
-     insertSnippetItem(item: snippetItem, to: destinationIndexPath) { group.leave() }
- 
-    default: break
-   }
-   
-  }
- }//func moveInAppItems(_ collectionView: UICollectionView...
- 
- 
- 
- 
- 
- func collectionView(_ collectionView: UICollectionView,
-                     performDropWith coordinator: UICollectionViewDropCoordinator)
-  
- {
-  print (#function, self.debugDescription, coordinator.session)
-  
-  guard let destinationIndexPath = coordinator.destinationIndexPath else {return}
-  
-  switch (coordinator.proposal.operation)
-  {
-   case .move:  moveInAppItems        (collectionView, performDropWith: coordinator, to: destinationIndexPath)
-   case .copy:  copyPhotosFromSideApp (collectionView, performDropWith: coordinator, at: destinationIndexPath)
-   default: break
-  }
-  
-  
- }//func collectionView(_ collectionView: UICollectionView, performDropWith...
- 
- 
-}

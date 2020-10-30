@@ -13,15 +13,19 @@ extension PhotoSnippet
 {
  final func move(into destination: PhotoSnippet)
  {
-  guard let context = self.managedObjectContext else
-  {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
-   return
-  }
+  guard let context = self.managedObjectContext else { return }
+  guard destination.managedObjectContext != nil else { return }
   
-  let snippetURL = self.url
-  let photoURLs = self.unfolderedPhotos.map{(from: $0.url, to: destination.url.appendingPathComponent($0.ID))}
-  let folderURLs = self.allFolders.map{(from: $0.url, to: destination.url.appendingPathComponent($0.ID))}
+  guard let sourceURL = self.url else { return }
+  guard let destURL = destination.url else { return }
+  
+  let photoURLs = self.unfolderedPhotos
+   .filter {$0.ID != nil && $0.url != nil }
+   .map{(from: $0.url!, to: destURL.appendingPathComponent($0.ID!))}
+  
+  let folderURLs = self.allFolders
+   .filter {$0.ID != nil && $0.url != nil}
+   .map{(from: $0.url!, to: destURL.appendingPathComponent($0.ID!))}
   
   context.persistAndWait(block:
   {
@@ -43,26 +47,10 @@ extension PhotoSnippet
    guard success else { return }
    photoURLs.forEach  { PhotoItem.movePhotoItemOnDisk(from: $0.from, to: $0.to) }
    folderURLs.forEach { PhotoItem.movePhotoItemOnDisk(from: $0.from, to: $0.to) }
-   PhotoItem.deletePhotoItemFromDisk(at: snippetURL)
+   PhotoItem.deletePhotoItemFromDisk(at: sourceURL)
   }
  }
  
- final func merge(with destination: Photo)
- {
-  guard let context = self.managedObjectContext else
-  {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
-   return
-  }
- }
- 
- final func merge(with destination: PhotoFolder)
- {
-  guard let context = self.managedObjectContext else
-  {
-   print ("<<<MO Processing Critical Error!>>> MO \(self.description) has no associated context!")
-   return
-  }
- }
+
 }
 

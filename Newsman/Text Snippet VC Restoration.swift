@@ -7,9 +7,9 @@ extension TextSnippetViewController
  var snippetsVC: SnippetsViewController?
  {
    guard let nc = self.navigationController else { return nil }
-   let count = nc.childViewControllers.count
+   let count = nc.children.count
    guard count == 3 else { return nil }
-   return nc.childViewControllers[count - 2] as? SnippetsViewController
+   return nc.children[count - 2] as? SnippetsViewController
  }
  
  override func encodeRestorableState(with coder: NSCoder)

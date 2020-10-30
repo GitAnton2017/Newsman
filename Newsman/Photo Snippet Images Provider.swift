@@ -31,32 +31,32 @@ import GameKit
   }()
   
 
-  private static let maxRandomPayload: UInt64 = 1024 * 1024 * 256
+  fileprivate static let maxRandomPayload: UInt64 = 1024 * 1024 * 256
 
-  private static var currRandomOperObservers: [NSKeyValueObservation] = []
+  fileprivate static var currRandomOperObservers: [NSKeyValueObservation] = []
 
-  private static var currRandomOperations: [GetRandomImagesOperation] = []
+  fileprivate static var currRandomOperations: [GetRandomImagesOperation] = []
   {
    didSet
    {
     if currRandomOperations.isEmpty
     {
-     print ("All CURRENT RANDOM OPERATIONS ARE FINISHED!")
+     //print ("All CURRENT RANDOM OPERATIONS ARE FINISHED!")
      currRandomOperObservers.removeAll()
      currPayload = 0
     }
    }
   }
 
-  private static var prevRandomOperObservers: [NSKeyValueObservation] = []
+  fileprivate static var prevRandomOperObservers: [NSKeyValueObservation] = []
 
-  private static var prevRandomOperations: [GetRandomImagesOperation] = []
+  fileprivate static var prevRandomOperations: [GetRandomImagesOperation] = []
   {
    didSet
    {
     if prevRandomOperations.isEmpty
     {
-     print ("All PREVIOUS RANDOM OPERATIONS ARE FINISHED!")
+     //print ("All PREVIOUS RANDOM OPERATIONS ARE FINISHED!")
      prevRandomOperObservers.removeAll()
      prevPayload = 0
     }
@@ -121,8 +121,7 @@ import GameKit
 
   func cancelRandomImagesOperations()
   {
-    print (#function, self)
-   
+    //print (#function, self)
     uQ.cancelAllOperations()
     cQ.cancelAllOperations()
   }
@@ -214,7 +213,7 @@ import GameKit
        DispatchQueue.main.async
         {[weak random_op = random_op] in
          guard let random_op = random_op,
-          let index = SnippetImagesProvider.currRandomOperations.index(of: random_op) else {return}
+          let index = SnippetImagesProvider.currRandomOperations.firstIndex(of: random_op) else {return}
          SnippetImagesProvider.currRandomOperations.remove(at: index)
          
        }
@@ -240,7 +239,7 @@ import GameKit
          DispatchQueue.main.async
           {[weak random_op = random_op] in
            guard let random_op = random_op,
-            let index = SnippetImagesProvider.prevRandomOperations.index(of: random_op) else {return}
+            let index = SnippetImagesProvider.prevRandomOperations.firstIndex(of: random_op) else {return}
            SnippetImagesProvider.prevRandomOperations.remove(at: index)
          }
         }
@@ -263,7 +262,7 @@ import GameKit
       DispatchQueue.main.async
        {[weak random_op = random_op] in
         guard let random_op = random_op,
-         let index = SnippetImagesProvider.prevRandomOperations.index(of: random_op) else {return}
+         let index = SnippetImagesProvider.prevRandomOperations.firstIndex(of: random_op) else {return}
         SnippetImagesProvider.prevRandomOperations.remove(at: index)
       }
      }
@@ -347,13 +346,13 @@ import GameKit
   {
    return (provider?.photoItems ?? []).filter
    {item in
-    let ID = item.id.uuidString
+    guard let ID = item.id?.uuidString else { return false }
     let cachedImage = PhotoItem.imageCacheDict[Int(requiredImageWidth)]?.object(forKey: ID as NSString)
     return cachedImage == nil
    }.compactMap
    {item in
-     let attr = try? FileManager.default.attributesOfItem(atPath: item.url.path) as NSDictionary
-     return attr?.fileSize()
+    let attr = try? FileManager.default.attributesOfItem(atPath: item.url!.path) as NSDictionary
+    return attr?.fileSize()
    }.reduce(0, {$0 + $1})
    
   }
@@ -402,11 +401,16 @@ import GameKit
    {op, _ in
     op.queue.cancelAllOperations()
     op.removeAllDependencies()
+    op.observers.removeAll()
    }
    
    observers.insert(cnxObserver)
    
-   let finishObserver = observe(\.isFinished) {op, val in op.removeAllDependencies()}
+   let finishObserver = observe(\.isFinished)
+   {op, val in
+    op.removeAllDependencies()
+    op.observers.removeAll()
+   }
    
    observers.insert(finishObserver)
    
@@ -495,11 +499,19 @@ import GameKit
      }
      
      image_set_op.completionBlock =
-     {
+     {[weak image_set_op] in
        OperationQueue.main.addOperation
        {
-        self.completion(image_set_op.imageSet) //Set ready image set
-        self.state = .Finished                 //Must be set in Main.thread!
+        self.completion(image_set_op?.imageSet) //Set ready image set
+        self.state = .Finished                  //Must be set in Main.thread!
+        SnippetImagesProvider.currRandomOperations.removeAll()
+        SnippetImagesProvider.prevRandomOperations.removeAll()
+        SnippetImagesProvider.currRandomOperObservers.removeAll()
+        SnippetImagesProvider.prevRandomOperObservers.removeAll()
+        prevSavedOperations.removeAll()
+        currSavedOperations.removeAll()
+        prevResizeOperations.removeAll()
+        currResizeOperations.removeAll()
        }
      }
    

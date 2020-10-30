@@ -56,8 +56,8 @@ class LayerTransitionAnimator: NSObject, UIViewControllerAnimatedTransitioning, 
   
   let trans = CATransition()
   trans.duration = duration
-  trans.type = kCATransitionPush
-  trans.subtype = kCATransitionFromRight
+  trans.type = CATransitionType.push
+  trans.subtype = CATransitionSubtype.fromRight
   trans.delegate = self
   
   

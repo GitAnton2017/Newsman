@@ -12,7 +12,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
  var interactiveController: UIPercentDrivenInteractiveTransition?
  var navigationController: UINavigationController
  var animator: UIViewPropertyAnimator?
- var touchEdges = UIEdgeInsets(top: 150, left: 50, bottom: 150, right: 0)
+ var touchEdges = UIEdgeInsets(top: 100, left: 50, bottom: 50, right: 0)
  
  init (with nc: UINavigationController)
  {
@@ -41,6 +41,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
   let dX = gr.translation(in: view).x
   let dY = gr.translation(in: view).y
   
+  
   //print ("(dx: \(dX), dy: \(dY)")
   
   let progress = abs(isPageMode ? dY/view.bounds.height : dX/view.bounds.width)
@@ -53,13 +54,16 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
    
    let count = navigationController.viewControllers.count
    
-   if (count > 1 && tp.x < touchEdges.left && tp.y > touchEdges.top && tp.y < view.bounds.height - touchEdges.bottom)
+   if (count > 1 && tp.x < touchEdges.left &&
+                    tp.y > touchEdges.top &&
+                    tp.y < view.bounds.height - touchEdges.bottom)
    {
     interactiveController = UIPercentDrivenInteractiveTransition()
     navigationController.popViewController(animated: true)
    }
    
-   if (count == 3 && tp.x > touchEdges.left && (tp.y < touchEdges.top || tp.y > view.bounds.height - touchEdges.bottom))
+   if (count == 3 && tp.x > touchEdges.left &&
+                    (tp.y < touchEdges.top || tp.y > view.bounds.height - touchEdges.bottom))
    {
     _prevSnippet = currentSnippet
     scrollDirection = tp.y < touchEdges.top ? 1 : -1
@@ -67,7 +71,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
     
     if let snippetsVC = navigationController.viewControllers[count - 2] as? SnippetsViewController,
        let items = snippetsVC.snippetsDataSource.items,
-       let thisIndex = items.index(where: {$0.id == currentSnippet.id}),
+     let thisIndex = items.firstIndex(where: {$0.id == currentSnippet.id}),
        let nextVC = configueNextVC(for: thisIndex , in: snippetsVC)
     {
      interactiveController = UIPercentDrivenInteractiveTransition()
@@ -175,7 +179,7 @@ class NCTransitionsDelegate: NSObject, UINavigationControllerDelegate, UIGesture
   return .portrait
  }*/
  
- func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning?
+ func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning?
  {
   return isPageMode ? NCSnippetsScrollAnimator(with: 0.5, for: self.scrollDirection) :
                       NCСrossDissolveAnimator(with: 0.5, for: operation)

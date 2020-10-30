@@ -6,84 +6,132 @@
 //  Copyright © 2019 Anton2016. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import protocol RxSwift.Disposable
 
 extension PhotoFolderItem
-{
- var isFolderDragged: Bool
- {
-  return singlePhotoItems.contains{$0.isDragAnimating}
- }
- 
- var isSetForClear: Bool
- {
-  get
-  {
-   return folder.dragAndDropAnimationSetForClearanceState
-  }
-  set
-  {
-   folder.dragAndDropAnimationSetForClearanceState = newValue
-  }
- }
- 
+{ 
  var isZoomed: Bool
  {
-  get
-  {
-   return folder.zoomedPhotoItemState
-  }
+  get { folder.zoomedPhotoItemState }
   set
   {
+   guard folder.managedObjectContext != nil else { return }
+   guard folder.isDeleted == false else { return }
    folder.zoomedPhotoItemState = newValue
   }
  }
  
- func toggleSelection()
- {
-  isSelected.toggle()
- }
+ func toggleSelection() { isSelected.toggle() }
  
  var isSelected: Bool
  {
-  get {return self.folder.isSelected}
+  get { folder.isSelected }
   set
   {
-   folder.photoSnippet?.currentFRC?.deactivateDelegate()
-   folder.managedObjectContext?.persistAndWait(block:
-    {
-     self.folder.isSelected = newValue
-     self.folder.photos?.forEach {($0 as! Photo).isSelected = newValue}
-   })
-   {flag in
-    if flag
-    {
-     //self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
-     // if folder dragged we update all the underlying zoom view single photo items selection state.
-//     self.zoomView?.photoItems.compactMap{$0.hostingZoomedCollectionViewCell}.forEach
-//      {
-//       $0.isPhotoItemSelected = newValue
-//     }
-     self.folder.photoSnippet?.currentFRC?.activateDelegate()
-    }
+   folder.managedObjectContext?.perform
+   {
+    guard self.folder.isDeleted == false else { return }
+    guard self.folder.isSelected != newValue else { return }
+    self.folder.isSelected = newValue
+    self.folder.photos?
+     .compactMap{ $0 as? Photo }
+     .forEach { $0.isSelected = newValue }
    }
-  }
- }
+  }//set...
+  
+ }//var isSelected: Bool...
+ 
  
  var isDragAnimating: Bool
  {
-  get {return folder.dragAndDropAnimationState}
+  get { folder.isDragAnimating }
   set
   {
-   folder.dragAndDropAnimationState = newValue
-   hostingCollectionViewCell?.isDragAnimating = newValue
-   folder.folderedPhotos.forEach { $0.dragAndDropAnimationState = newValue }
-   // if folder dragged we update all the underlying zoom view single photo items drag animation state.
-   zoomView?.photoItems.compactMap{$0.hostingZoomedCollectionViewCell}.forEach
+   
+   folder.managedObjectContext?.perform
    {
-     $0.isDragAnimating = newValue
+    guard self.folder.isDeleted == false else { return }
+    guard self.folder.isDragAnimating != newValue else { return }
+    self.folder.isDragAnimating = newValue
+    self.folder.photos?
+     .compactMap{ $0 as? Photo }
+     .forEach { $0.isDragAnimating = newValue }
    }
+  }//set...
+  
+ }//var isDragAnimating: Bool...
+ 
+ var isDropProceeding: Bool
+ {
+  get { folder.isDropProceeding }
+  set
+  {
+   guard folder.managedObjectContext != nil else { return }
+   guard folder.isDeleted == false else { return }
+   folder.isDropProceeding = newValue
+   folder.photos?
+    .compactMap{ $0 as? Photo }
+    .forEach { $0.isDropProceeding = newValue }
   }
  }
-
+ 
+ var isDragProceeding: Bool
+ {
+  get { folder.isDragProceeding }
+  set
+  {
+   guard folder.managedObjectContext != nil else { return }
+   guard folder.isDeleted == false else { return }
+   folder.isDragProceeding = newValue
+   folder.photos?
+    .compactMap{$0 as? Photo}
+    .forEach { $0.isDragProceeding = newValue }
+  }
+ }
+ 
+ var dragProceedLocation: CGPoint
+ {
+  get { folder.dragProceedLocation }
+  set
+  {
+   guard folder.isDeleted == false else { return }
+   guard folder.managedObjectContext != nil else { return }
+   folder.dragProceedLocation = newValue
+  }
+ }
+ 
+ var isJustCreated: Bool
+ {
+  get { folder.isJustCreated }
+  set
+  {
+   guard folder.isDeleted == false else { return }
+   guard folder.managedObjectContext != nil else { return }
+   folder.isJustCreated = newValue
+  }
+ }
+ 
+ var dragStateSubscription: Disposable?
+ {
+  get { folder.dragStateSubscription }
+  set
+  {
+   guard folder.isDeleted == false else { return }
+   guard folder.managedObjectContext != nil else { return }
+   folder.dragStateSubscription = newValue
+  }
+ }
+ 
+ var dragProceedSubscription: Disposable?
+ {
+  get { folder.dragProceedSubscription }
+  set
+  {
+   guard folder.isDeleted == false else { return }
+   guard folder.managedObjectContext != nil else { return }
+   folder.dragProceedSubscription = newValue
+  }
+ }
+ 
 } //extension PhotoFolderItem...

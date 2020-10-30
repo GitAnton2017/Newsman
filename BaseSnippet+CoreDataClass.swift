@@ -13,20 +13,33 @@ import UIKit
 import CoreLocation
 
 
-
-protocol SnippetImagesPreviewProvidable: class
+protocol SnippetImagesPreviewProvidable where Self: BaseSnippet
 {
- var imageProvider: SnippetPreviewImagesProvider {get}
+ var imageProvider: SnippetPreviewImagesProvider { get }
 }
 
 
-@objc(BaseSnippet) public class BaseSnippet: NSManagedObject
-{
 
+@objc(BaseSnippet)
+public class BaseSnippet: NSManagedObject
+{
+ 
+ var recordName: String!
+ 
+ @Weak(cleanInterval: 600) var removedChildenRecords = Set<NSManagedObject>()
+ 
+ var changedFieldsInCurrentBatchModifyOperation = Set<String>()
+ 
+ func initStorage(){} //Polymorphic method to intialize virtual type of storage for concrete snippet type.
+ 
+ static var snippetDates = SnippetDates()
+ 
  var sortFields: [String]
- //these KPs will be general for all types of Snippets and applied in TV FRC sort descriptors
+  //these KPs will be general for all types of Snippets and applied in TV FRC sort descriptors
  {
-  return [#keyPath(BaseSnippet.tag),  #keyPath(BaseSnippet.priority), #keyPath(BaseSnippet.date)]
+  [#keyPath(BaseSnippet.tag),
+   #keyPath(BaseSnippet.priority),
+   #keyPath(BaseSnippet.date)]
  }
  
  
@@ -45,7 +58,7 @@ protocol SnippetImagesPreviewProvidable: class
  
  var fields: [String] //these KPs will enforce FRC to update TV rows...
  {
-  return sortFields + [#keyPath(BaseSnippet.isSelected), #keyPath(BaseSnippet.isDragAnimating)]
+  sortFields + [#keyPath(BaseSnippet.isSelected), #keyPath(BaseSnippet.isDragAnimating)]
  }
  
 
@@ -67,8 +80,7 @@ protocol SnippetImagesPreviewProvidable: class
   let sectionName: String
  }
  
-
- static var hiddenSections:  [HiddenSectionKey : Bool] = [ : ]
+ static var hiddenSections = [HiddenSectionKey : Bool]()
  
  final func isHiddenSection(groupType: GroupSnippets, for newValue: String? = nil) -> Bool
  {
@@ -111,17 +123,14 @@ protocol SnippetImagesPreviewProvidable: class
  weak var currentFRC: SnippetsFetchController?
  //the weak ref to current FRC wrapper that fetched and manages this Snippet
 
- func initStorage(){ } //Polymorphic method to intialize virtual type of storage for concrete snippet type.
  
- static var snippetDates = SnippetDates()
-
  @NSManaged private (set) var date: NSDate?
  @NSManaged var dateIndex: String?
  @NSManaged var dateFormatIndex: String?
  
  final var snippetDate: Date
  {
-  get {return (self.date ?? NSDate()) as Date}
+  get { (date ?? NSDate()) as Date}
   set
   {
    self.date = newValue as NSDate
@@ -131,17 +140,9 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
- final var snippetDateTag: String
- {
-  return DateFormatters.medium.string(from: self.snippetDate)
- }
+ final var snippetDateTag: String { DateFormatters.medium.string(from: self.snippetDate) }
  
- @objc final var dateSearchIndex: String
- {
-  return DateFormatters.localizedSearchString(for: snippetDate)
- }
- 
- 
+ @objc final var dateSearchIndex: String { DateFormatters.localizedSearchString(for: snippetDate) }
  
  @NSManaged private (set) var tag: String?
  @NSManaged var  alphaIndex: String?
@@ -176,7 +177,10 @@ protocol SnippetImagesPreviewProvidable: class
    return SnippetStatus(rawValue: snippetStatus)!
   }
   
-  set { self.status = newValue.rawValue }
+  set
+  {
+   self.status = newValue.rawValue
+  }
   
  }
  
@@ -243,7 +247,7 @@ protocol SnippetImagesPreviewProvidable: class
  
  final var snippetCoordinates: CLLocation?
  {
-  get {return CLLocation(latitude: self.latitude, longitude: self.logitude)}
+  get { CLLocation(latitude: self.latitude, longitude: self.logitude) }
   set
   {
    self.latitude = newValue?.coordinate.latitude  ?? 0.0
@@ -274,7 +278,7 @@ protocol SnippetImagesPreviewProvidable: class
  
  final subscript(groupedBy: GroupSnippets) -> Bool
  {
-  get {return groupedBy.checkMask(for: hiddenSet)}
+  get { groupedBy.checkMask(for: hiddenSet) }
   set
   {
    let mask = GroupSnippets.groupingBitsMap[groupedBy]!
@@ -290,51 +294,26 @@ protocol SnippetImagesPreviewProvidable: class
   }
  }
  
- private var docFolder: URL
+ private var docFolder: URL { FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first! }
+ 
+ final var url: URL?
  {
-  return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+  guard let snippetID = self.id?.uuidString else { return nil }
+  return docFolder.appendingPathComponent(snippetID)
  }
  
  
- final var url: URL
- {
-  return docFolder.appendingPathComponent(self.id!.uuidString)
- }
- 
- final var dragAndDropAnimationSetForClearanceState: Bool = false
+// final var dragAndDropAnimationSetForClearanceState: Bool = false
  //Snippet MO internal not persisted state of animation set for delayed clearance of SnippetDragItem
  
- final var dragAndDropAnimationState: Bool = false
+// final var dragAndDropAnimationState: Bool = false
  //Snippet MO internal not persisted current state of SnippetDragItem animation
 
  final var zoomedSnippetState: Bool = false
  //Snippet MO internal not persisted current state .... reserved for future development
  
  
- 
 
-// @NSManaged fileprivate var primitivePriorityIndex: NSNumber
-//
-// static let priorityIndexKey = "priorityIndex"
-//
-// @objc public var priorityIndex: Int
-// {
-//  get
-//  {
-//   willAccessValue(forKey: BaseSnippet.priorityIndexKey)
-//   let index = SnippetPriority(rawValue: priority!)!.section
-//   didAccessValue(forKey:  BaseSnippet.priorityIndexKey)
-//   return index
-//  }
-//
-//  set
-//  {
-//   willChangeValue(forKey: BaseSnippet.priorityIndexKey)
-//   primitivePriorityIndex = NSNumber(value: newValue)
-//   didChangeValue(forKey:  BaseSnippet.priorityIndexKey)
-//  }
-// }
-//
  
 }
 

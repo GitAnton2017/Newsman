@@ -12,7 +12,7 @@ extension Operation //This recursive member function removes all finisshed Opera
 {
  func removeAllDependencies()
  {
-  guard isFinished || isCancelled else {return}
+  guard isFinished || isCancelled else { return }
   dependencies.forEach
   {
     $0.removeAllDependencies()

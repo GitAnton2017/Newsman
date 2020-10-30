@@ -6,7 +6,6 @@ import GameplayKit
 
 @IBDesignable class SnippetsViewCell: UITableViewCell, DropViewProvidable, DragWaggleAnimatable
 {
- 
  lazy var dropView: UIView = self.setDropView(ratio: 0.75)
  
  var waggleView: UIView { return self }
@@ -22,7 +21,7 @@ import GameplayKit
 
  final var snippetID: String
  {
-  return (hostedSnippet as? BaseSnippet)?.id?.uuidString ?? "No Snippet Assigned"
+  hostedSnippet?.id?.uuidString ?? "No Snippet Assigned"
  }
 
  final weak var tableView: UITableView?
@@ -30,20 +29,17 @@ import GameplayKit
   return self.superview as? UITableView
  }
  
- final  weak var currentFRC: SnippetsFetchController?
+ final weak var currentFRC: SnippetsFetchController?
  {
-  return (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
+  (tableView?.dataSource as? SnippetsViewDataSource)?.currentFRC
  }
 
 
- final var snippet: BaseSnippet?
- {
-  return hostedSnippet as? BaseSnippet
- }
+ final var snippet: BaseSnippet? { hostedSnippet }
  
  final var discloseView: UIImageView?
  {
-  return (accessoryView as? UIButton)?.imageView
+  (accessoryView as? UIButton)?.imageView
  }
  
  
@@ -65,7 +61,7 @@ import GameplayKit
   [
    pv.topAnchor.constraint      (equalTo: snippetTextTag.topAnchor, constant: 0),
    pv.bottomAnchor.constraint   (equalTo: snippetDateTag.bottomAnchor, constant:  0),
-   pv.trailingAnchor.constraint (equalTo: contentView.trailingAnchor, constant: 30),
+   pv.trailingAnchor.constraint (equalTo: contentView.trailingAnchor, constant: 0),
    pv.widthAnchor.constraint    (equalToConstant:  90)
   ]
   
@@ -140,14 +136,14 @@ import GameplayKit
 
  @IBInspectable var borderWidth: CGFloat
  {
-  set {layer.borderWidth = newValue}
-  get {return layer.borderWidth}
+  set { layer.borderWidth = newValue }
+  get { layer.borderWidth }
  }
 
  @IBInspectable var borderColor: UIColor
  {
-  set {layer.borderColor = newValue.cgColor}
-  get {return UIColor(cgColor: layer.borderColor!)}
+  set { layer.borderColor = newValue.cgColor }
+  get { UIColor(cgColor: layer.borderColor!) }
  }
 
  @IBInspectable var selectionColor: UIColor?
@@ -188,17 +184,47 @@ import GameplayKit
    return title
  }()
 
-
-
+ private var cellPaddings: UIEdgeInsets = .zero
+ 
+ @IBInspectable var topPadding: CGFloat
+ {
+  get { cellPaddings.top }
+  set { cellPaddings.top = newValue }
+ }
+ 
+ @IBInspectable var bottomPadding: CGFloat
+ {
+  get { cellPaddings.bottom }
+  set { cellPaddings.bottom = newValue }
+ }
+ 
+ @IBInspectable var leftPadding: CGFloat
+ {
+  get { cellPaddings.left }
+  set { cellPaddings.left = newValue }
+ }
+ 
+ @IBInspectable var rightPadding: CGFloat
+ {
+  get { cellPaddings.right }
+  set { cellPaddings.right = newValue }
+ }
+ 
+ override var frame: CGRect
+ {
+  get { super.frame }
+  set { super.frame = newValue.inset(by: cellPaddings) }
+ }
  
  override func awakeFromNib()
  {
   super.awakeFromNib()
-  
+
   configueDropInteraction()
   configueSpringInteraction()
   snippetImage.layer.masksToBounds = true
   configueDisclosure()
+  
  }
 
 
@@ -237,7 +263,7 @@ import GameplayKit
 
  
 
- override init(style: UITableViewCellStyle, reuseIdentifier: String?)
+ override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?)
  //Must be implemented together with other initilizers of the @IBDesignable class
  {
   super.init(style: style, reuseIdentifier: reuseIdentifier)

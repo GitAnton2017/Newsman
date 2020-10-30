@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,29 +16,40 @@
                 <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T3q-4L-78M">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VBC-4B-DTj" userLabel="Main View" customClass="PhotoSnippetCellMainView" customModule="Newsman" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
-                        <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </imageView>
-                    <activityIndicatorView opaque="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="W40-d8-XIc">
-                        <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
-                        <color key="color" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </activityIndicatorView>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="T3q-4L-78M">
+                                <rect key="frame" x="0.0" y="0.0" width="94" height="88"/>
+                                <color key="backgroundColor" red="0.88291827280000001" green="0.88291827280000001" blue="0.88291827280000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </imageView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="W40-d8-XIc">
+                                <rect key="frame" x="37" y="34" width="20" height="20"/>
+                                <color key="color" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="W40-d8-XIc" firstAttribute="centerY" secondItem="VBC-4B-DTj" secondAttribute="centerY" id="8TS-SA-VGF"/>
+                            <constraint firstAttribute="trailing" secondItem="T3q-4L-78M" secondAttribute="trailing" id="MNi-OF-UNM"/>
+                            <constraint firstItem="T3q-4L-78M" firstAttribute="leading" secondItem="VBC-4B-DTj" secondAttribute="leading" id="kiO-Y3-UAU"/>
+                            <constraint firstItem="T3q-4L-78M" firstAttribute="top" secondItem="VBC-4B-DTj" secondAttribute="top" id="mdJ-PW-lQa"/>
+                            <constraint firstItem="W40-d8-XIc" firstAttribute="centerX" secondItem="VBC-4B-DTj" secondAttribute="centerX" id="s9N-UN-znf"/>
+                            <constraint firstAttribute="bottom" secondItem="T3q-4L-78M" secondAttribute="bottom" id="vsT-VS-BZR"/>
+                        </constraints>
+                    </view>
                 </subviews>
             </view>
             <constraints>
-                <constraint firstItem="W40-d8-XIc" firstAttribute="leading" secondItem="Rjr-aT-XY6" secondAttribute="leading" id="Av8-3V-y2i"/>
-                <constraint firstAttribute="bottom" secondItem="W40-d8-XIc" secondAttribute="bottom" id="FW3-aA-Mu2"/>
-                <constraint firstAttribute="trailing" secondItem="T3q-4L-78M" secondAttribute="trailing" id="e4E-Sk-qMu"/>
-                <constraint firstItem="T3q-4L-78M" firstAttribute="leading" secondItem="Rjr-aT-XY6" secondAttribute="leading" id="gEx-s2-gud"/>
-                <constraint firstAttribute="trailing" secondItem="W40-d8-XIc" secondAttribute="trailing" id="iVU-Mv-vuO"/>
-                <constraint firstItem="W40-d8-XIc" firstAttribute="top" secondItem="Rjr-aT-XY6" secondAttribute="top" id="rmj-kr-G21"/>
-                <constraint firstAttribute="bottom" secondItem="T3q-4L-78M" secondAttribute="bottom" id="ruY-Pv-eaI"/>
-                <constraint firstItem="T3q-4L-78M" firstAttribute="top" secondItem="Rjr-aT-XY6" secondAttribute="top" id="uNy-gF-9aX"/>
+                <constraint firstAttribute="bottom" secondItem="VBC-4B-DTj" secondAttribute="bottom" id="CyS-6g-hvf"/>
+                <constraint firstItem="VBC-4B-DTj" firstAttribute="leading" secondItem="Rjr-aT-XY6" secondAttribute="leading" id="h0g-6r-nbA"/>
+                <constraint firstItem="VBC-4B-DTj" firstAttribute="top" secondItem="Rjr-aT-XY6" secondAttribute="top" id="kdl-85-iTc"/>
+                <constraint firstAttribute="trailing" secondItem="VBC-4B-DTj" secondAttribute="trailing" id="tkN-Jo-zts"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="rZa-Mc-NNK"/>
             <size key="customSize" width="127" height="125"/>
             <connections>
+                <outlet property="mainView" destination="VBC-4B-DTj" id="Q6n-ef-uhb"/>
                 <outlet property="photoIconView" destination="T3q-4L-78M" id="6O8-ip-DNE"/>
                 <outlet property="spinner" destination="W40-d8-XIc" id="ud9-Q0-vWp"/>
             </connections>

@@ -1,92 +1,112 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.98" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19E258a" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AudioSnippet" representedClassName="AudioSnippet" parentEntity="BaseSnippet" syncable="YES">
-        <attribute name="audio" optional="YES" attributeType="Binary" syncable="YES"/>
-        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="audios" inverseEntity="Report" syncable="YES"/>
+        <attribute name="audio" optional="YES" attributeType="Binary"/>
+        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="audios" inverseEntity="Report"/>
     </entity>
     <entity name="BaseSnippet" representedClassName="BaseSnippet" isAbstract="YES" syncable="YES">
-        <attribute name="alphaIndex" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="dateFormatIndex" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="dateIndex" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="disclosedCell" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="hiddenSection" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="hiddenSet" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isDragAnimating" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="logitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="priority" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="priorityIndex" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="status" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="tag" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="type" attributeType="String" customClassName=".SnippetType" syncable="YES"/>
+        <attribute name="alphaIndex" optional="YES" attributeType="String"/>
+        <attribute name="ck_metadata" optional="YES" attributeType="Binary"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="dateFormatIndex" optional="YES" attributeType="String"/>
+        <attribute name="dateIndex" optional="YES" attributeType="String"/>
+        <attribute name="disclosedCell" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="hiddenSection" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="hiddenSet" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isClouded" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isDragAnimating" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="logitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="priority" optional="YES" attributeType="String"/>
+        <attribute name="priorityIndex" optional="YES" attributeType="String"/>
+        <attribute name="status" optional="YES" attributeType="String"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <attribute name="type" attributeType="String" customClassName=".SnippetType"/>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
-        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isDragAnimating" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="priorityFlag" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoFolder" inverseName="photos" inverseEntity="PhotoFolder" syncable="YES"/>
-        <relationship name="photoSnippet" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="photos" inverseEntity="PhotoSnippet" syncable="YES"/>
+        <attribute name="arrowMenuPosition" optional="YES" attributeType="Transformable" valueTransformerName="NSValueDataSecureTransformer" customClassName="NSValue"/>
+        <attribute name="arrowMenuTouchPoint" optional="YES" attributeType="Transformable" valueTransformerName="NSValueDataSecureTransformer" customClassName="NSValue"/>
+        <attribute name="ck_metadata" optional="YES" attributeType="Binary"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isArrowMenuShowing" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isClouded" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isDragAnimating" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="plainPosition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="positions" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSMutableDictionary"/>
+        <attribute name="priorityFlag" optional="YES" attributeType="String"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <relationship name="folder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoFolder" inverseName="photos" inverseEntity="PhotoFolder"/>
+        <relationship name="photoSnippet" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="photos" inverseEntity="PhotoSnippet"/>
     </entity>
     <entity name="PhotoFolder" representedClassName="PhotoFolder" syncable="YES">
-        <attribute name="date" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="isDragAnimating" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="priorityFlag" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="photos" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="folder" inverseEntity="Photo" syncable="YES"/>
-        <relationship name="photoSnippet" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="folders" inverseEntity="PhotoSnippet" syncable="YES"/>
+        <attribute name="arrowMenuPosition" optional="YES" attributeType="Transformable" valueTransformerName="NSValueDataSecureTransformer" customClassName="NSValue"/>
+        <attribute name="arrowMenuTouchPoint" optional="YES" attributeType="Transformable" valueTransformerName="NSValueDataSecureTransformer" customClassName="NSValue"/>
+        <attribute name="ck_metadata" optional="YES" attributeType="Binary"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isArrowMenuShowing" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isClouded" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isDragAnimating" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="plainPosition" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="position" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="positions" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformer" customClassName="NSMutableDictionary"/>
+        <attribute name="priorityFlag" optional="YES" attributeType="String"/>
+        <attribute name="tag" optional="YES" attributeType="String"/>
+        <relationship name="photos" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="folder" inverseEntity="Photo"/>
+        <relationship name="photoSnippet" maxCount="1" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="folders" inverseEntity="PhotoSnippet"/>
     </entity>
     <entity name="PhotoSnippet" representedClassName="PhotoSnippet" parentEntity="BaseSnippet" syncable="YES">
-        <attribute name="ascending" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="grouping" optional="YES" attributeType="String" defaultValueString="By Time Created" syncable="YES"/>
-        <attribute name="nphoto" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="10" defaultValueString="3" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoFolder" inverseName="photoSnippet" inverseEntity="PhotoFolder" syncable="YES"/>
-        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoSnippet" inverseEntity="Photo" syncable="YES"/>
-        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="photos" inverseEntity="Report" syncable="YES"/>
+        <attribute name="ascending" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="ascendingPlain" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="grouping" optional="YES" attributeType="String" defaultValueString="By Time Created"/>
+        <attribute name="nphoto" optional="YES" attributeType="Integer 32" minValueString="1" maxValueString="10" defaultValueString="3" usesScalarValueType="YES"/>
+        <relationship name="folders" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PhotoFolder" inverseName="photoSnippet" inverseEntity="PhotoFolder"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photo" inverseName="photoSnippet" inverseEntity="Photo"/>
+        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="photos" inverseEntity="Report"/>
     </entity>
     <entity name="Report" representedClassName="Report" syncable="YES">
-        <attribute name="category" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
-        <relationship name="audios" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AudioSnippet" inverseName="reports" inverseEntity="AudioSnippet" syncable="YES"/>
-        <relationship name="photos" toMany="YES" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="reports" inverseEntity="PhotoSnippet" syncable="YES"/>
-        <relationship name="sketches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SketchSnippet" inverseName="reports" inverseEntity="SketchSnippet" syncable="YES"/>
-        <relationship name="texts" toMany="YES" deletionRule="Nullify" destinationEntity="TextSnippet" inverseName="reports" inverseEntity="TextSnippet" syncable="YES"/>
-        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="VideoSnippet" inverseName="reports" inverseEntity="VideoSnippet" syncable="YES"/>
+        <attribute name="category" optional="YES" attributeType="String"/>
+        <attribute name="ck_metadata" optional="YES" attributeType="Binary"/>
+        <attribute name="name" attributeType="String"/>
+        <relationship name="audios" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="AudioSnippet" inverseName="reports" inverseEntity="AudioSnippet"/>
+        <relationship name="photos" toMany="YES" deletionRule="Nullify" destinationEntity="PhotoSnippet" inverseName="reports" inverseEntity="PhotoSnippet"/>
+        <relationship name="sketches" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="SketchSnippet" inverseName="reports" inverseEntity="SketchSnippet"/>
+        <relationship name="texts" toMany="YES" deletionRule="Nullify" destinationEntity="TextSnippet" inverseName="reports" inverseEntity="TextSnippet"/>
+        <relationship name="videos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="VideoSnippet" inverseName="reports" inverseEntity="VideoSnippet"/>
     </entity>
     <entity name="Settings" representedClassName=".Settings" syncable="YES">
-        <attribute name="grouping" attributeType="String" syncable="YES"/>
+        <attribute name="grouping" attributeType="String"/>
     </entity>
     <entity name="SketchSnippet" representedClassName="SketchSnippet" parentEntity="BaseSnippet" syncable="YES">
-        <attribute name="sketch" attributeType="Binary" syncable="YES"/>
-        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="sketches" inverseEntity="Report" syncable="YES"/>
+        <attribute name="sketch" attributeType="Binary"/>
+        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="sketches" inverseEntity="Report"/>
     </entity>
     <entity name="TextSnippet" representedClassName="TextSnippet" parentEntity="BaseSnippet" syncable="YES">
-        <attribute name="text" attributeType="String" syncable="YES"/>
-        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="texts" inverseEntity="Report" syncable="YES"/>
+        <attribute name="text" attributeType="String"/>
+        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="texts" inverseEntity="Report"/>
     </entity>
     <entity name="VideoSnippet" representedClassName="VideoSnippet" parentEntity="BaseSnippet" syncable="YES">
-        <attribute name="video" attributeType="Binary" syncable="YES"/>
-        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="videos" inverseEntity="Report" syncable="YES"/>
+        <attribute name="video" attributeType="Binary"/>
+        <relationship name="reports" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Report" inverseName="videos" inverseEntity="Report"/>
     </entity>
     <fetchRequest name="Snippets" entity="BaseSnippet" predicateString="type == $p1"/>
     <elements>
-        <element name="AudioSnippet" positionX="-243" positionY="-396" width="128" height="75"/>
-        <element name="BaseSnippet" positionX="-441" positionY="-423" width="128" height="315"/>
-        <element name="Photo" positionX="-855" positionY="-558" width="128" height="165"/>
-        <element name="PhotoFolder" positionX="-848" positionY="-355" width="137" height="165"/>
-        <element name="PhotoSnippet" positionX="-650" positionY="-448" width="128" height="133"/>
-        <element name="Report" positionX="-441" positionY="-199" width="128" height="148"/>
+        <element name="AudioSnippet" positionX="-195.3984375" positionY="-418.04296875" width="128" height="75"/>
+        <element name="BaseSnippet" positionX="-441.828125" positionY="-706.921875" width="128" height="343"/>
+        <element name="Photo" positionX="-892.19921875" positionY="-679.91015625" width="128" height="283"/>
+        <element name="PhotoFolder" positionX="-876.90625" positionY="-361.80859375" width="137" height="283"/>
+        <element name="PhotoSnippet" positionX="-653.0234375" positionY="-688.171875" width="128" height="150"/>
+        <element name="Report" positionX="-441" positionY="-199" width="128" height="163"/>
         <element name="Settings" positionX="-254" positionY="-540" width="128" height="60"/>
-        <element name="SketchSnippet" positionX="-659" positionY="-282" width="128" height="75"/>
-        <element name="TextSnippet" positionX="-657" positionY="-144" width="128" height="75"/>
+        <element name="SketchSnippet" positionX="-672.203125" positionY="-473.9140625" width="128" height="75"/>
+        <element name="TextSnippet" positionX="-676.296875" positionY="-98.09765625" width="128" height="75"/>
         <element name="VideoSnippet" positionX="-243" positionY="-162" width="128" height="75"/>
     </elements>
 </model>

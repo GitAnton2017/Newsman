@@ -10,11 +10,12 @@ import Foundation
 
 class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataProvider, VideoPreviewDataProvider
 {
- var videoURL: URL?                  {return photoURL}
- var savedImageURL: URL?             {return photoURL}
- var imageSnippetType: SnippetType?  {return type    }
  
- var cachedImageID: UUID?            {return photoID }
+ var videoURL: URL?                  { photoURL }
+ var savedImageURL: URL?             { photoURL }
+ var imageSnippetType: SnippetType?  { type     }
+ 
+ var cachedImageID: UUID?            { photoID  }
  
  var photoItem: PhotoItem? //Input PhotoItem
  
@@ -27,20 +28,33 @@ class ContextDataOperation: Operation, CachedImageDataProvider, SavedImageDataPr
  override init()
  {
   super.init()
-  let cnxObserver = observe(\.isCancelled) {op, _ in op.removeAllDependencies()}
+  let cnxObserver = observe(\.isCancelled)
+  {op, _ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  let finObserver = observe(\.isFinished)
+  {op,_ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  observers.insert(finObserver)
   observers.insert(cnxObserver)
  }
  
  override func main()
  {
-  if isCancelled {return}
+  if isCancelled { return }
+  guard let photoItem = photoItem else { return }
+  guard photoItem.photo.isDeleted == false else { return }
   
-  //PhotoItem.contextQ.sync //This is fucking strong guaranty that MO Context is accessed serially!!!!
-  PhotoItem.MOC.performAndWait
+  photoItem.photo.managedObjectContext?.performAndWait
   {
-    self.photoID = photoItem?.id
-    self.photoURL = photoItem?.url
-    self.type = photoItem?.type
+   self.photoID = photoItem.id
+   self.photoURL = photoItem.url
+   self.type = photoItem.type
   }
  } //main()
  

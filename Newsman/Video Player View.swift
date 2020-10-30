@@ -44,20 +44,20 @@ class PlayerView: UIView
   progress.progress = 0.0
   let render = UIGraphicsImageRenderer(size: CGSize(width: 15, height: 15))
   progress.trackImage = render.image
-   {context in
+  {context in
     context.cgContext.setFillColor(UIColor.black.cgColor)
     context.cgContext.fillEllipse(in: CGRect(x: 0, y: 0, width: 15, height: 15))
     context.cgContext.setStrokeColor(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).cgColor)
     context.cgContext.setLineWidth(1)
-    context.cgContext.strokeEllipse(in: CGRect(x: 0, y: 0, width: 15, height: 15).insetBy(dx: 0.5, dy: 0.5                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ))
-   }.resizableImage(withCapInsets: UIEdgeInsetsMake(7.5, 7.5, 7.5, 7.5), resizingMode: .stretch)
+    context.cgContext.strokeEllipse(in: CGRect(x: 0, y: 0, width: 15, height: 15).insetBy(dx: 0.5, dy: 0.5))
+  }.resizableImage(withCapInsets: UIEdgeInsets.init(top: 7.5, left: 7.5, bottom: 7.5, right: 7.5), resizingMode: .stretch)
   
   progress.progressImage = render.image
   {context in
    context.cgContext.setFillColor(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).cgColor)
    context.cgContext.fillEllipse(in: CGRect(x: 0, y: 0, width: 15, height: 15).insetBy(dx: 2, dy: 2))
   
-  }.resizableImage(withCapInsets: UIEdgeInsetsMake(5.5, 5.5, 5.5, 5.5), resizingMode: .stretch)
+  }.resizableImage(withCapInsets: UIEdgeInsets.init(top: 5.5, left: 5.5, bottom: 5.5, right: 5.5), resizingMode: .stretch)
   
   self.addSubview(progress)
   progress.translatesAutoresizingMaskIntoConstraints = false
@@ -207,7 +207,7 @@ class PlayerView: UIView
  func playFromStart()
  {
   doubleTapGR.isEnabled = true
-  player?.seek(to: kCMTimeZero)
+  player?.seek(to: CMTime.zero)
   player?.play()
  }
  

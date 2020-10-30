@@ -8,207 +8,218 @@
 
 import UIKit
 import CoreData
+import GameplayKit
 
 
-extension PhotoSnippetViewController: PhotoManagedObjectsContextChangeObservable
- 
+extension PhotoSnippetViewController
 {
- 
- func insertPhotoItem(with hostedManagedObject: NSManagedObject)
- {
-  
- }
- 
+
+ // <<<<< ---------- FOLDER (.photoItemDidFolder) ----------------- >>>>>
  func moveToFolder(after notification: Notification)
  {
+  //find photoItem boxing photo MO and delete it from photoItems2D and corresponding CV cell!
   guard notification.name == .photoItemDidFolder else { return }
-  guard let photoItem = notification.object as? PhotoItem else { return }
-  guard let sourceIndexPath = photoItemIndexPath(photoItem: photoItem) else { return }
-  photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-  photoCollectionView.deleteItems(at: [sourceIndexPath])
- }
+  guard let photo = notification.object as? Photo else { return }
+  deletePhotoItem(with: photo)
+  
+ }//func moveToFolder(after notification: Notification)...
+
  
+ // <<<<< ------ UNFOLDER (.photoItemDidUnfolder) -------- >>>>>
  func moveFromFolder(after notification: Notification)
  {
   guard notification.name == .photoItemDidUnfolder else { return }
-  guard let photoItem = notification.object as? PhotoItem else { return }
+  guard let photo = notification.object as? Photo else { return }
   guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
   guard let position = userInfo[.position] as? PhotoItemPosition else { return }
-  insertItem(photoItem: photoItem, into: position)
   
- }
+  let photoItem = PhotoItem(photo: photo)
+  
+  insertPhotoItem(photoItem: photoItem, into: position, with: BatchAnimationOptions.withSmallJump(0.25))
+  {[weak self] in
+   self?.dragAndDropDelegate?.ddDelegateSubject.onNext(.final)
+  }
+ }//func moveFromFolder(after notification: Notification)...
+ 
+ 
+ 
+ func unfolderEntireFolder(after notification: Notification)
+ {
+  guard notification.name == .folderItemDidUnfolder else { return }
+  guard let photos = notification.object as? [Photo] else { return }
+  guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
+  guard let position = userInfo[.position] as? PhotoItemPosition else { return }
+  
+  let photoItems = photos.sorted{$0.rowPosition < $1.rowPosition}.map{PhotoItem(photo: $0)}
+  insertPhotoItems(photoItems: photoItems, into: position, with: BatchAnimationOptions.withSmallJump(0.25))
+  {[weak self] in
+   self?.dragAndDropDelegate?.ddDelegateSubject.onNext(.final)
+  }
+ }//func unfolderEntireFolder(after notification: Notification)...
+ 
+ 
+ 
+ func folderPhotoSnippet(after notification: Notification)
+ {
+  guard notification.name == .snippetItemDidFolder else { return }
+  guard let photos = notification.object as? [Photo] else { return }
+  guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
+  guard let selfFolder = userInfo[.isSelfFolderedSnippet] as? Bool, selfFolder else { return }
+  
+  photos.forEach{ deletePhotoItem(with: $0) }
+  
+ }//func folderPhotoSnippet(after notification: Notification)...
+ 
+ 
  
  func mergeIntoFolder(after notification: Notification)
  {
   guard notification.name == .photoItemDidMerge else { return }
-  guard let photoItem = notification.object as? PhotoItem else { return }
-  guard let sourceIndexPath = photoItemIndexPath(photoItem: photoItem) else { return }
-  photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-  photoCollectionView.deleteItems(at: [sourceIndexPath])
- }
- 
- 
- func cellSection(with position: PhotoItemPosition) -> Int
- {
-  guard let sectionName = position.sectionName else { return 0 }
-  guard let titles = self.sectionTitles else { return 0 }
-  return titles.index(of: sectionName) ?? 0
- }
- 
- func cellIndexPath(with position: PhotoItemPosition) -> IndexPath
- {
-  return IndexPath(row: Int(position.row), section: cellSection(with: position))
- }
- 
- func insertItem(photoItem: PhotoItemProtocol, into position: PhotoItemPosition)
- {
-  let destinationIndexPath = cellIndexPath(with: position)
-  let sectionCount = photoItems2D[destinationIndexPath.section].count
-  let maxSectionIndexPath = IndexPath(row: sectionCount, section: destinationIndexPath.section)
-  let indexPath = min(destinationIndexPath, maxSectionIndexPath)
-  photoItems2D[destinationIndexPath.section].insert(photoItem, at: indexPath.row)
-  photoCollectionView.insertItems(at: [indexPath])
-  
- }
- 
- func moveItem(photoItem: PhotoItemProtocol, to position: PhotoItemPosition)
- {
-  guard let sourceIndexPath = photoItemIndexPath(photoItem: photoItem) else { return }
-  photoItems2D[sourceIndexPath.section].remove(at: sourceIndexPath.row)
-  photoCollectionView.deleteItems(at: [sourceIndexPath])
-  insertItem(photoItem: photoItem, into: position)
- }
- 
- func moveItem(after notification: Notification)
- {
-  guard notification.name == .photoItemDidMove else { return }
-  guard let photoItem = notification.object as? PhotoItem else { return }
-  guard let userInfo = notification.userInfo as? [PhotoItemMovedKey: Any] else { return }
-  
-  switch (userInfo[.destSnippet], userInfo[.position])
-  {
-   case let (_?,  position as PhotoItemPosition): insertItem(photoItem: photoItem, into: position)
-   case let (nil, position as PhotoItemPosition): moveItem  (photoItem: photoItem, to:   position)
-   default: break
-  }
- }
- 
- 
- 
- func cellWithHosted(object: NSManagedObject) -> PhotoSnippetCellProtocol?
- {
-  return photoItems2D.joined().first{$0.hostedManagedObject === object}?.hostingCollectionViewCell
- }
+  //????....
+ }//func mergeIntoFolder(after notification: Notification)...
  
 
- func cellSection(with photo: Photo) -> Int
- {
-  guard let priority = photo.priorityFlag else { return 0 }
-  guard let titles = self.sectionTitles else { return 0 }
-  return titles.index(of: priority) ?? 0
- }
- 
- func photoItemIndexPath(with hostedManagedObject: NSManagedObject) -> IndexPath?
- {
-  return photoItems2D.enumerated().flatMap
-  {s in
-    s.1.enumerated().map{(indexPath: IndexPath(row: $0.0, section: s.0), element: $0.1)}
-   }.first{ $0.1.hostedManagedObject === hostedManagedObject }?.indexPath
- }
- 
- 
-
- func cellIndexPath(with photo: Photo) -> IndexPath
- {
-  let newRow = Int(photo.position)
-  let newSection = cellSection(with: photo)
-  return IndexPath(row: newRow, section: newSection)
- }
- 
- 
- func updateItem(with folder: PhotoFolder)
- {
-  let pairs = folder.changedValuesForCurrentEvent()
-  guard !pairs.isEmpty else { return }
-  guard let cell = cellWithHosted(object: folder) else { return }
-  guard cell.hostedItem?.hostedManagedObject === folder else { return }
-  
-  pairs.forEach
-  {pair in
-   switch pair.key
-   {
-    case #keyPath(PhotoFolder.isSelected):      cell.isPhotoItemSelected = folder.isSelected
-    case #keyPath(PhotoFolder.isDragAnimating): cell.isDragAnimating     = folder.isDragAnimating
-    default: break
-   }
-  }
- }
  
  func updateItem(with photo: Photo)
  {
   let pairs = photo.changedValuesForCurrentEvent()
   guard !pairs.isEmpty else { return }
   guard let cell = cellWithHosted(object: photo) else { return }
-  guard cell.hostedItem?.hostedManagedObject === photo else { return }
+  guard cell.hostedItem?.hostedManagedObject.objectID == photo.objectID else { return }
   
   pairs.forEach
   {pair in
    switch pair.key
    {
-    case #keyPath(Photo.isSelected):      cell.isPhotoItemSelected = photo.isSelected
-    case #keyPath(Photo.isDragAnimating): cell.isDragAnimating     = photo.isDragAnimating
+    case Photo.kp.isSelected:
+     //print("CELL SELECTION STATE [\(cell.debugDescription)] IS SET TO [\(photo.isSelected)] ")
+     allPhotosSelected = photoSnippet.allPhotosSelected
+     cell.isPhotoItemSelected = photo.isSelected
+    
+    case Photo.kp.isDragAnimating:
+    // print("CELL DRAG ANIMATION STATE [\(cell.debugDescription)] IS SET TO [\(photo.isDragAnimating)] ")
+    cell.isDragAnimating = photo.isDragAnimating
+    case Photo.kp.positions          :  cell.refreshRowPositionMarker()
+    case Photo.kp.isArrowMenuShowing
+     where photo.isArrowMenuShowing  : cell.showArrowMenu(); dismissArrowMenu(for: photo)
+    
+    case Photo.kp.isArrowMenuShowing
+     where !photo.isArrowMenuShowing : cell.dismissArrowMenu()
+     
     default: break
    }
   }
+ }//func updateItem(with photo: Photo)...
+ 
+ func dismissArrowMenu(for hostedObject: PhotoItemManagedObjectProtocol)
+ {
+  hostedObject.managedObjectContext?.perform //NO SAVE CONTEXT!
+  {
+   if let showingObject = (hostedObject.otherAllUnfoldered.first{$0.isArrowMenuShowing})
+   {
+    showingObject.isArrowMenuShowing = false
+   }
+   
+   if let folder = hostedObject as? PhotoFolder,
+      let showingFoldered = (folder.folderedPhotos.first{$0.isArrowMenuShowing})
+   {
+    showingFoldered.isArrowMenuShowing = false
+   }
+   
+  } as Void?
+  
  }
  
+ func updateItem(with folder: PhotoFolder)
+ {
+  let pairs = folder.changedValuesForCurrentEvent()
+  guard !pairs.isEmpty else { return }
+  guard let cell = cellWithHosted(object: folder) else { return }
+  guard cell.hostedItem?.hostedManagedObject.objectID == folder.objectID else { return }
+  
+  pairs.forEach
+  {pair in
+   switch pair.key
+   {
+    case PhotoFolder.kp.isSelected:
+      cell.isPhotoItemSelected = folder.isSelected
+      allPhotosSelected = photoSnippet.allPhotosSelected
+     
+    case PhotoFolder.kp.isDragAnimating    : cell.isDragAnimating = folder.isDragAnimating
+    case PhotoFolder.kp.positions          : cell.refreshRowPositionMarker()
+    case PhotoFolder.kp.isArrowMenuShowing where folder.isArrowMenuShowing: cell.showArrowMenu()
+     dismissArrowMenu(for: folder)
+    
+    case PhotoFolder.kp.isArrowMenuShowing where !folder.isArrowMenuShowing : cell.dismissArrowMenu()
+   
+    default: break
+   }
+  }
+  
+ }//func updateItem(with folder: PhotoFolder)...
  
+ 
+ func refreshFlagMakers(for hostedManagedObjects: [NSManagedObject])
+ {
+  hostedManagedObjects.compactMap{ cellWithHosted(object: $0) }.forEach
+  {
+   $0.refreshFlagMarker()
+  }
+ }//func refreshFlagMakers...
+ 
+ 
+ 
+ func updatePhotoItemsFlag(with hostedManagedObjects: [NSManagedObject])
+ {
+  print (#function)
+  
+  defer {
+  
+   let dragMovedObjects = hostedManagedObjects
+    .compactMap{$0 as? PhotoItemManagedObjectProtocol}.filter{$0.isDragMoved}
+   
+   //refreshFlagMakers(for: dragMovedObjects)
+   
+   dragMovedObjects.forEach{ $0.isDragMoved = false }
+   
+  }
+  
+  
+  guard photoSnippet?.photoGroupType == .makeGroups else
+  {
+   //refreshFlagMakers(for: hostedManagedObjects)
+   allPhotosSelected = false
+   return
+  }//guard photoSnippet?.photoGroupType...
+  
+  if GKRandomDistribution(forDieWithSideCount: 2).nextBool()
+  {
+   chainedCellsMoves(with: hostedManagedObjects) { self.allPhotosSelected = false }
+  }
+  else
+  {
+   batchedCellsMoves(with: hostedManagedObjects)
+   {
+    //self.refreshFlagMakers(for: hostedManagedObjects)
+    self.allPhotosSelected = false
+   }
+  }
+  
+ }//func updatePhotoItemsFlag(...
+ 
+
  
  func updatePhotoItem(with hostedManagedObject: NSManagedObject)
  {
   switch hostedManagedObject
   {
-   case let photo  as Photo:        updateItem(with: photo )
-   case let folder as PhotoFolder:  updateItem(with: folder)
+   case let photo  as Photo                                        :  updateItem(with: photo)
+   case let folder as PhotoFolder                                  :  updateItem(with: folder)
+   case let snippet as PhotoSnippet
+    where snippet.objectID == photoSnippet.objectID :  updateSnippet()
    default: break
   }
-  
-  
- }
- 
+ }//func updatePhotoItem...
 
  
- func updateSectionFooter(for sectionIndex: Int)
- {
-  let kind = UICollectionElementKindSectionFooter
-  let indexPath = IndexPath(row: 0, section: sectionIndex)
-  let itemsCount = photoItems2D[sectionIndex].count
- 
-  guard let footer = photoCollectionView.supplementaryView(forElementKind: kind, at: indexPath) as? PhotoSectionFooter else { return }
-  
-  footer.footerLabel.text = NSLocalizedString("Total photos in group", comment: "Total photos in group") + ": \(itemsCount)"
-  
- }
-
- func deletePhotoItem(with hostedManagedObject: NSManagedObject)
- {
-  guard let indexPath = photoItemIndexPath(with: hostedManagedObject) else { return }
-  
-  if ( photoItems2D[indexPath.section].count == 1 )
-  {
-   photoItems2D.remove(at: indexPath.section)
-   photoCollectionView.deleteSections(IndexSet(integer: indexPath.section))
-  }
-  else
-  {
-   
-   photoItems2D[indexPath.section].remove(at: indexPath.row)
-   photoCollectionView.deleteItems(at: [indexPath])
-   updateSectionFooter(for: indexPath.section)
-  }
-  
- }
- 
- 
- 
-}
+}//extension PhotoSnippetViewController...

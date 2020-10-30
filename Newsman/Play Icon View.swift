@@ -9,9 +9,9 @@ class PlayIconView: UIView
  var shift: CGFloat = 0
  var width: CGFloat = 0
  
- override static var layerClass: AnyClass {return CAShapeLayer.self}
+ override static var layerClass: AnyClass { CAShapeLayer.self }
  
- var playIconLayer: CAShapeLayer {return self.layer as! CAShapeLayer}
+ var playIconLayer: CAShapeLayer { layer as! CAShapeLayer }
  
  convenience init (iconColor: UIColor, r: CGFloat, shift: CGFloat, width: CGFloat)
  {
@@ -58,7 +58,7 @@ class PlayIconView: UIView
   playIconLayer.path = path
   playIconLayer.strokeColor = iconColor.cgColor
   playIconLayer.fillColor = iconColor.cgColor
-  playIconLayer.fillRule = kCAFillRuleEvenOdd
+  playIconLayer.fillRule = CAShapeLayerFillRule.evenOdd
  }
  
  override func draw(_ rect: CGRect)

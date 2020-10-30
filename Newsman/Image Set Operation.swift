@@ -17,7 +17,20 @@ class ImageSetOperation: Operation
  override init()
  {
   super.init()
-  let cnxObserver = observe(\.isCancelled) {op, _ in op.removeAllDependencies()}
+  let cnxObserver = observe(\.isCancelled)
+  {op, _ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  let finObserver = observe(\.isFinished)
+  {op,_ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  observers.insert(finObserver)
+  
   observers.insert(cnxObserver)
  }
  

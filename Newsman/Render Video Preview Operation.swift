@@ -11,21 +11,21 @@ import AVKit
 
 class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
 {
- var imageToResize: UIImage? {return previewImage}
+ var imageToResize: UIImage? { previewImage }
  
  private var contextDepend: VideoPreviewDataProvider?
  {
-  return dependencies.compactMap{$0 as? VideoPreviewDataProvider}.first
+  dependencies.compactMap{ $0 as? VideoPreviewDataProvider }.first
  }
  
  private var cachedDepend: CachedImageOperation?
  {
-  return dependencies.compactMap{$0 as? CachedImageOperation}.first
+  dependencies.compactMap{$0 as? CachedImageOperation}.first
  }
  
- private var videoURL: URL?        {return contextDepend?.videoURL}
- private var cachedImage: UIImage? {return cachedDepend?.cachedImage}
- private var type: SnippetType?    {return contextDepend?.imageSnippetType}
+ private var videoURL: URL?        { contextDepend?.videoURL         }
+ private var cachedImage: UIImage? { cachedDepend?.cachedImage       }
+ private var type: SnippetType?    { contextDepend?.imageSnippetType }
  
  private var previewImage: UIImage?
  
@@ -34,13 +34,27 @@ class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
  override init()
  {
   super.init()
-  let cnxObserver = observe(\.isCancelled) {op,_ in op.removeAllDependencies()}
+  
+  let cnxObserver = observe(\.isCancelled)
+  {op,_ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  
+  let finObserver = observe(\.isFinished)
+  {op,_ in
+   op.removeAllDependencies()
+   op.observers.removeAll()
+  }
+  
+  observers.insert(finObserver)
   observers.insert(cnxObserver)
  }
  
  override func main()
  {
-  if isCancelled {return}
+  if isCancelled { return }
   
   guard let url = videoURL, type == .video, cachedImage == nil, previewImage == nil else {return}
   
@@ -49,9 +63,9 @@ class RenderVideoPreviewOperation: Operation, ResizeImageDataProvider
    let asset = AVURLAsset(url: url, options: nil)
    let imgGenerator = AVAssetImageGenerator(asset: asset)
    imgGenerator.appliesPreferredTrackTransform = true
-   let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
+   let cgImage = try imgGenerator.copyCGImage(at: CMTimeMake(value: 0, timescale: 1), actualTime: nil)
    
-   if isCancelled {return}
+   if isCancelled { return }
    
    previewImage = UIImage(cgImage: cgImage)
    

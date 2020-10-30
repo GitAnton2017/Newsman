@@ -9,9 +9,9 @@ class PlaybackButton: UIButton
  var shift: CGFloat = 0.125
  var width: CGFloat = 0.075
  
- override static var layerClass: AnyClass {return CAShapeLayer.self}
+ override static var layerClass: AnyClass { CAShapeLayer.self }
  
- var playIconLayer: CAShapeLayer {return self.layer as! CAShapeLayer}
+ var playIconLayer: CAShapeLayer { layer as! CAShapeLayer }
  
  override init(frame: CGRect)
  {
@@ -49,7 +49,7 @@ class PlaybackButton: UIButton
   playIconLayer.path = path
   playIconLayer.strokeColor = iconColor.cgColor
   playIconLayer.fillColor = iconColor.cgColor
-  playIconLayer.fillRule = kCAFillRuleEvenOdd
+  playIconLayer.fillRule = CAShapeLayerFillRule.evenOdd
  
  }
  

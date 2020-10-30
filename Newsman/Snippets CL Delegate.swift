@@ -7,26 +7,28 @@ extension SnippetsViewController: CLLocationManagerDelegate
     
     func setLocationPermissions()
     {
-      switch(CLLocationManager.authorizationStatus())
-      {
+     switch(CLLocationManager.authorizationStatus())
+     {
         case .notDetermined: locationManager.requestWhenInUseAuthorization()
         case .authorizedWhenInUse: fallthrough
         case .authorizedAlways: break
         case .denied: fallthrough
         case .restricted: break
-      }
+        @unknown default: break
+     }
         
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
     {
-      switch(CLLocationManager.authorizationStatus())
+     switch(CLLocationManager.authorizationStatus())
      {
         case .notDetermined: break
         case .authorizedWhenInUse: locationManager.startUpdatingLocation()
         case .authorizedAlways: break
         case .denied: break
         case .restricted: break
+        @unknown default: break
      }
     }
     

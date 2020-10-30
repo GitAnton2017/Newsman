@@ -7,7 +7,7 @@ class TextPreviewProvider: SnippetPreviewImagesProvider
 {
  func cancelRandomImagesOperations()
  {
-  print (#function, self)
+  //print (#function, self)
  }
 
  init(textSnippet: TextSnippet)

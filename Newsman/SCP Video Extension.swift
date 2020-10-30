@@ -15,12 +15,13 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
  
  func refreshVideoMarkers()
  {
-  guard let hosted = hostedItem as? PhotoItem else {return}
+  guard let hosted = hostedItem as? PhotoItem else { return }
+  guard let videoURL = hosted.url else { return }
   
   if (hosted.type == .video)
   {
    showPlayIcon(iconColor: #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1).withAlphaComponent(0.65))
-   showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: hosted.url).duration)
+   showVideoDuration(textColor: UIColor.red, duration: AVURLAsset(url: videoURL).duration)
   }
  }
  
@@ -73,7 +74,7 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
  {
   if let time = contentView.subviews.first(where: {$0.tag == 1}) as? TimeStampView
   {
-   time.duration = kCMTimeZero
+   time.duration = CMTime.zero
   }
  }
  
@@ -94,7 +95,7 @@ extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
   
   if let time = contentView.subviews.first(where: {$0.tag == 1}) as? TimeStampView
   {
-   time.duration = kCMTimeZero
+   time.duration = CMTime.zero
    time.duration = duration
    animateShowDuration(time)
    return

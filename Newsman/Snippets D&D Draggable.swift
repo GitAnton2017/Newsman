@@ -8,9 +8,30 @@
 
 import UIKit
 import CoreData
+import protocol RxSwift.Disposable
+import class Combine.AnyCancellable
 
 final class SnippetDragItem: NSObject, SnippetProtocol
 {
+ var isDropProceeding: Bool = false //TO DO LATER
+ var isDragProceeding: Bool = false //TO DO LATER
+ var isJustCreated: Bool = false //TO DO LATER
+ var dragProceedLocation: CGPoint = .zero //TO DO LATER
+ 
+ var cellDragProceedSubscription: AnyCancellable?  //TO DO LATER
+ var cellDropProceedSubscription: AnyCancellable?  //TO DO LATER
+ var cellDragLocationSubscription: AnyCancellable?  //TO DO LATER
+ 
+ 
+ 
+ var dragStateSubscription: Disposable?
+ var dragProceedSubscription: Disposable?
+
+ 
+ func move(to snippet: BaseSnippet, to draggableItem: Draggable?)
+ {
+  // TO DO
+ }
  
  var isFolderDragged: Bool { return false } // Snippet always is not contained in any folder item!
  
@@ -18,9 +39,9 @@ final class SnippetDragItem: NSObject, SnippetProtocol
  
  var dragAnimationCancelWorkItem: DispatchWorkItem?
 
- var id: UUID { return snippet.id! }
+ var id: UUID? { return snippet.id }
  
- var type: SnippetType  { return snippet.snippetType }
+ var type: SnippetType?  { return snippet.snippetType }
  
  var location: String?  { return snippet.snippetLocation }
  
@@ -36,7 +57,7 @@ final class SnippetDragItem: NSObject, SnippetProtocol
  
  var priority: SnippetPriority { return snippet.snippetPriority }
  
- var url: URL { return snippet.url }
+ var url: URL? { return snippet.url }
  
  func deleteAllData()
  {
@@ -57,60 +78,35 @@ final class SnippetDragItem: NSObject, SnippetProtocol
  
  var isSelected: Bool
  {
-  get { return snippet.isSelected }
+  get { snippet.isSelected }
   set
   {
    guard newValue != isSelected else { return }
-   snippet.managedObjectContext?.persist
-   {
-    self.snippet.isSelected = newValue
-   }
+   snippet.managedObjectContext?.perform { self.snippet.isSelected = newValue }
   }
  }
 
  
  var isDragAnimating: Bool
  {
-  get { return snippet.isDragAnimating}
-  set
-  {
-   snippet.managedObjectContext?.persist
-   {
-    self.snippet.isDragAnimating = newValue
-   }
-  }
+  get { snippet.isDragAnimating}
+  set { snippet.managedObjectContext?.perform { self.snippet.isDragAnimating = newValue } }
  }
  
- var isSetForClear: Bool
- {
-  get { return snippet.dragAndDropAnimationSetForClearanceState }
-  set { snippet.dragAndDropAnimationSetForClearanceState = newValue }
- }
- 
+// var isSetForClear: Bool
+// {
+//  get { snippet.dragAndDropAnimationSetForClearanceState }
+//  set { snippet.dragAndDropAnimationSetForClearanceState = newValue }
+// }
+//
 
  var isZoomed: Bool
  {
-  get { return snippet.zoomedSnippetState}
+  get { snippet.zoomedSnippetState}
   set { snippet.zoomedSnippetState = newValue }
  }
  
  var zoomView: ZoomView? = nil //reseved for futute use...
- 
- func move(to snippet: BaseSnippet, to draggableItem: Draggable?)
- {
-  guard self.snippet !== snippet else { return } //prevent moving into itself...
-  
-  switch (self.snippet, snippet, draggableItem)
-  {
-   case let (source as PhotoSnippet, destination as PhotoSnippet, nil):
-    source.move(into: destination)
-   case let (source as PhotoSnippet, _ as PhotoSnippet, folderItem as PhotoFolderItem):
-    source.merge(with: folderItem.folder)
-   case let (source as PhotoSnippet, _ as PhotoSnippet, photoItem as PhotoItem):
-    source.merge(with: photoItem.photo)
-   default: break
-  }
- }
  
  
 }

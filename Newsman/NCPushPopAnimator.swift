@@ -7,14 +7,14 @@ class NCСrossDissolveAnimator: NSObject, UIViewControllerAnimatedTransitioning
  
  var animator: UIViewPropertyAnimator?
  var duration: TimeInterval
- var ncOperation: UINavigationControllerOperation
+ var ncOperation: UINavigationController.Operation
  
  var direction: CGFloat
  {
   return ncOperation == .push ? -1.0 : 1.0
  }
  
- init (with duration: TimeInterval, for operation: UINavigationControllerOperation)
+ init (with duration: TimeInterval, for operation: UINavigationController.Operation)
  {
   self.duration = duration
   ncOperation = operation

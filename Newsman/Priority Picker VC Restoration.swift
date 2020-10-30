@@ -19,14 +19,14 @@ extension PriorityPickerViewController
  override func applicationFinishedRestoringState()
  {
   if let nc = self.navigationController,
-     let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 3] as? SnippetsViewController,
+     let snippetsVC = nc.children[nc.children.count - 3] as? SnippetsViewController,
      let ID = self.editedSnippetRestorationID,
      let editedSnippet = snippetsVC.snippetsDataSource.currentFRC[ID]
   {
   
    self.editedSnippet = editedSnippet
    
-   switch nc.childViewControllers[nc.childViewControllers.count - 2]
+   switch nc.children[nc.children.count - 2]
    {
     case let editedSnippetVC as PhotoSnippetViewController:
      editedSnippetVC.photoSnippet = editedSnippet as? PhotoSnippet

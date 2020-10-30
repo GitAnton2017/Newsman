@@ -14,7 +14,7 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  
  private var imageToResize: UIImage?
  {
-  return dependencies.compactMap{($0 as? ResizeImageDataProvider)?.imageToResize}.first
+  dependencies.compactMap{($0 as? ResizeImageDataProvider)?.imageToResize}.first
  }
  
  private var resizedImage: UIImage?
@@ -31,23 +31,24 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
   {op, _ in
    op.dependencies.compactMap({$0 as? SavedImageOperation}).first?.imageToResize = nil
    op.removeAllDependencies()
+   op.observers.removeAll()
   }
   
   observers.insert(cnxObserver)
   
   let finishObserver = observe(\.isFinished)
   {op, _ in
-   
-   op.removeAllDependencies()
-   
+  
    DispatchQueue.main.async
    {
-     
-     guard let curr_ind = PhotoItem.currResizeOperations.index(of: op) else {return}
-     PhotoItem.currResizeOperations.remove(at: curr_ind)
+    op.removeAllDependencies()
+    op.observers.removeAll()
    
-     guard let prev_ind = PhotoItem.prevResizeOperations.index(of: op) else {return}
-     PhotoItem.prevResizeOperations.remove(at: prev_ind)
+    guard let curr_ind = PhotoItem.currResizeOperations.firstIndex(of: op) else { return }
+    PhotoItem.currResizeOperations.remove(at: curr_ind)
+  
+    guard let prev_ind = PhotoItem.prevResizeOperations.firstIndex(of: op) else { return }
+    PhotoItem.prevResizeOperations.remove(at: prev_ind)
      
    }
    
@@ -60,14 +61,13 @@ class ResizeImageOperation: Operation, ThumbnailImageDataProvider
  
  override func main()
  {
+  if isCancelled { return }
   
-  if isCancelled {return}
-  
-  guard let image = imageToResize else {return}
+  guard let image = imageToResize else { return }
   
   let resized = image.resized(withPercentage: CGFloat(width) / image.size.width)
   
-  if isCancelled {return}
+  if isCancelled { return }
   
   resizedImage = resized
   

@@ -17,7 +17,7 @@ class SnippetsTableViewSupplemenaryView: UITableViewHeaderFooterView
 {
  var sectionNumber: Int?
  {
-  guard let tv = tableView else {return nil}
+  guard let tv = tableView else { return nil }
   let N = tv.numberOfSections
   return (0..<N).map{($0, tv.headerView(forSection: $0))}.first{$0.1 === self}?.0
  }

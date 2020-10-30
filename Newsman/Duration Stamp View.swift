@@ -7,7 +7,7 @@ import AVKit
 
 class TimeStampView: UIView
 {
- var duration: CMTime = kCMTimeZero
+ var duration: CMTime = CMTime.zero
  {
   didSet
   {
@@ -38,7 +38,7 @@ class TimeStampView: UIView
   let renderer = UIGraphicsImageRenderer(bounds: rect)
  
   
-  guard duration > kCMTimeZero else
+  guard duration > CMTime.zero else
   {
    //let con = UIGraphicsGetCurrentContext()
    //con?.clear(rect)
@@ -66,9 +66,9 @@ class TimeStampView: UIView
     paragraphStyle.alignment = .right
     paragraphStyle.lineSpacing = 1.0
     
-    let attr = [NSAttributedStringKey.font: UIFont(name: "Avenir", size: rect.height * 0.95)!,
-                NSAttributedStringKey.paragraphStyle: paragraphStyle,
-                NSAttributedStringKey.foregroundColor: textColor,]
+    let attr = [NSAttributedString.Key.font: UIFont(name: "Avenir", size: rect.height * 0.95)!,
+                NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                NSAttributedString.Key.foregroundColor: textColor,]
     
     timeStr.draw(in: rect, withAttributes: attr)
   }
@@ -91,7 +91,7 @@ class DurationStampView:  UIView
   textLayer.fontSize = bounds.height
  }
  
- var duration: CMTime = kCMTimeZero
+ var duration: CMTime = CMTime.zero
  {
   didSet
   {
@@ -122,7 +122,7 @@ class DurationStampView:  UIView
   self.backgroundColor = UIColor.clear
   textLayer.needsDisplayOnBoundsChange = true
   textLayer.contentsScale = UIScreen.main.scale
-  textLayer.alignmentMode = kCAAlignmentRight
+  textLayer.alignmentMode = CATextLayerAlignmentMode.right
   
  }
  

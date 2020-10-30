@@ -1,7 +1,16 @@
 
 import Foundation
 
-
+extension Int
+{
+ var length: Int
+ {
+  var cnt = 1, div = 10
+  while self / div > 0 { div *= 10; cnt += 1 }
+  return cnt
+ }
+ 
+}
 extension String
 {
  init(repeating: [Character], counts: [Int])
@@ -29,6 +38,16 @@ struct DateFormatters
   return df
   
  }()
+ 
+ static let timeStamp: DateFormatter  =
+ {
+  let df = DateFormatter()
+  df.setLocalizedDateFormatFromTemplate("dMyy hmsk")
+  return df
+  
+ }()
+ 
+ 
  
  static let dr = 0...2
  static let mr = 0...5

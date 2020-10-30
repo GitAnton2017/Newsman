@@ -10,8 +10,7 @@ import UIKit
 
 extension SnippetsViewCell: UISpringLoadedInteractionEffect, UISpringLoadedInteractionBehavior
 {
- 
- 
+
  func editHostedSnippet()
  {
   guard let snippet = self.snippet else { return }
@@ -25,11 +24,11 @@ extension SnippetsViewCell: UISpringLoadedInteractionEffect, UISpringLoadedInter
   switch context.state
   {
 
-   case .possible: self.alpha = 0.75
+   case .possible:   self.alpha = 0.75
    case .activating: self.alpha = 0.25
-   case .activated: touchKeySpring { self.alpha = 0 }
-   case .inactive: self.alpha = 1
-  
+   case .activated:  touchKeySpring { self.alpha = 0 }
+   case .inactive:   self.alpha = 1
+   @unknown default: break
   }
  }
  

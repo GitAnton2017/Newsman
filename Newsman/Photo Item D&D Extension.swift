@@ -6,72 +6,126 @@
 //  Copyright © 2019 Anton2016. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import protocol RxSwift.Disposable
+
 
 extension PhotoItem
 {
+ var isFoldered: Bool { photo.isFoldered }
  
  var isZoomed: Bool
  {
-  get { return photo.zoomedPhotoItemState }
-  set { photo.zoomedPhotoItemState = newValue }
+  get { photo.zoomedPhotoItemState }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.zoomedPhotoItemState = newValue
+  }
  }
  
- var isFolderDragged: Bool
- {
-  guard let folder = self.folder else { return false }
-  return folder.dragAndDropAnimationState
- }
- 
- var isSetForClear: Bool
- {
-  get { return photo.dragAndDropAnimationSetForClearanceState }
-  set { photo.dragAndDropAnimationSetForClearanceState = newValue }
- }
- 
- func toggleSelection()
- {
-  isSelected.toggle()
- }
+
+  
+ func toggleSelection() { isSelected.toggle() }
  
  var isSelected: Bool
  {
-  get { return self.photo.isSelected }
+  get { photo.isSelected }
   set
   {
-   photo.photoSnippet?.currentFRC?.deactivateDelegate()
-   photo.managedObjectContext?.persistAndWait(block: { self.photo.isSelected = newValue })
-   {flag in
-    if flag
-    {
-//     self.hostingCollectionViewCell?.isPhotoItemSelected = newValue
-//     self.hostingZoomedCollectionViewCell?.isPhotoItemSelected = newValue
-     self.photo.photoSnippet?.currentFRC?.activateDelegate()
-    }
+   photo.managedObjectContext?.perform
+   {
+    guard self.photo.isDeleted == false else { return }
+    guard newValue != self.photo.isSelected else { return }
+    self.photo.isSelected = newValue
+    guard let folder = self.photo.folder else  { return }
+    guard folder.managedObjectContext != nil else { return }
+    guard folder.isDeleted == false else  { return }
+    folder.isSelected = folder.areAllPhotosSelected
    }
   }
- }
+ }//var isSelected: Bool...
  
- 
+
  var isDragAnimating: Bool
  {
-  get
-  {
-    return photo.isDragAnimating
-//   return photo.dragAndDropAnimationState
-  }
-  
+  get { photo.isDragAnimating }
   set
   {
-   
-   photo.managedObjectContext?.persist{ self.photo.isDragAnimating = newValue }
-   
-//   photo.dragAndDropAnimationState = newValue
-//   self.hostingCollectionViewCell?.isDragAnimating = newValue
-//   self.hostingZoomedCollectionViewCell?.isDragAnimating = newValue
+   photo.managedObjectContext?.perform
+   {
+    guard self.photo.isDeleted == false else { return }
+    guard newValue != self.photo.isDragAnimating else { return }
+    self.photo.isDragAnimating = newValue
+   }
+  }
+ }//var isDragAnimating: Bool
+ 
+ var isDropProceeding: Bool
+ {
+  get { photo.isDropProceeding }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.isDropProceeding = newValue
+  }
+ }
+ 
+ var isDragProceeding: Bool
+ {
+  get { photo.isDragProceeding }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.isDragProceeding = newValue
+  }
+ }
+ 
+ var dragProceedLocation: CGPoint
+ {
+  get { photo.dragProceedLocation }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.dragProceedLocation = newValue
+  }
+ }
+ 
+ var isJustCreated: Bool
+ {
+  get { photo.isJustCreated }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.isJustCreated = newValue
+  }
+ }
+ 
+ var dragStateSubscription: Disposable?
+ {
+  get { photo.dragStateSubscription }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.dragStateSubscription = newValue
+  }
+ }
+ var dragProceedSubscription: Disposable?
+ {
+  get { photo.dragProceedSubscription }
+  set
+  {
+   guard photo.isDeleted == false else { return }
+   guard photo.managedObjectContext != nil else { return }
+   photo.dragProceedSubscription = newValue
   }
  }
  
  
- 
-}
+} //extension PhotoItem

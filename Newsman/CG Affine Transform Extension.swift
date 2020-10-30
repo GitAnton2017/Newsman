@@ -3,6 +3,19 @@
 import Foundation
 import UIKit
 
+extension CGRect
+{
+ func scaledBy(sw: CGFloat, sh: CGFloat) -> CGRect
+ {
+  return insetBy(dx: width * (1 - sw) / 2, dy: height * (1 - sh) / 2)
+ }
+ 
+ func smallerBy(factor: CGFloat) -> CGRect
+ {
+  return scaledBy(sw: 1 - factor, sh: 1 - factor)
+ }
+}
+
 extension CGAffineTransform
 {
  static let rotate90p = CGAffineTransform(rotationAngle: .pi / 2)

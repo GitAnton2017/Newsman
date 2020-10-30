@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
-    <device id="retina5_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
+    <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,9 +17,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nTZ-3z-fPL">
-                                <rect key="frame" x="4" y="64" width="406" height="622"/>
+                                <rect key="frame" x="4" y="0.0" width="406" height="642"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="10" id="dPM-MG-3cx">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="12" id="dPM-MG-3cx">
                                     <size key="itemSize" width="150" height="150"/>
                                     <size key="headerReferenceSize" width="0.0" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="50"/>
@@ -34,9 +33,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NDH-YN-VEh">
-                                                    <rect key="frame" x="25" y="122.99999999999999" width="100" height="20.333333333333329"/>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NDH-YN-VEh">
+                                                    <rect key="frame" x="25" y="123" width="100" height="18"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -68,9 +67,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="406" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NEWSMAN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4u0-9p-ftU">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NEWSMAN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4u0-9p-ftU">
                                             <rect key="frame" x="0.0" y="5" width="406" height="45"/>
-                                            <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="19"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                             <color key="textColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -91,7 +90,7 @@
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YaI-cz-OX1">
                                             <rect key="frame" x="0.0" y="0.0" width="406" height="50"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                             <color key="textColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
@@ -108,7 +107,7 @@
                                 </collectionReusableView>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="Newsman.red"/>
                         <constraints>
                             <constraint firstItem="WXC-5W-HkX" firstAttribute="trailing" secondItem="nTZ-3z-fPL" secondAttribute="trailing" constant="4" id="RDz-Ms-ef1"/>
                             <constraint firstItem="nTZ-3z-fPL" firstAttribute="leading" secondItem="WXC-5W-HkX" secondAttribute="leading" constant="4" id="VHv-8f-nTo"/>
@@ -131,46 +130,49 @@
         <!--Snippets VC-->
         <scene sceneID="Qgm-Jg-tdy">
             <objects>
-                <viewController storyboardIdentifier="SnippetsVC" title="Snippets VC" modalTransitionStyle="crossDissolve" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8F0-Wa-TO0" customClass="SnippetsViewController" customModule="Newsman" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SnippetsVC" title="Snippets VC" modalPresentationStyle="fullScreen" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8F0-Wa-TO0" customClass="SnippetsViewController" customModule="Newsman" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" restorationIdentifier="SnippetsView" id="ULZ-Fl-aNF">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg">
-                                <rect key="frame" x="4" y="64" width="406" height="622"/>
-                                <color key="backgroundColor" red="1" green="0.93623086389999999" blue="0.92165692939999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" dataMode="prototypes" style="grouped" separatorStyle="none" separatorInsetReference="fromAutomaticInsets" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="eyJ-fM-0bg" customClass="SnippetsTableView" customModule="Newsman" customModuleProvider="target">
+                                <rect key="frame" x="4" y="0.0" width="406" height="642"/>
+                                <color key="backgroundColor" red="1" green="0.94185239430000001" blue="0.92284500650000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <edgeInsets key="layoutMargins" top="8" left="11" bottom="8" right="11"/>
-                                <color key="separatorColor" red="0.47787757359999999" green="0.122446873" blue="0.055025289310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="separatorInset" minX="3" minY="0.0" maxX="3" maxY="0.0"/>
                                 <color key="sectionIndexColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="sectionIndexBackgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="sectionIndexBackgroundColor" red="0.87900000810623169" green="0.22499999403953552" blue="0.10100000351667404" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="sectionIndexTrackingBackgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" showsReorderControl="YES" indentationWidth="0.0" reuseIdentifier="SnippetCell" rowHeight="70" id="i7N-u2-v6g" customClass="SnippetsViewCell" customModule="Newsman" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="406" height="70"/>
+                                        <rect key="frame" x="0.0" y="55.333332061767578" width="406" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="i7N-u2-v6g" id="YtZ-ZP-IsY">
                                             <rect key="frame" x="0.0" y="0.0" width="406" height="70"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8uF-fe-ELp">
-                                                    <rect key="frame" x="71" y="10" width="295" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                    <rect key="frame" x="71" y="9.9999999999999982" width="295" height="21.333333333333329"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
+                                                    <color key="textColor" name="Newsman.primary.label"/>
                                                     <nil key="highlightedColor"/>
-                                                    <size key="shadowOffset" width="0.0" height="0.0"/>
+                                                    <color key="shadowColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <size key="shadowOffset" width="1" height="1"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqb-23-EaJ">
-                                                    <rect key="frame" x="71" y="41" width="235" height="19"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                                    <color key="textColor" red="0.47787757359644667" green="0.1224468730437069" blue="0.055025289314372665" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qqb-23-EaJ">
+                                                    <rect key="frame" x="71" y="42" width="235" height="18"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                    <color key="textColor" name="Newsman.primary.label"/>
                                                     <nil key="highlightedColor"/>
+                                                    <color key="shadowColor" red="0.83197623909999996" green="0.65704293199999997" blue="0.57695643149999998" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <size key="shadowOffset" width="1" height="1"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oDv-xT-xUx" userLabel="FlipperView">
                                                     <rect key="frame" x="10" y="10" width="50" height="50"/>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lZK-7m-eLo" customClass="BorderedImageView" customModule="Newsman" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                            <color key="backgroundColor" red="0.86096129441624369" green="0.42940520365132839" blue="0.41328064587052804" alpha="0.54917594179999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="backgroundColor" red="0.87935437817258888" green="0.22531752870130387" blue="0.10125339991298299" alpha="0.45959974315068491" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                                     <real key="value" value="8"/>
@@ -179,7 +181,7 @@
                                                                     <real key="value" value="0.80000000000000004"/>
                                                                 </userDefinedRuntimeAttribute>
                                                                 <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                                    <color key="value" red="0.79164685785467859" green="0.39118910848602229" blue="0.36940740564761687" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <color key="value" name="Newsman.red"/>
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </imageView>
@@ -213,20 +215,31 @@
                                                 <constraint firstItem="8uF-fe-ELp" firstAttribute="leading" secondItem="oDv-xT-xUx" secondAttribute="trailing" constant="11" id="ufn-z3-nw8"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" red="0.83197623914873542" green="0.65704293200732533" blue="0.57695643147784492" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        <color key="backgroundColor" red="0.83915422138223794" green="0.66680960883695695" blue="0.58678497921118733" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
-                                                <color key="value" red="1" green="0.92945568310000004" blue="0.95738423660000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <real key="value" value="9"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
-                                                <real key="value" value="1"/>
+                                                <real key="value" value="0.0"/>
                                             </userDefinedRuntimeAttribute>
                                             <userDefinedRuntimeAttribute type="color" keyPath="selectionColor">
-                                                <color key="value" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="value" name="Newsman.red"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                <color key="value" red="1" green="0.75891955408046541" blue="0.60892984015631335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="topPadding">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="bottomPadding">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="leftPadding">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="rightPadding">
+                                                <real key="value" value="1"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -241,7 +254,7 @@
                                 </prototypes>
                             </tableView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QNI-h6-xfy">
-                                <rect key="frame" x="0.0" y="686" width="414" height="50"/>
+                                <rect key="frame" x="0.0" y="642" width="414" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Pea-M7-Sff"/>
                                 </constraints>
@@ -266,11 +279,12 @@
                                     </barButtonItem>
                                 </items>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="barTintColor" name="Newsman.red"/>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="Newsman.red"/>
                         <constraints>
+                            <constraint firstItem="QNI-h6-xfy" firstAttribute="bottom" secondItem="uxl-ll-qSE" secondAttribute="bottom" id="Qu1-z9-OUs"/>
                             <constraint firstItem="uxl-ll-qSE" firstAttribute="trailing" secondItem="eyJ-fM-0bg" secondAttribute="trailing" constant="4" id="Uwt-el-D2q"/>
                             <constraint firstItem="eyJ-fM-0bg" firstAttribute="top" secondItem="uxl-ll-qSE" secondAttribute="top" id="V2W-ky-631"/>
                             <constraint firstItem="eyJ-fM-0bg" firstAttribute="bottom" secondItem="QNI-h6-xfy" secondAttribute="top" id="VP0-6x-ty7"/>
@@ -278,7 +292,6 @@
                             <constraint firstItem="QNI-h6-xfy" firstAttribute="trailing" secondItem="uxl-ll-qSE" secondAttribute="trailing" id="fwH-q5-8XS"/>
                             <constraint firstItem="QNI-h6-xfy" firstAttribute="leading" secondItem="uxl-ll-qSE" secondAttribute="leading" id="wdY-d5-I16"/>
                             <constraint firstItem="eyJ-fM-0bg" firstAttribute="leading" secondItem="uxl-ll-qSE" secondAttribute="leading" constant="4" id="xqD-XH-RiS"/>
-                            <constraint firstItem="QNI-h6-xfy" firstAttribute="bottom" secondItem="ULZ-Fl-aNF" secondAttribute="bottom" id="xtU-s9-iEB"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="uxl-ll-qSE"/>
                     </view>
@@ -314,19 +327,20 @@
             </objects>
             <point key="canvasLocation" x="973.91304347826099" y="24.456521739130437"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Newsman Navigation Controller-->
         <scene sceneID="OAs-zD-MWr">
             <objects>
-                <navigationController storyboardIdentifier="MainNavigationVC" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="partialCurl" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sBZ-um-ChR" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MainNavigationVC" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="partialCurl" useStoryboardIdentifierAsRestorationIdentifier="YES" id="sBZ-um-ChR" customClass="NewsmanNavigationController" customModule="Newsman" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" semanticContentAttribute="playback" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" backIndicatorImage="back.nav.icon" largeTitles="YES" backIndicatorTransitionMaskImage="back.nav.icon" id="MYn-az-J5H">
-                        <rect key="frame" x="0.0" y="20" width="414" height="96"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" semanticContentAttribute="playback" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" translucent="NO" id="MYn-az-J5H">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="Newsman.red"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" red="0.92549020049999997" green="0.23529411850000001" blue="0.1019607857" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" name="Newsman.red"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="23"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="textShadowColor" red="0.47787757359999999" green="0.122446873" blue="0.055025289310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <offsetWrapper key="textShadowOffset" horizontal="2" vertical="2"/>
                         </textAttributes>
@@ -387,7 +401,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="back.nav.icon" width="48" height="48"/>
-        <image name="home.tab.icon" width="54" height="54"/>
+        <image name="home.tab.icon" width="24" height="24"/>
+        <namedColor name="Newsman.primary.label">
+            <color red="0.45098039215686275" green="0.098039215686274508" blue="0.058823529411764705" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Newsman.red">
+            <color red="0.84313725490196079" green="0.22352941176470589" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

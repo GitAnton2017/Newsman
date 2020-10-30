@@ -28,7 +28,7 @@ extension SnippetsViewController: UITableViewDelegate
  
   let groupType = self.groupType
   guard let provider = cell.hostedSnippet?.imageProvider  else {return}
-  guard let snippet = cell.hostedSnippet as? BaseSnippet else {return}
+  guard let snippet = cell.hostedSnippet else {return}
   if snippet[groupType] {return}
 
   let iconWidth = cell.snippetImage.frame.width
@@ -37,14 +37,14 @@ extension SnippetsViewController: UITableViewDelegate
   {[weak w_cell = cell, weak w_snippet = snippet] (image) in
  
    guard let wc = w_cell, let ws = w_snippet else {return}
-   guard wc.hostedSnippet === ws else {return}
+   guard wc.hostedSnippet?.objectID == ws.objectID else {return}
    if ws[groupType] {return}
    
    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .milliseconds(200))
    {[weak w_cell = cell, weak w_snippet = snippet] in
     
     guard let wc = w_cell, let ws = w_snippet else {return}
-    guard wc.hostedSnippet === ws else {return}
+    guard wc.hostedSnippet?.objectID == ws.objectID else {return}
     if ws[groupType] {return}
     
     cell.imageSpinner.stopAnimating()
@@ -57,7 +57,7 @@ extension SnippetsViewController: UITableViewDelegate
                       {[weak w_cell = cell, weak w_snippet = snippet] _ in
                        
                        guard let wc = w_cell, let ws = w_snippet else {return}
-                       guard wc.hostedSnippet === ws else {return}
+                       guard wc.hostedSnippet?.objectID == ws.objectID  else {return}
                        if ws[groupType] {return}
                        
                        cell.snippetImage.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)
@@ -71,14 +71,14 @@ extension SnippetsViewController: UITableViewDelegate
                                       { [weak w_cell = cell, weak w_snippet = snippet] _ in
                                        
                                        guard let wc = w_cell, let ws = w_snippet else {return}
-                                       guard wc.hostedSnippet === ws else {return}
+                                       guard wc.hostedSnippet?.objectID == ws.objectID else {return}
                                        if ws[groupType] {return}
                                        
                                        provider.getRandomImages(requiredImageWidth: iconWidth)
                                        {[weak w_cell = cell, weak w_snippet = snippet] (images) in
                                         guard var images = images else {return}
                                         guard let wc = w_cell, let ws = w_snippet else {return}
-                                        guard wc.hostedSnippet === ws else {return}
+                                        guard wc.hostedSnippet?.objectID == ws.objectID else {return}
                                         if ws[groupType] {return}
                                         
                                         if let firstImage = image {images.insert(firstImage, at: 0)}
@@ -163,7 +163,7 @@ extension SnippetsViewController: UITableViewDelegate
     $0.snippetPriority = newPriority
     $0.isSelected = false
    }
-  }
+  } as Void?
   
  }
  
@@ -172,7 +172,7 @@ extension SnippetsViewController: UITableViewDelegate
   moc.persist
   {
    snippets.forEach { $0.isSelected = state }
-  }
+  } as Void?
  }
  
  
@@ -196,14 +196,14 @@ extension SnippetsViewController: UITableViewDelegate
      
      self.moc.delete(snippet)
     }
-  }
+  } as Void?
   
  }
  
  final func persistSnippetNameChange(for snippet: BaseSnippet, to newName: String)
  {
   guard newName != snippet.snippetName else { return }
-  moc.persist{ snippet.snippetName = newName }
+  moc.perform { snippet.snippetName = newName }
  }
  
  
@@ -444,7 +444,6 @@ extension SnippetsViewController: UITableViewDelegate
  
  
  
- 
  func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
  {
   guard snippetsDataSource.searchString.isEmpty else { return 0 }
@@ -458,7 +457,7 @@ extension SnippetsViewController: UITableViewDelegate
  }
  
  func tableView(_ tableView: UITableView,
-                  editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle
+                  editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
  {
   return .delete
  }

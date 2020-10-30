@@ -10,6 +10,8 @@
 import UIKit
 import CoreData
 import AVKit
+import Combine
+import RxSwift
 
 
 /*extension AppDelegate: NSCacheDelegate
@@ -22,7 +24,14 @@ import AVKit
 
 @UIApplicationMain class AppDelegate: UIResponder, UIApplicationDelegate
 {
-
+ lazy var appCloudData = AppCloudData()
+ 
+ let dragAndDropDelegatesStatesSubject = BehaviorSubject<DragAndDropDelegateStates>(value: .initial)
+ 
+ var cancellables = Set<AnyCancellable>()
+ 
+ var disposeBag = DisposeBag()
+  
  var window: UIWindow?
 
  var anim: UIViewImplicitlyAnimating?
@@ -31,15 +40,18 @@ import AVKit
 
  
  func application(_ application: UIApplication,
-                    supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask
- {
-   return .all
- }
-
+                  supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask { .all }
 
 
  func application(_ application: UIApplication,
-                    willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+                  didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
+ {
+  configueAppAppearance()
+  return true
+ }
+ 
+ func application(_ application: UIApplication,
+                    willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
  
  {
      // Override point for customization after application launch.
@@ -48,6 +60,12 @@ import AVKit
      //PhotoItem.imageCache.delegate = self
   
      Defaults.register()
+     NSValueDataSecureTransformer.register()
+  
+//     appCloudData.configueCloudDB (.private)
+  
+     configueSaveContextObservation()
+  
   
      let nc = window!.rootViewController as! UINavigationController
   
@@ -60,7 +78,7 @@ import AVKit
   
      do
      {
-       try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+       try audioSession.setCategory(AVAudioSession.Category(rawValue: convertFromAVAudioSessionCategory(AVAudioSession.Category.playback)))
      }
      catch
      {
@@ -75,6 +93,7 @@ import AVKit
      // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
 
+  
   let nc = window!.rootViewController as! UINavigationController
 
   if let videoVC = nc.presentedViewController as? VideoShootingViewController,
@@ -97,7 +116,7 @@ import AVKit
      // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
      // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
   
-  
+      
       self.saveContext()
  }
 
@@ -134,55 +153,63 @@ import AVKit
  }
 
  // MARK: - Core Data stack
+ 
+ 
+ final var viewContext: NSManagedObjectContext { /*backgroundContext */persistentContainer.viewContext }
+ 
+ lazy var backgroundContext = { persistentContainer.newBackgroundContext() }()
+ 
+ lazy var childMainContext: NSManagedObjectContext =
+ {
+  let context = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+  context.parent = backgroundContext
+  return context
+ }()
 
  lazy var persistentContainer: NSPersistentContainer =
  {
-     /*
-      The persistent container for the application. This implementation
-      creates and returns a container, having loaded the store for the
-      application to it. This property is optional since there are legitimate
-      error conditions that could cause the creation of the store to fail.
-     */
-     let container = NSPersistentContainer(name: "Newsman")
-     container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-         if let error = error as NSError? {
-             // Replace this implementation with code to handle the error appropriately.
-             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-          
-             /*
-              Typical reasons for an error here include:
-              * The parent directory does not exist, cannot be created, or disallows writing.
-              * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-              * The device is out of space.
-              * The store could not be migrated to the current model version.
-              Check the error message to determine what the actual problem was.
-              */
-             fatalError("Unresolved error \(error), \(error.userInfo)")
-         }
-     })
-     return container
+   let container = NSPersistentContainer(name: "Newsman")
+   container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+    if let error = error as NSError?{
+     fatalError("Unresolved error \(error), \(error.userInfo)")
+    }
+   })
+
+  return container
  }()
 
- // MARK: - Core Data Saving support
-
+ 
+ private final var saveContextSubscription: AnyCancellable?
+ 
  func saveContext ()
  {
 
-    let context = persistentContainer.viewContext
+  saveContextSubscription = viewContext.saveContextPublisher
+   .sink(receiveCompletion: { [unowned self] _ in self.saveContextSubscription?.cancel() },
+         receiveValue: { _ in })
   
-     if context.hasChanges
-     {
-         do
-         {
-             try context.save()
-         } catch {
-             // Replace this implementation with code to handle the error appropriately.
-             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-             let nserror = error as NSError
-             print ("Unresolved error \(nserror), \(nserror.userInfo)")
-         }
-     }
- 
+//    let context = persistentContainer.viewContext
+//
+//    if context.hasChanges
+//    {
+//        do
+//        {
+//            try context.save()
+//        } catch {
+//            // Replace this implementation with code to handle the error appropriately.
+//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            let nserror = error as NSError
+//            print ("Unresolved error \(nserror), \(nserror.userInfo)")
+//        }
+//    }
+
  }
+ 
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String
+{
+	return input.rawValue
+}

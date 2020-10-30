@@ -77,7 +77,7 @@ class RotationFadeScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning
   rotateAnimY.toValue   = presenting ? 2 * CGFloat.pi : -2 * CGFloat.pi
   
   animGroup.animations = [scaleAnim, rotateAnimX, fadeAnim]
-  animGroup.fillMode = kCAFillModeForwards
+  animGroup.fillMode = CAMediaTimingFillMode.forwards
   animGroup.isRemovedOnCompletion = false
   
   containerView.addSubview(toView)
@@ -88,7 +88,7 @@ class RotationFadeScaleAnimator: NSObject, UIViewControllerAnimatedTransitioning
   }
   else
   {
-   containerView.bringSubview(toFront: fromView)
+   containerView.bringSubviewToFront(fromView)
    fromView.layer.add(animGroup, forKey: "animGroup")
    
   }

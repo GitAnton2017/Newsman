@@ -1,7 +1,6 @@
 
 import Foundation
 
-
 prefix operator §§
 
 extension String
@@ -61,6 +60,10 @@ struct Localized
  static let groupPhotoSelect = NSLocalizedString("Please select photo grouping type",
                                                  comment: "Group Photos Alerts Message")
  
+ static let undoManagerTitle =  NSLocalizedString("Undo Manager", comment: "Undo Manager Alerts Title")
+ static let undoManagerSelect = NSLocalizedString("Please select undo manager action",
+                                                 comment: "Undo Manager Alerts Message")
+ 
  static let totalSnippets = NSLocalizedString("Total Snippets in this category: ",
                                               comment: "Total Snippets")
  
@@ -73,6 +76,10 @@ struct Localized
  static let dateScope =     NSLocalizedString("Dates",     comment: "Dates")
  static let contentScope =  NSLocalizedString("Texts",     comment: "Texts")
  static let LocationScope = NSLocalizedString("Locations", comment: "Locations")
+ 
+ static let unflagged = §§"Not Flagged Yet"
+ 
+ static let tagPhotoItem = §§"Search Tag"
  
   
 }

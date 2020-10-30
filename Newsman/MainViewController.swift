@@ -7,6 +7,8 @@ class MainViewController: UIViewController
     
     let mainViewDataSource = MainViewDataSource()
  
+    override var prefersStatusBarHidden: Bool { false }
+ 
     @IBAction func unwind(_ seg: UIStoryboardSegue)
     {
  

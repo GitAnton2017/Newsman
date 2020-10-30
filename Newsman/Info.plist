@@ -26,10 +26,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Newsman needs access to your device camera to make photo snippets!</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Newsman needs access to your device microphone to make video shooting snippets!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Adds location information to your snippets when it is created!</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Newsman needs access to your device microphone to make video shooting snippets!</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Newsman needs access to your device photo library to make photo snippets!</string>
 	<key>UILaunchStoryboardName</key>
@@ -40,12 +40,16 @@
 	<array>
 		<string>armv7</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<false/>
+	<key>UIStatusBarHidden</key>
+	<true/>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDefault</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -54,5 +58,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<true/>
 </dict>
 </plist>

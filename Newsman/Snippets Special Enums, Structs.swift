@@ -4,44 +4,6 @@ import CoreData
 import UIKit
 import CoreLocation
 
-
-protocol StringLocalizable
-{
- var localizedString: String {get}
-}
-
-protocol AllCasesSelectorRepresentable: StringLocalizable, CaseIterable
-{
- typealias ActionType  = (Self) -> Void
-
- static func caseSelectorController(title: String,
-                                    message: String,
-                                    style: UIAlertController.Style,
-                                    block: @escaping ActionType) -> UIAlertController
-}
-
-extension AllCasesSelectorRepresentable
-{
- static func caseSelectorController (title: String, message: String,
-                                     style: UIAlertController.Style,
-                                     block: @escaping ActionType) -> UIAlertController
- {
-  let selector = UIAlertController(title: title, message: message, preferredStyle: style)
-  
-  Self.allCases.map
-  {priority in
-   UIAlertAction(title: priority.localizedString, style: .default){ _ in block(priority)}
-  }.forEach{selector.addAction($0)}
-  
-  let cancelAction = UIAlertAction(title: Localized.cancelAction, style: .cancel, handler: nil)
-  
-  selector.addAction(cancelAction)
-  
-  return selector
-  
- }
-}
-
 struct Sort
 {
  static let byDateDes =        NSSortDescriptor(key: #keyPath(BaseSnippet.date),          ascending: false)
@@ -149,6 +111,15 @@ class SnippetDates
 
 enum SnippetType: String, AllCasesSelectorRepresentable, Codable
 {
+
+ static private var enabled = Dictionary(uniqueKeysWithValues: allCases.map{($0, true)})
+ 
+ var isCaseEnabled: Bool
+ {
+  get { return SnippetType.enabled[self]! }
+  set { SnippetType.enabled[self] = newValue }
+ }
+ 
  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
  
  private static let presentingVCTypesMap: [SnippetType : SnippetsRepresentable.Type] =
@@ -230,6 +201,15 @@ enum SnippetType: String, AllCasesSelectorRepresentable, Codable
 
 enum SnippetPriority: String, AllCasesSelectorRepresentable
 {
+ 
+ static private var enabled = Dictionary(uniqueKeysWithValues: allCases.map{($0, true)})
+ 
+ var isCaseEnabled: Bool
+ {
+  get { return SnippetPriority.enabled[self]! }
+  set { SnippetPriority.enabled[self] = newValue }
+ }
+ 
  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
  
  static let priorityColorMap : [SnippetPriority: UIColor] =
@@ -292,6 +272,15 @@ enum SnippetPriority: String, AllCasesSelectorRepresentable
 
 enum SnippetStatus: String, AllCasesSelectorRepresentable
 {
+ 
+ static private var enabled = Dictionary(uniqueKeysWithValues: allCases.map{($0, true)})
+ 
+ var isCaseEnabled: Bool
+ {
+  get { return SnippetStatus.enabled[self]! }
+  set { SnippetStatus.enabled[self] = newValue }
+ }
+ 
  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
  
  case new         =   "New"
@@ -301,6 +290,14 @@ enum SnippetStatus: String, AllCasesSelectorRepresentable
 
 enum GroupSnippets: String,  AllCasesSelectorRepresentable
 {
+ 
+ static private var enabled = Dictionary(uniqueKeysWithValues: allCases.map{($0, true)})
+ 
+ var isCaseEnabled: Bool
+ {
+  get { return GroupSnippets.enabled[self]! }
+  set { GroupSnippets.enabled[self] = newValue }
+ }
  
  var localizedString: String {return NSLocalizedString(rawValue, comment: rawValue)}
  

@@ -19,15 +19,15 @@ extension PhotoSnippetViewController
  override func applicationFinishedRestoringState()
  {
   
-  if let nc = self.navigationController,
-     let snippetsVC = nc.childViewControllers[nc.childViewControllers.count - 2] as? SnippetsViewController,
-     let ID = self.photoSnippetRestorationID,
+  if let nc = navigationController,
+     let snippetsVC = nc.children[nc.children.count - 2] as? SnippetsViewController,
+     let ID = photoSnippetRestorationID,
      let photoSnippet = snippetsVC.snippetsDataSource.currentFRC[ID] as? PhotoSnippet
   {
    
    self.photoSnippet = photoSnippet
-   self.photoSnippet.currentFRC = snippetsVC.snippetsDataSource.currentFRC
-   (self.navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
+   currentFRC = snippetsVC.snippetsDataSource.currentFRC
+   (navigationController?.delegate as! NCTransitionsDelegate).currentSnippet = photoSnippet
  
    updatePhotoSnippet()
   }

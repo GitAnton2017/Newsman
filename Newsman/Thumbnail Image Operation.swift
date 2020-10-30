@@ -10,27 +10,27 @@ import UIKit
 
 class ThumbnailImageOperation: Operation, ImageSetDataProvider
 {
- var finalImage: UIImage? {return thumbnailImage}
+ var finalImage: UIImage? { thumbnailImage }
  
  var thumbnailImage: UIImage?
  
  private var thumbnailDepend: ThumbnailImageDataProvider?
  {
-  return dependencies.compactMap{$0 as? ThumbnailImageDataProvider}.first
+  dependencies.compactMap{$0 as? ThumbnailImageDataProvider}.first
  }
  
  private var contextDepend: CachedImageDataProvider?
  {
-  return dependencies.compactMap{$0 as? CachedImageDataProvider   }.first
+  dependencies.compactMap{$0 as? CachedImageDataProvider   }.first
  }
  
  private var cachedDepend: CachedImageOperation?
  {
-  return dependencies.compactMap{$0 as? CachedImageOperation      }.first
+  dependencies.compactMap{$0 as? CachedImageOperation      }.first
  }
  
- var cachedImageID: UUID?   {return contextDepend?.cachedImageID  }
- var cachedImage: UIImage?  {return cachedDepend?.cachedImage     }
+ var cachedImageID: UUID?   { contextDepend?.cachedImageID  }
+ var cachedImage: UIImage?  { cachedDepend?.cachedImage     }
  
  private var width: Int
  
@@ -42,15 +42,26 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
   
   super.init()
   
-  let cnxObserver = observe(\.isCancelled) {op, _ in op.removeAllDependencies()}
+  let cnxObserver = observe(\.isCancelled)
+  {op, _ in
+   op.removeAllDependencies()
+   DispatchQueue.main.async { op.observers.removeAll() }
+  }
   
+  let finObserver = observe(\.isFinished)
+  {op,_ in
+   op.removeAllDependencies()
+   DispatchQueue.main.async { op.observers.removeAll() }
+  }
+  
+  observers.insert(finObserver)
   observers.insert(cnxObserver)
  }
  
  override func main()
  {
 
-  if isCancelled {return}
+  if isCancelled { return }
   
   guard let image = thumbnailDepend?.thumbnailImage, let ID = cachedImageID?.uuidString else
   {
@@ -60,19 +71,13 @@ class ThumbnailImageOperation: Operation, ImageSetDataProvider
   
   thumbnailImage = image
   
-  if let cache = PhotoItem.imageCacheDict[width]
-  {
-   cache.setObject(image, forKey: ID as NSString)
-   //   print ("NEW THUMBNAIL CACHED WITH EXISTING CACHE: \(cache.name) for Item ID \(ID)")
-  }
+  if let cache = PhotoItem.imageCacheDict[width] { cache.setObject(image, forKey: ID as NSString) }
   else
   {
    let newImagesCache = PhotoItem.ImagesCache()
    newImagesCache.name = "(\(width) x \(width))"
    newImagesCache.setObject(image, forKey: ID as NSString)
    PhotoItem.imageCacheDict[width] = newImagesCache
-   
-   //   print ("NEW THUMBNAIL CACHED WITH NEW CREATED CACHE for Item ID \(ID)")
   }
  }
 }
