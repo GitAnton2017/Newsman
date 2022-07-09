@@ -12,7 +12,7 @@ import RxSwift
 import Combine
 
  
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension PhotoSnippetCellProtocol 
 {
  
  func configueCenterChangeObservation()

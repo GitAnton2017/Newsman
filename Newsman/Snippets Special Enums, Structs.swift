@@ -94,16 +94,16 @@ class SnippetDates
  
  var predicates : [DatePredicate]
  {
-  return [
-          ("0_For Today",         {$0.snippetDate >= self.boftd && $0.snippetDate < self.bofnd}),
-          ("1_For Yesterday",     {$0.snippetDate >= self.bofld && $0.snippetDate < self.boftd}),
-          ("2_For This Week",     {$0.snippetDate >= self.boftw && $0.snippetDate < self.bofnd}),
-          ("3_For Last Week",     {$0.snippetDate >= self.boflw && $0.snippetDate < self.boftw}),
-          ("4_For This Month",    {$0.snippetDate >= self.boftm && $0.snippetDate < self.bofnd}),
-          ("5_For Last Month",    {$0.snippetDate >= self.boflm && $0.snippetDate < self.boftm}),
-          ("7_For This Year",     {$0.snippetDate >= self.bofty && $0.snippetDate < self.bofnd}),
-          ("8_For Last Year and earlier on",                      {$0.snippetDate < self.bofty})
-         ]
+  [
+   ("0_For Today",         {$0.snippetDate >= self.boftd && $0.snippetDate < self.bofnd}),
+   ("1_For Yesterday",     {$0.snippetDate >= self.bofld && $0.snippetDate < self.boftd}),
+   ("2_For This Week",     {$0.snippetDate >= self.boftw && $0.snippetDate < self.bofnd}),
+   ("3_For Last Week",     {$0.snippetDate >= self.boflw && $0.snippetDate < self.boftw}),
+   ("4_For This Month",    {$0.snippetDate >= self.boftm && $0.snippetDate < self.bofnd}),
+   ("5_For Last Month",    {$0.snippetDate >= self.boflm && $0.snippetDate < self.boftm}),
+   ("7_For This Year",     {$0.snippetDate >= self.bofty && $0.snippetDate < self.bofnd}),
+   ("8_For Last Year and earlier on",                      {$0.snippetDate < self.bofty})
+  ]
  }
 
  

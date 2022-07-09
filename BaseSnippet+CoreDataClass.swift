@@ -28,6 +28,7 @@ public class BaseSnippet: NSManagedObject
  
  @Weak(cleanInterval: 600) var removedChildenRecords = Set<NSManagedObject>()
  
+ 
  var changedFieldsInCurrentBatchModifyOperation = Set<String>()
  
  func initStorage(){} //Polymorphic method to intialize virtual type of storage for concrete snippet type.

@@ -15,7 +15,7 @@ protocol DragAndDropStatesRepresentable where Self: NSManagedObject
  var isDropProceeding: Bool   { get set } // not managed...
 }
 
-protocol DragAndDropStatesObservation: class
+protocol DragAndDropStatesObservation: AnyObject
 {
  var disposeBag: DisposeBag    { get }
  var completion: ( () -> () )? { get set }

@@ -7,7 +7,7 @@
 //
 
 
-protocol ContentDraggable: class
+protocol ContentDraggable: AnyObject
 {
  var isContentDraggable: Bool { get }
 }

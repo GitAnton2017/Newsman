@@ -17,7 +17,7 @@ func == (lhs: Draggable?, rhs: Draggable?) -> Bool
  lhs?.hostedManagedObject.objectID == rhs?.hostedManagedObject.objectID
 }
 
-protocol Draggable: class
+protocol Draggable: AnyObject
 {
  var dragStateSubscription:        Disposable?     { get set }
  var dragProceedSubscription:      Disposable?     { get set }

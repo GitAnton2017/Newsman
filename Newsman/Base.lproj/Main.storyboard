@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="sBZ-um-ChR">
     <device id="retina5_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -107,6 +108,7 @@
                                 </collectionReusableView>
                             </collectionView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="WXC-5W-HkX"/>
                         <color key="backgroundColor" name="Newsman.red"/>
                         <constraints>
                             <constraint firstItem="WXC-5W-HkX" firstAttribute="trailing" secondItem="nTZ-3z-fPL" secondAttribute="trailing" constant="4" id="RDz-Ms-ef1"/>
@@ -114,7 +116,6 @@
                             <constraint firstItem="WXC-5W-HkX" firstAttribute="bottom" secondItem="nTZ-3z-fPL" secondAttribute="bottom" constant="50" id="Vkt-iP-usX"/>
                             <constraint firstItem="nTZ-3z-fPL" firstAttribute="top" secondItem="WXC-5W-HkX" secondAttribute="top" id="f7F-jR-8uZ"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="WXC-5W-HkX"/>
                     </view>
                     <navigationItem key="navigationItem" title="NEWSMAN" leftItemsSupplementBackButton="YES" largeTitleDisplayMode="never" id="0mi-Nr-yQW">
                         <barButtonItem key="backBarButtonItem" title="Back" id="6dI-Si-6U4"/>
@@ -188,7 +189,7 @@
                                                         <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="nSb-8A-J19">
                                                             <rect key="frame" x="15" y="15" width="20" height="20"/>
                                                             <color key="tintColor" red="0.92549019610000005" green="0.23660613729999999" blue="0.038742558920000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <color key="color" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                                            <color key="color" systemColor="viewFlipsideBackgroundColor"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -282,6 +283,7 @@
                                 <color key="barTintColor" name="Newsman.red"/>
                             </toolbar>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="uxl-ll-qSE"/>
                         <color key="backgroundColor" name="Newsman.red"/>
                         <constraints>
                             <constraint firstItem="QNI-h6-xfy" firstAttribute="bottom" secondItem="uxl-ll-qSE" secondAttribute="bottom" id="Qu1-z9-OUs"/>
@@ -293,7 +295,6 @@
                             <constraint firstItem="QNI-h6-xfy" firstAttribute="leading" secondItem="uxl-ll-qSE" secondAttribute="leading" id="wdY-d5-I16"/>
                             <constraint firstItem="eyJ-fM-0bg" firstAttribute="leading" secondItem="uxl-ll-qSE" secondAttribute="leading" constant="4" id="xqD-XH-RiS"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="uxl-ll-qSE"/>
                     </view>
                     <navigationItem key="navigationItem" title="SNIPPETS VC" largeTitleDisplayMode="never" id="hte-ci-Lpa">
                         <rightBarButtonItems>
@@ -408,5 +409,8 @@
         <namedColor name="Newsman.red">
             <color red="0.84313725490196079" green="0.22352941176470589" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="viewFlipsideBackgroundColor">
+            <color red="0.1215686274509804" green="0.12941176470588239" blue="0.14117647058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

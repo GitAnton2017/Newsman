@@ -68,7 +68,7 @@ extension PhotoSnippetCellProtocol
  }
 }
 
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension PhotoSnippetCellProtocol 
 {
  
  

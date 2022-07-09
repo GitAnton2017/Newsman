@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DropViewProvidable: class, UIDropInteractionDelegate
+protocol DropViewProvidable: UIDropInteractionDelegate
 {
  var dropView: UIView { get } //provides drop view lazily for Drop activities.
 }

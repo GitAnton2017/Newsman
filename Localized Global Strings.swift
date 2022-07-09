@@ -5,13 +5,8 @@ prefix operator §§
 
 extension String
 {
- var quoted: String {return "\"" + self + "\""}
- 
- static prefix func §§ (s: String) -> String
- {
-  return NSLocalizedString(s, comment: s)
- }
- 
+ var quoted: String { "\"" + self + "\"" }
+ static prefix func §§ (s: String) -> String { NSLocalizedString(s, comment: s) }
 }
 
 

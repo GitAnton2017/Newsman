@@ -621,7 +621,8 @@ extension PhotoFolder
   .flatMap {[unowned self] moc, single, singleURL, FURL, FID, FD, FS -> AnyPublisher<Void, ManagedObjectError> in
    
    let moveToRoot = Just<Photo>(single)
-    .mapError{_ in ManagedObjectError.unknown}
+    .setFailureType(to: ManagedObjectError.self)
+    //.mapError{_ in ManagedObjectError.unknown}
     .flatMap{ single -> AnyPublisher<Void, ManagedObjectError> in
      guard let fromURL = singleURL else { return Empty().eraseToAnyPublisher() }
      guard let toURL = single.url else { return Empty().eraseToAnyPublisher() }

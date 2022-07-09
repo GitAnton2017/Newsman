@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DragWaggleAnimatable: class
+protocol DragWaggleAnimatable: AnyObject
 {
  var isDragAnimating: Bool  { get set }
  var waggleView: UIView { get  }

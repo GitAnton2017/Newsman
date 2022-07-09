@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import AVFoundation
 
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension PhotoSnippetCellProtocol 
 {
  
  func refreshVideoMarkers()

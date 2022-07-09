@@ -205,7 +205,7 @@ extension PhotoItemProtocol where Self: PhotoFolderItem
 }
 
 
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension PhotoSnippetCellProtocol 
 {
  
  func updateAllCellStatesSubscriptions()

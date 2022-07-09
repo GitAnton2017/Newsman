@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension PhotoSnippetCellProtocol where Self: UICollectionViewCell
+extension PhotoSnippetCellProtocol 
 {
 
  func refreshRowPositionMarker(_ animated: Bool = true)
